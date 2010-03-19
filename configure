@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo Generating `pwd`/Makefile
+
+rm -f Makefile
+
+echo 'all:' >> Makefile
+echo $'\t cp -f res/resources.dat Linux/share/kwestkingdom/resources.dat' >> Makefile
+echo $'\t make -C src' >> Makefile
+echo >> Makefile
+
+echo 'backup:' >> Makefile
+echo $'\t cp -rf . /tmp/kwestkingdom' >> Makefile
+echo $'\t cd /tmp/kwestkingdom && make clean' >> Makefile
+echo $'\t cd /tmp && tar -zcf kwestkingdom-`date "+%Y.%m.%d.%H.%M.%S"`.tar.gz kwestkingdom' >> Makefile
+echo $'\t cd /tmp && rm -rf kwestkingdom' >> Makefile
+echo $'\t mv /tmp/kwestkingdom*.gz ../backup' >> Makefile
+echo >> Makefile
+
+echo 'clean:' >> Makefile
+echo $'\t make -C src clean' >> Makefile
+echo >> Makefile
+
+echo 'win:' >> Makefile
+echo $'\t cp -f res/resources.dat Windows/resources.dat' >> Makefile
+echo $'\t make -C src win' >> Makefile
+echo >> Makefile
+
+cd src
+./configure
+cd ../

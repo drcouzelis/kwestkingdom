@@ -1,0 +1,39 @@
+GENERAL NOTES
+=============
+. "grabber -nosound Resources.dat &" to edit resources.
+. "dat2c -o Resources.m -h Resources.h Resources.dat" to compile resources.
+
+. v0.2
+  - Add the boss.
+  - Add the ending.
+  - Add fish.
+  - Add new enemies.
+  - Add butterflies.
+  - Have summer, fall, winter, and spring areas.
+  - Make the weapon sparkle when it is drawn.
+  - Make a "weapon" class.
+  - Fix the enemy algorithm.
+    . In story mode, make sure the new enemy is generated in the room he is supposed to appear in.
+  - Make hearts more frequent in the earlier rooms.
+  - Add special effects.
+    . Shine when drawing a weapon.
+    . Shadows under trees and anything that flies.
+    . Fish in the water.
+  - Add weather effects.
+    . Rain.
+    . Fog.
+  - Improve the terrain editor to remove closed off areas.
+  - Make ninjas not attack when the hero holds his shield and waits.
+
+STORY
+=====
+The king has gone mad!
+An evil spirit has possessed the king and is causing dismay to the kingdom.
+The prince, guided by a maigical fairy, must find the sword of Kwest and slay the evil spirit.
+But greeblies and a great dragon guard the castle.
+Help the prince save the kingdom!
+
+SOUND EFFECTS
+=============
+http://www.freesound.org/
+
