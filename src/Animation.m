@@ -128,8 +128,8 @@ extern int timer;
 }
 
 
-BITMAP *canvas40x40 = NULL;
-BITMAP *canvas120x120 = NULL;
+BITMAP *canvasStandardSize = NULL;
+BITMAP *canvasTripleSize = NULL;
 
 
 /**
@@ -138,20 +138,28 @@ BITMAP *canvas120x120 = NULL;
  */
 BITMAP * getCanvas(int w, int h) {
   
-  if (w == 40 && h == 40) {
-    if (canvas40x40 == NULL) {
-      canvas40x40 = create_bitmap(40, 40);
+  if (w == getScaledTileSize() && h == getScaledTileSize()) {
+    if (canvasStandardSize && canvasStandardSize->w != getScaledTileSize()) {
+      destroy_bitmap(canvasStandardSize);
+      canvasStandardSize = NULL;
     }
-    return canvas40x40;
+    if (canvasStandardSize == NULL) {
+      canvasStandardSize = create_bitmap(getScaledTileSize(), getScaledTileSize());
+    }
+    return canvasStandardSize;
   }
   
-  if (w == 120 && h == 120) {
-    if (canvas120x120 == NULL) {
-      canvas120x120 = create_bitmap(120, 120);
+  if (w == getScaledTileSize() * 3 && h == getScaledTileSize() * 3) {
+    if (canvasTripleSize && canvasTripleSize->w != getScaledTileSize()) {
+      destroy_bitmap(canvasTripleSize);
+      canvasTripleSize = NULL;
     }
-    return canvas120x120;
+    if (canvasTripleSize == NULL) {
+      canvasTripleSize = create_bitmap(getScaledTileSize() * 3, getScaledTileSize() * 3);
+    }
+    return canvasTripleSize;
   }
-  
+
   printf("Failed to find a canvas size %dx%d. \n", w, h);
   
   return NULL;

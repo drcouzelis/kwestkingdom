@@ -39,8 +39,8 @@
   int h; // Height of the sprite
   
   // Where the image is on the screen
-  int visualX; // SCREEN_WIDTH
-  int visualY; // SCREEN_HEIGHT
+  int visualX; // Screen width
+  int visualY; // Screen height
   int fudge;
   
   int speed; // In FPS

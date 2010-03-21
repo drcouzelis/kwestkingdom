@@ -80,13 +80,16 @@ void init_game() {
   
   initializeResources();
 
-  if (startWindow() == 0) {
+  if (startWindow(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT) == 0) {
     exit(0);
   }
+
+  setPalette();
+  initializeScaledImages();
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggleSound(); // Turn off sound
-  
+
 }
 
 
@@ -153,6 +156,7 @@ int main(int argc, char **argv) {
   freeScreen();
   
   destroyResources();
+  destroyScaledImages();
   //destroy_midi(bgm);
   
   return 0;

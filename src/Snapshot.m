@@ -27,7 +27,7 @@
   self = [super init];
   
   if (self) {
-    canvas = create_bitmap(SCREEN_WIDTH, SCREEN_HEIGHT);
+    canvas = create_bitmap(getScreenWidth(), getScreenHeight());
   }
   
   return self;

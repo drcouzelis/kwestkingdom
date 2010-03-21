@@ -488,7 +488,7 @@ typedef enum {
   [prevRoomSnapshot setX: 0];
   [prevRoomSnapshot setY: 0];
   [prevRoomSnapshot moveY: 10];
-  [prevRoomSnapshot setSpeed: verticalRoomTransitionSpeed];
+  [prevRoomSnapshot setSpeed: getScreenHeight()];
   [self drawTerrain: [prevRoomSnapshot getCanvas]];
   [self drawCharacters: [prevRoomSnapshot getCanvas]];
   return self;
@@ -533,39 +533,39 @@ typedef enum {
   if ([hero getX] < 0) {
     [prevRoomSnapshot setX: 0];
     [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: SCREEN_WIDTH];
-    [prevRoomSnapshot setSpeed: horizontalRoomTransitionSpeed];
-    [nextRoomSnapshot setX: -SCREEN_WIDTH];
+    [prevRoomSnapshot moveX: getScreenWidth()];
+    [prevRoomSnapshot setSpeed: getScreenWidth()];
+    [nextRoomSnapshot setX: -getScreenWidth()];
     [nextRoomSnapshot setY: 0];
     [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: horizontalRoomTransitionSpeed];
+    [nextRoomSnapshot setSpeed: getScreenWidth()];
   } else if ([hero getX] > COLS - 1) {
     [prevRoomSnapshot setX: 0];
     [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: -SCREEN_WIDTH];
-    [prevRoomSnapshot setSpeed: horizontalRoomTransitionSpeed];
-    [nextRoomSnapshot setX: SCREEN_WIDTH];
+    [prevRoomSnapshot moveX: -getScreenWidth()];
+    [prevRoomSnapshot setSpeed: getScreenWidth()];
+    [nextRoomSnapshot setX: getScreenWidth()];
     [nextRoomSnapshot setY: 0];
     [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: horizontalRoomTransitionSpeed];
+    [nextRoomSnapshot setSpeed: getScreenWidth()];
   } else if ([hero getY] < 0) {
     [prevRoomSnapshot setX: 0];
     [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: SCREEN_HEIGHT];
-    [prevRoomSnapshot setSpeed: verticalRoomTransitionSpeed];
+    [prevRoomSnapshot moveY: getScreenHeight()];
+    [prevRoomSnapshot setSpeed: getScreenHeight()];
     [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: -SCREEN_HEIGHT];
+    [nextRoomSnapshot setY: -getScreenHeight()];
     [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: verticalRoomTransitionSpeed];
+    [nextRoomSnapshot setSpeed: getScreenHeight()];
   } else if ([hero getY] > ROWS - 1) {
     [prevRoomSnapshot setX: 0];
     [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: -SCREEN_HEIGHT];
-    [prevRoomSnapshot setSpeed: verticalRoomTransitionSpeed];
+    [prevRoomSnapshot moveY: -getScreenHeight()];
+    [prevRoomSnapshot setSpeed: getScreenHeight()];
     [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: SCREEN_HEIGHT];
+    [nextRoomSnapshot setY: getScreenHeight()];
     [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: verticalRoomTransitionSpeed];
+    [nextRoomSnapshot setSpeed: getScreenHeight()];
   } else {
     [prevRoomSnapshot setX: 0];
     [prevRoomSnapshot setY: 0];
@@ -680,7 +680,7 @@ typedef enum {
   // Draw help tiles.
   [helpTiles iterate];
   while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * TILE_SIZE andY: [helpTile getY] * TILE_SIZE];
+    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * getScaledTileSize() andY: [helpTile getY] * getScaledTileSize()];
   }
   
   return self;
@@ -719,14 +719,14 @@ typedef enum {
   // Put the hero's health on the screen.
   for (i = 0; i < [hero getMaxHealth]; i++) {
     if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: SCREEN_WIDTH - (MAX_HERO_HEALTH + 1) * (TILE_SIZE / 2) + (i * (TILE_SIZE / 2)) andY: 0];
+      [heartAnimation drawTo: buffer atX: getScreenWidth() - (MAX_HERO_HEALTH + 1) * (getScaledTileSize() / 2) + (i * (getScaledTileSize() / 2)) andY: 0];
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: SCREEN_WIDTH - (MAX_HERO_HEALTH + 1) * (TILE_SIZE / 2) + (i * (TILE_SIZE / 2)) andY: 0];
+      [heartEmptyAnimation drawTo: buffer atX: getScreenWidth() - (MAX_HERO_HEALTH + 1) * (getScaledTileSize() / 2) + (i * (getScaledTileSize() / 2)) andY: 0];
     }
   }
   
   sprintf(moneyLine, "$%d", [hero getMoney]);
-  resizedTextOut(buffer, SCREEN_WIDTH - (TILE_SIZE * 2), TILE_SIZE, 2, WHITE, moneyLine);
+  resizedTextOut(buffer, getScreenWidth() - (getScaledTileSize() * 2), getScaledTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   [helpTiles iterate];
@@ -781,7 +781,7 @@ typedef enum {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, SCREEN_WIDTH - 80, SCREEN_HEIGHT - 30, WHITE, -1, "Room %d", [room getNumber]);
+  textprintf_ex(buffer, font, getScreenWidth() - 80, getScreenHeight() - 30, WHITE, -1, "Room %d", [room getNumber]);
   
   return self;
   

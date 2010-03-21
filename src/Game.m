@@ -146,6 +146,7 @@ typedef enum {
     if (toggleFullscreen() == 0) {
       [self setState: GAME_QUIT_STATE];
     }
+    initializeScaledImages();
   }
   
   if (soundKey != nil && [soundKey isPressed]) {
@@ -237,12 +238,12 @@ typedef enum {
   int hTextOffset;
   int vTextOffset;
   
-  x = (SCREEN_WIDTH / 2) - 160;
-  y = (SCREEN_HEIGHT / 2) - 20;
+  x = (getScreenWidth() / 2) - 160;
+  y = (getScreenHeight() / 2) - 20;
   w = 160 * 2;
   h = 200;
-  lineSpacing = TILE_SIZE / 2;
-  hTextOffset = TILE_SIZE;
+  lineSpacing = getScaledTileSize() / 2;
+  hTextOffset = getScaledTileSize();
   vTextOffset = lineSpacing;
   
   [menuBackground draw: buffer];
@@ -304,11 +305,11 @@ typedef enum {
   char line[256];
   int i;
   
-  x = (SCREEN_WIDTH / 2) - 200;
-  y = (SCREEN_HEIGHT / 2) - 200;
+  x = (getScreenWidth() / 2) - 200;
+  y = (getScreenHeight() / 2) - 200;
   w = 200 * 2;
   h = 200 * 2;
-  lineSpacing = TILE_SIZE / 2;
+  lineSpacing = getScaledTileSize() / 2;
   vTextOffset = lineSpacing;
   
   [highScoresBackground draw: buffer];
@@ -348,11 +349,11 @@ typedef enum {
   int lineSpacing;
   int vTextOffset;
   
-  x = (SCREEN_WIDTH / 2) - 280;
-  y = (SCREEN_HEIGHT / 2) - 40;
+  x = (getScreenWidth() / 2) - 280;
+  y = (getScreenHeight() / 2) - 40;
   w = 280 * 2;
   h = 90;
-  lineSpacing = TILE_SIZE / 2;
+  lineSpacing = getScaledTileSize() / 2;
   vTextOffset = lineSpacing;
   
   [world draw: buffer];
