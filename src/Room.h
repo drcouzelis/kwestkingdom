@@ -22,7 +22,7 @@
 #import "HelpTile.h"
 #import "List.h"
 #import "Map.h"
-#import "Main.h"
+#import "KwestKingdom.h"
 #import "Screen.h"
 #import "Traversable.h"
 #import "Updatable.h"

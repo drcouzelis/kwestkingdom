@@ -20,7 +20,7 @@
 #import "Inhabitable.h"
 #import "List.h"
 #import "Map.h"
-#import "Main.h"
+#import "KwestKingdom.h"
 #import "Targetable.h"
 #import "Traversable.h"
 

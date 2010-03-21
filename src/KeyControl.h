@@ -18,7 +18,7 @@
  */
 #import <objc/Object.h>
 #import <allegro.h>
-#import "Main.h"
+#import "KwestKingdom.h"
 
 
 @interface KeyControl : Object {

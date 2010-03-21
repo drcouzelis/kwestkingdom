@@ -19,15 +19,15 @@
 #import <objc/Object.h>
 #import <allegro.h>
 #import "al_screen.h"
-#import "Main.h"
+#import "KwestKingdom.h"
 #import "ResourceLibrary.h"
 
 
-//#define SCREEN_WIDTH 640 // DEPRECATED
-//#define SCREEN_HEIGHT 480 // DEPRECATED
-//#define COLOR_DEPTH 8 // DEPRECATED
+#define SCREEN_WIDTH 640 // DEPRECATED
+#define SCREEN_HEIGHT 480 // DEPRECATED
+#define COLOR_DEPTH 8 // DEPRECATED
 
-//#define TILE_SIZE 40 // DEPRECATED
+#define TILE_SIZE 40 // DEPRECATED
 
 #define DEFAULT_SCREEN_WIDTH 640
 #define DEFAULT_SCREEN_HEIGHT 480

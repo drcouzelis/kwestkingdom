@@ -16,57 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#define ALLEGRO_STATICLINK 1
+
+
 #import <objc/Object.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "EndlessWorld.h"
-#import "HighScoreLibrary.h"
-#import "KeyControl.h"
-#import "Main.h"
-#import "ResourceLibrary.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "StoryWorld.h"
-#import "Updatable.h"
+#import <allegro.h>
 
 
-@interface KwestKingdom : Object <Drawable, Updatable> {
-  
-  World *world;
-  
-  int state;
-  
-  Animation *titleAnimation;
-  Animation *gameOverAnimation;
-  
-  KeyControl *fullscreenKey;
-  KeyControl *soundKey;
-  KeyControl *escapeKey;
-  
-  KeyControl *upKey;
-  KeyControl *downKey;
-  KeyControl *selectKey;
-  
-  int menuSelection;
-  Snapshot *menuBackground;
-  Snapshot *highScoresBackground;
-  Animation *menuPointer;
-  
-  char playerInitials[4];
-  
-}
+#define GAME_TICKER 100
 
 
-- readPlayerInitials;
-- (BOOL) continuePlaying;
-- activateMenuSelection;
-- drawMenu: (BITMAP *) buffer;
-- drawHighScores: (BITMAP *) buffer;
-- drawEnterInitials: (BITMAP *) buffer;
+#define WHITE (makecol(255, 255, 255)) //2
+#define BLACK (makecol(0, 0, 0)) //1
+//#define GREEN (makecol(0, 255, 0))
+#define BLUE (makecol(0, 0, 100))
+#define LIGHT_BLUE (makecol(130, 229, 255))
+#define RED (makecol(109, 4, 4))
+#define GRAY (makecol(109, 109, 109))
+#define MAGICPINK (makecol(255, 0, 255))
 
-- setState: (int) aState;
+typedef enum {
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT
+} DIRECTION;
 
-- gameOver;
 
+void game_over();
 
-@end
+int random_number(int low, int high);

@@ -19,7 +19,7 @@
 #import "Heart.h"
 #import "Inhabitable.h"
 #import "Livable.h"
-#import "Main.h"
+#import "KwestKingdom.h"
 #import "Moneyable.h"
 #import "MoneyBag.h"
 #import "Screen.h"

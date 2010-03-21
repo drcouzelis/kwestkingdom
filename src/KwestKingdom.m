@@ -17,491 +17,145 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #import "KwestKingdom.h"
+#import "Game.h"
+#import "ResourceLibrary.h"
+#import "Screen.h"
 
 
-typedef enum {
-  GAME_MENU_STATE,
-  GAME_PLAY_STATE,
-  GAME_OVER_STATE,
-  GAME_HIGH_SCORES_STATE,
-  GAME_QUIT_STATE,
-  GAME_ENTER_INITIALS_STATE
-} GAME_STATE;
+volatile int timer = 0;
+volatile int fps_timer = 0;
+
+Game *game;
+
+//MIDI *bgm;
 
 
-typedef enum {
-  NEW_GAME_SELECTION = 0,
-  SURVIVAL_MODE_SELECTION,
-  RESUME_GAME_SELECTION,
-  HIGH_SCORES_SELECTION,
-  //FULLSCREEN_SELECTION,
-  //SOUND_SELECTION,
-  MAX_MENU_SELECTIONS
-} MENU_SELECTION;
+/**
+ * To keep the game running at the correct frames per second
+ */
+void do_timer(void) {
+  timer++;
+} END_OF_FUNCTION (do_timer);
 
 
-@implementation KwestKingdom
+/**
+ * To display the current frames per second
+ */
+void game_time_ticker() {
+  fps_timer++;
+}
+END_OF_FUNCTION(game_time_ticker)
 
 
-- init {
+void game_over() {
+  [game gameOver];
+}
+
+
+int random_number(int low, int high) {
+  return (rand() % (high - low + 1)) + low;
+}
+
+
+void init_game() {
   
-  self = [super init];
+  allegro_init();
   
-  if (self) {
-    
-    world = nil;
-    menuSelection = NEW_GAME_SELECTION;
-    strcpy(playerInitials, "\0");
-    
-    [HighScoreLibrary initInstance];
-    
-    titleAnimation = [[Animation alloc] init];
-    [titleAnimation addFrame: getImage(TITLE_01_BMP)];
-    
-    gameOverAnimation = [[Animation alloc] init];
-    [gameOverAnimation addFrame: getImage(GAME_OVER_01_BMP)];
-    
-    escapeKey = [[KeyControl alloc] initWithKey: KEY_ESC];
-    [escapeKey setDelay: GAME_TICKER];
-    // The keys to toggle fullscreen and sound are loaded in "setState".
-    fullscreenKey = nil;
-    soundKey = nil;
-    
-    upKey = [[KeyControl alloc] initWithKey: KEY_UP];
-    downKey = [[KeyControl alloc] initWithKey: KEY_DOWN];
-    selectKey = [[KeyControl alloc] initWithKey: KEY_ENTER];
-    [upKey setDelay: GAME_TICKER];
-    [downKey setDelay: GAME_TICKER];
-    [selectKey setDelay: GAME_TICKER];
-    
-    menuBackground = [[Snapshot alloc] init];
-    highScoresBackground = [[Snapshot alloc] init];
-    
-    menuPointer = [[Animation alloc] init];
-    [menuPointer addFrame: getImage(SWORD_01_BMP)];
-    [menuPointer addFrame: getImage(SWORD_02_BMP)];
-    [menuPointer addFrame: getImage(SWORD_03_BMP)];
-    [menuPointer addFrame: getImage(SWORD_04_BMP)];
-    [menuPointer rotate: YES];
-    [menuPointer setLoop: YES];
-    [menuPointer setSpeed: 6];
-    
-    [self setState: GAME_MENU_STATE];
-    
+  install_timer();
+  
+  LOCK_VARIABLE(timer);
+  LOCK_FUNCTION(do_timer);
+  install_int_ex(do_timer, BPS_TO_TIMER(GAME_TICKER));
+  
+  LOCK_VARIABLE(fps_timer);
+  LOCK_FUNCTION(game_time_ticker);
+  install_int_ex(game_time_ticker, BPS_TO_TIMER(10));
+  
+  timer = 0;
+  fps_timer = 0;
+  
+  srand(time(NULL));
+  
+  install_keyboard();
+  
+  initializeResources();
+
+  if (startWindow() == 0) {
+    exit(0);
   }
   
-  return self;
+  install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
+  toggleSound(); // Turn off sound
   
 }
 
 
-- free {
-  [world free];
-  [titleAnimation free];
-  [gameOverAnimation free];
-  [fullscreenKey free];
-  [soundKey free];
-  [escapeKey free];
-  [upKey free];
-  [downKey free];
-  [selectKey free];
-  [menuBackground free];
-  [highScoresBackground free];
-  [menuPointer free];
-  [HighScoreLibrary freeInstance];
-  return [super free];
-}
-
-
-- readPlayerInitials {
+int main(int argc, char **argv) {
   
-  int key;
-  int length;
+  int timemark;
+  int fps;
+  int frames_done;
+  int prevTime;
   
-  if (keypressed()) {
-    key = readkey();
-    length = strlen(playerInitials);
-    // If the player pressed "backspace" or "delete" then delet a character.
-    if ((key >> 8) == KEY_BACKSPACE || (key >> 8) == KEY_DEL) {
-      if (length > 0) {
-        playerInitials[length - 1] = '\0';
+  fps = 0;
+  frames_done = 0;
+  prevTime = 0;
+  
+  init_game();
+  
+  game = [[Game alloc] init];
+  
+  // Reset the timers just before the game begins.
+  timer = 0;
+  fps_timer = 0;
+  
+  while ([game continuePlaying]) {
+    
+    while (timer == 0) {
+      rest(1);
+    }
+    
+    while (timer > 0) {
+      
+      timemark = timer;
+      
+      [game update];
+      
+      timer--;
+      
+      if (timemark <= timer) {
+        break;
       }
-    } else if (((key >> 8) >= KEY_A && (key >> 8) <= KEY_Z) || ((key >> 8) >= KEY_0 && (key >> 8) <= KEY_9)) {
-      // The player pressed a letter or number key! Add it to the initials.
-      if (length < 3) {
-        playerInitials[length] = key & 0xFF;
-        playerInitials[length + 1] = '\0';
-      }
+      
     }
-  }
-  
-  return self;
-  
-}
-
-
-- update {
-  
-  if (fullscreenKey != nil && [fullscreenKey isPressed]) {
-    if (toggleFullscreen() == 0) {
-      [self setState: GAME_QUIT_STATE];
+    
+    // If a second has passed since we last measured the frame rate...
+    if (fps_timer - prevTime >= 10) {
+      // fps now holds the the number of frames done in the last second.
+      fps = frames_done;
+      // Reset for the next second
+      frames_done = 0;
+      prevTime = fps_timer;
     }
-  }
-  
-  if (soundKey != nil && [soundKey isPressed]) {
-    toggleSound();
-  }
-  
-  switch (state) {
-  
-  case GAME_MENU_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_QUIT_STATE];
-    } else if ([upKey isPressed]) {
-      menuSelection--;
-      if (menuSelection == RESUME_GAME_SELECTION && world == nil) {
-        menuSelection--;
-      }
-      if (menuSelection < 0) {
-        menuSelection++;
-      }
-    } else if ([downKey isPressed]) {
-      menuSelection++;
-      if (menuSelection == RESUME_GAME_SELECTION && world == nil) {
-        menuSelection++;
-      }
-      if (menuSelection == MAX_MENU_SELECTIONS) {
-        menuSelection--;
-      }
-    } else if ([selectKey isPressed]) {
-      [self activateMenuSelection];
-    }
-    [menuPointer update];
-    break;
-  
-  case GAME_PLAY_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
-    }
-    [world update];
-    break;
-  
-  case GAME_HIGH_SCORES_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
-    }
-    break;
-  
-  case GAME_ENTER_INITIALS_STATE:
-    [self readPlayerInitials];
-    if (strlen(playerInitials) > 0 && [selectKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
-      [HighScoreLibrary addHighScoreWithInitials: playerInitials andRoom: [world getRoomNumber] andCoins: [world getMoney]];
-      [world free];
-      world = nil;
-      strcpy(playerInitials, "\0");
-    }
-    break;
-  
-  case GAME_OVER_STATE:
-    if ([selectKey isPressed]) {
-      menuSelection = NEW_GAME_SELECTION;
-      if ([HighScoreLibrary highScorePositionWithRoom: [world getRoomNumber] andCoins: [world getMoney]] == -1) {
-        [self setState: GAME_MENU_STATE];
-        [world free];
-        world = nil;
-      } else {
-        [self setState: GAME_ENTER_INITIALS_STATE];
-      }
-    }
-    break;
-  
-  case GAME_QUIT_STATE:
-    // Do nothing.
-    break;
+    
+    [game draw: getBuffer()];
+    //clear_to_color(getBuffer(), BLACK);
+    textprintf_ex(getBuffer(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    
+    showScreen();
+    
+    frames_done++;
     
   }
   
-  return self;
+  [game free];
+  
+  freeScreen();
+  
+  destroyResources();
+  //destroy_midi(bgm);
+  
+  return 0;
   
 }
-
-
-- drawMenu: (BITMAP *) buffer {
-  
-  int x;
-  int y;
-  int w;
-  int h;
-  int lineSpacing;
-  int hTextOffset;
-  int vTextOffset;
-  
-  x = (SCREEN_WIDTH / 2) - 160;
-  y = (SCREEN_HEIGHT / 2) - 20;
-  w = 160 * 2;
-  h = 200;
-  lineSpacing = TILE_SIZE / 2;
-  hTextOffset = TILE_SIZE;
-  vTextOffset = lineSpacing;
-  
-  [menuBackground draw: buffer];
-  drawBox(buffer, x, y, w, h);
-  [titleAnimation drawTo: buffer atX: 54 andY: 54];
-  
-  // New Game
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, "New Game");
-  // Survival Mode
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, "Survival Mode");
-  
-  // Resume Game
-  if (world == nil) {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, "Resume Game");
-  } else {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, "Resume Game");
-  }
-  
-  // High Scores
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, "High Scores");
-  
-  // Quit
-  resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, "Press ESC To Quit");
-  
-  // Fullscreen
-  if (isFullscreen()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Windowed");
-  } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Fullscreen");
-  }
-  
-  // Sound
-  if (soundEnabled()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (On)");
-  } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (Off)");
-  }
-  
-  [menuPointer drawTo: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
-  
-  return self;
-  
-}
-
-
-- drawHighScores: (BITMAP *) buffer {
-  
-  int x;
-  int y;
-  int w;
-  int h;
-  int lineSpacing;
-  int vTextOffset;
-  
-  char initials[4];
-  int room;
-  int coins;
-  
-  char line[256];
-  int i;
-  
-  x = (SCREEN_WIDTH / 2) - 200;
-  y = (SCREEN_HEIGHT / 2) - 200;
-  w = 200 * 2;
-  h = 200 * 2;
-  lineSpacing = TILE_SIZE / 2;
-  vTextOffset = lineSpacing;
-  
-  [highScoresBackground draw: buffer];
-  drawBox(buffer, x, y, w, h);
-  
-  // Title
-  resizedTextOut(buffer, x + 120, y + vTextOffset, 2, WHITE, "High Scores");
-  
-  // Header
-  resizedTextOut(buffer, x + 50, y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
-  
-  // High scores
-  for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
-    if ([HighScoreLibrary getHighScoreNumber: i returnInitials: initials andRoom: &room andCoins: &coins] == YES) {
-      sprintf(line, "#%d %3s %4d %6d", i + 1, initials, room, coins);
-    } else {
-      sprintf(line, "#%d", i + 1);
-    }
-    resizedTextOut(buffer, x + 50, y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
-  }
-  
-  // Return
-  resizedTextOut(buffer, x + 50, y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
-  
-  return self;
-  
-}
-
-
-- drawEnterInitials: (BITMAP *) buffer {
-  
-  int x;
-  int y;
-  int w;
-  int h;
-  
-  int lineSpacing;
-  int vTextOffset;
-  
-  x = (SCREEN_WIDTH / 2) - 280;
-  y = (SCREEN_HEIGHT / 2) - 40;
-  w = 280 * 2;
-  h = 90;
-  lineSpacing = TILE_SIZE / 2;
-  vTextOffset = lineSpacing;
-  
-  [world draw: buffer];
-  
-  drawBox(buffer, x, y, w, h);
-  
-  // Title
-  resizedTextOut(buffer, x + 160, y + vTextOffset, 2, WHITE, "Congratulations!");
-  resizedTextOut(buffer, x + 110, y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
-  resizedTextOut(buffer, x + 40, y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
-  
-  // Initials
-  resizedTextOut(buffer, x + 480, y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
-  
-  return self;
-  
-}
-
-
-- draw: (BITMAP *) buffer {
-  
-  switch (state) {
-  
-  case GAME_MENU_STATE:
-    [self drawMenu: buffer];
-    break;
-  
-  case GAME_PLAY_STATE:
-    [world draw: buffer];
-    break;
-  
-  case GAME_OVER_STATE:
-    [world draw: buffer];
-    [gameOverAnimation drawTo: buffer atX: 0 andY: 0];
-    break;
-    
-  case GAME_ENTER_INITIALS_STATE:
-    [self drawEnterInitials: buffer];
-    break;
-    
-  case GAME_HIGH_SCORES_STATE:
-    [self drawHighScores: buffer];
-    break;
-  
-  case GAME_QUIT_STATE:
-    // Do nothing.
-    break;
-    
-  }
-  
-  return self;
-  
-}
-
-
-- activateMenuSelection {
-  switch (menuSelection) {
-  case NEW_GAME_SELECTION:
-    [world free];
-    world = [[StoryWorld alloc] init];
-    [self setState: GAME_PLAY_STATE];
-    menuSelection = RESUME_GAME_SELECTION;
-    break;
-  case SURVIVAL_MODE_SELECTION:
-    [world free];
-    world = [[EndlessWorld alloc] init];
-    [self setState: GAME_PLAY_STATE];
-    menuSelection = RESUME_GAME_SELECTION;
-    break;
-  case RESUME_GAME_SELECTION:
-    if (world != nil) {
-      [self setState: GAME_PLAY_STATE];
-    }
-    break;
-  case HIGH_SCORES_SELECTION:
-    [self setState: GAME_HIGH_SCORES_STATE];
-    break;
-  }
-  return self;
-}
-
-
-- setState: (int) aState {
-  
-  RoomFactory *roomFactory;
-  Room *tempRoom;
-  
-  state = aState;
-  
-  switch (state) {
-  
-  case GAME_MENU_STATE:
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setType: ROOM_FOREST];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    tempRoom = [roomFactory createRoom];
-    [tempRoom draw: [menuBackground getCanvas]];
-    [tempRoom free];
-    [roomFactory free];
-    // Load the fullscreen and sound keys.
-    // They are disabled so the player could enter initials.
-    if (fullscreenKey == nil) {
-      fullscreenKey = [[KeyControl alloc] initWithKey: KEY_F];
-      [fullscreenKey setDelay: GAME_TICKER];
-    }
-    if (soundKey == nil) {
-      soundKey = [[KeyControl alloc] initWithKey: KEY_S];
-      [soundKey setDelay: GAME_TICKER];
-    }
-    break;
-    
-  case GAME_HIGH_SCORES_STATE:
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setType: ROOM_UNDERGROUND];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    tempRoom = [roomFactory createRoom];
-    [tempRoom draw: [highScoresBackground getCanvas]];
-    [tempRoom free];
-    [roomFactory free];
-    break;
-    
-  case GAME_ENTER_INITIALS_STATE:
-    clear_keybuf();
-    // Disable the fullscreen and sound keys so the player could enter initials.
-    [fullscreenKey free];
-    fullscreenKey = nil;
-    [soundKey free];
-    soundKey = nil;
-    break;
-    
-  }
-  
-  return self;
-  
-}
-
-
-- (BOOL) continuePlaying {
-  if (state == GAME_QUIT_STATE) {
-    return NO;
-  }
-  return YES;
-}
-
-
-- gameOver {
-  [self setState: GAME_OVER_STATE];
-  return self;
-}
-
-
-@end
+END_OF_MAIN()

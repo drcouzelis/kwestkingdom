@@ -8,9 +8,9 @@ LDFLAGS = $(shell allegro-config --libs)
 WIN_CC = wine c:\\MinGW\\bin\\gcc.exe
 WIN_OUTPUT = ../Windows/kwestkingdom
 
-HEADERS = al_screen.h Animation.h Archer.h Arrow.h Bow.h Character.h Chomper.h Collectable.h Drawable.h EndlessWorld.h Enemy.h ForestRoom.h Giant.h Hammer.h Heart.h HelpTile.h Hero.h HighScoreLibrary.h Inhabitable.h KeyControl.h KwestKingdom.h List.h Livable.h Main.h Map.h Moneyable.h MoneyBag.h Ninja.h Positionable.h ResourceLibrary.h Resources.h RoomFactory.h Room.h Screen.h Shield.h Snapshot.h SnowRoom.h Sprite.h StoryWorld.h Sword.h Targetable.h Traversable.h UndergroundRoom.h Updatable.h World.h
+HEADERS = al_screen.h Animation.h Archer.h Arrow.h Bow.h Character.h Chomper.h Collectable.h Drawable.h EndlessWorld.h Enemy.h ForestRoom.h Game.h Giant.h Hammer.h Heart.h HelpTile.h Hero.h HighScoreLibrary.h Inhabitable.h KeyControl.h KwestKingdom.h List.h Livable.h Map.h Moneyable.h MoneyBag.h Ninja.h Positionable.h ResourceLibrary.h Resources.h RoomFactory.h Room.h Screen.h Shield.h Snapshot.h SnowRoom.h Sprite.h StoryWorld.h Sword.h Targetable.h Traversable.h UndergroundRoom.h Updatable.h World.h
 
-OBJECTS = al_screen.o Animation.o Archer.o Arrow.o Bow.o Character.o Chomper.o EndlessWorld.o Enemy.o ForestRoom.o Giant.o Hammer.o Heart.o HelpTile.o Hero.o HighScoreLibrary.o KeyControl.o KwestKingdom.o List.o Main.o Map.o MoneyBag.o Ninja.o ResourceLibrary.o RoomFactory.o Room.o Screen.o Shield.o Snapshot.o SnowRoom.o Sprite.o StoryWorld.o Sword.o UndergroundRoom.o World.o
+OBJECTS = al_screen.o Animation.o Archer.o Arrow.o Bow.o Character.o Chomper.o EndlessWorld.o Enemy.o ForestRoom.o Game.o Giant.o Hammer.o Heart.o HelpTile.o Hero.o HighScoreLibrary.o KeyControl.o KwestKingdom.o List.o Map.o MoneyBag.o Ninja.o ResourceLibrary.o RoomFactory.o Room.o Screen.o Shield.o Snapshot.o SnowRoom.o Sprite.o StoryWorld.o Sword.o UndergroundRoom.o World.o
 
 kwestkingdom: $(OBJECTS)
 	 $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)
@@ -45,6 +45,9 @@ Enemy.o: Enemy.m $(HEADERS)
 ForestRoom.o: ForestRoom.m $(HEADERS)
 	 $(CC) $(DEBUG) -c ForestRoom.m $(CFLAGS)
 
+Game.o: Game.m $(HEADERS)
+	 $(CC) $(DEBUG) -c Game.m $(CFLAGS)
+
 Giant.o: Giant.m $(HEADERS)
 	 $(CC) $(DEBUG) -c Giant.m $(CFLAGS)
 
@@ -71,9 +74,6 @@ KwestKingdom.o: KwestKingdom.m $(HEADERS)
 
 List.o: List.m $(HEADERS)
 	 $(CC) $(DEBUG) -c List.m $(CFLAGS)
-
-Main.o: Main.m $(HEADERS)
-	 $(CC) $(DEBUG) -c Main.m $(CFLAGS)
 
 Map.o: Map.m $(HEADERS)
 	 $(CC) $(DEBUG) -c Map.m $(CFLAGS)
