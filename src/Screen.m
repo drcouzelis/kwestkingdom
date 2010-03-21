@@ -22,11 +22,15 @@
 static BOOL fullscreen = NO;
 static BOOL screenInitialized = NO;
 
+static int screenWidth = DEFAULT_SCREEN_WIDTH;
+static int screenHeight = DEFAULT_SCREEN_HEIGHT;
+static int screenRatio = DEFAULT_SCREEN_RATIO;
+
 
 BOOL selectBestScreen() {
   
-  horizontalRoomTransitionSpeed = SCREEN_WIDTH;
-  verticalRoomTransitionSpeed = SCREEN_HEIGHT;
+  horizontalRoomTransitionSpeed = screenWidth;
+  verticalRoomTransitionSpeed = screenHeight;
   
   enable_vsync();
   
@@ -49,6 +53,7 @@ BOOL selectBestScreen() {
 
 
 void freeScreen() {
+  destroyScaledImages();
   shutdown_screen_updating();
 }
 
@@ -66,22 +71,21 @@ BOOL toggleFullscreen() {
 
 BOOL startWindow() {
   
-  int colorDepth;
-  
   if (screenInitialized) {
     shutdown_screen_updating();
   }
   
-  colorDepth = desktop_color_depth();
-  if (colorDepth == 0) {
-    colorDepth = COLOR_DEPTH;
-  }
-  
-  set_color_depth(colorDepth);
-  
-  if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0)) {
-    printf("Failed to set graphics mode to windowed %dx%d. \n", SCREEN_WIDTH, SCREEN_HEIGHT);
-    return FALSE;
+  setColorDepth();
+ 
+  // If the game is running in a window then
+  // just use the default scren resolution.
+  screenWidth = DEFAULT_SCREEN_WIDTH;
+  screenHeight = DEFAULT_SCREEN_HEIGHT;
+  screenRatio = DEFAULT_SCREEN_RATIO;
+
+  if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, screenWidth, screenHeight, 0, 0)) {
+    printf("Failed to set graphics mode to windowed %dx%d. \n", screenWidth, screenHeight);
+    return NO;
   }
   
   if (selectBestScreen() == NO) {
@@ -89,6 +93,7 @@ BOOL startWindow() {
   }
   
   setPalette();
+  initializeScaledImages();
 
   fullscreen = NO;
   screenInitialized = YES;
@@ -100,22 +105,21 @@ BOOL startWindow() {
 
 BOOL startFullscreen() {
   
-  int colorDepth;
-  
   if (screenInitialized) {
     shutdown_screen_updating();
   }
   
-  colorDepth = desktop_color_depth();
-  if (colorDepth == 0) {
-    colorDepth = COLOR_DEPTH;
-  }
-  
-  set_color_depth(colorDepth);
-  
-  if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0)) {
-    printf("Failed to set graphics mode to windowed %dx%d. \n", SCREEN_WIDTH, SCREEN_HEIGHT);
-    return FALSE;
+  setColorDepth();
+ 
+  // Try to match the screen resolution of the user's desktop.
+  if (get_desktop_resolution(&screenWidth, &screenHeight) == 0) {
+    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, screenWidth, screenHeight, 0, 0)) {
+      printf("Failed to set graphics mode to windowed %dx%d. \n", screenWidth, screenHeight);
+      return NO;
+    }
+  } else {
+    printf("Failed to get the desktop resolution. \n");
+    return NO;
   }
   
   if (selectBestScreen() == NO) {
@@ -123,12 +127,28 @@ BOOL startFullscreen() {
   }
   
   setPalette();
+  initializeScaledImages();
 
   fullscreen = YES;
   screenInitialized = YES;
   
   return YES;
   
+}
+
+
+BOOL setColorDepth() {
+
+  int colorDepth;
+  
+  colorDepth = desktop_color_depth();
+  if (colorDepth == 0) {
+    colorDepth = DEFAULT_COLOR_DEPTH;
+  }
+  
+  set_color_depth(colorDepth);
+
+  return YES;
 }
 
 
@@ -159,15 +179,18 @@ BITMAP * getBuffer() {
 }
 
 
+int getScreenRatio() {
+  return screenRatio;
+}
+
+
+int getTileSize() {
+  return ORIGINAL_TILE_SIZE * screenRatio;
+}
+
+
 BOOL isFullscreen() {
   return fullscreen;
 }
 
-
-void initializeColors() {
-  //set_color_conversion(COLORCONV_REDUCE_TO_256);
-  //PALETTE gamePalette;
-  //destroy_bitmap(load_bmp("../res/images/palette.bmp", gamePalette));
-  //set_palette(gamePalette);
-}
 

@@ -28,6 +28,9 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h);
 void initializeResources();
 void destroyResources();
 
+void initializeScaledImages();
+void destroyScaledImages();
+
 BITMAP * getImage(int image);
 void setPalette(void);
 

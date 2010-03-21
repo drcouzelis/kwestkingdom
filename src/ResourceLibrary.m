@@ -19,6 +19,12 @@
 #import "ResourceLibrary.h"
 
 
+// This array will hold the actual bitmaps that will be drawn to the screen.
+// "PALETTE_PAL" is the last item in the list of resources. (See "Resources.h")
+static BITMAP *scaledImages[PALETTE_PAL];
+static BOOL scaledImagesInitialized = NO;
+
+
 void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, char *text) {
   BITMAP *tempBitmap;
   tempBitmap = create_bitmap(text_length(font, text), text_height(font));
@@ -229,8 +235,55 @@ void destroyResources() {
 }
 
 
+void initializeScaledImages() {
+
+  BITMAP *resource;
+  BITMAP *canvas;
+  int i;
+  
+  if (scaledImagesInitialized) {
+    destroyScaledImages();
+  }
+
+  // "ARCHER_01_BMP" is the first bitmap in the list of resources.
+  // "PALETTE_PAL" is the last one.
+  for (i = ARCHER_01_BMP; i < PALETTE_PAL; i++) {
+    
+    resource = (BITMAP *)resources[i].dat;
+    
+    // Copy the resource bitmap to a temporary canvas
+    // because only memory bitmaps can be scaled.
+    canvas = create_bitmap(resource->w, resource->h);
+    blit(resource, canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+    
+    scaledImages[i] = create_bitmap(canvas->w * getScreenRatio(), canvas->h * getScreenRatio());
+    clear_to_color(scaledImages[i], MAGICPINK);
+
+    stretch_sprite(scaledImages[i], canvas, 0, 0, scaledImages[i]->w, scaledImages[i]->h);
+
+    destroy_bitmap(canvas);
+  }
+
+
+  scaledImagesInitialized = YES;
+  
+}
+
+void destroyScaledImages() {
+  int i;
+  if (scaledImagesInitialized) {
+    for (i = ARCHER_01_BMP; i < PALETTE_PAL; i++) {
+      destroy_bitmap(scaledImages[i]);
+    }
+    scaledImagesInitialized = NO;
+  }
+}
+
 BITMAP * getImage(int image) {
-  return (BITMAP *)resources[image].dat;
+  //return (BITMAP *)resources[image].dat;
+  if (scaledImagesInitialized) {
+    return scaledImages[image];
+  }
   return NULL;
 }
 

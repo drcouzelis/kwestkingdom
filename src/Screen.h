@@ -23,14 +23,21 @@
 #import "ResourceLibrary.h"
 
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define COLOR_DEPTH 8
+//#define SCREEN_WIDTH 640 // DEPRECATED
+//#define SCREEN_HEIGHT 480 // DEPRECATED
+//#define COLOR_DEPTH 8 // DEPRECATED
 
-#define TILE_SIZE 40
+//#define TILE_SIZE 40 // DEPRECATED
 
-#define COLS (SCREEN_WIDTH / TILE_SIZE)
-#define ROWS (SCREEN_HEIGHT / TILE_SIZE)
+#define DEFAULT_SCREEN_WIDTH 640
+#define DEFAULT_SCREEN_HEIGHT 480
+#define DEFAULT_COLOR_DEPTH 8
+#define DEFAULT_SCREEN_RATIO 2
+
+#define ORIGINAL_TILE_SIZE 20
+
+#define COLS 16
+#define ROWS 12
 
 
 int horizontalRoomTransitionSpeed;
@@ -39,11 +46,13 @@ int verticalRoomTransitionSpeed;
 BOOL startWindow();
 BOOL startFullscreen();
 BOOL toggleFullscreen();
+BOOL setColorDepth();
 BITMAP * getBuffer();
 void showScreen();
 
 BOOL isFullscreen();
-void initializeColors();
 BOOL selectBestScreen();
+int getScreenRatio();
+int getTileSize();
 void freeScreen();
 
