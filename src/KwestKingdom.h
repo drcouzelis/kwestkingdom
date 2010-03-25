@@ -26,6 +26,7 @@
 #define GAME_TICKER 100
 
 
+// Colors
 #define WHITE (makecol(255, 255, 255)) //2
 #define BLACK (makecol(0, 0, 0)) //1
 #define GREEN (makecol(0, 255, 0))
@@ -35,16 +36,15 @@
 #define GRAY (makecol(109, 109, 109))
 #define MAGICPINK (makecol(255, 0, 255))
 
-#define DEFAULT_SCREEN_RATIO 2
-
 #define TILE_SIZE 20
 
 #define COLS 16
 #define ROWS 12
 
-#define DEFAULT_SCREEN_WIDTH (COLS * TILE_SIZE * DEFAULT_SCREEN_RATIO)
-#define DEFAULT_SCREEN_HEIGHT (ROWS * TILE_SIZE * DEFAULT_SCREEN_RATIO)
-#define DEFAULT_COLOR_DEPTH 8
+#define WINDOW_WIDTH (COLS * TILE_SIZE)
+#define WINDOW_HEIGHT (ROWS * TILE_SIZE)
+
+#define DEFAULT_SCREEN_RATIO 2
 
 
 typedef enum {
@@ -54,6 +54,8 @@ typedef enum {
   RIGHT
 } DIRECTION;
 
+
+int getTileSize();
 
 void game_over();
 

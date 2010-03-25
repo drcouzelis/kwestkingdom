@@ -17,6 +17,7 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #import <objc/Object.h>
+#import "KwestKingdom.h"
 #import "Screen.h"
 
 

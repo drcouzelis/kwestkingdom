@@ -19,28 +19,16 @@
 #import <objc/Object.h>
 #import <allegro.h>
 #import "al_screen.h"
-#import "KwestKingdom.h"
 
 
-//#define SCREEN_WIDTH 640 // DEPRECATED
-//#define SCREEN_HEIGHT 480 // DEPRECATED
-//#define COLOR_DEPTH 8 // DEPRECATED
-//#define TILE_SIZE 40 // DEPRECATED
+void setWindowSize(int width, int height);
 
+BOOL initializeScreen(int width, int height, BOOL fullscreen);
+void destroyScreen();
 
-BOOL startWindow(int w, int h);
-BOOL startFullscreen(int w, int h);
-void freeScreen();
+int getWindowWidth();
+int getWindowHeight();
 
+BITMAP *getWindow();
 void showScreen();
-
-BITMAP * getBuffer();
-
-int getScreenWidth();
-int getScreenHeight();
-int getScreenRatio();
-int getScaledTileSize();
-
-BOOL isFullscreen();
-BOOL toggleFullscreen();
 

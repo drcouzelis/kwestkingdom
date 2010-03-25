@@ -19,14 +19,23 @@
 #import "Screen.h"
 
 
-static BOOL fullscreen = NO;
-static BOOL screenInitialized = NO;
-
-static int screenWidth = 0;
-static int screenHeight = 0;
-static int screenRatio = 1;
+#define DEFAULT_COLOR_DEPTH 8
 
 
+// The window is the area inside the screen that
+// the game is drawn on.
+static BITMAP *window = NULL;
+
+// The scale is used to know how big to multiply the window.
+static int scale = 2;
+
+
+// This function is not really necessary, is it?
+//BOOL toggleFullscreen();
+//  return initializeScreen(getScreenWidth(), getScreenHeight(), !fullscreen);
+//}
+
+ 
 BOOL selectBestScreen() {
   
   enable_vsync();
@@ -49,102 +58,76 @@ BOOL selectBestScreen() {
 }
 
 
-BOOL setColorDepth() {
+void setWindowSize(int width, int height) {
+  if (window) {
+    destroy_bitmap(window);
+  }
+  window = create_bitmap(width, height);
+  clear_to_color(window, makecol(0, 0, 0)); // Clear to black
+}
 
-  int colorDepth;
-  
-  colorDepth = desktop_color_depth();
-  if (colorDepth == 0) {
-    colorDepth = DEFAULT_COLOR_DEPTH;
+
+BOOL initializeScreen(int width, int height, BOOL fullscreen) {
+
+  if (screen) {
+    shutdown_screen_updating();
   }
   
-  set_color_depth(colorDepth);
+  // Set the color depth.
+  if (desktop_color_depth() == 0) {
+    set_color_depth(DEFAULT_COLOR_DEPTH);
+  } else {
+    set_color_depth(desktop_color_depth());
+  }
+ 
+  // Start the screen.
+  if (fullscreen) {
+    
+    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
+      printf("Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
+      return NO;
+    }
+    
+  } else {
+  
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
+      printf("Failed to set graphics mode to windowed %dx%d. \n", width, height);
+      return NO;
+    }
 
+  }
+  
+  if (selectBestScreen() == NO) {
+    return NO;
+  }
+  
   return YES;
+
 }
+ 
 
-
-int calculateScreenRatio(int w, int h) {
-  // You should take into consideration all different kinds
-  // of screen widths and heights.
-  return h / (ROWS * TILE_SIZE); // TEMP
-}
-
-
-void freeScreen() {
+void destroyScreen() {
+  if (window) {
+    destroy_bitmap(window);
+    window = NULL;
+  }
   shutdown_screen_updating();
 }
 
 
-BOOL toggleFullscreen() {
-  
-  if (fullscreen) {
-    return startWindow(getScreenWidth(), getScreenHeight());
+int getWindowWidth() {
+  if (window) {
+    return window->w;
   }
-  
-  return startFullscreen(getScreenWidth(), getScreenHeight());
-  
+  return 0;
 }
 
 
-BOOL startWindow(int w, int h) {
-  
-  if (screenInitialized) {
-    shutdown_screen_updating();
+int getWindowHeight() {
+  if (window) {
+    return window->h;
   }
-  
-  setColorDepth();
- 
-  if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, w, h, 0, 0)) {
-    printf("Failed to set graphics mode to windowed %dx%d. \n", w, h);
-    return NO;
-  }
-
-  screenWidth = w;
-  screenHeight = h;
-  screenRatio = calculateScreenRatio(w, h);
-  
-  if (selectBestScreen() == NO) {
-    return NO;
-  }
-  
-  fullscreen = NO;
-  screenInitialized = YES;
-  
-  return YES;
-  
-}
-
-
-BOOL startFullscreen(int w, int h) {
-  
-  if (screenInitialized) {
-    shutdown_screen_updating();
-  }
-  
-  setColorDepth();
- 
-  // Try to match the screen resolution of the user's desktop.
-  //get_desktop_resolution(&screenWidth, &screenHeight); 
-
-  if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, w, h, 0, 0)) {
-    printf("Failed to set graphics mode to windowed %dx%d. \n", w, h);
-    return NO;
-  }
- 
-  screenWidth = w;
-  screenHeight = h;
-  screenRatio = calculateScreenRatio(w, h);
-  
-  if (selectBestScreen() == NO) {
-    return NO;
-  }
-  
-  fullscreen = YES;
-  screenInitialized = YES;
-  
-  return YES;
-  
+  return 0;
 }
 
 
@@ -152,51 +135,28 @@ void showScreen() {
   
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
-    textprintf_ex(get_buffer(), font, 10, getScreenHeight() - 20, WHITE, -1, "Triple Buffering");
+    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Triple Buffering");
     break;
   case UPDATE_PAGE_FLIP:
-    textprintf_ex(get_buffer(), font, 10, getScreenHeight() - 20, WHITE, -1, "Page Flipping");
+    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Page Flipping");
     break;
   case UPDATE_SYSTEM_BUFFER:
-    textprintf_ex(get_buffer(), font, 10, getScreenHeight() - 20, WHITE, -1, "System Buffering");
+    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "System Buffering");
     break;
   case UPDATE_DOUBLE_BUFFER:
-    textprintf_ex(get_buffer(), font, 10, getScreenHeight() - 20, WHITE, -1, "Double Buffering");
+    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Double Buffering");
     break;
   }
   
-  update_screen();
+  // Scale the window onto the screen.
+  stretch_blit(getWindow(), get_buffer(), 0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth() * scale, getWindowHeight() * scale);
   
+  update_screen();
+
 }
+ 
 
-
-BITMAP * getBuffer() {
-  return get_buffer();
+BITMAP *getWindow() {
+  return window;
 }
-
-
-int getScreenRatio() {
-  return screenRatio;
-}
-
-
-int getScaledTileSize() {
-  return TILE_SIZE * screenRatio;
-}
-
-
-int getScreenWidth() {
-  return screenWidth;
-}
-
-
-int getScreenHeight() {
-  return screenHeight;
-}
-
-
-BOOL isFullscreen() {
-  return fullscreen;
-}
-
 

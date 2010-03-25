@@ -47,6 +47,11 @@ void game_time_ticker() {
 END_OF_FUNCTION(game_time_ticker)
 
 
+int getTileSize() {
+  return TILE_SIZE;
+}
+
+
 void game_over() {
   [game gameOver];
 }
@@ -80,12 +85,12 @@ void init_game() {
   
   initializeResources();
 
-  if (startWindow(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT) == 0) {
+  if (initializeScreen(640, 480, NO) == NO) {
     exit(0);
   }
 
   setPalette();
-  initializeScaledImages();
+  setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggleSound(); // Turn off sound
@@ -141,9 +146,9 @@ int main(int argc, char **argv) {
       prevTime = fps_timer;
     }
     
-    [game draw: getBuffer()];
+    [game draw: getWindow()];
     //clear_to_color(getBuffer(), BLACK);
-    textprintf_ex(getBuffer(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
     showScreen();
     
@@ -153,10 +158,9 @@ int main(int argc, char **argv) {
   
   [game free];
   
-  freeScreen();
+  destroyScreen();
   
   destroyResources();
-  destroyScaledImages();
   //destroy_midi(bgm);
   
   return 0;

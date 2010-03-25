@@ -57,20 +57,20 @@
     leftSide = 0;
     upperSide = 0;
   } else if (location == UPPER_RIGHT) {
-    leftSide = getScreenWidth() / 2;
+    leftSide = getWindowWidth() / 2;
     upperSide = 0;
   } else if (location == LOWER_LEFT) {
     leftSide = 0;
-    upperSide = getScreenHeight() / 2;
+    upperSide = getWindowHeight() / 2;
   } else {
-    leftSide = getScreenWidth() / 2;
-    upperSide = getScreenHeight() / 2;
+    leftSide = getWindowWidth() / 2;
+    upperSide = getWindowHeight() / 2;
   }
   
-  leftSide += (getScaledTileSize() / 2);
-  upperSide += (getScaledTileSize() / 2);
+  leftSide += (getTileSize() / 2);
+  upperSide += (getTileSize() / 2);
   
-  drawBox(buffer, leftSide, upperSide, (getScreenWidth() / 2) - getScaledTileSize(), (numOfLines + 2) * lineSpacing);
+  drawBox(buffer, leftSide, upperSide, (getWindowWidth() / 2) - getTileSize(), (numOfLines + 2) * lineSpacing);
   
   if (line1) {
     resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);

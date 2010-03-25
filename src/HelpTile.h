@@ -18,6 +18,7 @@
  */
 #import <objc/Object.h>
 #import "Drawable.h"
+#import "KwestKingdom.h"
 #import "ResourceLibrary.h"
 #import "Screen.h"
 

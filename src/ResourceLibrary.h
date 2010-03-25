@@ -18,6 +18,7 @@
  */
 #import <objc/Object.h>
 #import <allegro.h>
+#import "KwestKingdom.h"
 #import "Resources.h"
 #import "Screen.h"
 

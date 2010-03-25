@@ -136,31 +136,23 @@ BITMAP *canvasTripleSize = NULL;
  * This silly little function provides a fix for transparency
  * when using the rotate sprite and flip sprite functions.
  */
-BITMAP * getCanvas(int w, int h) {
+BITMAP * getCanvas(int width, int height) {
   
-  if (w == getScaledTileSize() && h == getScaledTileSize()) {
-    if (canvasStandardSize && canvasStandardSize->w != getScaledTileSize()) {
-      destroy_bitmap(canvasStandardSize);
-      canvasStandardSize = NULL;
-    }
+  if (width == getTileSize() && height == getTileSize()) {
     if (canvasStandardSize == NULL) {
-      canvasStandardSize = create_bitmap(getScaledTileSize(), getScaledTileSize());
+      canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
     }
     return canvasStandardSize;
   }
   
-  if (w == getScaledTileSize() * 3 && h == getScaledTileSize() * 3) {
-    if (canvasTripleSize && canvasTripleSize->w != getScaledTileSize()) {
-      destroy_bitmap(canvasTripleSize);
-      canvasTripleSize = NULL;
-    }
+  if (width == getTileSize() * 3 && height == getTileSize() * 3) {
     if (canvasTripleSize == NULL) {
-      canvasTripleSize = create_bitmap(getScaledTileSize() * 3, getScaledTileSize() * 3);
+      canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
     }
     return canvasTripleSize;
   }
 
-  printf("Failed to find a canvas size %dx%d. \n", w, h);
+  printf("Failed to find a canvas size %dx%d. \n", width, height);
   
   return NULL;
   
