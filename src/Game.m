@@ -248,10 +248,15 @@ typedef enum {
   
   [menuBackground draw: buffer];
   drawBox(buffer, x, y, w, h);
-  [titleAnimation drawTo: buffer atX: 54 andY: 54];
+
+  [titleAnimation drawTo: buffer
+    atX: (getWindowWidth() / 2) - ([titleAnimation width] / 2)
+    andY: (getWindowWidth() - [titleAnimation width]) / 2
+  ];
   
   // New Game
   resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, "New Game");
+
   // Survival Mode
   resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, "Survival Mode");
   
