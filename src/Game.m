@@ -143,7 +143,7 @@ typedef enum {
 - update {
   
   if (fullscreenKey != nil && [fullscreenKey isPressed]) {
-    if (initializeScreen(getWindowWidth(), getWindowHeight(), is_windowed_mode()) == NO) {
+    if (initializeScreen(-1, -1, is_windowed_mode()) == NO) {
       [self setState: GAME_QUIT_STATE];
     }
     setPalette();
@@ -238,10 +238,10 @@ typedef enum {
   int hTextOffset;
   int vTextOffset;
   
-  x = (getWindowWidth() / 2) - 160;
-  y = (getWindowHeight() / 2) - 20;
-  w = 160 * 2;
-  h = 200;
+  x = (getWindowWidth() / 2) - (getTileSize() * 4);
+  y = (getWindowHeight() / 2) - (getTileSize() / 2);
+  w = getTileSize() * 4 * 2;
+  h = getTileSize() * 5;
   lineSpacing = getTileSize() / 2;
   hTextOffset = getTileSize();
   vTextOffset = lineSpacing;
@@ -249,6 +249,7 @@ typedef enum {
   [menuBackground draw: buffer];
   drawBox(buffer, x, y, w, h);
 
+  // Draw the title of the game
   [titleAnimation drawTo: buffer
     atX: (getWindowWidth() / 2) - ([titleAnimation width] / 2)
     andY: (getWindowWidth() - [titleAnimation width]) / 2

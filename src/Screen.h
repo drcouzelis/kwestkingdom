@@ -19,6 +19,7 @@
 #import <objc/Object.h>
 #import <allegro.h>
 #import "al_screen.h"
+#import "KwestKingdom.h"
 
 
 void setWindowSize(int width, int height);

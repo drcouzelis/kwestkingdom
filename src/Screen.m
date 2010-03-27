@@ -30,12 +30,6 @@ static BITMAP *window = NULL;
 static int scale = 2;
 
 
-// This function is not really necessary, is it?
-//BOOL toggleFullscreen();
-//  return initializeScreen(getScreenWidth(), getScreenHeight(), !fullscreen);
-//}
-
- 
 BOOL selectBestScreen() {
   
   enable_vsync();
@@ -63,21 +57,31 @@ void setWindowSize(int width, int height) {
     destroy_bitmap(window);
   }
   window = create_bitmap(width, height);
-  clear_to_color(window, makecol(0, 0, 0)); // Clear to black
+  clear_to_color(window, BLACK);
 }
 
 
 BOOL initializeScreen(int width, int height, BOOL fullscreen) {
+
+  int colorDepth;
 
   if (screen) {
     shutdown_screen_updating();
   }
   
   // Set the color depth.
-  if (desktop_color_depth() == 0) {
-    set_color_depth(DEFAULT_COLOR_DEPTH);
-  } else {
-    set_color_depth(desktop_color_depth());
+  colorDepth = desktop_color_depth();
+  if (colorDepth == 0) {
+    colorDepth = DEFAULT_COLOR_DEPTH;
+  }
+  set_color_depth(colorDepth);
+
+  if (width < 0) {
+    width = SCREEN_W;
+  }
+
+  if (height < 0) {
+    height = SCREEN_H;
   }
  
   // Start the screen.
@@ -133,18 +137,24 @@ int getWindowHeight() {
 
 void showScreen() {
   
+  int x;
+  int y;
+
+  x = getTileSize() / 5;
+  y = getWindowHeight() - (getTileSize() / 2);
+  
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
-    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Triple Buffering");
+    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Triple Buffering");
     break;
   case UPDATE_PAGE_FLIP:
-    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Page Flipping");
+    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Page Flipping");
     break;
   case UPDATE_SYSTEM_BUFFER:
-    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "System Buffering");
+    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "System Buffering");
     break;
   case UPDATE_DOUBLE_BUFFER:
-    textprintf_ex(getWindow(), font, 10, getWindowHeight() - 10, makecol(255, 255, 255), -1, "Double Buffering");
+    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Double Buffering");
     break;
   }
   

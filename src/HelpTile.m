@@ -49,28 +49,22 @@
   int upperSide;
   int numOfLines;
   int lineSpacing;
+  int width;
+  int height;
   
   numOfLines = 6;
   lineSpacing = 10;
   
-  if (location == UPPER_LEFT) {
-    leftSide = 0;
-    upperSide = 0;
-  } else if (location == UPPER_RIGHT) {
-    leftSide = getWindowWidth() / 2;
-    upperSide = 0;
-  } else if (location == LOWER_LEFT) {
-    leftSide = 0;
-    upperSide = getWindowHeight() / 2;
-  } else {
-    leftSide = getWindowWidth() / 2;
-    upperSide = getWindowHeight() / 2;
-  }
-  
+  leftSide = 0;
+  upperSide = 0;
+ 
   leftSide += (getTileSize() / 2);
   upperSide += (getTileSize() / 2);
+
+  width = getWindowWidth() - (getTileSize() * 4);
+  height = (numOfLines + 2) * lineSpacing;
   
-  drawBox(buffer, leftSide, upperSide, (getWindowWidth() / 2) - getTileSize(), (numOfLines + 2) * lineSpacing);
+  drawBox(buffer, leftSide, upperSide, leftSide + width, upperSide + height);
   
   if (line1) {
     resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);

@@ -38,6 +38,7 @@ void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, ch
 
 void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   
+  /*
   int leftOutside;
   int rightOutside;
   int topOutside;
@@ -63,9 +64,12 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   rightInside = rightOutside - depth;
   topInside = topOutside + depth;
   bottomInside = bottomOutside - depth;
+  */
   
-  rectfill(buffer, leftInside, topInside, rightInside, bottomInside, RED);
+  //rectfill(buffer, leftInside, topInside, rightInside, bottomInside, RED);
+  rectfill(buffer, x, y, x + w, y + h, BLACK);
   
+  /*
   // Top
   hline(buffer, leftOutside + 2, topOutside + 0, rightOutside - 2, WHITE);
   hline(buffer, leftOutside + 2, topOutside + 1, rightOutside - 2, WHITE);
@@ -213,6 +217,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   vline(buffer, rightOutside - 9, topOutside + 14, bottomOutside - 14, WHITE);
   vline(buffer, rightOutside - 10, topOutside + 14, bottomOutside - 14, WHITE);
   vline(buffer, rightOutside - 11, topOutside + 14, bottomOutside - 14, WHITE);
+  */
   
 }
 

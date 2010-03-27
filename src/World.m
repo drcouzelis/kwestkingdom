@@ -733,19 +733,6 @@ typedef enum {
   
   while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
     if ([helpTile getX] == [hero getX] && [helpTile getY] == [hero getY]) {
-      if ([hero getY] < ROWS / 2) {
-        if ([hero getX] < COLS / 2) {
-          [helpTile setLocation: LOWER_RIGHT];
-        } else {
-          [helpTile setLocation: LOWER_LEFT];
-        }
-      } else {
-        if ([hero getX] < COLS / 2) {
-          [helpTile setLocation: UPPER_RIGHT];
-        } else {
-          [helpTile setLocation: UPPER_LEFT];
-        }
-      }
       [helpTile draw: buffer];
     }
   }
@@ -781,7 +768,7 @@ typedef enum {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - 80, getWindowHeight() - 30, WHITE, -1, "Room %d", [room getNumber]);
+  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
   
   return self;
   
