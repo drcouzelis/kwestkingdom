@@ -35,7 +35,7 @@ typedef enum {
   
   if (self) {
     
-    [self setSpeed: 480];
+    [self setSpeed: getWalkSpeed() * 4];
     
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(ARROW_01_BMP)];
@@ -151,22 +151,27 @@ typedef enum {
 }
 
 
-#define ARROW_VISUAL_OFFSET 12
-
-
 - toHoldState {
+  
+  int visualOffset;
+  
+  visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
+  
   state = ARROW_HOLD_STATE;
+  
   [self setDirection: direction];
+  
   // Offset the animation a little bit to make it look like
   // the arrow is in the bow string.
   [flyUpAnimation setOffsetX: 0];
-  [flyUpAnimation setOffsetY: ARROW_VISUAL_OFFSET];
+  [flyUpAnimation setOffsetY: visualOffset];
   [flyDownAnimation setOffsetX: 0];
-  [flyDownAnimation setOffsetY: -ARROW_VISUAL_OFFSET];
-  [flyLeftAnimation setOffsetX: ARROW_VISUAL_OFFSET];
+  [flyDownAnimation setOffsetY: -visualOffset];
+  [flyLeftAnimation setOffsetX: visualOffset];
   [flyLeftAnimation setOffsetY: 0];
-  [flyRightAnimation setOffsetX: -ARROW_VISUAL_OFFSET];
+  [flyRightAnimation setOffsetX: -visualOffset];
   [flyRightAnimation setOffsetY: 0];
+  
   return self;
 }
 

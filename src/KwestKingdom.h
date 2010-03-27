@@ -56,6 +56,7 @@ typedef enum {
 
 
 int getTileSize();
+int getWalkSpeed();
 
 void game_over();
 

@@ -67,7 +67,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   */
   
   //rectfill(buffer, leftInside, topInside, rightInside, bottomInside, RED);
-  rectfill(buffer, x, y, x + w, y + h, BLACK);
+  rectfill(buffer, x, y, x + w, y + h, RED);
   
   /*
   // Top

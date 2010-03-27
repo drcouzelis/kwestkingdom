@@ -1,9 +1,7 @@
 /*--------------------------------------------------------------
-	al_screen.h -- header file for screen update API
-					(c) Chris "23yrold3yrold" Barry, 2004
+        al_screen.h -- header file for screen update API
+        (c) Chris "23yrold3yrold" Barry, 2004
   --------------------------------------------------------------*/
-
-#define ALLEGRO_STATICLINK 1
 
 #ifndef SCREEN_UPDATE_H
 #define SCREEN_UPDATE_H

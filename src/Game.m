@@ -311,10 +311,10 @@ typedef enum {
   char line[256];
   int i;
   
-  x = (getWindowWidth() / 2) - 200;
-  y = (getWindowHeight() / 2) - 200;
-  w = 200 * 2;
-  h = 200 * 2;
+  x = getTileSize() * 3;
+  y = getTileSize() * 2;
+  w = getTileSize() * 10;
+  h = getTileSize() * 8;
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
@@ -322,10 +322,10 @@ typedef enum {
   drawBox(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + 120, y + vTextOffset, 2, WHITE, "High Scores");
+  resizedTextOut(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, "High Scores");
   
   // Header
-  resizedTextOut(buffer, x + 50, y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
+  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
@@ -334,11 +334,11 @@ typedef enum {
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    resizedTextOut(buffer, x + 50, y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
   }
   
   // Return
-  resizedTextOut(buffer, x + 50, y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
+  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
   
   return self;
   
@@ -355,10 +355,10 @@ typedef enum {
   int lineSpacing;
   int vTextOffset;
   
-  x = (getWindowWidth() / 2) - 280;
-  y = (getWindowHeight() / 2) - 40;
-  w = 280 * 2;
-  h = 90;
+  x = getTileSize();
+  y = getTileSize() * 5;
+  w = getTileSize() * 14;
+  h = (getTileSize() * 2) + (getTileSize() / 2);
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
@@ -367,12 +367,12 @@ typedef enum {
   drawBox(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + 160, y + vTextOffset, 2, WHITE, "Congratulations!");
-  resizedTextOut(buffer, x + 110, y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
-  resizedTextOut(buffer, x + 40, y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
+  resizedTextOut(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, "Congratulations!");
+  resizedTextOut(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
+  resizedTextOut(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
   
   // Initials
-  resizedTextOut(buffer, x + 480, y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
+  resizedTextOut(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
   
   return self;
   

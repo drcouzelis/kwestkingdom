@@ -44,7 +44,7 @@ typedef enum {
   
   if (self) {
     
-    speed = 120; // In FPS
+    speed = getWalkSpeed(); // In FPS
     health = 3;
     maxHealth = MAX_HERO_HEALTH;
     team = HERO_TEAM;

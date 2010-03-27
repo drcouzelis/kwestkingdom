@@ -52,6 +52,11 @@ int getTileSize() {
 }
 
 
+int getWalkSpeed() {
+  return 60;
+}
+
+
 void game_over() {
   [game gameOver];
 }

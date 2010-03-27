@@ -40,7 +40,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    speed = 120;
+    speed = getWalkSpeed();
     team = ENEMY_TEAM;
     
     bow = [[Bow alloc] init];

@@ -26,9 +26,6 @@ typedef enum {
   NINJA_DASH_STATE
 } NINJA_STATE;
 
-#define NINJA_WALK_SPEED 120
-#define NINJA_DASH_SPEED 140
-
 
 @implementation Ninja
 
@@ -42,8 +39,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    [self setSpeed: NINJA_WALK_SPEED];
-    //health = 1;
+    [self setSpeed: getWalkSpeed()];
     team = ENEMY_TEAM;
     
     sword = [[Sword alloc] init];
@@ -146,7 +142,7 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: NINJA_DASH_SPEED];
+      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
@@ -163,7 +159,7 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: NINJA_DASH_SPEED];
+      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
@@ -208,7 +204,7 @@ typedef enum {
     
   case NINJA_DASH_STATE:
     if (![self moving]) {
-      [self setSpeed: NINJA_WALK_SPEED];
+      [self setSpeed: getWalkSpeed()];
       // If the target has a walking distance of one...
       if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
         state = NINJA_ATTACK_STATE;

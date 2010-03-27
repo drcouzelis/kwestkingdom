@@ -33,8 +33,6 @@ typedef enum {
   ENEMY_TEAM
 } TEAM;
 
-#define CHARACTER_WALK_SPEED 120
-
 
 @interface Character : Sprite <Livable, Moneyable> {
   

@@ -41,7 +41,7 @@ typedef enum {
     w = 2;
     h = 2;
     
-    speed = 120;
+    speed = getWalkSpeed();
     maxHealth = 5;
     health = 5;
     team = ENEMY_TEAM;
