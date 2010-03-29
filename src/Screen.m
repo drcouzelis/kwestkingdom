@@ -52,12 +52,38 @@ BOOL selectBestScreen() {
 }
 
 
+BOOL setScale() {
+  
+  int xScale;
+  int yScale;
+
+  if (screen && window) {
+  
+    xScale = screen->w / window->w;
+    yScale = screen->h / window->h;
+    
+    if (xScale < yScale) {
+      scale = xScale;
+    } else {
+      scale = yScale;
+    }
+
+    return YES;
+
+  }
+  
+  return NO;
+  
+}
+
+
 void setWindowSize(int width, int height) {
   if (window) {
     destroy_bitmap(window);
   }
   window = create_bitmap(width, height);
   clear_to_color(window, BLACK);
+  setScale();
 }
 
 
@@ -68,7 +94,7 @@ BOOL initializeScreen(int width, int height, BOOL fullscreen) {
   if (screen) {
     shutdown_screen_updating();
   }
-  
+
   // Set the color depth.
   colorDepth = desktop_color_depth();
   if (colorDepth == 0) {
@@ -104,6 +130,8 @@ BOOL initializeScreen(int width, int height, BOOL fullscreen) {
   if (selectBestScreen() == NO) {
     return NO;
   }
+
+  setScale();
   
   return YES;
 
@@ -159,7 +187,18 @@ void showScreen() {
   }
   
   // Scale the window onto the screen.
-  stretch_blit(getWindow(), get_buffer(), 0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth() * scale, getWindowHeight() * scale);
+  stretch_blit(
+    getWindow(),
+    get_buffer(),
+    0,
+    0,
+    getWindowWidth(),
+    getWindowHeight(),
+    (SCREEN_W / 2) - (getWindowWidth() / 2 * scale),
+    (SCREEN_H / 2) - (getWindowHeight() / 2 * scale),
+    getWindowWidth() * scale,
+    getWindowHeight() * scale
+  );
   
   update_screen();
 
