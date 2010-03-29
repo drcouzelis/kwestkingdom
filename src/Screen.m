@@ -27,7 +27,7 @@
 static BITMAP *window = NULL;
 
 // The scale is used to know how big to multiply the window.
-static int scale = 2;
+static int scale = DEFAULT_SCREEN_RATIO;
 
 
 BOOL selectBestScreen() {

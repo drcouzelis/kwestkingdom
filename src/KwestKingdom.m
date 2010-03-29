@@ -90,7 +90,7 @@ void init_game() {
   
   initializeResources();
 
-  if (initializeScreen(640, 480, NO) == NO) {
+  if (initializeScreen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, NO) == NO) {
     exit(0);
   }
 
