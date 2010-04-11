@@ -31,5 +31,5 @@ int getWindowWidth();
 int getWindowHeight();
 
 BITMAP *getWindow();
-void showScreen();
+BOOL showScreen();
 

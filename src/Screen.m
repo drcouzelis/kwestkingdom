@@ -78,12 +78,15 @@ BOOL setScale() {
 
 
 void setWindowSize(int width, int height) {
+  
   if (window) {
     destroy_bitmap(window);
   }
+  
   window = create_bitmap(width, height);
   clear_to_color(window, BLACK);
   setScale();
+
 }
 
 
@@ -163,10 +166,20 @@ int getWindowHeight() {
 }
 
 
-void showScreen() {
+BOOL showScreen() {
   
   int x;
   int y;
+
+  if (screen == NULL) {
+    printf("Failed to find a screen to show. \n");
+    return NO;
+  }
+
+  if (window == NULL) {
+    printf("Failed to find a window to draw. \n");
+    return NO;
+  }
 
   x = getTileSize() / 5;
   y = getWindowHeight() - (getTileSize() / 2);
@@ -201,6 +214,8 @@ void showScreen() {
   );
   
   update_screen();
+
+  return YES;
 
 }
  
