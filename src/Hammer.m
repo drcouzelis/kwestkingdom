@@ -52,12 +52,12 @@
     [attackRightAnimation setLoop: NO];
     [attackRightAnimation setSpeed: 24];
     
-    attackLeftAnimation = [[attackRightAnimation copy] hFlip: YES];
+    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
     [attackLeftAnimation setOffsetX: -TILE_SIZE * 2];
-    attackDownAnimation = [[attackRightAnimation copy] rotate: YES];
+    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
     [attackDownAnimation setOffsetX: 0];
     [attackDownAnimation setOffsetY: TILE_SIZE];
-    attackUpAnimation = [[[[attackRightAnimation copy] hFlip: YES] vFlip: YES] rotate: YES];
+    attackUpAnimation = [[[[attackRightAnimation copy] setHorizontalFlip: YES] setVerticalFlip: YES] setRotate: YES];
     [attackUpAnimation setOffsetX: -TILE_SIZE];
     [attackUpAnimation setOffsetY: -TILE_SIZE * 2];
     

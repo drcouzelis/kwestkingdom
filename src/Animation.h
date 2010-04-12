@@ -56,9 +56,9 @@
 - setSpeed: (int) newSpeed;
 - setOffsetX: (int) newOffsetX;
 - setOffsetY: (int) newOffsetY;
-- rotate: (BOOL) rotateOn;
-- hFlip: (BOOL) hFlipOn;
-- vFlip: (BOOL) vFlipOn;
+- setRotate: (BOOL) rotateOn;
+- setHorizontalFlip: (BOOL) hFlipOn;
+- setVerticalFlip: (BOOL) vFlipOn;
 
 - reset;
 

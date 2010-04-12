@@ -42,21 +42,21 @@
     [waterAnimation addFrame: getImage(TERRAIN_ICE_01_BMP)];
     
     [shoreNorthAnimation addFrame: getImage(SHORE_ICE_01_BMP)];
-    shoreSouthAnimation = [[shoreNorthAnimation copy] vFlip: YES];
-    shoreEastAnimation = [[shoreNorthAnimation copy] rotate: YES];
-    shoreWestAnimation = [[[shoreNorthAnimation copy] vFlip: YES] rotate: YES];
+    shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
+    shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
+    shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
     
     [shoreInsideNEAnimation addFrame: getImage(SHORE_ICE_INSIDE_CORNER_01_BMP)];
-    shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] hFlip: YES];
-    shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] vFlip: YES];
-    shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] vFlip: YES] hFlip: YES];
+    shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
+    shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
+    shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
     
     [shoreOutsideNEAnimation addFrame: getImage(SHORE_ICE_OUTSIDE_CORNER_01_BMP)];
     [shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
     [shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
-    shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] hFlip: YES];
-    shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] vFlip: YES];
-    shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] vFlip: YES] hFlip: YES];
+    shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];
+    shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] setVerticalFlip: YES];
+    shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
     
   }
   

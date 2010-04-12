@@ -40,9 +40,9 @@ typedef enum {
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(ARROW_01_BMP)];
     
-    flyLeftAnimation = [[flyRightAnimation copy] hFlip: YES];
-    flyDownAnimation = [[flyRightAnimation copy] rotate: YES];
-    flyUpAnimation = [[[flyRightAnimation copy] hFlip: YES] rotate: YES];
+    flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: YES];
+    flyDownAnimation = [[flyRightAnimation copy] setRotate: YES];
+    flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
     
     direction = UP;
     

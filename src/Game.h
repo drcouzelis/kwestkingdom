@@ -23,10 +23,10 @@
 #import "HighScoreLibrary.h"
 #import "KeyControl.h"
 #import "KwestKingdom.h"
-#import "ResourceLibrary.h"
 #import "RoomFactory.h"
 #import "Snapshot.h"
 #import "StoryWorld.h"
+#import "Text.h"
 #import "Updatable.h"
 
 

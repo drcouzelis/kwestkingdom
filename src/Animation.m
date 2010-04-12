@@ -71,9 +71,9 @@ extern int timer;
   [animation setOffsetY: offsetY];
   [animation setLoop: loop];
   [animation setSpeed: speed];
-  [animation hFlip: hFlip];
-  [animation vFlip: vFlip];
-  [animation rotate: rotate];
+  [animation setHorizontalFlip: hFlip];
+  [animation setVerticalFlip: vFlip];
+  [animation setRotate: rotate];
   [animation reset];
   
   return animation;
@@ -152,7 +152,7 @@ BITMAP * getCanvas(int width, int height) {
     return canvasTripleSize;
   }
 
-  printf("Failed to find a canvas size %dx%d. \n", width, height);
+  fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
   
   return NULL;
   
@@ -172,7 +172,9 @@ BITMAP * getCanvas(int width, int height) {
   // Only necessary when rotating and flipping sprites.
   if (rotate || hFlip || vFlip) {
     canvas = getCanvas([self getImage]->w, [self getImage]->h);
-    blit([self getImage], canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+    if (canvas) {
+      blit([self getImage], canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+    }
   } else {
     canvas = [self getImage];
   }
@@ -267,19 +269,19 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- rotate: (BOOL) rotateOn {
+- setRotate: (BOOL) rotateOn {
   rotate = rotateOn;
   return self;
 }
 
 
-- hFlip: (BOOL) hFlipOn {
+- setHorizontalFlip: (BOOL) hFlipOn {
   hFlip = hFlipOn;
   return self;
 }
 
 
-- vFlip: (BOOL) vFlipOn {
+- setVerticalFlip: (BOOL) vFlipOn {
   vFlip = vFlipOn;
   return self;
 }

@@ -30,6 +30,7 @@
 #import "Targetable.h"
 #import "Traversable.h"
 #import "Updatable.h"
+#import "Text.h"
 
 
 @interface World : Object <Drawable, Inhabitable, Targetable, Traversable, Updatable> {

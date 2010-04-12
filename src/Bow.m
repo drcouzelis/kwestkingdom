@@ -51,9 +51,9 @@ typedef enum {
     [attackRightAnimation setLoop: NO];
     [attackRightAnimation setSpeed: 12];
 	
-    attackLeftAnimation = [[attackRightAnimation copy] hFlip: YES];
-    attackDownAnimation = [[attackRightAnimation copy] rotate: YES];
-    attackUpAnimation = [[[attackRightAnimation copy] hFlip: YES] rotate: YES];
+    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
+    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
+    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
     
     [self toAwayState];
     

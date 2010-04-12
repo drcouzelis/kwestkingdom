@@ -82,7 +82,7 @@ typedef enum {
     [menuPointer addFrame: getImage(SWORD_02_BMP)];
     [menuPointer addFrame: getImage(SWORD_03_BMP)];
     [menuPointer addFrame: getImage(SWORD_04_BMP)];
-    [menuPointer rotate: YES];
+    [menuPointer setRotate: YES];
     [menuPointer setLoop: YES];
     [menuPointer setSpeed: 6];
     
