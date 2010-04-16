@@ -393,7 +393,9 @@ typedef enum {
   
   case GAME_OVER_STATE:
     [world draw: buffer];
-    [gameOverAnimation drawTo: buffer atX: 0 andY: 0];
+    [gameOverAnimation drawTo: buffer
+      atX: (getWindowWidth() / 2) - ([gameOverAnimation width] / 2)
+      andY: (getWindowHeight() / 2) - ([gameOverAnimation height] / 2)];
     break;
     
   case GAME_ENTER_INITIALS_STATE:
