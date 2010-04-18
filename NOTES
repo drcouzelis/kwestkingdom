@@ -1,8 +1,5 @@
 GENERAL NOTES
 =============
-. "grabber -nosound Resources.dat &" to edit resources.
-. "dat2c -o Resources.m -h Resources.h Resources.dat" to compile resources.
-
 . v0.2
   - Add the boss.
   - Add the ending.

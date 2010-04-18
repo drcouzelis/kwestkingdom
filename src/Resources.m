@@ -28,6 +28,8 @@ PALETTE palette;
 
 void initializeResources() {
   
+  int i;
+
   if (initializedResources) {
     return;
   }
@@ -120,8 +122,34 @@ void initializeResources() {
   // Load the palette last to get the correct colors.
   images[IMG_PALETTE] = load_bitmap("img/palette.bmp", palette);
 
+  // Load the sounds.
+  sounds[SND_SWORD] = load_sample("snd/sword.wav");
+  sounds[SND_ARROW_HIT] = load_sample("snd/arrow/hit.wav");
+  sounds[SND_ARROW_FLY] = load_sample("snd/arrow/fly.wav");
+  sounds[SND_GASP] = load_sample("snd/gasp.wav");
+  sounds[SND_CHOMP] = load_sample("snd/chomp.wav");
+  sounds[SND_MONEY] = load_sample("snd/money.wav");
+  sounds[SND_HEART] = load_sample("snd/heart.wav");
+  sounds[SND_HAMMER] = load_sample("snd/hammer.wav");
+
   initializedResources = YES;
+
+  for (i = 0; i < NUMBER_OF_IMAGES; i++) {
+    if (images[i] == NULL) {
+      initializedResources = NO;
+      destroyResources();
+      return;
+    }
+  }
   
+  for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
+    if (sounds[i] == NULL) {
+      initializedResources = NO;
+      destroyResources();
+      return;
+    }
+  }
+
 }
 
 
@@ -135,6 +163,10 @@ void destroyResources() {
 
   for (i = 0; i < NUMBER_OF_IMAGES; i++) {
     destroy_bitmap(images[i]);
+  }
+
+  for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
+    destroy_sample(sounds[i]);
   }
 
   initializedResources = NO;
