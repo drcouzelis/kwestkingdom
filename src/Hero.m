@@ -58,45 +58,45 @@ typedef enum {
     [bow setSpeed: speed];
     
     standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(HERO_01_BMP)];
-    [standAnimation addFrame: getImage(HERO_02_BMP)];
-    [standAnimation addFrame: getImage(HERO_03_BMP)];
-    [standAnimation addFrame: getImage(HERO_02_BMP)];
+    [standAnimation addFrame: getImage(IMG_HERO_STAND_1)];
+    [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
+    [standAnimation addFrame: getImage(IMG_HERO_STAND_3)];
+    [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 6];
     
     beginAttackAnimation = [[Animation alloc] init];
-    [beginAttackAnimation addFrame: getImage(HERO_ATTACK_01_BMP)];
-    [beginAttackAnimation addFrame: getImage(HERO_ATTACK_02_BMP)];
-    [beginAttackAnimation addFrame: getImage(HERO_ATTACK_03_BMP)];
-    [beginAttackAnimation addFrame: getImage(HERO_ATTACK_04_BMP)];
+    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
+    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
+    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_3)];
+    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_4)];
     [beginAttackAnimation setLoop: NO];
     [beginAttackAnimation setSpeed: HERO_ATTACK_SPEED];
     
     endAttackAnimation = [[Animation alloc] init];
-    [endAttackAnimation addFrame: getImage(HERO_ATTACK_03_BMP)];
-    [endAttackAnimation addFrame: getImage(HERO_ATTACK_02_BMP)];
-    [endAttackAnimation addFrame: getImage(HERO_ATTACK_01_BMP)];
+    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_3)];
+    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
+    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
     [endAttackAnimation setLoop: NO];
     [endAttackAnimation setSpeed: HERO_ATTACK_SPEED];
     
     hurtAnimation = [[Animation alloc] init];
-    [hurtAnimation addFrame: getImage(HERO_HURT_01_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_02_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_03_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_04_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_03_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_02_BMP)];
-    [hurtAnimation addFrame: getImage(HERO_HURT_01_BMP)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_2)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_3)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_4)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_3)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_2)];
+    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
     [hurtAnimation setLoop: NO];
     [hurtAnimation setSpeed: 12];
     
     deadAnimation = [[Animation alloc] init];
-    [deadAnimation addFrame: getImage(HERO_DEAD_01_BMP)];
-    [deadAnimation addFrame: getImage(HERO_DEAD_02_BMP)];
-    [deadAnimation addFrame: getImage(HERO_DEAD_03_BMP)];
-    [deadAnimation addFrame: getImage(HERO_DEAD_04_BMP)];
-    [deadAnimation addFrame: getImage(HERO_DEAD_05_BMP)];
+    [deadAnimation addFrame: getImage(IMG_HERO_DIE_1)];
+    [deadAnimation addFrame: getImage(IMG_HERO_DIE_2)];
+    [deadAnimation addFrame: getImage(IMG_HERO_DIE_3)];
+    [deadAnimation addFrame: getImage(IMG_HERO_DIE_4)];
+    [deadAnimation addFrame: getImage(IMG_HERO_DIE_5)];
     [deadAnimation setLoop: NO];
     [deadAnimation setSpeed: 6];
     
@@ -408,7 +408,7 @@ typedef enum {
     [bow toHoldState];
   }
   
-  playSound(GASP_SOUND);
+  playSound(SND_GASP);
   
   return self;
   

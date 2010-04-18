@@ -1,99 +1,133 @@
-/* Allegro datafile object indexes, produced by grabber v4.4.0, Unix */
-/* Datafile: /home/couzelis/Projects/Kwest Kingdom/kwestkingdom/res/resources.dat */
-/* Date: Sat Jan 30 09:36:31 2010 */
-/* Do not hand edit! */
+/**
+ * Copyright 2009 David Couzelis
+ *
+ * This file is part of "Kwest Kingdom".
+ *
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
+#import <objc/Object.h>
+#import <allegro.h>
 
-#define ARROW_FLY_SOUND                  0        /* SAMP */
-#define ARROW_HIT_SOUND                  1        /* SAMP */
-#define CHOMP_SOUND                      2        /* SAMP */
-#define GASP_SOUND                       3        /* SAMP */
-#define HAMMER_ATTACK_SOUND              4        /* SAMP */
-#define HEART_SOUND                      5        /* SAMP */
-#define MONEY_SOUND                      6        /* SAMP */
-#define SWORD_ATTACK_SOUND               7        /* SAMP */
-#define ARCHER_01_BMP                    8        /* BMP  */
-#define ARCHER_02_BMP                    9        /* BMP  */
-#define ARCHER_03_BMP                    10       /* BMP  */
-#define ARROW_01_BMP                     11       /* BMP  */
-#define BOW_01_BMP                       12       /* BMP  */
-#define BOW_02_BMP                       13       /* BMP  */
-#define BOW_03_BMP                       14       /* BMP  */
-#define BOW_04_BMP                       15       /* BMP  */
-#define BOW_ATTACK_01_BMP                16       /* BMP  */
-#define BOW_ATTACK_02_BMP                17       /* BMP  */
-#define BOW_ATTACK_03_BMP                18       /* BMP  */
-#define CHOMPER_01_BMP                   19       /* BMP  */
-#define CHOMPER_02_BMP                   20       /* BMP  */
-#define CHOMPER_03_BMP                   21       /* BMP  */
-#define CHOMPER_ATTACK_01_BMP            22       /* BMP  */
-#define CHOMPER_ATTACK_02_BMP            23       /* BMP  */
-#define CHOMPER_ATTACK_03_BMP            24       /* BMP  */
-#define CHOMPER_ATTACK_04_BMP            25       /* BMP  */
-#define CHOMPER_ATTACK_05_BMP            26       /* BMP  */
-#define GAME_OVER_01_BMP                 27       /* BMP  */
-#define GIANT_01_BMP                     28       /* BMP  */
-#define GIANT_02_BMP                     29       /* BMP  */
-#define GIANT_03_BMP                     30       /* BMP  */
-#define HAMMER_01_BMP                    31       /* BMP  */
-#define HAMMER_02_BMP                    32       /* BMP  */
-#define HAMMER_03_BMP                    33       /* BMP  */
-#define HAMMER_04_BMP                    34       /* BMP  */
-#define HAMMER_ATTACK_01_BMP             35       /* BMP  */
-#define HAMMER_ATTACK_02_BMP             36       /* BMP  */
-#define HAMMER_ATTACK_03_BMP             37       /* BMP  */
-#define HAMMER_ATTACK_04_BMP             38       /* BMP  */
-#define HELP_01_BMP                      39       /* BMP  */
-#define HERO_01_BMP                      40       /* BMP  */
-#define HERO_02_BMP                      41       /* BMP  */
-#define HERO_03_BMP                      42       /* BMP  */
-#define HERO_ATTACK_01_BMP               43       /* BMP  */
-#define HERO_ATTACK_02_BMP               44       /* BMP  */
-#define HERO_ATTACK_03_BMP               45       /* BMP  */
-#define HERO_ATTACK_04_BMP               46       /* BMP  */
-#define HERO_DEAD_01_BMP                 47       /* BMP  */
-#define HERO_DEAD_02_BMP                 48       /* BMP  */
-#define HERO_DEAD_03_BMP                 49       /* BMP  */
-#define HERO_DEAD_04_BMP                 50       /* BMP  */
-#define HERO_DEAD_05_BMP                 51       /* BMP  */
-#define HERO_HURT_01_BMP                 52       /* BMP  */
-#define HERO_HURT_02_BMP                 53       /* BMP  */
-#define HERO_HURT_03_BMP                 54       /* BMP  */
-#define HERO_HURT_04_BMP                 55       /* BMP  */
-#define ITEM_HEART_01_BMP                56       /* BMP  */
-#define ITEM_HEART_EMPTY_01_BMP          57       /* BMP  */
-#define ITEM_MONEYBAG_01_BMP             58       /* BMP  */
-#define NINJA_01_BMP                     59       /* BMP  */
-#define NINJA_02_BMP                     60       /* BMP  */
-#define NINJA_03_BMP                     61       /* BMP  */
-#define SHIELD_01_BMP                    62       /* BMP  */
-#define SHIELD_02_BMP                    63       /* BMP  */
-#define SHIELD_03_BMP                    64       /* BMP  */
-#define SHIELD_04_BMP                    65       /* BMP  */
-#define SHORE_01_BMP                     66       /* BMP  */
-#define SHORE_ICE_01_BMP                 67       /* BMP  */
-#define SHORE_ICE_INSIDE_CORNER_01_BMP   68       /* BMP  */
-#define SHORE_ICE_OUTSIDE_CORNER_01_BMP  69       /* BMP  */
-#define SHORE_INSIDE_CORNER_01_BMP       70       /* BMP  */
-#define SHORE_OUTSIDE_CORNER_01_BMP      71       /* BMP  */
-#define SWORD_01_BMP                     72       /* BMP  */
-#define SWORD_02_BMP                     73       /* BMP  */
-#define SWORD_03_BMP                     74       /* BMP  */
-#define SWORD_04_BMP                     75       /* BMP  */
-#define SWORD_ATTACK_01_BMP              76       /* BMP  */
-#define SWORD_ATTACK_02_BMP              77       /* BMP  */
-#define SWORD_ATTACK_03_BMP              78       /* BMP  */
-#define SWORD_ATTACK_04_BMP              79       /* BMP  */
-#define TERRAIN_DIRT_01_BMP              80       /* BMP  */
-#define TERRAIN_EVERGREEN_01_BMP         81       /* BMP  */
-#define TERRAIN_GRASS_01_BMP             82       /* BMP  */
-#define TERRAIN_ICE_01_BMP               83       /* BMP  */
-#define TERRAIN_PATH_01_BMP              84       /* BMP  */
-#define TERRAIN_ROCK_01_BMP              85       /* BMP  */
-#define TERRAIN_SNOW_01_BMP              86       /* BMP  */
-#define TERRAIN_STAIRS_DOWN_01_BMP       87       /* BMP  */
-#define TERRAIN_STAIRS_UP_01_BMP         88       /* BMP  */
-#define TERRAIN_TREE_01_BMP              89       /* BMP  */
-#define TERRAIN_WATER_01_BMP             90       /* BMP  */
-#define TITLE_01_BMP                     91       /* BMP  */
-#define PALETTE_PAL                      92       /* PAL  */
+typedef enum {
+  IMG_SWORD_STAB_2,
+  IMG_SWORD_STAB_4,
+  IMG_SWORD_STAB_3,
+  IMG_SWORD_STAB_1,
+  IMG_SWORD_HOLD_2,
+  IMG_SWORD_HOLD_4,
+  IMG_SWORD_HOLD_3,
+  IMG_SWORD_HOLD_1,
+  IMG_SHIELD_2,
+  IMG_SHIELD_4,
+  IMG_SHIELD_3,
+  IMG_SHIELD_1,
+  IMG_TITLE,
+  IMG_CHOMPER_BITE_2,
+  IMG_CHOMPER_BITE_4,
+  IMG_CHOMPER_BITE_5,
+  IMG_CHOMPER_BITE_3,
+  IMG_CHOMPER_BITE_1,
+  IMG_CHOMPER_STAND_2,
+  IMG_CHOMPER_STAND_3,
+  IMG_CHOMPER_STAND_1,
+  IMG_HERO_HURT_2,
+  IMG_HERO_HURT_4,
+  IMG_HERO_HURT_3,
+  IMG_HERO_HURT_1,
+  IMG_HERO_DIE_2,
+  IMG_HERO_DIE_4,
+  IMG_HERO_DIE_5,
+  IMG_HERO_DIE_3,
+  IMG_HERO_DIE_1,
+  IMG_HERO_ATTACK_2,
+  IMG_HERO_ATTACK_4,
+  IMG_HERO_ATTACK_3,
+  IMG_HERO_ATTACK_1,
+  IMG_HERO_STAND_2,
+  IMG_HERO_STAND_3,
+  IMG_HERO_STAND_1,
+  IMG_ARCHER_2,
+  IMG_ARCHER_3,
+  IMG_ARCHER_1,
+  IMG_ITEMS_EMPTYHEART,
+  IMG_ITEMS_HEART,
+  IMG_ITEMS_MONEYBAG,
+  IMG_TERRAIN_DOWNSTAIRS,
+  IMG_TERRAIN_WATER,
+  IMG_TERRAIN_DIRT,
+  IMG_TERRAIN_ICE,
+  IMG_TERRAIN_PATH,
+  IMG_TERRAIN_SPIRE,
+  IMG_TERRAIN_OAK,
+  IMG_TERRAIN_UPSTAIRS,
+  IMG_TERRAIN_SNOW,
+  IMG_TERRAIN_EVERGREEN,
+  IMG_TERRAIN_GRASS,
+  IMG_HAMMER_SWING_2,
+  IMG_HAMMER_SWING_4,
+  IMG_HAMMER_SWING_3,
+  IMG_HAMMER_SWING_1,
+  IMG_HAMMER_HOLD_2,
+  IMG_HAMMER_HOLD_4,
+  IMG_HAMMER_HOLD_3,
+  IMG_HAMMER_HOLD_1,
+  IMG_BOW_DRAW_2,
+  IMG_BOW_DRAW_3,
+  IMG_BOW_DRAW_1,
+  IMG_BOW_HOLD_2,
+  IMG_BOW_HOLD_4,
+  IMG_BOW_HOLD_3,
+  IMG_BOW_HOLD_1,
+  IMG_GIANT_2,
+  IMG_GIANT_3,
+  IMG_GIANT_1,
+  IMG_ARROW,
+  IMG_SHORE_SNOW_INSIDECORNER,
+  IMG_SHORE_SNOW_OUTSIDECORNER,
+  IMG_SHORE_SNOW_SHORE,
+  IMG_SHORE_GRASS_INSIDECORNER,
+  IMG_SHORE_GRASS_OUTSIDECORNER,
+  IMG_SHORE_GRASS_SHORE,
+  IMG_HELP,
+  IMG_GAMEOVER,
+  IMG_PALETTE,
+  IMG_NINJA_2,
+  IMG_NINJA_3,
+  IMG_NINJA_1,
+  NUMBER_OF_IMAGES
+} IMAGES;
+
+typedef enum {
+  SND_MONEY,
+  SND_ARROW_HIT,
+  SND_ARROW_FLY,
+  SND_HEART,
+  SND_GASP,
+  SND_SWORD,
+  SND_HAMMER,
+  SND_CHOMP,
+  NUMBER_OF_SOUNDS
+} SOUNDS;
+
+void initializeResources();
+void destroyResources();
+
+BITMAP * getImage(int image);
+void setPalette(void);
+
+void playSound(int sound);
+void toggleSound(void);
+
+BOOL soundEnabled(void);
 

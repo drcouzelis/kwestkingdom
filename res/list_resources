@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# David Couzelis
+# License: Do whatever you want with this one file. Seriously. Anything.
+
+# Use this simply script to convert the names of resources
+# (images, sounds...) into a format that would be nice to use
+# as a "constant" in your code. For example:
+#
+#   img/hero/stand/1.bmp
+#
+# would be converted to:
+#
+#   IMG_HERO_STAND_1
+
+# Get a list of all of the images and sounds that
+# are in this directory and its sub-directories.
+filenames=$(find . -name '*.bmp' && find . -name '*.wav')
+
+for resource in $filenames
+do
+  
+  resource=$(echo $resource | sed 's|^\./||')  # Remove the "./" prefix
+  resource=$(echo $resource | sed 's|\..*$||') # Remove the file type suffix
+  resource=$(echo $resource | sed 's|/|_|'g)   # Replace "/" with "_"
+  
+  resource=$(echo $resource | \
+    sed 'y|abcdefghijklmnopqrstuvwxyz|ABCDEFGHIJKLMNOPQRSTUVWXYZ|') # To upper case
+  
+  echo $resource,
+  
+done
+
+echo
+
+# Create a list of images and how to load them.
+filenames=$(find . -name '*.bmp')
+
+for resource in $filenames
+do
+  
+  filename=$(echo $resource | sed 's|^\./||')  # Remove the "./" prefix
+  resource=$(echo $filename | sed 's|\..*$||') # Remove the file type suffix
+  resource=$(echo $resource | sed 's|/|_|'g)   # Replace "/" with "_"
+  
+  resource=$(echo $resource | \
+    sed 'y|abcdefghijklmnopqrstuvwxyz|ABCDEFGHIJKLMNOPQRSTUVWXYZ|') # To upper case
+  
+  echo images\[$resource\] = load_bitmap\(\"$filename\", palette\)\;
+  
+done
+

@@ -56,10 +56,10 @@ typedef enum {
     [HighScoreLibrary initInstance];
     
     titleAnimation = [[Animation alloc] init];
-    [titleAnimation addFrame: getImage(TITLE_01_BMP)];
+    [titleAnimation addFrame: getImage(IMG_TITLE)];
     
     gameOverAnimation = [[Animation alloc] init];
-    [gameOverAnimation addFrame: getImage(GAME_OVER_01_BMP)];
+    [gameOverAnimation addFrame: getImage(IMG_GAMEOVER)];
     
     escapeKey = [[KeyControl alloc] initWithKey: KEY_ESC];
     [escapeKey setDelay: GAME_TICKER];
@@ -78,10 +78,10 @@ typedef enum {
     highScoresBackground = [[Snapshot alloc] init];
     
     menuPointer = [[Animation alloc] init];
-    [menuPointer addFrame: getImage(SWORD_01_BMP)];
-    [menuPointer addFrame: getImage(SWORD_02_BMP)];
-    [menuPointer addFrame: getImage(SWORD_03_BMP)];
-    [menuPointer addFrame: getImage(SWORD_04_BMP)];
+    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_1)];
+    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_2)];
+    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_3)];
+    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_4)];
     [menuPointer setRotate: YES];
     [menuPointer setLoop: YES];
     [menuPointer setSpeed: 6];

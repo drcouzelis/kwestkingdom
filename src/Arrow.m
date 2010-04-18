@@ -38,7 +38,7 @@ typedef enum {
     [self setSpeed: getWalkSpeed() * 4];
     
     flyRightAnimation = [[Animation alloc] init];
-    [flyRightAnimation addFrame: getImage(ARROW_01_BMP)];
+    [flyRightAnimation addFrame: getImage(IMG_ARROW)];
     
     flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: YES];
     flyDownAnimation = [[flyRightAnimation copy] setRotate: YES];
@@ -189,7 +189,7 @@ typedef enum {
   [flyLeftAnimation setOffsetY: 0];
   [flyRightAnimation setOffsetX: 0];
   [flyRightAnimation setOffsetY: 0];
-  playSound(ARROW_FLY_SOUND);
+  playSound(SND_ARROW_FLY);
   return self;
 }
 
@@ -197,7 +197,7 @@ typedef enum {
 - toStoppedState {
   state = ARROW_STOPPED_STATE;
   [self setDirection: direction];
-  playSound(ARROW_HIT_SOUND);
+  playSound(SND_ARROW_HIT);
   return self;
 }
 

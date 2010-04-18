@@ -17,7 +17,7 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #import "Character.h"
-#import "ResourceLibrary.h"
+#import "Resources.h"
 
 
 @interface Arrow : Character {

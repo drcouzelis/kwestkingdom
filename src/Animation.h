@@ -18,7 +18,6 @@
  */
 #import <objc/Object.h>
 #import <allegro.h>
-#import "ResourceLibrary.h"
 #import "KwestKingdom.h"
 #import "Updatable.h"
 

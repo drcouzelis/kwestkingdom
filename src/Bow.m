@@ -37,17 +37,17 @@ typedef enum {
     arrow = nil;
     
     holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(BOW_01_BMP)];
-    [holdAnimation addFrame: getImage(BOW_02_BMP)];
-    [holdAnimation addFrame: getImage(BOW_03_BMP)];
-    [holdAnimation addFrame: getImage(BOW_04_BMP)];
+    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_1)];
+    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_2)];
+    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_3)];
+    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_4)];
     [holdAnimation setLoop: YES];
     [holdAnimation setSpeed: 6];
 	
     attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(BOW_ATTACK_01_BMP)];
-    [attackRightAnimation addFrame: getImage(BOW_ATTACK_02_BMP)];
-    [attackRightAnimation addFrame: getImage(BOW_ATTACK_03_BMP)];
+    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_1)];
+    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_2)];
+    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_3)];
     [attackRightAnimation setLoop: NO];
     [attackRightAnimation setSpeed: 12];
 	

@@ -66,11 +66,11 @@ typedef enum {
     helpTiles = [[List alloc] init];
     
     heartAnimation = [[Animation alloc] init];
-    [heartAnimation addFrame: getImage(ITEM_HEART_01_BMP)];
+    [heartAnimation addFrame: getImage(IMG_ITEMS_HEART)];
     heartEmptyAnimation = [[Animation alloc] init];
-    [heartEmptyAnimation addFrame: getImage(ITEM_HEART_EMPTY_01_BMP)];
+    [heartEmptyAnimation addFrame: getImage(IMG_ITEMS_EMPTYHEART)];
     helpTileAnimation = [[Animation alloc] init];
-    [helpTileAnimation addFrame: getImage(HELP_01_BMP)];
+    [helpTileAnimation addFrame: getImage(IMG_HELP)];
     
     prevRoomSnapshot = [[Snapshot alloc] init];
     nextRoomSnapshot = [[Snapshot alloc] init];

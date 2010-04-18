@@ -1,5 +1,4 @@
 all:
-	 cp -f res/resources.dat Linux/share/kwestkingdom/resources.dat
 	 make -C src
 
 backup:

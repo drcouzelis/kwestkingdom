@@ -18,7 +18,7 @@
  */
 #import "KwestKingdom.h"
 #import "Game.h"
-#import "ResourceLibrary.h"
+#import "Resources.h"
 #import "Screen.h"
 
 

@@ -38,23 +38,23 @@ typedef enum {
     prevDirection = UP;
     
     standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(CHOMPER_01_BMP)];
-    [standAnimation addFrame: getImage(CHOMPER_02_BMP)];
-    [standAnimation addFrame: getImage(CHOMPER_03_BMP)];
-    [standAnimation addFrame: getImage(CHOMPER_02_BMP)];
+    [standAnimation addFrame: getImage(IMG_CHOMPER_STAND_1)];
+    [standAnimation addFrame: getImage(IMG_CHOMPER_STAND_2)];
+    [standAnimation addFrame: getImage(IMG_CHOMPER_STAND_3)];
+    [standAnimation addFrame: getImage(IMG_CHOMPER_STAND_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 6];
     
     attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_01_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_02_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_03_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_04_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_05_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_04_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_03_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_02_BMP)];
-    [attackAnimation addFrame: getImage(CHOMPER_ATTACK_01_BMP)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_1)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_2)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_3)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_4)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_5)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_4)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_3)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_2)];
+    [attackAnimation addFrame: getImage(IMG_CHOMPER_BITE_1)];
     [attackAnimation setLoop: NO];
     [attackAnimation setSpeed: 20];
     
@@ -105,7 +105,7 @@ typedef enum {
       state = CHOMPER_ATTACK_STATE;
       animation = attackAnimation;
       [animation reset];
-      playSound(CHOMP_SOUND);
+      playSound(SND_CHOMP);
       
     } else {
       

@@ -1,4 +1,0 @@
-#!/bin/bash
-# Use grabber to edit the resources.
-grabber -nosound resources.dat &
-

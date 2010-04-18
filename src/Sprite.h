@@ -23,7 +23,7 @@
 #import "Inhabitable.h"
 #import "KwestKingdom.h"
 #import "Positionable.h"
-#import "ResourceLibrary.h"
+#import "Resources.h"
 #import "Screen.h"
 #import "Targetable.h"
 #import "Traversable.h"

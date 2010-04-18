@@ -36,22 +36,22 @@
     shoreInsideNEAnimation = [[Animation alloc] init];
     shoreOutsideNEAnimation = [[Animation alloc] init];
     
-    [grassAnimation addFrame: getImage(TERRAIN_SNOW_01_BMP)];
-    //[pathAnimation addFrame: getImage(SNOW_PATH_01_BMP)];
-    [mountainAnimation addFrame: getImage(TERRAIN_EVERGREEN_01_BMP)];
-    [waterAnimation addFrame: getImage(TERRAIN_ICE_01_BMP)];
+    [grassAnimation addFrame: getImage(IMG_TERRAIN_SNOW)];
+    //[pathAnimation addFrame: getImage(SNOW_PATH_01)];
+    [mountainAnimation addFrame: getImage(IMG_TERRAIN_EVERGREEN)];
+    [waterAnimation addFrame: getImage(IMG_TERRAIN_ICE)];
     
-    [shoreNorthAnimation addFrame: getImage(SHORE_ICE_01_BMP)];
+    [shoreNorthAnimation addFrame: getImage(IMG_SHORE_SNOW_SHORE)];
     shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
     shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
     shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
     
-    [shoreInsideNEAnimation addFrame: getImage(SHORE_ICE_INSIDE_CORNER_01_BMP)];
+    [shoreInsideNEAnimation addFrame: getImage(IMG_SHORE_SNOW_INSIDECORNER)];
     shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
     shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
     shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
     
-    [shoreOutsideNEAnimation addFrame: getImage(SHORE_ICE_OUTSIDE_CORNER_01_BMP)];
+    [shoreOutsideNEAnimation addFrame: getImage(IMG_SHORE_SNOW_OUTSIDECORNER)];
     [shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
     [shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
     shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];

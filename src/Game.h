@@ -23,6 +23,7 @@
 #import "HighScoreLibrary.h"
 #import "KeyControl.h"
 #import "KwestKingdom.h"
+#import "Resources.h"
 #import "RoomFactory.h"
 #import "Snapshot.h"
 #import "StoryWorld.h"

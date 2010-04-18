@@ -5,7 +5,6 @@ echo Generating `pwd`/Makefile
 rm -f Makefile
 
 echo 'all:' >> Makefile
-echo $'\t cp -f res/resources.dat Linux/share/kwestkingdom/resources.dat' >> Makefile
 echo $'\t make -C src' >> Makefile
 echo >> Makefile
 

@@ -20,7 +20,7 @@
 #import "Bow.h"
 #import "Character.h"
 #import "KeyControl.h"
-#import "ResourceLibrary.h"
+#import "Resources.h"
 #import "Shield.h"
 #import "Sword.h"
 
