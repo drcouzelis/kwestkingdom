@@ -16,10 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Positionable.h"
+#ifndef __TARGETABLE_H
+#define __TARGETABLE_H
 
 
-@protocol Targetable
-- (id<Positionable>) getTarget;
-@end
+class Positionable;
 
+
+class Targetable
+{
+public:
+  virtual Positionable* getTarget() = 0;
+};
+
+
+#endif // __TARGETABLE_H

@@ -16,19 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
+#ifndef __INHABITABLE_H
+#define __INHABITABLE_H
 
 
-@protocol Inhabitable
+class Character;
+class Sprite; // Replace with class "Item" in the future
 
-- (BOOL) isInhabitedAtX: (int) x andY: (int) y;
 
-- (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y;
-- attackFromTeam: (int) team atX: (int) x andY: (int) y;
-- shake;
+class Inhabitable
+{
+public:
+  virtual bool isInhabited(int x, int y) = 0;
+  
+  virtual bool isAttackable(int team, int x, int y) = 0;
+  virtual void attack(int team, int x, int y) = 0;
+  
+  virtual void addCharacter(Character* character) = 0;
+  virtual void addItem(Sprite* item) = 0;
+  
+  virtual void shake() = 0;
+};
 
-- addCharacter: (id) aCharacter;
-- addItem: (id) anItem;
 
-@end
-
+#endif // __INHABITABLE_H

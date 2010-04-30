@@ -16,69 +16,82 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import "Collectable.h"
-#import "Drawable.h"
-#import "Enemy.h"
-#import "HelpTile.h"
-#import "Hero.h"
-#import "Inhabitable.h"
-#import "List.h"
-#import "Room.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "Targetable.h"
-#import "Traversable.h"
-#import "Updatable.h"
-#import "Text.h"
+#ifndef __WORLD_H
+#define __WORLD_H
 
 
-@interface World : Object <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
+#include <vector>
+
+#include "Collectable.h"
+#include "Drawable.h"
+#include "Enemy.h"
+#include "HelpTile.h"
+#include "Hero.h"
+#include "Inhabitable.h"
+#include "Room.h"
+//#include "RoomFactory.h"
+#include "Snapshot.h"
+#include "Targetable.h"
+#include "Traversable.h"
+#include "Updatable.h"
+#include "Text.h"
+
+
+class HelpTile;
+
+
+class World
+  : public virtual Drawable,
+    public virtual Inhabitable,
+    public virtual Targetable,
+    public virtual Traversable,
+    public virtual Updatable
+{
+public:
+  World();
   
-  Hero *hero;
-  List *enemies;
-  List *rooms;
+  virtual void updateRoom();
+  virtual void updateItems();
+  virtual void updateTurn();
+  virtual void updateHero();
+  virtual void updateEnemies();
   
-  RoomFactory *roomFactory;
-  Room *room;
+  virtual Room* createNextRoom();
+  virtual void changeRooms();
   
-  List *items;
-  List *helpTiles;
+  virtual void drawTerrain(BITMAP* buffer);
+  virtual void drawCharacters(BITMAP* buffer);
+  virtual void drawUserInterface(BITMAP* buffer);
   
-  Animation *heartAnimation;
-  Animation *heartEmptyAnimation;
-  Animation *helpTileAnimation;
+  virtual int getRoomNumber();
+  virtual int getMoney();
   
-  Character *currentCharacter;
+  virtual void addHelpTile(HelpTile* helpTile);
+  
+protected:
+  Hero* hero;
+  std::vector<Enemy*> enemies;
+  std::vector<Room*> rooms;
+  
+  //RoomFactory* roomFactory;
+  Room* room;
+  
+  std::vector<Collectable*>* items;
+  std::vector<HelpTile*>* helpTiles;
+  
+  Animation* heartAnimation;
+  Animation* heartEmptyAnimation;
+  Animation* helpTileAnimation;
+  
+  Character* currentCharacter;
   
   int difficulty;
   
-  Snapshot *prevRoomSnapshot;
-  Snapshot *nextRoomSnapshot;
+  Snapshot* prevRoomSnapshot;
+  Snapshot* nextRoomSnapshot;
   
   int state;
-  
-}
+};
 
 
-- updateRoom;
-- updateItems;
-- updateTurn;
-- updateHero;
-- updateEnemies;
-
-- (Room *) createNextRoom;
-- changeRooms;
-
-- drawTerrain: (BITMAP *) buffer;
-- drawCharacters: (BITMAP *) buffer;
-- drawUserInterface: (BITMAP *) buffer;
-
-- (int) getRoomNumber;
-- (int) getMoney;
-
-- addHelpTile: (id) aHelpTile;
-
-
-@end
-
+#endif // __WORLD_H

@@ -16,42 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Sprite.h"
+#include "KwestKingdom.h"
+#include "Sprite.h"
 
 
-@implementation Sprite
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    x = 0;
-    y = 0;
-    w = 1;
-    h = 1;
-    visualX = 0;
-    visualY = 0;
-    fudge = 0;
-    speed = 0;
-    animation = nil;
-    world = nil;
-    state = 0;
-  }
-  
-  return self;
-  
+Sprite::Sprite()
+: x(0)
+, y(0)
+, w(0)
+, h(0)
+, visualX(0)
+, visualY(0)
+, fudge(0)
+, speed(0)
+, animation(NULL)
+, world(NULL)
+, state(0)
+{
+  // Empty  
 }
 
 
-- update {
-  
-  [animation update];
+void
+Sprite::update()
+{
+  animation->animate();
   
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
-  if ([self moving]) {
+  if (isMoving()) {
     
     if (speed > 0) {
       
@@ -80,19 +73,18 @@
       visualY = y * getTileSize();
     }
     
-    if (![self moving]) {
+    if (!isMoving()) {
       fudge = 0;
     }
     
   }
   
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
-  
+void
+Sprite::draw(BITMAP* buffer)
+{
   // Add a shadow.
   /*
   hline(buffer, visualX + 6, visualY + 30, visualX + 33, BLACK);
@@ -103,103 +95,112 @@
   hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
   
-  [animation drawTo: buffer atX: visualX andY: visualY];
-  
-  return self;
+  animation->draw(buffer, visualX, visualY);
   
 }
 
 
-- (BOOL) moving {
+bool
+Sprite::isMoving()
+{
   if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
-- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right {
-  
+void
+Sprite::bound(int top, int bottom, int left, int right)
+{
   if (x < left) {
-    [self moveX: left];
+    moveX(left);
   } else if (x + w - 1 > right) {
-    [self moveX: right];
+    moveX(right);
   }
   
   if (y < top) {
-    [self moveY: top];
+    moveY(top);
   } else if (y + h - 1 > bottom) {
-    [self moveY: bottom];
+    moveY(bottom);
   }
-  
-  return self;
-  
 }
 
 
-- (int) getX {
+int
+Sprite::getX()
+{
   return x;
 }
 
 
-- (int) getY {
+int
+Sprite::getY()
+{
   return y;
 }
 
 
-- setX: (int) newX {
-  x = newX;
+void
+Sprite::setX(int x)
+{
+  this->x = x;
   visualX = x * getTileSize();
-  return self;
 }
 
 
-- setY: (int) newY {
-  y = newY;
+void
+Sprite::setY(int y)
+{
+  this->y = y;
   visualY = y * getTileSize();
-  return self;
 }
 
 
-- moveX: (int) newX {
-  x = newX;
-  return self;
+void
+Sprite::moveX(int x)
+{
+  this->x = x;
 }
 
 
-- moveY: (int) newY {
-  y = newY;
-  return self;
+void
+Sprite::moveY(int y)
+{
+  this->y = y;
 }
 
 
-- (int) getWidth {
+int
+Sprite::getWidth()
+{
   return w;
 }
 
 
-- (int) getHeight {
+int
+Sprite::getHeight()
+{
   return h;
 }
 
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
-  world = aWorld;
-  return self;
+void
+Sprite::setWorld(World* world)
+{
+  this->world = world;
 }
 
 
-- setState: (int) aState {
-  state = aState;
-  return self;
+void
+Sprite::setState(int state)
+{
+  this->state = state;
 }
 
 
-- setSpeed: (int) theSpeed {
-  speed = theSpeed;
-  return self;
+void
+Sprite::setSpeed(int speed)
+{
+  this->speed = speed;
 }
-
-
-@end
-

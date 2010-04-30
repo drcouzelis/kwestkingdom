@@ -16,61 +16,67 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Arrow.h"
-#import "Bow.h"
-#import "Character.h"
-#import "KeyControl.h"
-#import "Resources.h"
-#import "Shield.h"
-#import "Sword.h"
+#ifndef __HERO_H
+#define __HERO_H
+
+
+#include "Arrow.h"
+#include "Bow.h"
+#include "Character.h"
+#include "KeyControl.h"
+#include "Resources.h"
+#include "Shield.h"
+#include "Sword.h"
 
 
 #define MAX_HERO_HEALTH 3
 
 
-@interface Hero : Character {
+class Hero : public Character
+{
+public:
+  Hero();
   
-  Shield *shield;
-  Sword *sword;
-  Bow *bow;
+  virtual void emptyHands();
   
-  Animation *standAnimation;
-  Animation *beginAttackAnimation;
-  Animation *endAttackAnimation;
-  Animation *hurtAnimation;
-  Animation *deadAnimation;
+  // Updates
+  virtual void updateStandState();
   
-  KeyControl *upKey;
-  KeyControl *downKey;
-  KeyControl *rightKey;
-  KeyControl *leftKey;
-  KeyControl *waitKey;
-  KeyControl *attackKey;
-  KeyControl *handKey;
-  KeyControl *shieldKey;
-  KeyControl *swordKey;
-  KeyControl *bowKey;
+  // State control
+  virtual void toStandState();
+  virtual void toMoveState();
+  virtual void toAttackState();
+  virtual void toHurtState();
+  virtual void toDeadState();
+  virtual void toPushSwordState();
+  virtual void toPullSwordState();
+  virtual void toDrawBowState();
+  virtual void toShootArrowState();
+
+protected:
+  Shield* shield;
+  Sword* sword;
+  Bow* bow;
+  
+  Animation* standAnimation;
+  Animation* beginAttackAnimation;
+  Animation* endAttackAnimation;
+  Animation* hurtAnimation;
+  Animation* deadAnimation;
+  
+  KeyControl* upKey;
+  KeyControl* downKey;
+  KeyControl* rightKey;
+  KeyControl* leftKey;
+  KeyControl* waitKey;
+  KeyControl* attackKey;
+  KeyControl* handKey;
+  KeyControl* shieldKey;
+  KeyControl* swordKey;
+  KeyControl* bowKey;
   
   int direction;
-  
-}
+};
 
 
-- emptyHands;
-
-// Updates
-- updateStandState;
-
-// State control
-- toStandState;
-- toMoveState;
-- toAttackState;
-- toHurtState;
-- toDeadState;
-- toPushSwordState;
-- toPullSwordState;
-- toDrawBowState;
-- toShootArrowState;
-
-
-@end
+#endif // __HERO_H

@@ -16,8 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-@protocol Moneyable
-- (int) getMoney;
-- setMoney: (int) amount;
-@end
+#ifndef __MONEYABLE_H
+#define __MONEYABLE_H
 
+
+class Moneyable
+{
+public:
+  virtual int  getMoney() = 0;
+  virtual void setMoney(int amount) = 0;
+};
+
+
+#endif // __MONEYABLE_H

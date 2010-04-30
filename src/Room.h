@@ -16,37 +16,103 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "HelpTile.h"
-#import "List.h"
-#import "Map.h"
-#import "KwestKingdom.h"
-#import "Screen.h"
-#import "Traversable.h"
-#import "Updatable.h"
+#ifndef __ROOM_H
+#define __ROOM_H
 
 
-#define GRASS_TERRAIN 0
-#define TREE_TERRAIN 1
-#define WATER_TERRAIN 2
-#define ENTRANCE_TERRAIN 3
-#define EXIT_TERRAIN 4
+#include <vector>
+
+#include "Animation.h"
+#include "Drawable.h"
+#include "HelpTile.h"
+#include "Map.h"
+#include "Traversable.h"
+#include "Updatable.h"
+
+
+class Enemy;
+class Collectable;
+
+
+typedef enum {
+  GRASS_TERRAIN,
+  TREE_TERRAIN,
+  WATER_TERRAIN,
+  ENTRANCE_TERRAIN,
+  EXIT_TERRAIN
+} TERRAIN;
+
 
 #define MAX_NUM_OF_STEPS (ROWS * COLS)
 #define NO_STEP -1
 
 
-@interface Room : Object <Drawable, Traversable, Updatable> {
+class Room : public virtual Drawable, public virtual Traversable, public virtual Updatable
+{
+public:
   
+  Room();
+  ~Room();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual bool isSwimmable(int x, int y) = 0; // Traversable
+  virtual bool isWalkable(int x, int y) = 0;  // Traversable
+  virtual bool isJumpable(int x, int y) = 0;  // Traversable
+  virtual bool isFlyable(int x, int y) = 0;   // Traversable
+  virtual bool isSoarable(int x, int y) = 0;  // Traversable
+  
+  virtual void update(); // Updatable
+  
+  virtual void setPathMap(Map* map);
+  virtual void setTerrainMap(Map* map);
+  
+  virtual void addStep(int step);
+  virtual int  getSizeOfPath();
+  virtual int  getXOfStepNumber(int step);
+  virtual int  getYOfStepNumber(int step);
+  
+  virtual std::vector<Enemy*>*       retrieveEnemies();
+  virtual std::vector<Collectable*>* retrieveItems();
+  virtual std::vector<HelpTile*>*    retrieveHelpTiles();
+  
+  virtual void storeEnemies(std::vector<Enemy*>* enemies);
+  virtual void storeItems(std::vector<Collectable*>* list);
+  virtual void storeHelpTiles(std::vector<HelpTile*>* list);
+  
+  virtual int getEntranceFromNextRoomX();
+  virtual int getEntranceFromNextRoomY();
+  virtual int getEntranceFromPrevRoomX();
+  virtual int getEntranceFromPrevRoomY();
+  virtual int getExitToNextRoomX();
+  virtual int getExitToNextRoomY();
+  virtual int getExitToPrevRoomX();
+  virtual int getExitToPrevRoomY();
+  
+  virtual void setEntranceFromNextRoomX(int x);
+  virtual void setEntranceFromNextRoomY(int y);
+  virtual void setEntranceFromPrevRoomX(int x);
+  virtual void setEntranceFromPrevRoomY(int y);
+  virtual void setExitToNextRoomX(int x);
+  virtual void setExitToNextRoomY(int y);
+  virtual void setExitToPrevRoomX(int x);
+  virtual void setExitToPrevRoomY(int y);
+  
+  virtual void setNumber(int number);
+  virtual int  getNumber();
+  
+  virtual void removeExitToPrevRoom();
+  
+  virtual Map* getPathMap();
+  
+private:
   // Add a terrain map, item map, character map...
-  Map *terrainMap;
-  Map *pathMap;
+  Map* terrainMap;
+  Map* pathMap;
   
-  List *enemyStorage;
-  List *itemStorage;
-  List *helpTileStorage;
+  std::vector<Enemy*>* enemyStorage;
+  std::vector<Collectable*>* itemStorage;
+  std::vector<HelpTile*>* helpTileStorage;
   
   int entranceFromNextRoomX;
   int entranceFromNextRoomY;
@@ -60,70 +126,26 @@
   
   int number;
   
-  Animation *grassAnimation;
-  Animation *pathAnimation;
-  Animation *mountainAnimation;
-  Animation *waterAnimation;
-  Animation *shoreNorthAnimation;
-  Animation *shoreSouthAnimation;
-  Animation *shoreEastAnimation;
-  Animation *shoreWestAnimation;
-  Animation *shoreInsideNEAnimation;
-  Animation *shoreInsideNWAnimation;
-  Animation *shoreInsideSEAnimation;
-  Animation *shoreInsideSWAnimation;
-  Animation *shoreOutsideNEAnimation;
-  Animation *shoreOutsideNWAnimation;
-  Animation *shoreOutsideSEAnimation;
-  Animation *shoreOutsideSWAnimation;
+  Animation* grassAnimation;
+  Animation* pathAnimation;
+  Animation* mountainAnimation;
+  Animation* waterAnimation;
+  Animation* shoreNorthAnimation;
+  Animation* shoreSouthAnimation;
+  Animation* shoreEastAnimation;
+  Animation* shoreWestAnimation;
+  Animation* shoreInsideNEAnimation;
+  Animation* shoreInsideNWAnimation;
+  Animation* shoreInsideSEAnimation;
+  Animation* shoreInsideSWAnimation;
+  Animation* shoreOutsideNEAnimation;
+  Animation* shoreOutsideNWAnimation;
+  Animation* shoreOutsideSEAnimation;
+  Animation* shoreOutsideSWAnimation;
   
   int path[MAX_NUM_OF_STEPS];
   int steps;
-  
-}
+};
 
 
-- setPathMap: (Map *) aPathMap;
-- setTerrainMap: (Map *) aTerrainMap;
-
-- addStep: (int) aStep;
-- (int) getSizeOfPath;
-- (int) getXOfStepNumber: (int) aStep;
-- (int) getYOfStepNumber: (int) aStep;
-
-- (List *) retrieveEnemies;
-- storeEnemies: (List *) list;
-
-- (List *) retrieveItems;
-- storeItems: (List *) list;
-
-- (List *) retrieveHelpTiles;
-- storeHelpTiles: (List *) list;
-
-- (int) getEntranceFromNextRoomX;
-- (int) getEntranceFromNextRoomY;
-- (int) getEntranceFromPrevRoomX;
-- (int) getEntranceFromPrevRoomY;
-- (int) getExitToNextRoomX;
-- (int) getExitToNextRoomY;
-- (int) getExitToPrevRoomX;
-- (int) getExitToPrevRoomY;
-
-- setEntranceFromNextRoomX: (int) newX;
-- setEntranceFromNextRoomY: (int) newY;
-- setEntranceFromPrevRoomX: (int) newX;
-- setEntranceFromPrevRoomY: (int) newY;
-- setExitToNextRoomX: (int) newX;
-- setExitToNextRoomY: (int) newY;
-- setExitToPrevRoomX: (int) newX;
-- setExitToPrevRoomY: (int) newY;
-
-- setNumber: (int) aNumber;
-- (int) getNumber;
-
-- removeExitToPrevRoom;
-
-- (Map *) getPathMap;
-
-
-@end
+#endif // __ROOM_H

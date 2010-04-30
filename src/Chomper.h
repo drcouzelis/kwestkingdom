@@ -16,17 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Enemy.h"
+#ifndef __CHOMPER_H
+#define __CHOMPER_H
 
 
-@interface Chomper : Enemy {
-  
-  Animation *standAnimation;
-  Animation *attackAnimation;
+#include "Enemy.h"
+
+
+class Chomper : public Enemy
+{
+public:
+  Chomper();
+
+protected:
+  Animation* standAnimation;
+  Animation* attackAnimation;
   
   int prevDirection;
-  
-}
+};
 
 
-@end
+#endif // __CHOMPER_H

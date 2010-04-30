@@ -16,30 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Sprite.h"
+#ifndef __SWORD_H
+#define __SWORD_H
 
 
-@interface Sword : Sprite {
+#include "Sprite.h"
+
+
+class Sword : public Sprite
+{
+public:
+  Sword();
   
-  Animation *holdAnimation;
-  Animation *attackUpAnimation;
-  Animation *attackDownAnimation;
-  Animation *attackLeftAnimation;
-  Animation *attackRightAnimation;
+  virtual bool isHeld();
   
-}
+  virtual void toHoldState();
+  virtual void toAwayState();
+  
+  // Deprecated
+  virtual void toAttackUpState();
+  virtual void toAttackDownState();
+  virtual void toAttackLeftState();
+  virtual void toAttackRightState();
+  
+protected:
+  Animation* holdAnimation;
+  Animation* attackUpAnimation;
+  Animation* attackDownAnimation;
+  Animation* attackLeftAnimation;
+  Animation* attackRightAnimation;
+};
 
 
-- (BOOL) held;
-
-- toHoldState;
-- toAwayState;
-
-// Deprecated
-- toAttackUpState;
-- toAttackDownState;
-- toAttackLeftState;
-- toAttackRightState;
-
-
-@end
+#endif // __SWORD_H

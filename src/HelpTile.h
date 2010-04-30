@@ -16,11 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import "Drawable.h"
-#import "KwestKingdom.h"
-#import "Screen.h"
-#import "Text.h"
+#ifndef __HELP_TILE_H
+#define __HELP_TILE_H
+
+
+#include "Drawable.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
+#include "Text.h"
 
 
 typedef enum {
@@ -31,37 +34,36 @@ typedef enum {
 } CORNER;
 
 
-@interface HelpTile : Object <Drawable> {
+class HelpTile : public virtual Drawable
+{
+public:
+  HelpTile(int x, int y);
   
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  void setLines(
+    char* line1,
+    char* line2,
+    char* line3,
+    char* line4,
+    char* line5,
+    char* line6
+  );
+  
+  int getX();
+  int getY();
+  
+protected:
   int x;
   int y;
   
-  char *line1;
-  char *line2;
-  char *line3;
-  char *line4;
-  char *line5;
-  char *line6;
-  
-  int location;
-  
-}
+  char* line1;
+  char* line2;
+  char* line3;
+  char* line4;
+  char* line5;
+  char* line6;
+};
 
 
-- setX: (int) newX;
-- setY: (int) newY;
-
-- setLine1: (char *) newLine1
-      and2: (char *) newLine2
-      and3: (char *) newLine3
-      and4: (char *) newLine4
-      and5: (char *) newLine5
-      and6: (char *) newLine6;
-
-- setLocation: (int) theLocation;
-
-- (int) getX;
-- (int) getY;
-
-
-@end
+#endif // __HELP_TILE_H

@@ -16,12 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "World.h"
+#ifndef __STORY_WORLD_H
+#define __STORY_WORLD_H
 
 
-@interface StoryWorld : World {
-}
+#include "World.h"
 
 
-@end
+class StoryWorld : public World
+{
+public:
+  StoryWorld();
+};
 
+
+#endif // __STORY_WORLD_H

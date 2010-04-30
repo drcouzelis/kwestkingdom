@@ -16,24 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import "Inhabitable.h"
-#import "List.h"
-#import "Map.h"
-#import "KwestKingdom.h"
-#import "Targetable.h"
-#import "Traversable.h"
+#ifndef __ROOM_FACTORY_H
+#define __ROOM_FACTORY_H
+
+
+#include "Inhabitable.h"
+#include "Map.h"
+#include "KwestKingdom.h"
+#include "Targetable.h"
+#include "Traversable.h"
 
 // Rooms
-#import "ForestRoom.h"
-#import "SnowRoom.h"
-#import "UndergroundRoom.h"
+#include "ForestRoom.h"
+#include "SnowRoom.h"
+#include "UndergroundRoom.h"
 
 // Enemies
-#import "Archer.h"
-#import "Giant.h"
-#import "Ninja.h"
-#import "Chomper.h"
+#include "Archer.h"
+#include "Giant.h"
+#include "Ninja.h"
+#include "Chomper.h"
 
 
 // Types
@@ -58,9 +60,35 @@
 #define DEFAULT_CHANCE_OF_GIANT 3
 
 
-@interface RoomFactory : Object {
+class RoomFactory
+{
+public:
+  RoomFactory();
   
-  id<Inhabitable, Targetable, Traversable> world;
+  virtual Room* createRoom();
+  
+  virtual Map* generatePathToEdge();
+  virtual Map* generateTerrain();
+  virtual std::vector<Enemy*> generateEnemies();
+  virtual std::vector<Collectable*> generateItems();
+
+  virtual bool characterExists(std::vector<Enemy*> list, int x, int y, int w, int h);
+
+  virtual void setWorld(World world);
+  virtual void setType(int type);
+  virtual void setTerrain(int terrain);
+  virtual void setNumber(int number);
+  virtual void setDifficulty(int difficulty);
+  virtual void setPathBeginX(int pathBeginX);
+  virtual void setPathBeginY(int pathBeginY);
+
+  virtual void setChanceOfChomper(int chance);
+  virtual void setChanceOfArcher(int chance);
+  virtual void setChanceOfNinja(int chance);
+  virtual void setChanceOfGiant(int chance);
+  
+private:
+  World* world;
   int type;
   int terrain;
   int number;
@@ -76,37 +104,15 @@
   // These are created internally.
   int pathStopX;
   int pathStopY;
-  Map *pathMap;
-  Map *terrainMap;
-  List *enemies;
-  List *items;
+  Map* pathMap;
+  Map* terrainMap;
+  std::vector<Enemy*> enemies;
+  std::vector<Collectable*> items;
   
   int path[MAX_NUM_OF_STEPS];
   int steps;
   
 }
 
-- (Room *) createRoom;
 
-- (Map *) generatePathToEdge;
-- (Map *) generateTerrain;
-- (List *) generateEnemies;
-- (List *) generateItems;
-
-- (BOOL) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
-
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-- setType: (int) theType;
-- setTerrain: (int) theTerrain;
-- setNumber: (int) theNumber;
-- setDifficulty: (int) theDifficulty;
-- setPathBeginX: (int) thePathBeginX;
-- setPathBeginY: (int) thePathBeginY;
-
-- setChanceOfChomper: (int) chance;
-- setChanceOfArcher: (int) chance;
-- setChanceOfNinja: (int) chance;
-- setChanceOfGiant: (int) chance;
-
-
-@end
+#endif // __ROOM_FACTORY_H

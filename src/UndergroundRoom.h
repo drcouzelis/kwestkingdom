@@ -16,11 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Resources.h"
-#import "Room.h"
+#ifndef __UNDERGROUND_ROOM_H
+#define __UNDERGROUND_ROOM_H
 
 
-@interface UndergroundRoom : Room {
-}
+#include "Resources.h"
+#include "Room.h"
 
-@end
+
+class UndergroundRoom : public Room
+{
+public:
+  UndergroundRoom();
+};
+
+
+#endif // __UNDERGROUND_ROOM_H

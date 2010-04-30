@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------
-	al_screen.c -- implementation file for screen update API
+	al_screen.cpp -- implementation file for screen update API
 					(c) Chris "23yrold3yrold" Barry, 2004
   --------------------------------------------------------------*/
 

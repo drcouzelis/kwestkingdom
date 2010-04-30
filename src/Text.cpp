@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Text.h"
+#include "KwestKingdom.h"
+#include "Text.h"
 
 
-void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, char *text) {
+void resized_text_out(BITMAP *dest, int x, int y, double multiplier, int color, char *text)
+{
   //BITMAP *tempBitmap;
   //tempBitmap = create_bitmap(text_length(font, text), text_height(font));
   //clear_to_color(tempBitmap, makecol(255, 0, 255));
@@ -30,8 +32,8 @@ void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, ch
 }
 
 
-void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
-  
+void draw_box(BITMAP *buffer, int x, int y, int w, int h)
+{
   /*
   int leftOutside;
   int rightOutside;
@@ -214,5 +216,3 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   */
   
 }
-
-

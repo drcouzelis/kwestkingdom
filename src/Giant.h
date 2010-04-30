@@ -16,24 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef __GIANT_H
+#define __GIANT_H
+
+
 #import "Enemy.h"
 #import "Hammer.h"
 
 
-@interface Giant : Enemy {
+class Giant : public Enemy
+{
+public:
+  Giant();
+
+  virtual bool target(Positionable* target, int range);
+  virtual int  directionToTarget(Positionable* target);
+  virtual bool isMe(int x, int y);
+  virtual bool canWalkTo(int x, int y);
   
-  Hammer *hammer;
+protected:
+  Hammer* hammer;
   
-  Animation *standAnimation;
-  Animation *attackAnimation;
-  
-}
+  Animation* standAnimation;
+  Animation* attackAnimation;
+};
 
 
-- (BOOL) target: (id<Positionable>) target isInRange: (int) range;
-- (int) directionToTarget: (id<Positionable>) target;
-- (BOOL) isMeAtX: (int) atX andY: (int) atY;
-- (BOOL) canWalkToX: (int) toX andY: (int) toY;
-
-
-@end
+#endif // __GIANT_H

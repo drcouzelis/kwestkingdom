@@ -16,59 +16,85 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import <allegro.h>
-#import "KwestKingdom.h"
-#import "Updatable.h"
+#ifndef __ANIMATION_H
+#define __ANIMATION_H
 
 
-#define ANIMATION_MAX_FRAMES 16
+#include <vector>
+#include <allegro.h>
 
 
-@interface Animation : Object <Updatable> {
-
-  BITMAP *frames[ANIMATION_MAX_FRAMES];
+class Animation
+{
+public:
+  Animation(int speed = 0, bool loop = false);
   
-  // An animation is drawn with respect to its offset.
-  int offsetX;
-  int offsetY;
-
-  int length;
-  int pos;
-  BOOL loop;
-  BOOL finished;
+  /**
+   * Animate the animation.
+   */
+  virtual void animate(); // Inherited
+  
+  /**
+   * Draw the current frame to the specified buffer,
+   * with the correct offsets.
+   */
+  virtual void draw(BITMAP* buffer, int x, int y);
+  
+  /**
+   * Add an image to the end of the list of frames.
+   */
+  virtual void addFrame(BITMAP* image);
+  
+  /**
+   * Reset the animation to the first frame.
+   */
+  virtual void reset();
+  
+  /**
+   * This method is only relevant to animations that do not loop.
+   */
+  virtual bool isFinished();
+  
+  /**
+   * Create a copy.
+   */
+  virtual Animation& operator=(const Animation& animation);
+  
+  /**
+   * Get the current frame of animation.
+   */
+  virtual BITMAP* getImage();
+  
+  virtual int getWidth();
+  virtual int getHeight();
+  virtual int getCurrentFrameNumber();
+  
+  virtual void setHorizontalFlip(bool hFlip);
+  virtual void setVerticalFlip(bool vFlip);
+  virtual void setRotate(bool rotate);
+  virtual void setHorizontalOffset(int hOffset);
+  virtual void setVerticalOffset(int vOffset);
+  
+protected:
+  std::vector<BITMAP*> frames;
+  
+  unsigned int index;
+  bool         loop;
+  bool         finished;
   
   int speed;
   int fudge;
   
-  BOOL hFlip;
-  BOOL vFlip;
-  BOOL rotate;
-
-}
-
-- (BITMAP *) getImage;
-
-- addFrame: (BITMAP *) bitmap;
-
-- setLoop: (BOOL) loopOn;
-- setSpeed: (int) newSpeed;
-- setOffsetX: (int) newOffsetX;
-- setOffsetY: (int) newOffsetY;
-- setRotate: (BOOL) rotateOn;
-- setHorizontalFlip: (BOOL) hFlipOn;
-- setVerticalFlip: (BOOL) vFlipOn;
-
-- reset;
-
-- drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y;
-- (Animation *) copy;
-
-- (BOOL) finished;
-- (int) width;
-- (int) height;
-- (int) currentFrameNumber;
+  bool hFlip;
+  bool vFlip;
+  bool rotate;
+  
+  /**
+   * An animation is drawn with respect to its offset.
+   */
+  int hOffset;
+  int vOffset;
+};
 
 
-@end
-
+#endif // __ANIMATION_H

@@ -16,7 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Screen.h"
+#include <iostream>
+
+#include "al_screen.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
 
 
 #define DEFAULT_COLOR_DEPTH 8
@@ -24,14 +28,14 @@
 
 // The window is the area inside the screen that
 // the game is drawn on.
-static BITMAP *window = NULL;
+static BITMAP* window = NULL;
 
 // The scale is used to know how big to multiply the window.
 static int scale = DEFAULT_SCREEN_RATIO;
 
 
-BOOL selectBestScreen() {
-  
+bool select_best_screen()
+{
   enable_vsync();
   
   if (initialize_screen_updating(UPDATE_TRIPLE_BUFFER)) {
@@ -43,17 +47,16 @@ BOOL selectBestScreen() {
   } else if (initialize_screen_updating(UPDATE_DOUBLE_BUFFER)) {
     // Using double buffer.
   } else {
-    printf("Failed to initialize screen updating. \n");
-    return NO;
+    std::cerr << "Failed to initialize screen updating." << std::endl;
+    return false;
   }
   
-  return YES;
-  
+  return true;
 }
 
 
-BOOL setScale() {
-  
+bool set_scale()
+{
   int xScale;
   int yScale;
 
@@ -68,30 +71,28 @@ BOOL setScale() {
       scale = yScale;
     }
 
-    return YES;
+    return true;
 
   }
   
-  return NO;
-  
+  return false;
 }
 
 
-void setWindowSize(int width, int height) {
-  
+void set_window_size(int width, int height)
+{
   if (window) {
     destroy_bitmap(window);
   }
   
   window = create_bitmap(width, height);
   clear_to_color(window, BLACK);
-  setScale();
-
+  set_scale();
 }
 
 
-BOOL initializeScreen(int width, int height, BOOL fullscreen) {
-
+bool init_screen(int width, int height, bool fullscreen)
+{
   int colorDepth;
 
   if (screen) {
@@ -104,44 +105,46 @@ BOOL initializeScreen(int width, int height, BOOL fullscreen) {
     colorDepth = DEFAULT_COLOR_DEPTH;
   }
   set_color_depth(colorDepth);
-
+  
   if (width < 0) {
     width = SCREEN_W;
   }
-
+  
   if (height < 0) {
     height = SCREEN_H;
   }
- 
+  
   // Start the screen.
   if (fullscreen) {
     
     if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
-      printf("Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
-      return NO;
+      std::cerr << "Failed to set graphics mode to fullscreen ";
+      std::cerr << width << "x" << height << "." << std::endl;
+      return false;
     }
     
   } else {
   
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
-      printf("Failed to set graphics mode to windowed %dx%d. \n", width, height);
-      return NO;
+      std::cerr << "Failed to set graphics mode to windowed ";
+      std::cerr << width << "x" << height << "." << std::endl;
+      return false;
     }
 
   }
   
-  if (selectBestScreen() == NO) {
-    return NO;
+  if (select_best_screen() == false) {
+    return false;
   }
 
-  setScale();
+  set_scale();
   
-  return YES;
-
+  return true;
 }
  
 
-void destroyScreen() {
+void free_screen()
+{
   if (window) {
     destroy_bitmap(window);
     window = NULL;
@@ -150,7 +153,8 @@ void destroyScreen() {
 }
 
 
-int getWindowWidth() {
+int window_width()
+{
   if (window) {
     return window->w;
   }
@@ -158,7 +162,8 @@ int getWindowWidth() {
 }
 
 
-int getWindowHeight() {
+int window_height()
+{
   if (window) {
     return window->h;
   }
@@ -166,61 +171,61 @@ int getWindowHeight() {
 }
 
 
-BOOL showScreen() {
-  
+bool show_screen()
+{
   int x;
   int y;
 
   if (screen == NULL) {
-    printf("Failed to find a screen to show. \n");
-    return NO;
+    std::cerr << "Failed to find a screen to show." << std::endl;
+    return false;
   }
 
   if (window == NULL) {
-    printf("Failed to find a window to draw. \n");
-    return NO;
+    std::cerr << "Failed to find a window to draw." << std::endl;
+    return false;
   }
 
   x = getTileSize() / 5;
-  y = getWindowHeight() - (getTileSize() / 2);
+  y = window_height() - (getTileSize() / 2);
   
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
-    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Triple Buffering");
+    textprintf_ex(get_window(), font, x, y, WHITE, -1, "Triple Buffering");
     break;
   case UPDATE_PAGE_FLIP:
-    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Page Flipping");
+    textprintf_ex(get_window(), font, x, y, WHITE, -1, "Page Flipping");
     break;
   case UPDATE_SYSTEM_BUFFER:
-    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "System Buffering");
+    textprintf_ex(get_window(), font, x, y, WHITE, -1, "System Buffering");
     break;
   case UPDATE_DOUBLE_BUFFER:
-    textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Double Buffering");
+    textprintf_ex(get_window(), font, x, y, WHITE, -1, "Double Buffering");
     break;
   }
   
   // Scale the window onto the screen.
   stretch_blit(
-    getWindow(),
+    get_window(),
     get_buffer(),
     0,
     0,
-    getWindowWidth(),
-    getWindowHeight(),
-    (SCREEN_W / 2) - (getWindowWidth() / 2 * scale),
-    (SCREEN_H / 2) - (getWindowHeight() / 2 * scale),
-    getWindowWidth() * scale,
-    getWindowHeight() * scale
+    window_width(),
+    window_height(),
+    (SCREEN_W / 2) - (window_width() / 2 * scale),
+    (SCREEN_H / 2) - (window_height() / 2 * scale),
+    window_width() * scale,
+    window_height() * scale
   );
   
   update_screen();
 
-  return YES;
-
+  return true;
 }
  
 
-BITMAP *getWindow() {
+BITMAP* get_window()
+{
   return window;
 }
 

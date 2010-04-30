@@ -16,21 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Sprite.h"
+#ifndef __SHIELD_H
+#define __SHIELD_H
 
 
-@interface Shield : Sprite {
+#include "Sprite.h"
+
+
+class Shield : public Sprite
+{
+public:
+  Shield();
   
-  Animation *holdAnimation;
+  virtual bool isHeld();
   
-}
+  // Deprecated
+  virtual void toHoldState();
+  virtual void toAwayState();
+  
+protected:
+  Animation* holdAnimation;
+};
 
 
-- (BOOL) held;
-
-// Deprecated
-- toHoldState;
-- toAwayState;
-
-
-@end
+#endif // __SHIELD_H

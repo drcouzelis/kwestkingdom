@@ -16,47 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "MoneyBag.h"
+#include "Character.h"
+#include "MoneyBag.h"
 
 
-@implementation MoneyBag
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    amount = 1;
-    animation = [[Animation alloc] init];
-    [animation addFrame: getImage(IMG_ITEMS_MONEYBAG)];
-  }
-  
-  return self;
-  
+MoneyBag::MoneyBag()
+: amount(1)
+{
+  animation = new Animation;
+  animation->addFrame(get_image(IMG_ITEMS_MONEYBAG));
 }
 
 
-- collectedBy: (id<Livable, Moneyable>) character {
-  [character setMoney: [character getMoney] + amount];
-  playSound(SND_MONEY);
-  return self;
+void
+MoneyBag::collectedBy(Character* character)
+{
+  character->setMoney(character->getMoney() + amount);
+  play_sound(SND_MONEY);
 }
 
 
-- (int) getAmount {
+int
+MoneyBag::getAmount()
+{
   return amount;
 }
 
 
-- setAmount: (int) anAmount {
-  amount = anAmount;
+void
+MoneyBag::setAmount(int amount)
+{
+  this->amount = amount;
   if (amount < 0) {
     amount = 0;
   }
-  return self;
 }
-
-
-@end
-

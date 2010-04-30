@@ -16,20 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Resources.h"
+#include "Resources.h"
 
 
-BOOL initializedResources = NO;
+bool initializedResources = false;
 
-BITMAP *images[NUMBER_OF_IMAGES];
-SAMPLE *sounds[NUMBER_OF_SOUNDS];
+BITMAP* images[NUMBER_OF_IMAGES];
+SAMPLE* sounds[NUMBER_OF_SOUNDS];
 PALETTE palette;
 
 
-void initializeResources() {
-  
-  int i;
-
+void init_resources()
+{
   if (initializedResources) {
     return;
   }
@@ -132,20 +130,20 @@ void initializeResources() {
   sounds[SND_HEART] = load_sample("snd/heart.wav");
   sounds[SND_HAMMER] = load_sample("snd/hammer.wav");
 
-  initializedResources = YES;
+  initializedResources = true;
 
-  for (i = 0; i < NUMBER_OF_IMAGES; i++) {
+  for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
     if (images[i] == NULL) {
-      initializedResources = NO;
-      destroyResources();
+      initializedResources = false;
+      free_resources();
       return;
     }
   }
   
-  for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
+  for (int i = 0; i < NUMBER_OF_SOUNDS; i++) {
     if (sounds[i] == NULL) {
-      initializedResources = NO;
-      destroyResources();
+      initializedResources = false;
+      free_resources();
       return;
     }
   }
@@ -153,38 +151,39 @@ void initializeResources() {
 }
 
 
-void destroyResources() {
-
-  int i;
-
+void free_resources()
+{
   if (!initializedResources) {
     return;
   }
 
-  for (i = 0; i < NUMBER_OF_IMAGES; i++) {
+  for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
     destroy_bitmap(images[i]);
   }
 
-  for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
+  for (int i = 0; i < NUMBER_OF_SOUNDS; i++) {
     destroy_sample(sounds[i]);
   }
 
-  initializedResources = NO;
+  initializedResources = false;
 
 }
 
 
-BITMAP * getImage(int image) {
+BITMAP* get_image(int image)
+{
   return images[image];
 }
 
 
-void setPalette(void) {
+void set_palette(void)
+{
   set_palette(palette);
 }
 
 
-void playSound(int sound) {
+void play_sound(int sound)
+{
   play_sample(sounds[sound], 255, 128, 1000, 0);
 }
 
@@ -192,7 +191,7 @@ void playSound(int sound) {
 #define GAME_VOLUME 192
 
 
-void toggleSound(void) {
+void toggle_sound(void) {
   
   int digiVolume;
   int midiVolume;
@@ -208,18 +207,16 @@ void toggleSound(void) {
 }
 
 
-BOOL soundEnabled(void) {
-  
+bool sound_enabled(void)
+{
   int digiVolume;
   int midiVolume;
   
   get_volume(&digiVolume, &midiVolume);
   
   if (digiVolume == 0) {
-    return NO;
+    return false;
   }
   
-  return YES;
-  
+  return true;
 }
-

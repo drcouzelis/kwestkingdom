@@ -16,19 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Enemy.h"
-#import "Sword.h"
+#ifndef __NINJA_H
+#define __NINJA_H
 
 
-@interface Ninja : Enemy {
+#include "Enemy.h"
+#include "Sword.h"
+
+
+class Ninja : public Enemy
+{
+public:
+  Ninja();
+
+private:
+  Sword* sword;
   
-  Sword *sword;
-  
-  Animation *standAnimation;
-  Animation *attackAnimation;
-  Animation *dashAnimation;
-  
-}
+  Animation* standAnimation;
+  Animation* attackAnimation;
+  Animation* dashAnimation;
+};
 
 
-@end
+#endif // __NINJA_H

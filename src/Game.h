@@ -16,58 +16,64 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "EndlessWorld.h"
-#import "HighScoreLibrary.h"
-#import "KeyControl.h"
-#import "KwestKingdom.h"
-#import "Resources.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "StoryWorld.h"
-#import "Text.h"
-#import "Updatable.h"
+#ifndef __GAME_H
+#define __GAME_H
 
 
-@interface Game : Object <Drawable, Updatable> {
+#include "Animation.h"
+#include "Drawable.h"
+#include "EndlessWorld.h"
+#include "HighScoreLibrary.h"
+#include "KeyControl.h"
+#include "KwestKingdom.h"
+#include "Resources.h"
+#include "RoomFactory.h"
+#include "Snapshot.h"
+#include "StoryWorld.h"
+#include "Text.h"
+#include "Updatable.h"
+
+
+class Game : public virtual Drawable, public virtual Updatable
+{
+public:
+  Game();
+
+  virtual void readPlayerInitials();
+  virtual bool continuePlaying();
+  virtual void activateMenuSelection();
   
-  World *world;
+  virtual void drawMenu(BITMAP* buffer);
+  virtual void drawHighScores(BITMAP* buffer);
+  virtual void drawEnterInitials(BITMAP* buffer);
+  
+  virtual void setState(int state);
+
+  virtual void gameOver();
+  
+protected:
+  World* world;
   
   int state;
   
-  Animation *titleAnimation;
-  Animation *gameOverAnimation;
+  Animation* titleAnimation;
+  Animation* gameOverAnimation;
   
-  KeyControl *fullscreenKey;
-  KeyControl *soundKey;
-  KeyControl *escapeKey;
+  KeyControl* fullscreenKey;
+  KeyControl* soundKey;
+  KeyControl* escapeKey;
   
-  KeyControl *upKey;
-  KeyControl *downKey;
-  KeyControl *selectKey;
+  KeyControl* upKey;
+  KeyControl* downKey;
+  KeyControl* selectKey;
   
   int menuSelection;
-  Snapshot *menuBackground;
-  Snapshot *highScoresBackground;
-  Animation *menuPointer;
+  Snapshot* menuBackground;
+  Snapshot* highScoresBackground;
+  Animation* menuPointer;
   
   char playerInitials[4];
-  
-}
+};
 
 
-- readPlayerInitials;
-- (BOOL) continuePlaying;
-- activateMenuSelection;
-- drawMenu: (BITMAP *) buffer;
-- drawHighScores: (BITMAP *) buffer;
-- drawEnterInitials: (BITMAP *) buffer;
-
-- setState: (int) aState;
-
-- gameOver;
-
-
-@end
+#endif // __GAME_H

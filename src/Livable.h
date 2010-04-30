@@ -16,15 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
+#ifndef __LIVABLE_H
+#define __LIVABLE_H
 
 
-@protocol Livable
-- (BOOL) isDead;
-- setHealth: (int) theHealth;
-- (int) getHealth;
-- setMaxHealth: (int) theHealth;
-- (int) getMaxHealth;
-- hurt;
-@end
+class Livable
+{
+public:
+  virtual bool isDead() = 0;
+  virtual void setHealth(int health) = 0;
+  virtual int  getHealth() = 0;
+  virtual void setMaxHealth(int health) = 0;
+  virtual int  getMaxHealth() = 0;
+  virtual void hurt() = 0;
+};
+
+
+#endif // __LIVABLE_H
 

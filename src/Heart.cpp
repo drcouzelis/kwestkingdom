@@ -16,48 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import <objc/Object.h>
+#include "Character.h"
+#include "Heart.h"
+#include "Resources.h"
 
 
-@interface Node : Object {
-  id item;
-  Node *next;
-  Node *prev;
+Heart::Heart()
+{
+  animation = new Animation(0, false);
+  animation->addFrame(get_image(IMG_ITEMS_HEART));
 }
 
 
-- setItem: (id) anItem;
-- setNext: (Node *) theNext;
-- setPrev: (Node *) thePrev;
-- (id) getItem;
-- (Node *) getNext;
-- (Node *) getPrev;
-
-
-@end
-
-
-@interface List : Object {
-  Node *head;
-  Node *tail;
-  Node *next;
-  int size;
+void
+Heart::collectedBy(Character* character)
+{
+  character->setHealth(character->getHealth() + 1);
+  play_sound(SND_HEART);
 }
-
-
-- append: (id) item;
-- remove: (id) item;
-
-- (int) findIndex: (id) item;
-- (id) getIndex: (int) index;
-
-- (id) getHead;
-- (id) getTail;
-
-- iterate;
-- (id) next;
-
-- (int) size;
-
-
-@end

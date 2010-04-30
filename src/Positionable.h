@@ -16,14 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-@protocol Positionable
-- setX: (int) newX;
-- setY: (int) newY;
-- (int) getX;
-- (int) getY;
-- moveX: (int) newX;
-- moveY: (int) newY;
-- setSpeed: (int) newSpeed;
-- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right;
-@end
+#ifndef __POSITIONABLE_H
+#define __POSITIONABLE_H
 
+
+class Positionable
+{
+public:
+  virtual void setX(int x) = 0;
+  virtual void setY(int y) = 0;
+  virtual int  getX() = 0;
+  virtual int  getY() = 0;
+  virtual void moveX(int x) = 0;
+  virtual void moveY(int y) = 0;
+  virtual void setSpeed(int speed) = 0;
+  virtual void bound(int top, int bottom, int left, int right) = 0;
+};
+
+
+#endif // __POSITIONABLE_H

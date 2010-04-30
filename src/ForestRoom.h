@@ -16,11 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef __FOREST_ROOM_H
+#define __FOREST_ROOM_H
+
+
 #import "Resources.h"
 #import "Room.h"
 
 
-@interface ForestRoom : Room {
-}
+class ForestRoom : public Room
+{
+public:
+  ForectRoom();
+};
 
-@end
+
+#endif // __FOREST_ROOM_H
