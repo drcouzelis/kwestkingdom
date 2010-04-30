@@ -27,6 +27,9 @@ class Arrow : public Character
 {
 public:
   Arrow();
+  ~Arrow();
+  
+  virtual void update(); // Updatable
   
   virtual bool isInsideScreen();
   virtual void findTarget();

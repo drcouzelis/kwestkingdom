@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Arrow.h"
+#include "Arrow.h"
+#include "World.h"
 
 
 typedef enum {
@@ -26,47 +27,43 @@ typedef enum {
 } ARROW_STATE;
 
 
-@implementation Arrow
-
-
-- init {
+Arrow::Arrow()
+{
+  setSpeed(getWalkSpeed() * 4);
   
-  self = [super init];
+  flyRightAnimation = new Animation();
+  flyRightAnimation->addFrame(get_image(IMG_ARROW));
   
-  if (self) {
-    
-    [self setSpeed: getWalkSpeed() * 4];
-    
-    flyRightAnimation = [[Animation alloc] init];
-    [flyRightAnimation addFrame: getImage(IMG_ARROW)];
-    
-    flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: YES];
-    flyDownAnimation = [[flyRightAnimation copy] setRotate: YES];
-    flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
-    
-    direction = UP;
-    
-    [self toHoldState];
-    
-  }
+  flyLeftAnimation = flyRightAnimation;
+  flyLeftAnimation->setHorizontalFlip(true);
   
-  return self;
+  flyDownAnimation = flyRightAnimation;
+  flyDownAnimation->setRotate(true);
+  
+  flyUpAnimation = flyRightAnimation;
+  flyUpAnimation->setHorizontalFlip(true);
+  flyUpAnimation->setRotate(true);
+  
+  direction = UP;
+  
+  toHoldState();
   
 }
 
 
-- free {
-  [flyUpAnimation free];
-  [flyDownAnimation free];
-  [flyLeftAnimation free];
-  [flyRightAnimation free];
-  return [super free];
+Arrow::~Arrow()
+{
+  delete flyUpAnimation;
+  delete flyDownAnimation;
+  delete flyLeftAnimation;
+  delete flyRightAnimation;
 }
 
 
-- update {
-  
-  [super update];
+void
+Arrow::update()
+{
+  Character::update();
   
   switch (state) {
   case ARROW_HOLD_STATE:
@@ -75,19 +72,19 @@ typedef enum {
     
   case ARROW_FLYING_STATE:
     
-    if (![self moving]) {
+    if (!isMoving()) {
       
       if (direction == LEFT) {
-        [world attackFromTeam: team atX: x - 1 andY: y];
+        world->attack(team, x - 1, y);
       } else if (direction == RIGHT) {
-        [world attackFromTeam: team atX: x + 1 andY: y];
+        world->attack(team, x + 1, y);
       } else if (direction == UP) {
-        [world attackFromTeam: team atX: x andY: y - 1];
+        world->attack(team, x, y - 1);
       } else {
-        [world attackFromTeam: team atX: x andY: y + 1];
+        world->attack(team, x, y + 1);
       }
       
-      [self toStoppedState];
+      toStoppedState();
       
     }
     
@@ -98,46 +95,46 @@ typedef enum {
     break;
   }
   
-  return self;
-  
 }
 
 
-- (BOOL) isInsideScreen {
+bool
+Arrow::isInsideScreen()
+{
   if (x < 0 || x > COLS - 1 || y < 0 || y > ROWS - 1) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 
-- findTarget {
-  
+void
+Arrow::findTarget()
+{
   if (direction == LEFT) {
-    while ([world isFlyableAtX: x - 1 andY: y] && ![world isAttackableFromTeam: team atX: x - 1 andY: y] && [self isInsideScreen]) {
+    while (world->isFlyable(x - 1, y) && !world->isAttackable(team, x - 1, y) && isInsideScreen()) {
       x--;
     }
   } else if (direction == RIGHT) {
-    while ([world isFlyableAtX: x + 1 andY: y] && ![world isAttackableFromTeam: team atX: x + 1 andY: y] && [self isInsideScreen]) {
+    while (world->isFlyable(x + 1, y) && !world->isAttackable(team, x + 1, y) && isInsideScreen()) {
       x++;
     }
   } else if (direction == UP) {
-    while ([world isFlyableAtX: x andY: y - 1] && ![world isAttackableFromTeam: team atX: x andY: y - 1] && [self isInsideScreen]) {
+    while (world->isFlyable(x, y - 1) && !world->isAttackable(team, x, y - 1) && isInsideScreen()) {
       y--;
     }
   } else {
-    while ([world isFlyableAtX: x andY: y + 1] && ![world isAttackableFromTeam: team atX: x andY: y + 1] && [self isInsideScreen]) {
+    while (world->isFlyable(x, y + 1) && !world->isAttackable(team, x, y + 1) && isInsideScreen()) {
       y++;
     }
   }
-  
-  return self;
-  
 }
 
 
-- setDirection: (int) aDirection {
-  direction = aDirection;
+void
+Arrow::setDirection(int direction)
+{
+  this->direction = direction;
   if (direction == UP) {
     animation = flyUpAnimation;
   } else if (direction == DOWN) {
@@ -147,67 +144,64 @@ typedef enum {
   } else {
     animation = flyRightAnimation;
   }
-  return self;
 }
 
 
-- toHoldState {
-  
-  int visualOffset;
-  
-  visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
+void
+Arrow::toHoldState()
+{
+  int visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
   
   state = ARROW_HOLD_STATE;
   
-  [self setDirection: direction];
+  setDirection(direction);
   
   // Offset the animation a little bit to make it look like
   // the arrow is in the bow string.
-  [flyUpAnimation setOffsetX: 0];
-  [flyUpAnimation setOffsetY: visualOffset];
-  [flyDownAnimation setOffsetX: 0];
-  [flyDownAnimation setOffsetY: -visualOffset];
-  [flyLeftAnimation setOffsetX: visualOffset];
-  [flyLeftAnimation setOffsetY: 0];
-  [flyRightAnimation setOffsetX: -visualOffset];
-  [flyRightAnimation setOffsetY: 0];
-  
-  return self;
+  flyUpAnimation->setHorizontalOffset(0);
+  flyUpAnimation->setVerticalOffset(visualOffset);
+  flyDownAnimation->setHorizontalOffset(0);
+  flyDownAnimation->setVerticalOffset(-visualOffset);
+  flyLeftAnimation->setHorizontalOffset(visualOffset);
+  flyLeftAnimation->setVerticalOffset(0);
+  flyRightAnimation->setHorizontalOffset(-visualOffset);
+  flyRightAnimation->setVerticalOffset(0);
 }
 
 
-- toFlyingState {
+void
+Arrow::toFlyingState()
+{
   state = ARROW_FLYING_STATE;
-  [self setDirection: direction];
-  [self findTarget];
+  setDirection(direction);
+  findTarget();
   // Put the animation back to where it's supposed to be.
-  [flyUpAnimation setOffsetX: 0];
-  [flyUpAnimation setOffsetY: 0];
-  [flyDownAnimation setOffsetX: 0];
-  [flyDownAnimation setOffsetY: 0];
-  [flyLeftAnimation setOffsetX: 0];
-  [flyLeftAnimation setOffsetY: 0];
-  [flyRightAnimation setOffsetX: 0];
-  [flyRightAnimation setOffsetY: 0];
-  playSound(SND_ARROW_FLY);
-  return self;
+  flyUpAnimation->setHorizontalOffset(0);
+  flyUpAnimation->setVerticalOffset(0);
+  flyDownAnimation->setHorizontalOffset(0);
+  flyDownAnimation->setVerticalOffset(0);
+  flyLeftAnimation->setHorizontalOffset(0);
+  flyLeftAnimation->setVerticalOffset(0);
+  flyRightAnimation->setHorizontalOffset(0);
+  flyRightAnimation->setVerticalOffset(0);
+  play_sound(SND_ARROW_FLY);
 }
 
 
-- toStoppedState {
+void
+Arrow::toStoppedState(){
   state = ARROW_STOPPED_STATE;
-  [self setDirection: direction];
-  playSound(SND_ARROW_HIT);
-  return self;
+  setDirection(direction);
+  play_sound(SND_ARROW_HIT);
 }
 
 
-- (BOOL) stopped {
+bool
+Arrow::isStopped()
+{
   if (state == ARROW_STOPPED_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
-
-@end
