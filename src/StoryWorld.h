@@ -27,6 +27,12 @@ class StoryWorld : public World
 {
 public:
   StoryWorld();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void update(); // Updatable
+  
+  virtual void changeRooms(); // World
 };
 
 

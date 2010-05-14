@@ -16,62 +16,53 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "KeyControl.h"
+#include "KeyControl.h"
 
 
-@implementation KeyControl
-
-
-- initWithKey: (int) aKey {
-  self = [super init];
-  if (self) {
-    keyCode = aKey;
-    released = YES;
-    timer = 0;
-    delay = 0; //GAME_TICKER / 4;
-  }
-  return self;
+KeyControl::KeyControl(int key)
+{
+  keyCode = key;
+  released = true;
+  timer = 0;
+  delay = 0; //GAME_TICKER / 4;
 }
 
 
-- (BOOL) isPressed {
-  
-  BOOL ret = NO;
+bool
+KeyControl::isPressed()
+{
+  bool ret = false;
   
   if (delay == 0 && key[keyCode]) {
-    return YES;
+    return true;
   }
   
   if (key[keyCode]) {
     if (released) {
       
-      ret = YES;
+      ret = true;
       timer = 0;
       
     } else {
       timer++;
     }
     
-    released = NO;
+    released = false;
     
     if (timer >= delay) {
-      released = YES;
+      released = true;
     }
     
   } else {
-    released = YES;
+    released = true;
   }
   
   return ret;
-  
 }
 
 
-- setDelay: (BOOL) theDelay {
-  delay = theDelay;
-  return self;
+void
+KeyControl::setDelay(bool delay)
+{
+  this->delay = delay;
 }
-
-
-@end
-

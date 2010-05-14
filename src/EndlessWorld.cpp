@@ -16,24 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "EndlessWorld.h"
+#include "EndlessWorld.h"
 
 
-@implementation EndlessWorld
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    difficulty = 100;
-  }
-  
-  return self;
-  
+EndlessWorld::EndlessWorld()
+{
+  difficulty = 100;
 }
-
-
-@end
-

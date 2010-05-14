@@ -38,7 +38,12 @@ class Game : public virtual Drawable, public virtual Updatable
 {
 public:
   Game();
-
+  ~Game();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void update(); // Updatable
+  
   virtual void readPlayerInitials();
   virtual bool continuePlaying();
   virtual void activateMenuSelection();
@@ -48,7 +53,7 @@ public:
   virtual void drawEnterInitials(BITMAP* buffer);
   
   virtual void setState(int state);
-
+  
   virtual void gameOver();
   
 protected:

@@ -27,7 +27,12 @@ class Chomper : public Enemy
 {
 public:
   Chomper();
-
+  ~Chomper();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void update(); // Updatable
+  
 protected:
   Animation* standAnimation;
   Animation* attackAnimation;

@@ -47,10 +47,12 @@ typedef enum {
 #define NO_STEP -1
 
 
-class Room : public virtual Drawable, public virtual Traversable, public virtual Updatable
+class Room
+: public virtual Drawable
+, public virtual Traversable
+, public virtual Updatable
 {
 public:
-  
   Room();
   ~Room();
   
@@ -105,7 +107,7 @@ public:
   
   virtual Map* getPathMap();
   
-private:
+protected:
   // Add a terrain map, item map, character map...
   Map* terrainMap;
   Map* pathMap;

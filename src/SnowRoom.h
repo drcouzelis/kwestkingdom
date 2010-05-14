@@ -20,6 +20,7 @@
 #define __SNOW_ROOM_H
 
 
+#include "Resources.h"
 #include "Room.h"
 
 

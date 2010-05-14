@@ -23,7 +23,7 @@
 #include <allegro.h>
 
 
-void resized_text_out(BITMAP* dest, int x, int y, double multiplier, int color, char* text);
+void resized_text_out(BITMAP* dest, int x, int y, double multiplier, int color, const char* text);
 
 void draw_box(BITMAP* buffer, int x, int y, int w, int h);
 

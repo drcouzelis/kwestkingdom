@@ -16,29 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "HighScoreLibrary.h"
+#include <cstdio>
+#include <cstring>
+
+#include "HighScoreLibrary.h"
 
 
 #define HIGH_SCORES_FILENAME "highscores.txt"
 
 
-static HighScoreLibrary *highScoreLibraryInstance = NULL;
 static HighScore highScores[MAX_NUM_OF_HIGH_SCORES];
 static int numOfHighScores;
 
 
-void writeHighScores() {
-  
-  FILE *file;
-  int i;
-  
-  file = fopen(HIGH_SCORES_FILENAME, "w");
+void write_high_scores()
+{
+  FILE* file = fopen(HIGH_SCORES_FILENAME, "w");
   
   if (file == NULL) {
     return;
   }
   
-  for (i = 0; i < numOfHighScores; i++) {
+  for (int i = 0; i < numOfHighScores; i++) {
     fprintf(file, "%s %d %d\n", highScores[i].initials, highScores[i].room, highScores[i].coins);
   }
   
@@ -47,9 +46,9 @@ void writeHighScores() {
 }
 
 
-void readHighScores() {
-  
-  FILE *file;
+void read_high_scores()
+{
+  FILE* file;
   char line[256];
   
   numOfHighScores = 0;
@@ -70,33 +69,20 @@ void readHighScores() {
 }
 
 
-@implementation HighScoreLibrary
-
-
-+ initInstance {
-  int i;
-  if (highScoreLibraryInstance == NULL) {
-    highScoreLibraryInstance = [[HighScoreLibrary alloc] init];
-    for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
-      strcpy(highScores[i].initials, "\0");
-      highScores[i].room = 0;
-      highScores[i].coins = 0;
-    }
-    numOfHighScores = 0;
-    readHighScores();
+void init_high_scores()
+{
+  for (int i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
+    strcpy(highScores[i].initials, "\0");
+    highScores[i].room = 0;
+    highScores[i].coins = 0;
   }
-  return highScoreLibraryInstance;
+  numOfHighScores = 0;
+  read_high_scores();
 }
 
 
-+ freeInstance {
-  highScoreLibraryInstance = [highScoreLibraryInstance free];
-  return highScoreLibraryInstance;
-}
-
-
-+ (int) highScorePositionWithRoom: (int) room andCoins: (int) coins {
-  
+int high_score_position(int room, int coins)
+{
   int position;
   int i;
   
@@ -115,19 +101,18 @@ void readHighScores() {
   }
   
   return position;
-  
 }
 
 
-+ addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins {
-  
+void add_high_score(char* initials, int room, int coins)
+{
   int position;
   int i;
   
-  position = [HighScoreLibrary highScorePositionWithRoom: room andCoins: coins];
+  position = high_score_position(room, coins);
   
   if (position == MAX_NUM_OF_HIGH_SCORES) {
-    return self;
+    return;
   }
   
   for (i = MAX_NUM_OF_HIGH_SCORES - 2; i >= position; i--) {
@@ -142,23 +127,19 @@ void readHighScores() {
   
   numOfHighScores++;
   
-  writeHighScores();
-  readHighScores();
-  
-  return self;
-  
+  write_high_scores();
+  read_high_scores();
 }
 
 
-+ (BOOL) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins {
+bool get_high_score(int num, char* initials, int* room, int* coins)
+{
   if (num < numOfHighScores) {
     strcpy(initials, highScores[num].initials);
     *room = highScores[num].room;
     *coins = highScores[num].coins;
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
-
-@end

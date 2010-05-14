@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Bow.h"
+#include "Bow.h"
 
 
 typedef enum {
@@ -25,149 +25,141 @@ typedef enum {
 } BOW_STATE;
 
 
-@implementation Bow
-
-
-- init {
+Bow::Bow()
+{
+  arrow = NULL;
   
-  self = [super init];
+  holdAnimation = new Animation(6, true);
+  holdAnimation->addFrame(get_image(IMG_BOW_HOLD_1));
+  holdAnimation->addFrame(get_image(IMG_BOW_HOLD_2));
+  holdAnimation->addFrame(get_image(IMG_BOW_HOLD_3));
+  holdAnimation->addFrame(get_image(IMG_BOW_HOLD_4));
   
-  if (self) {
-    
-    arrow = nil;
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMG_BOW_HOLD_4)];
-    [holdAnimation setLoop: YES];
-    [holdAnimation setSpeed: 6];
-	
-    attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_1)];
-    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_2)];
-    [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_3)];
-    [attackRightAnimation setLoop: NO];
-    [attackRightAnimation setSpeed: 12];
-	
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
-    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
-    
-    [self toAwayState];
-    
-  }
+  attackRightAnimation = new Animation(12, false);
+  attackRightAnimation->addFrame(get_image(IMG_BOW_DRAW_1));
+  attackRightAnimation->addFrame(get_image(IMG_BOW_DRAW_2));
+  attackRightAnimation->addFrame(get_image(IMG_BOW_DRAW_3));
   
-  return self;
+  attackLeftAnimation = attackRightAnimation;
+  attackLeftAnimation->setHorizontalFlip(true);
   
+  attackDownAnimation = attackRightAnimation;
+  attackDownAnimation->setRotate(true);
+  
+  attackUpAnimation = attackRightAnimation;
+  attackUpAnimation->setHorizontalFlip(true);
+  attackUpAnimation->setRotate(true);
+  
+  toAwayState();
 }
 
 
-- free {
-  [holdAnimation free];
-  [attackUpAnimation free];
-  [attackDownAnimation free];
-  [attackLeftAnimation free];
-  [attackRightAnimation free];
-  [arrow free];
-  return [super free];
+Bow::~Bow()
+{
+  delete holdAnimation;
+  delete attackUpAnimation;
+  delete attackDownAnimation;
+  delete attackLeftAnimation;
+  delete attackRightAnimation;
+  delete arrow;
 }
 
 
-- update {
-  [super update];
-  [arrow update];
-  return self;
+void
+Bow::update()
+{
+  Sprite::update();
+  arrow->update();
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [arrow draw: buffer];
-  return self;
+void
+Bow::draw(BITMAP* buffer)
+{
+  Sprite::draw(buffer);
+  arrow->draw(buffer);
 }
 
 
-- setArrow: (Arrow *) anArrow {
-  arrow = anArrow;
-  return self;
+void
+Bow::setArrow(Arrow* arrow)
+{
+  this->arrow = arrow;
 }
 
 
-- (Arrow *) getArrow {
+Arrow*
+Bow::getArrow()
+{
   return arrow;
 }
 
 
-- setArrowWithX: (int) newX
-    andY: (int) newY
-    andDirection: (int) aDirection
-    andTeam: (int) aTeam
-    andWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
-  
-  arrow = [[Arrow alloc] init];
-  [arrow setTeam: aTeam];
-  [arrow setX: newX];
-  [arrow setY: newY];
-  [arrow setWorld: aWorld];
-  [arrow setDirection: aDirection];
-  [arrow toHoldState];
-  
-  return self;
-  
+void
+Bow::setArrow(int x, int y, int direction, int team, World* world)
+{
+  arrow = new Arrow();
+  arrow->setTeam(team);
+  arrow->setX(x);
+  arrow->setY(y);
+  arrow->setWorld(world);
+  arrow->setDirection(direction);
+  arrow->toHoldState();
 }
 
 
-- toHoldState {
+void
+Bow::toHoldState()
+{
   state = BOW_HOLD_STATE;
   animation = holdAnimation;
-  return self;
 }
 
 
-- toAwayState {
+void
+Bow::toAwayState()
+{
   state = BOW_AWAY_STATE;
-  animation = nil;
-  return self;
+  animation = NULL;
 }
 
 
-- toAttackUpState {
+void
+Bow::toAttackUpState(){
   animation = attackUpAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- toAttackDownState {
+void
+Bow::toAttackDownState()
+{
   animation = attackDownAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- toAttackLeftState {
+void
+Bow::toAttackLeftState()
+{
   animation = attackLeftAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- toAttackRightState {
+void
+Bow::toAttackRightState()
+{
   animation = attackRightAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- (BOOL) held {
+bool
+Bow::isHeld()
+{
   if (state != BOW_AWAY_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
-
-
-@end
-

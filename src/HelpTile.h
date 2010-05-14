@@ -42,12 +42,12 @@ public:
   virtual void draw(BITMAP* buffer); // Drawable
   
   void setLines(
-    char* line1,
-    char* line2,
-    char* line3,
-    char* line4,
-    char* line5,
-    char* line6
+    char* line1 = NULL,
+    char* line2 = NULL,
+    char* line3 = NULL,
+    char* line4 = NULL,
+    char* line5 = NULL,
+    char* line6 = NULL
   );
   
   int getX();

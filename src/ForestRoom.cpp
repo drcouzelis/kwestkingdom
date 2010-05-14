@@ -16,54 +16,63 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "ForestRoom.h"
+#include "ForestRoom.h"
 
 
-@implementation ForestRoom
-
-
-- init {
+ForestRoom::ForestRoom()
+{
+  grassAnimation = new Animation();
+  pathAnimation = new Animation();
+  mountainAnimation = new Animation();
+  waterAnimation = new Animation();
+  shoreNorthAnimation = new Animation();
+  shoreInsideNEAnimation = new Animation();
+  shoreOutsideNEAnimation = new Animation();
   
-  self = [super init];
+  // Terrain
+  grassAnimation->addFrame(get_image(IMG_TERRAIN_GRASS));
+  pathAnimation->addFrame(get_image(IMG_TERRAIN_PATH));
+  mountainAnimation->addFrame(get_image(IMG_TERRAIN_OAK));
+  waterAnimation->addFrame(get_image(IMG_TERRAIN_WATER));
   
-  if (self) {
-    
-    grassAnimation = [[Animation alloc] init];
-    pathAnimation = [[Animation alloc] init];
-    mountainAnimation = [[Animation alloc] init];
-    waterAnimation = [[Animation alloc] init];
-    shoreNorthAnimation = [[Animation alloc] init];
-    shoreInsideNEAnimation = [[Animation alloc] init];
-    shoreOutsideNEAnimation = [[Animation alloc] init];
-    
-    [grassAnimation addFrame: getImage(IMG_TERRAIN_GRASS)];
-    [pathAnimation addFrame: getImage(IMG_TERRAIN_PATH)];
-    [mountainAnimation addFrame: getImage(IMG_TERRAIN_OAK)];
-    [waterAnimation addFrame: getImage(IMG_TERRAIN_WATER)];
-    
-    [shoreNorthAnimation addFrame: getImage(IMG_SHORE_GRASS_SHORE)];
-    shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
-    shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
-    shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
-    
-    [shoreInsideNEAnimation addFrame: getImage(IMG_SHORE_GRASS_INSIDECORNER)];
-    shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
-    shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
-    shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
-    
-    [shoreOutsideNEAnimation addFrame: getImage(IMG_SHORE_GRASS_OUTSIDECORNER)];
-    [shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
-    [shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
-    shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];
-    shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] setVerticalFlip: YES];
-    shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
-    
-  }
+  // Shores
+  shoreNorthAnimation->addFrame(get_image(IMG_SHORE_GRASS_SHORE));
   
-  return self;
+  shoreSouthAnimation = shoreNorthAnimation;
+  shoreSouthAnimation->setVerticalFlip(true);
   
+  shoreEastAnimation = shoreNorthAnimation;
+  shoreEastAnimation->setRotate(true);
+  
+  shoreWestAnimation = shoreNorthAnimation;
+  shoreWestAnimation->setVerticalFlip(true);
+  shoreWestAnimation->setRotate(true);
+  
+  // Inside shores
+  shoreInsideNEAnimation->addFrame(get_image(IMG_SHORE_GRASS_INSIDECORNER));
+  
+  shoreInsideNWAnimation = shoreInsideNEAnimation;
+  shoreInsideNWAnimation->setHorizontalFlip(true);
+  
+  shoreInsideSEAnimation = shoreInsideNEAnimation;
+  shoreInsideSEAnimation->setVerticalFlip(true);
+  
+  shoreInsideSWAnimation = shoreInsideNEAnimation;
+  shoreInsideSWAnimation->setVerticalFlip(true);
+  shoreInsideSWAnimation->setHorizontalFlip(true);
+  
+  // Outside shores
+  shoreOutsideNEAnimation->addFrame(get_image(IMG_SHORE_GRASS_OUTSIDECORNER));
+  shoreOutsideNEAnimation->setHorizontalOffset(-TILE_SIZE);
+  shoreOutsideNEAnimation->setVerticalOffset(-TILE_SIZE);
+  
+  shoreOutsideNWAnimation = shoreOutsideNEAnimation;
+  shoreOutsideNWAnimation->setHorizontalFlip(true);
+  
+  shoreOutsideSEAnimation = shoreOutsideNEAnimation;
+  shoreOutsideSEAnimation->setVerticalFlip(true);
+  
+  shoreOutsideSWAnimation = shoreOutsideNEAnimation;
+  shoreOutsideSWAnimation->setVerticalFlip(true);
+  shoreOutsideSWAnimation->setHorizontalFlip(true);
 }
-
-
-@end
-

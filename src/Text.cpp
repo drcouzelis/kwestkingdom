@@ -20,7 +20,7 @@
 #include "Text.h"
 
 
-void resized_text_out(BITMAP *dest, int x, int y, double multiplier, int color, char *text)
+void resized_text_out(BITMAP *dest, int x, int y, double multiplier, int color, const char *text)
 {
   //BITMAP *tempBitmap;
   //tempBitmap = create_bitmap(text_length(font, text), text_height(font));

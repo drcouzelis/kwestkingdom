@@ -20,14 +20,14 @@
 #define __FOREST_ROOM_H
 
 
-#import "Resources.h"
-#import "Room.h"
+#include "Resources.h"
+#include "Room.h"
 
 
 class ForestRoom : public Room
 {
 public:
-  ForectRoom();
+  ForestRoom();
 };
 
 

@@ -36,7 +36,10 @@ typedef enum {
 } TEAM;
 
 
-class Character : public Sprite, public virtual Livable, public virtual Moneyable
+class Character
+: public Sprite
+, public virtual Livable
+, public virtual Moneyable
 {
 public:
   Character();

@@ -31,7 +31,6 @@ typedef struct {
 
 
 void init_high_scores();
-void free_high_scores();
 
 int high_score_position(int room, int coins);
 

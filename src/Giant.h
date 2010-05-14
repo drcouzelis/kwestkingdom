@@ -20,16 +20,30 @@
 #define __GIANT_H
 
 
-#import "Enemy.h"
-#import "Hammer.h"
+#include "Enemy.h"
+#include "Hammer.h"
 
 
 class Giant : public Enemy
 {
 public:
   Giant();
+  ~Giant();
 
-  virtual bool target(Positionable* target, int range);
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void dropItem(); // Enemy
+  
+  virtual void setX(int x);  // Positionable
+  virtual void setY(int y);  // Positionable
+  virtual void moveX(int x); // Positionable
+  virtual void moveY(int y); // Positionable
+  
+  virtual void setWorld(World* world); // Sprite
+  
+  virtual void update(); // Updatable
+  
+  virtual bool inRange(Positionable* target, int range);
   virtual int  directionToTarget(Positionable* target);
   virtual bool isMe(int x, int y);
   virtual bool canWalkTo(int x, int y);

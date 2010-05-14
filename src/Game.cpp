@@ -16,7 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Game.h"
+#include "Game.h"
+
+// TEMP
+#include <cstdio>
 
 
 typedef enum {
@@ -40,81 +43,67 @@ typedef enum {
 } MENU_SELECTION;
 
 
-@implementation Game
-
-
-- init {
+Game::Game()
+{
+  world = NULL;
+  menuSelection = NEW_GAME_SELECTION;
+  strcpy(playerInitials, "\0");
   
-  self = [super init];
+  init_high_scores();
   
-  if (self) {
-    
-    world = nil;
-    menuSelection = NEW_GAME_SELECTION;
-    strcpy(playerInitials, "\0");
-    
-    [HighScoreLibrary initInstance];
-    
-    titleAnimation = [[Animation alloc] init];
-    [titleAnimation addFrame: getImage(IMG_TITLE)];
-    
-    gameOverAnimation = [[Animation alloc] init];
-    [gameOverAnimation addFrame: getImage(IMG_GAMEOVER)];
-    
-    escapeKey = [[KeyControl alloc] initWithKey: KEY_ESC];
-    [escapeKey setDelay: GAME_TICKER];
-    // The keys to toggle fullscreen and sound are loaded in "setState".
-    fullscreenKey = nil;
-    soundKey = nil;
-    
-    upKey = [[KeyControl alloc] initWithKey: KEY_UP];
-    downKey = [[KeyControl alloc] initWithKey: KEY_DOWN];
-    selectKey = [[KeyControl alloc] initWithKey: KEY_ENTER];
-    [upKey setDelay: GAME_TICKER];
-    [downKey setDelay: GAME_TICKER];
-    [selectKey setDelay: GAME_TICKER];
-    
-    menuBackground = [[Snapshot alloc] init];
-    highScoresBackground = [[Snapshot alloc] init];
-    
-    menuPointer = [[Animation alloc] init];
-    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_1)];
-    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_2)];
-    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_3)];
-    [menuPointer addFrame: getImage(IMG_SWORD_HOLD_4)];
-    [menuPointer setRotate: YES];
-    [menuPointer setLoop: YES];
-    [menuPointer setSpeed: 6];
-    
-    [self setState: GAME_MENU_STATE];
-    
-  }
+  titleAnimation = new Animation();
+  titleAnimation->addFrame(get_image(IMG_TITLE));
   
-  return self;
+  gameOverAnimation = new Animation();
+  gameOverAnimation->addFrame(get_image(IMG_GAMEOVER));
   
+  escapeKey = new KeyControl(KEY_ESC);
+  escapeKey->setDelay(GAME_TICKER);
+  // The keys to toggle fullscreen and sound are loaded in "setState".
+  fullscreenKey = NULL;
+  soundKey = NULL;
+  
+  upKey = new KeyControl(KEY_UP);
+  downKey = new KeyControl(KEY_DOWN);
+  selectKey = new KeyControl(KEY_ENTER);
+  upKey->setDelay(GAME_TICKER);
+  downKey->setDelay(GAME_TICKER);
+  selectKey->setDelay(GAME_TICKER);
+  
+  menuBackground = new Snapshot();
+  highScoresBackground = new Snapshot();
+  
+  menuPointer = new Animation(6, true);
+  menuPointer->addFrame(get_image(IMG_SWORD_HOLD_1));
+  menuPointer->addFrame(get_image(IMG_SWORD_HOLD_2));
+  menuPointer->addFrame(get_image(IMG_SWORD_HOLD_3));
+  menuPointer->addFrame(get_image(IMG_SWORD_HOLD_4));
+  menuPointer->setRotate(true);
+  
+  setState(GAME_MENU_STATE);
 }
 
 
-- free {
-  [world free];
-  [titleAnimation free];
-  [gameOverAnimation free];
-  [fullscreenKey free];
-  [soundKey free];
-  [escapeKey free];
-  [upKey free];
-  [downKey free];
-  [selectKey free];
-  [menuBackground free];
-  [highScoresBackground free];
-  [menuPointer free];
-  [HighScoreLibrary freeInstance];
-  return [super free];
+Game::~Game()
+{
+  delete world;
+  delete titleAnimation;
+  delete gameOverAnimation;
+  delete fullscreenKey;
+  delete soundKey;
+  delete escapeKey;
+  delete upKey;
+  delete downKey;
+  delete selectKey;
+  delete menuBackground;
+  delete highScoresBackground;
+  delete menuPointer;
 }
 
 
-- readPlayerInitials {
-  
+void
+Game::readPlayerInitials()
+{
   int key;
   int length;
   
@@ -135,84 +124,83 @@ typedef enum {
     }
   }
   
-  return self;
-  
 }
 
 
-- update {
-  
-  if (fullscreenKey != nil && [fullscreenKey isPressed]) {
-    if (initializeScreen(-1, -1, is_windowed_mode()) == NO) {
-      [self setState: GAME_QUIT_STATE];
+void
+Game::update()
+{
+  if (fullscreenKey != NULL && fullscreenKey->isPressed()) {
+    if (init_screen(-1, -1, is_windowed_mode()) == false) {
+      setState(GAME_QUIT_STATE);
     }
-    setPalette();
+    set_palette();
   }
   
-  if (soundKey != nil && [soundKey isPressed]) {
-    toggleSound();
+  if (soundKey != NULL && soundKey->isPressed()) {
+    toggle_sound();
   }
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_QUIT_STATE];
-    } else if ([upKey isPressed]) {
+    if (escapeKey->isPressed()) {
+      setState(GAME_QUIT_STATE);
+    } else if (upKey->isPressed()) {
       menuSelection--;
-      if (menuSelection == RESUME_GAME_SELECTION && world == nil) {
+      if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection--;
       }
       if (menuSelection < 0) {
         menuSelection++;
       }
-    } else if ([downKey isPressed]) {
+    } else if (downKey->isPressed()) {
       menuSelection++;
-      if (menuSelection == RESUME_GAME_SELECTION && world == nil) {
+      if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection++;
       }
       if (menuSelection == MAX_MENU_SELECTIONS) {
         menuSelection--;
       }
-    } else if ([selectKey isPressed]) {
-      [self activateMenuSelection];
+    } else if (selectKey->isPressed()) {
+      activateMenuSelection();
     }
-    [menuPointer update];
+    menuPointer->animate();
     break;
   
   case GAME_PLAY_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
+    if (escapeKey->isPressed()) {
+      setState(GAME_MENU_STATE);
     }
-    [world update];
+    world->update();
     break;
   
   case GAME_HIGH_SCORES_STATE:
-    if ([escapeKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
+    if (escapeKey->isPressed()) {
+      setState(GAME_MENU_STATE);
     }
     break;
   
   case GAME_ENTER_INITIALS_STATE:
-    [self readPlayerInitials];
-    if (strlen(playerInitials) > 0 && [selectKey isPressed]) {
-      [self setState: GAME_MENU_STATE];
-      [HighScoreLibrary addHighScoreWithInitials: playerInitials andRoom: [world getRoomNumber] andCoins: [world getMoney]];
-      [world free];
-      world = nil;
+    readPlayerInitials();
+    if (strlen(playerInitials) > 0 && selectKey->isPressed()) {
+      setState(GAME_MENU_STATE);
+      add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
+      delete world;
+      world = NULL;
       strcpy(playerInitials, "\0");
     }
     break;
   
   case GAME_OVER_STATE:
-    if ([selectKey isPressed]) {
+    if (selectKey->isPressed()) {
       menuSelection = NEW_GAME_SELECTION;
-      if ([HighScoreLibrary highScorePositionWithRoom: [world getRoomNumber] andCoins: [world getMoney]] == -1) {
-        [self setState: GAME_MENU_STATE];
-        [world free];
-        world = nil;
+      if (high_score_position(world->getRoomNumber(), world->getMoney()) == -1) {
+        setState(GAME_MENU_STATE);
+        delete world;
+        world = NULL;
       } else {
-        [self setState: GAME_ENTER_INITIALS_STATE];
+        setState(GAME_ENTER_INITIALS_STATE);
       }
     }
     break;
@@ -223,13 +211,12 @@ typedef enum {
     
   }
   
-  return self;
-  
 }
 
 
-- drawMenu: (BITMAP *) buffer {
-  
+void
+Game::drawMenu(BITMAP* buffer)
+{
   int x;
   int y;
   int w;
@@ -238,65 +225,65 @@ typedef enum {
   int hTextOffset;
   int vTextOffset;
   
-  x = (getWindowWidth() / 2) - (getTileSize() * 4);
-  y = (getWindowHeight() / 2) - (getTileSize() / 2);
+  x = (window_width() / 2) - (getTileSize() * 4);
+  y = (window_height() / 2) - (getTileSize() / 2);
   w = getTileSize() * 4 * 2;
   h = getTileSize() * 5;
   lineSpacing = getTileSize() / 2;
   hTextOffset = getTileSize();
   vTextOffset = lineSpacing;
   
-  [menuBackground draw: buffer];
-  drawBox(buffer, x, y, w, h);
+  menuBackground->draw(buffer);
+  draw_box(buffer, x, y, w, h);
 
   // Draw the title of the game
-  [titleAnimation drawTo: buffer
-    atX: (getWindowWidth() / 2) - ([titleAnimation width] / 2)
-    andY: (getWindowWidth() - [titleAnimation width]) / 2
-  ];
+  titleAnimation->draw(
+    buffer,
+    (window_width() / 2) - (titleAnimation->getWidth() / 2),
+    (window_width() - titleAnimation->getWidth()) / 2
+  );
   
   // New Game
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, "New Game");
+  resized_text_out(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, "New Game");
 
   // Survival Mode
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, "Survival Mode");
+  resized_text_out(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, "Survival Mode");
   
   // Resume Game
-  if (world == nil) {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, "Resume Game");
+  if (world == NULL) {
+    resized_text_out(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, "Resume Game");
   } else {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, "Resume Game");
+    resized_text_out(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, "Resume Game");
   }
   
   // High Scores
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, "High Scores");
+  resized_text_out(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, "High Scores");
   
   // Quit
-  resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, "Press ESC To Quit");
+  resized_text_out(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, "Press ESC To Quit");
   
   // Fullscreen
   if (is_windowed_mode()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Fullscreen");
+    resized_text_out(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Fullscreen");
   } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Windowed");
+    resized_text_out(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, "F for Windowed");
   }
   
   // Sound
-  if (soundEnabled()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (On)");
+  if (sound_enabled()) {
+    resized_text_out(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (On)");
   } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (Off)");
+    resized_text_out(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (Off)");
   }
   
-  [menuPointer drawTo: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
-  
-  return self;
+  menuPointer->draw(buffer, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
   
 }
 
 
-- drawHighScores: (BITMAP *) buffer {
-  
+void
+Game::drawHighScores(BITMAP* buffer)
+{
   int x;
   int y;
   int w;
@@ -318,35 +305,34 @@ typedef enum {
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
-  [highScoresBackground draw: buffer];
-  drawBox(buffer, x, y, w, h);
+  highScoresBackground->draw(buffer);
+  draw_box(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, "High Scores");
+  resized_text_out(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, "High Scores");
   
   // Header
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
+  resized_text_out(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
-    if ([HighScoreLibrary getHighScoreNumber: i returnInitials: initials andRoom: &room andCoins: &coins] == YES) {
+    if (get_high_score(i, initials, &room, &coins) == true) {
       sprintf(line, "#%d %3s %4d %6d", i + 1, initials, room, coins);
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    resized_text_out(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
   }
   
   // Return
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
-  
-  return self;
+  resized_text_out(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
   
 }
 
 
-- drawEnterInitials: (BITMAP *) buffer {
-  
+void
+Game::drawEnterInitials(BITMAP* buffer)
+{
   int x;
   int y;
   int w;
@@ -362,48 +348,49 @@ typedef enum {
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
-  [world draw: buffer];
+  world->draw(buffer);
   
-  drawBox(buffer, x, y, w, h);
+  draw_box(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, "Congratulations!");
-  resizedTextOut(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
-  resizedTextOut(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
+  resized_text_out(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, "Congratulations!");
+  resized_text_out(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
+  resized_text_out(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
   
   // Initials
-  resizedTextOut(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
-  
-  return self;
+  resized_text_out(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
   
 }
 
 
-- draw: (BITMAP *) buffer {
-  
+void
+Game::draw(BITMAP* buffer)
+{
   switch (state) {
   
   case GAME_MENU_STATE:
-    [self drawMenu: buffer];
+    drawMenu(buffer);
     break;
   
   case GAME_PLAY_STATE:
-    [world draw: buffer];
+    world->draw(buffer);
     break;
   
   case GAME_OVER_STATE:
-    [world draw: buffer];
-    [gameOverAnimation drawTo: buffer
-      atX: (getWindowWidth() / 2) - ([gameOverAnimation width] / 2)
-      andY: (getWindowHeight() / 2) - ([gameOverAnimation height] / 2)];
+    world->draw(buffer);
+    gameOverAnimation->draw(
+      buffer,
+      (window_width() / 2) - (gameOverAnimation->getWidth() / 2),
+      (window_height() / 2) - (gameOverAnimation->getHeight() / 2)
+    );
     break;
     
   case GAME_ENTER_INITIALS_STATE:
-    [self drawEnterInitials: buffer];
+    drawEnterInitials(buffer);
     break;
     
   case GAME_HIGH_SCORES_STATE:
-    [self drawHighScores: buffer];
+    drawHighScores(buffer);
     break;
   
   case GAME_QUIT_STATE:
@@ -412,105 +399,104 @@ typedef enum {
     
   }
   
-  return self;
-  
 }
 
 
-- activateMenuSelection {
+void
+Game::activateMenuSelection()
+{
   switch (menuSelection) {
   case NEW_GAME_SELECTION:
-    [world free];
-    world = [[StoryWorld alloc] init];
-    [self setState: GAME_PLAY_STATE];
+    delete world;
+    world = new StoryWorld();
+    setState(GAME_PLAY_STATE);
     menuSelection = RESUME_GAME_SELECTION;
     break;
   case SURVIVAL_MODE_SELECTION:
-    [world free];
-    world = [[EndlessWorld alloc] init];
-    [self setState: GAME_PLAY_STATE];
+    delete world;
+    world = new EndlessWorld();
+    setState(GAME_PLAY_STATE);
     menuSelection = RESUME_GAME_SELECTION;
     break;
   case RESUME_GAME_SELECTION:
-    if (world != nil) {
-      [self setState: GAME_PLAY_STATE];
+    if (world != NULL) {
+      setState(GAME_PLAY_STATE);
     }
     break;
   case HIGH_SCORES_SELECTION:
-    [self setState: GAME_HIGH_SCORES_STATE];
+    setState(GAME_HIGH_SCORES_STATE);
     break;
   }
-  return self;
 }
 
 
-- setState: (int) aState {
-  
+void
+Game::setState(int state)
+{
   RoomFactory *roomFactory;
   Room *tempRoom;
   
-  state = aState;
+  this->state = state;
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setType: ROOM_FOREST];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    tempRoom = [roomFactory createRoom];
-    [tempRoom draw: [menuBackground getCanvas]];
-    [tempRoom free];
-    [roomFactory free];
+    roomFactory = new RoomFactory();
+    roomFactory->setType(ROOM_FOREST);
+    roomFactory->setTerrain(ROOM_NO_WATER);
+    tempRoom = roomFactory->createRoom();
+    tempRoom->draw(menuBackground->getCanvas());
+    delete tempRoom;
+    delete roomFactory;
     // Load the fullscreen and sound keys.
     // They are disabled so the player could enter initials.
-    if (fullscreenKey == nil) {
-      fullscreenKey = [[KeyControl alloc] initWithKey: KEY_F];
-      [fullscreenKey setDelay: GAME_TICKER];
+    if (fullscreenKey == NULL) {
+      fullscreenKey = new KeyControl(KEY_F);
+      fullscreenKey->setDelay(GAME_TICKER);
     }
-    if (soundKey == nil) {
-      soundKey = [[KeyControl alloc] initWithKey: KEY_S];
-      [soundKey setDelay: GAME_TICKER];
+    if (soundKey == NULL) {
+      soundKey = new KeyControl(KEY_S);
+      soundKey->setDelay(GAME_TICKER);
     }
     break;
     
   case GAME_HIGH_SCORES_STATE:
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setType: ROOM_UNDERGROUND];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    tempRoom = [roomFactory createRoom];
-    [tempRoom draw: [highScoresBackground getCanvas]];
-    [tempRoom free];
-    [roomFactory free];
+    roomFactory = new RoomFactory();
+    roomFactory->setType(ROOM_UNDERGROUND);
+    roomFactory->setTerrain(ROOM_NO_WATER);
+    tempRoom = roomFactory->createRoom();
+    tempRoom->draw(highScoresBackground->getCanvas());
+    delete tempRoom;
+    delete roomFactory;
     break;
     
   case GAME_ENTER_INITIALS_STATE:
     clear_keybuf();
     // Disable the fullscreen and sound keys so the player could enter initials.
-    [fullscreenKey free];
-    fullscreenKey = nil;
-    [soundKey free];
-    soundKey = nil;
+    delete fullscreenKey;
+    fullscreenKey = NULL;
+    delete soundKey;
+    soundKey = NULL;
     break;
     
   }
   
-  return self;
-  
 }
 
 
-- (BOOL) continuePlaying {
+bool
+Game::continuePlaying()
+{
   if (state == GAME_QUIT_STATE) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 
-- gameOver {
-  [self setState: GAME_OVER_STATE];
-  return self;
+void
+Game::gameOver()
+{
+  setState(GAME_OVER_STATE);
 }
 
-
-@end

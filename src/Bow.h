@@ -31,14 +31,19 @@ class Bow : public Sprite
 {
 public:
   Bow();
-
+  ~Bow();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void update(); // Updatable
+  
   virtual void   setArrow(Arrow* arrow);
   virtual Arrow* getArrow();
-
+  
   virtual void setArrow(int x, int y, int direction, int team, World* world);
-
+  
   virtual bool isHeld();
-
+  
   // State control
   virtual void toHoldState();
   virtual void toAwayState();
@@ -46,7 +51,7 @@ public:
   virtual void toAttackDownState();
   virtual void toAttackLeftState();
   virtual void toAttackRightState();
-
+  
 protected:
   Arrow* arrow;
   

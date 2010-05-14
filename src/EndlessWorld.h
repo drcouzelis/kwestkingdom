@@ -26,7 +26,7 @@
 class EndlessWorld : public World
 {
 public:
-  World();
+  EndlessWorld();
 };
 
 

@@ -60,6 +60,9 @@
 #define DEFAULT_CHANCE_OF_GIANT 3
 
 
+class World;
+
+
 class RoomFactory
 {
 public:
@@ -74,7 +77,7 @@ public:
 
   virtual bool characterExists(std::vector<Enemy*> list, int x, int y, int w, int h);
 
-  virtual void setWorld(World world);
+  virtual void setWorld(World* world);
   virtual void setType(int type);
   virtual void setTerrain(int terrain);
   virtual void setNumber(int number);
@@ -111,8 +114,7 @@ private:
   
   int path[MAX_NUM_OF_STEPS];
   int steps;
-  
-}
+};
 
 
 #endif // __ROOM_FACTORY_H

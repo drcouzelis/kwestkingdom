@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Hero.h"
+#include "Hero.h"
 
 
 #define HERO_ATTACK_SPEED 12

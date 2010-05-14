@@ -23,6 +23,9 @@
 #include "Sprite.h"
 
 
+class World;
+
+
 typedef enum {
 
   HAMMER_HOLD_STATE,
@@ -42,6 +45,13 @@ class Hammer : public Sprite
 {
 public:
   Hammer();
+  ~Hammer();
+
+  virtual void draw(BITMAP* buffer); // Drawable
+
+  virtual void update(); // Updatable
+
+  virtual void setState(int state); // Sprite
 
   virtual bool isHeld();
   

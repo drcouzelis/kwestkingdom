@@ -29,7 +29,6 @@
 #include "Hero.h"
 #include "Inhabitable.h"
 #include "Room.h"
-//#include "RoomFactory.h"
 #include "Snapshot.h"
 #include "Targetable.h"
 #include "Traversable.h"
@@ -38,17 +37,38 @@
 
 
 class HelpTile;
+class RoomFactory;
 
 
 class World
-  : public virtual Drawable,
-    public virtual Inhabitable,
-    public virtual Targetable,
-    public virtual Traversable,
-    public virtual Updatable
+: public virtual Drawable
+, public virtual Inhabitable
+, public virtual Targetable
+, public virtual Traversable
+, public virtual Updatable
 {
 public:
   World();
+  ~World();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual bool isInhabited(int x, int y);            // Inhabitable
+  virtual bool isAttackable(int team, int x, int y); // Inhabitable
+  virtual void attack(int team, int x, int y);       // Inhabitable
+  virtual void addCharacter(Character* character);   // Inhabitable
+  virtual void addItem(Sprite* item);                // Inhabitable
+  virtual void shake();                              // Inhabitable
+  
+  virtual Positionable* getTarget(); // Targetable
+  
+  virtual bool isSwimmable(int x, int y); // Traversable
+  virtual bool isWalkable(int x, int y);  // Traversable
+  virtual bool isJumpable(int x, int y);  // Traversable
+  virtual bool isFlyable(int x, int y);   // Traversable
+  virtual bool isSoarable(int x, int y);  // Traversable
+  
+  virtual void update(); // Updatable
   
   virtual void updateRoom();
   virtual void updateItems();
@@ -70,10 +90,10 @@ public:
   
 protected:
   Hero* hero;
-  std::vector<Enemy*> enemies;
+  std::vector<Enemy*>* enemies;
   std::vector<Room*> rooms;
   
-  //RoomFactory* roomFactory;
+  RoomFactory* roomFactory;
   Room* room;
   
   std::vector<Collectable*>* items;

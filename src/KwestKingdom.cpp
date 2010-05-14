@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "KwestKingdom.h"
-#import "Game.h"
-#import "Resources.h"
-#import "Screen.h"
+#include "KwestKingdom.h"
+#include "Game.h"
+#include "Resources.h"
+#include "Screen.h"
 
 
 volatile int timer = 0;
 volatile int fps_timer = 0;
 
-Game *game;
+Game* game;
 
 //MIDI *bgm;
 
@@ -33,7 +33,8 @@ Game *game;
 /**
  * To keep the game running at the correct frames per second
  */
-void do_timer(void) {
+void do_timer(void)
+{
   timer++;
 } END_OF_FUNCTION (do_timer);
 
@@ -41,34 +42,39 @@ void do_timer(void) {
 /**
  * To display the current frames per second
  */
-void game_time_ticker() {
+void game_time_ticker()
+{
   fps_timer++;
 }
 END_OF_FUNCTION(game_time_ticker)
 
 
-int getTileSize() {
+int getTileSize()
+{
   return TILE_SIZE;
 }
 
 
-int getWalkSpeed() {
+int getWalkSpeed()
+{
   return 60;
 }
 
 
-void game_over() {
-  [game gameOver];
+void game_over()
+{
+  game->gameOver();
 }
 
 
-int random_number(int low, int high) {
+int random_number(int low, int high)
+{
   return (rand() % (high - low + 1)) + low;
 }
 
 
-void init_game() {
-  
+void init_game()
+{
   allegro_init();
   
   install_timer();
@@ -88,41 +94,36 @@ void init_game() {
   
   install_keyboard();
   
-  initializeResources();
+  init_resources();
 
-  if (initializeScreen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, NO) == NO) {
+  if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);
   }
 
-  setPalette();
-  setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+  set_palette();
+  set_window_size(WINDOW_WIDTH, WINDOW_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
-  toggleSound(); // Turn off sound
-
+  toggle_sound(); // Turn off sound
 }
 
 
-int main(int argc, char **argv) {
-  
+int main(int argc, char **argv)
+{
   int timemark;
-  int fps;
-  int frames_done;
-  int prevTime;
-  
-  fps = 0;
-  frames_done = 0;
-  prevTime = 0;
+  int fps = 0;
+  int frames_done = 0;
+  int prevTime = 0;
   
   init_game();
   
-  game = [[Game alloc] init];
+  game = new Game();
   
   // Reset the timers just before the game begins.
   timer = 0;
   fps_timer = 0;
   
-  while ([game continuePlaying]) {
+  while (game->continuePlaying()) {
     
     while (timer == 0) {
       rest(1);
@@ -132,7 +133,7 @@ int main(int argc, char **argv) {
       
       timemark = timer;
       
-      [game update];
+      game->update();
       
       timer--;
       
@@ -151,24 +152,23 @@ int main(int argc, char **argv) {
       prevTime = fps_timer;
     }
     
-    [game draw: getWindow()];
+    game->draw(get_window());
     //clear_to_color(getBuffer(), BLACK);
-    textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    textprintf_ex(get_window(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
-    showScreen();
+    show_screen();
     
     frames_done++;
     
   }
   
-  [game free];
+  delete game;
   
-  destroyScreen();
+  free_screen();
   
-  destroyResources();
+  free_resources();
   //destroy_midi(bgm);
   
   return 0;
-  
 }
 END_OF_MAIN()

@@ -16,54 +16,62 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "SnowRoom.h"
+#include "SnowRoom.h"
 
 
-@implementation SnowRoom
-
-
-- init {
+SnowRoom::SnowRoom()
+{
+  grassAnimation = new Animation();
+  pathAnimation = new Animation();
+  mountainAnimation = new Animation();
+  waterAnimation = new Animation();
+  shoreNorthAnimation = new Animation();
+  shoreInsideNEAnimation = new Animation();
+  shoreOutsideNEAnimation = new Animation();
   
-  self = [super init];
+  grassAnimation->addFrame(get_image(IMG_TERRAIN_SNOW));
+  //pathAnimation->addFrame(get_image(SNOW_PATH_01));
+  mountainAnimation->addFrame(get_image(IMG_TERRAIN_EVERGREEN));
+  waterAnimation->addFrame(get_image(IMG_TERRAIN_ICE));
   
-  if (self) {
-    
-    grassAnimation = [[Animation alloc] init];
-    pathAnimation = [[Animation alloc] init];
-    mountainAnimation = [[Animation alloc] init];
-    waterAnimation = [[Animation alloc] init];
-    shoreNorthAnimation = [[Animation alloc] init];
-    shoreInsideNEAnimation = [[Animation alloc] init];
-    shoreOutsideNEAnimation = [[Animation alloc] init];
-    
-    [grassAnimation addFrame: getImage(IMG_TERRAIN_SNOW)];
-    //[pathAnimation addFrame: getImage(SNOW_PATH_01)];
-    [mountainAnimation addFrame: getImage(IMG_TERRAIN_EVERGREEN)];
-    [waterAnimation addFrame: getImage(IMG_TERRAIN_ICE)];
-    
-    [shoreNorthAnimation addFrame: getImage(IMG_SHORE_SNOW_SHORE)];
-    shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
-    shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
-    shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
-    
-    [shoreInsideNEAnimation addFrame: getImage(IMG_SHORE_SNOW_INSIDECORNER)];
-    shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
-    shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
-    shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
-    
-    [shoreOutsideNEAnimation addFrame: getImage(IMG_SHORE_SNOW_OUTSIDECORNER)];
-    [shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
-    [shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
-    shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];
-    shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] setVerticalFlip: YES];
-    shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
-    
-  }
+  // Shores
+  shoreNorthAnimation->addFrame(get_image(IMG_SHORE_SNOW_SHORE));
   
-  return self;
+  shoreSouthAnimation = shoreNorthAnimation;
+  shoreSouthAnimation->setVerticalFlip(true);
   
+  shoreEastAnimation = shoreNorthAnimation;
+  shoreEastAnimation->setRotate(true);
+  
+  shoreWestAnimation = shoreNorthAnimation;
+  shoreWestAnimation->setVerticalFlip(true);
+  shoreWestAnimation->setRotate(true);
+  
+  // Inside shores
+  shoreInsideNEAnimation->addFrame(get_image(IMG_SHORE_SNOW_INSIDECORNER));
+  
+  shoreInsideNWAnimation = shoreInsideNEAnimation;
+  shoreInsideNWAnimation->setHorizontalFlip(true);
+  
+  shoreInsideSEAnimation = shoreInsideNEAnimation;
+  shoreInsideSEAnimation->setVerticalFlip(true);
+  
+  shoreInsideSWAnimation = shoreInsideNEAnimation;
+  shoreInsideSWAnimation->setVerticalFlip(true);
+  shoreInsideSWAnimation->setHorizontalFlip(true);
+  
+  // Outside shores
+  shoreOutsideNEAnimation->addFrame(get_image(IMG_SHORE_SNOW_OUTSIDECORNER));
+  shoreOutsideNEAnimation->setHorizontalOffset(-TILE_SIZE);
+  shoreOutsideNEAnimation->setVerticalOffset(-TILE_SIZE);
+  
+  shoreOutsideNWAnimation = shoreOutsideNEAnimation;
+  shoreOutsideNWAnimation->setHorizontalFlip(true);
+  
+  shoreOutsideSEAnimation = shoreOutsideNEAnimation;
+  shoreOutsideSEAnimation->setVerticalFlip(true);
+  
+  shoreOutsideSWAnimation = shoreOutsideNEAnimation;
+  shoreOutsideSWAnimation->setVerticalFlip(true);
+  shoreOutsideSWAnimation->setHorizontalFlip(true);
 }
-
-
-@end
-

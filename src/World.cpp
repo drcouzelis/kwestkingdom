@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "World.h"
+#include "World.h"
 
 
 typedef enum {
@@ -26,145 +26,109 @@ typedef enum {
 } WORLD_STATE;
 
 
-@implementation World
-
-
-- init {
+World::World()
+{
+  difficulty = 0;
   
-  self = [super init];
+  hero = new Hero();
+  hero->setMaxHealth(MAX_HERO_HEALTH);
+  hero->setHealth(MAX_HERO_HEALTH);
+  hero->setWorld(this);
+  hero->setX(COLS / 2 - 1);
+  hero->setY(ROWS - 2);
   
-  if (self) {
-    
-    difficulty = 0;
-    
-    hero = [[Hero alloc] init];
-    [hero setMaxHealth: MAX_HERO_HEALTH];
-    [hero setHealth: MAX_HERO_HEALTH];
-    [hero setWorld: self];
-    [hero setX: COLS / 2 - 1];
-    [hero setY: ROWS - 2];
-    
-    // Create the starting room.
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setWorld: self];
-    [roomFactory setType: ROOM_FOREST];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    [roomFactory setNumber: 1];
-    [roomFactory setDifficulty: difficulty];
-    [roomFactory setPathBeginX: [hero getX]];
-    [roomFactory setPathBeginY: [hero getY]];
-    
-    room = [self createNextRoom];
-    [room setExitToPrevRoomX: -1]; // Remove the entrance to the first room.
-    [room setExitToPrevRoomY: -1];
-    
-    rooms = [[List alloc] init];
-    [rooms append: room];
-    
-    enemies = [[List alloc] init];
-    items = [[List alloc] init];
-    helpTiles = [[List alloc] init];
-    
-    heartAnimation = [[Animation alloc] init];
-    [heartAnimation addFrame: getImage(IMG_ITEMS_HEART)];
-    heartEmptyAnimation = [[Animation alloc] init];
-    [heartEmptyAnimation addFrame: getImage(IMG_ITEMS_EMPTYHEART)];
-    helpTileAnimation = [[Animation alloc] init];
-    [helpTileAnimation addFrame: getImage(IMG_HELP)];
-    
-    prevRoomSnapshot = [[Snapshot alloc] init];
-    nextRoomSnapshot = [[Snapshot alloc] init];
-    
-    currentCharacter = nil;
-    
-    state = WORLD_UPDATE_STATE;
-    
-  }
+  // Create the starting room.
+  roomFactory = new RoomFactory();
+  roomFactory->setWorld(self);
+  roomFactory->setType(ROOM_FOREST);
+  roomFactory->setTerrain(ROOM_NO_WATER);
+  roomFactory->setNumber(1);
+  roomFactory->setDifficulty(difficulty);
+  roomFactory->setPathBeginX(hero->getX()];
+  roomFactory->setPathBeginY(hero->getY());
   
-  return self;
+  room = createNextRoom();
+  room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
+  room->setExitToPrevRoomY(-1);
   
+  rooms->push_back(room);
+  
+  enemies = new std::vector<Enemy*>;
+  items = new std::vector<Collectable*>;
+  helpTiles = new std::vector<HelpTile*>;
+  
+  heartAnimation = new Animation();
+  heartAnimation->addFrame(getImage(IMG_ITEMS_HEART));
+  heartEmptyAnimation = new Animation();
+  heartEmptyAnimation->addFrame(getImage(IMG_ITEMS_EMPTYHEART));
+  helpTileAnimation = new Animation();
+  helpTileAnimation->addFrame(getImage(IMG_HELP));
+  
+  prevRoomSnapshot = new Snapshot();
+  nextRoomSnapshot = new Snapshot();
+  
+  currentCharacter = nil;
+  
+  state = WORLD_UPDATE_STATE;
 }
 
 
-- free {
-  [rooms free];
-  [roomFactory free];
-  [hero free];
-  [enemies free];
-  [items free];
-  [helpTiles free];
-  [heartAnimation free];
-  [heartEmptyAnimation free];
-  [helpTileAnimation free];
-  [prevRoomSnapshot free];
-  [nextRoomSnapshot free];
-  return [super free];
+World::~World()
+{
+  delete rooms;
+  delete roomFactory;
+  delete hero;
+  delete enemies;
+  delete items;
+  delete helpTiles;
+  delete heartAnimation;
+  delete heartEmptyAnimation;
+  delete helpTileAnimation;
+  delete prevRoomSnapshot;
+  delete nextRoomSnapshot;
 }
 
 
-- updateRoom {
-  [room update];
-  return self;
+void
+World::updateRoom()
+{
+  room->update();
 }
 
 
-- updateItems {
-  
-  id<Collectable, Positionable, Updatable> item;
+void
+World::updateItems()
+{
+  Collectable* item;
   //Enemy *enemy;
-  int x;
-  int y;
   
-  [items iterate];
-  while ((item = (id<Collectable, Positionable, Updatable>)[items next]) != nil) {
+  
+  for (int i = 0; i < items->size(); i++) {
     
-    [item update];
+    item = items[i];
+    
+    item->update();
     
     // For the entire size of the hero
     // see if he is standing on an item
-    for (x = 0; x < [hero getWidth]; x++) {
-      for (y = 0; y < [hero getHeight]; y++) {
+    for (int x = 0; x < hero->getWidth(); x++) {
+      for (int y = 0; y < hero->getHeight(); y++) {
         
         // Hero is standing on the item
-        if ([item getX] == [hero getX] + x && [item getY] == [hero getY] + y) {
-          [item collectedBy: hero];
-          [items remove: item];
-          return self;
+        if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
+          item->collectedBy(hero);
+          items->erase(item);
         }
         
       }
     }
     
-    /*
-    // Enemies can not collect items.
-    [enemies iterate];
-    while ((enemy = (Enemy *)[enemies next]) != nil) {
-      
-      // For the entire size of the hero
-      // see if he is standing on an item
-      for (x = 0; x < [enemy getWidth]; x++) {
-        for (y = 0; y < [enemy getHeight]; y++) {
-          
-          // If an enemy is standing on the item
-          if ([item getX] == [enemy getX] + x && [item getY] == [enemy getY] + y) {
-            [item collectedBy: enemy];
-            [items remove: item];
-            return self;
-          }
-          
-        }
-      }
-      
-    }
-    */
-    
   }
-  
-  return self;
   
 }
 
 
+// YOU LEFT OFF HERE!!
 - updateTurn {
   
   int index;
@@ -773,7 +737,3 @@ typedef enum {
   return self;
   
 }
-
-
-@end
-
