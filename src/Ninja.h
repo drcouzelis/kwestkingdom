@@ -28,9 +28,19 @@ class Ninja : public Enemy
 {
 public:
   Ninja();
+  ~Ninja();
 
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual void setX(int x);  // Positionable
+  virtual void setY(int y);  // Positionable
+  virtual void moveX(int x); // Positionable
+  virtual void moveY(int y); // Positionable
+  
+  virtual void update(); // Updatable
+  
 private:
-  Sword* sword;
+  Sword sword;
   
   Animation* standAnimation;
   Animation* attackAnimation;

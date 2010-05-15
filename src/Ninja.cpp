@@ -27,87 +27,72 @@ typedef enum {
 } NINJA_STATE;
 
 
-@implementation Ninja
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    
+Ninja::Ninja()
+{
     x = 0;
     y = 0;
     
-    [self setSpeed: getWalkSpeed()];
+    setSpeed(getWalkSpeed());
     team = ENEMY_TEAM;
     
-    sword = [[Sword alloc] init];
-    [sword setSpeed: speed];
-    [sword toHoldState];
+    //sword = [[Sword alloc] init];
+    sword.setSpeed(speed);
+    sword.toHoldState();
     
-    standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMG_NINJA_1)];
-    [standAnimation addFrame: getImage(IMG_NINJA_2)];
-    [standAnimation addFrame: getImage(IMG_NINJA_3)];
-    [standAnimation addFrame: getImage(IMG_NINJA_2)];
-    [standAnimation setLoop: YES];
-    [standAnimation setSpeed: 6];
+    standAnimation = new Animation(6, true);
+    standAnimation->addFrame(get_image(IMG_NINJA_1));
+    standAnimation->addFrame(get_image(IMG_NINJA_2));
+    standAnimation->addFrame(get_image(IMG_NINJA_3));
+    standAnimation->addFrame(get_image(IMG_NINJA_2));
     
-    dashAnimation = [standAnimation copy];
-    [dashAnimation setSpeed: 24];
+    dashAnimation = standAnimation;
+    dashAnimation->setSpeed(24);
     
-    attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(IMG_NINJA_1)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation setLoop: NO];
-    [attackAnimation setSpeed: 12];
+    attackAnimation = new Animation(12, false);
+    attackAnimation->addFrame(get_image(IMG_NINJA_1));
+    attackAnimation->addFrame(get_image(IMG_NINJA_2));
+    attackAnimation->addFrame(get_image(IMG_NINJA_2));
+    attackAnimation->addFrame(get_image(IMG_NINJA_3));
+    attackAnimation->addFrame(get_image(IMG_NINJA_3));
+    attackAnimation->addFrame(get_image(IMG_NINJA_2));
+    attackAnimation->addFrame(get_image(IMG_NINJA_2));
     
     animation = standAnimation;
     state = NINJA_STAND_STATE;
-    [self wait];
-    
-  }
-  
-  return self;
-  
+    wait();
 }
 
 
-- free {
-  [sword free];
-  [standAnimation free];
-  [dashAnimation free];
-  [attackAnimation free];
-  return [super free];
+Ninja::~Ninja()
+{
+  delete standAnimation;
+  delete dashAnimation;
+  delete attackAnimation;
 }
 
 
-- update {
-  
+void
+Ninja::update()
+{
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Positionable* target;
   
-  [super update];
-  [sword update];
+  Enemy::update();
+  sword.update();
   
-  if ([self waiting]) {
-    return self;
+  if (isWaiting()) {
+    return;
   }
   
   if (health == 0) {
-    return self;
+    return;
   }
   
-  target = [world getTarget];
-  
+  target = world->getTarget();
+
+  // YOU LEFT OFF HERE!!  
   switch (state) {
   
   case NINJA_STAND_STATE:
@@ -247,46 +232,49 @@ typedef enum {
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [sword draw: buffer];
-  return self;
+void
+Ninja::draw(BITMAP* buffer)
+{
+  Enemy::draw(buffer);
+  sword.draw(buffer);
 }
 
 
-- setX: (int) newX {
-  [super setX: newX];
-  [sword setX: newX];
-  return self;
+void
+Ninja::setX(int x)
+{
+  Enemy::setX(x);
+  sword.setX(x);
 }
 
 
-- setY: (int) newY {
-  [super setY: newY];
-  [sword setY: newY];
-  return self;
+void
+Ninja::setY(int y)
+{
+  Enemy::setY(y);
+  sword.setY(y);
 }
 
 
-- moveX: (int) newX {
-  [super moveX: newX];
-  [sword moveX: newX];
-  return self;
+void
+Ninja::moveX(int x)
+{
+  Enemy::moveX(x);
+  sword.moveX(x);
 }
 
 
-- moveY: (int) newY {
-  [super moveY: newY];
-  [sword moveY: newY];
-  return self;
+void
+Ninja::moveY(int y)
+{
+  Enemy::moveY(y);
+  sword.moveY(y);
 }
 
 
-- setSpeed: (int) theSpeed {
-  speed = theSpeed;
-  [sword setSpeed: speed];
-  return self;
+void
+Ninja::setSpeed(int speed)
+{
+  this->speed = speed;
+  sword.setSpeed(speed);
 }
-
-
-@end
