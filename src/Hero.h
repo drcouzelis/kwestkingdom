@@ -32,10 +32,32 @@
 #define MAX_HERO_HEALTH 3
 
 
+class World;
+
+
 class Hero : public Character
 {
 public:
   Hero();
+  ~Hero();
+  
+  virtual void draw(BITMAP* buffer); // Drawable
+  
+  virtual bool isDead();                 // Livable
+  //virtual void setHealth(int health);    // Livable
+  //virtual int  getHealth();              // Livable
+  //virtual void setMaxHealth(int health); // Livable
+  //virtual int  getMaxHealth();           // Livable
+  virtual void hurt();                   // Livable
+  
+  virtual void setX(int x);         // Positionable
+  virtual void setY(int y);         // Positionable
+  //virtual int  getX();              // Positionable
+  //virtual int  getY();              // Positionable
+  virtual void moveX(int x);        // Positionable
+  virtual void moveY(int y);        // Positionable
+  
+  virtual void update(); // Updatable
   
   virtual void emptyHands();
   
@@ -54,9 +76,9 @@ public:
   virtual void toShootArrowState();
 
 protected:
-  Shield* shield;
-  Sword* sword;
-  Bow* bow;
+  Shield shield;
+  Sword sword;
+  Bow bow;
   
   Animation* standAnimation;
   Animation* beginAttackAnimation;
@@ -64,16 +86,16 @@ protected:
   Animation* hurtAnimation;
   Animation* deadAnimation;
   
-  KeyControl* upKey;
-  KeyControl* downKey;
-  KeyControl* rightKey;
-  KeyControl* leftKey;
-  KeyControl* waitKey;
-  KeyControl* attackKey;
-  KeyControl* handKey;
-  KeyControl* shieldKey;
-  KeyControl* swordKey;
-  KeyControl* bowKey;
+  KeyControl upKey;
+  KeyControl downKey;
+  KeyControl rightKey;
+  KeyControl leftKey;
+  KeyControl waitKey;
+  KeyControl attackKey;
+  KeyControl handKey;
+  KeyControl shieldKey;
+  KeyControl swordKey;
+  KeyControl bowKey;
   
   int direction;
 };

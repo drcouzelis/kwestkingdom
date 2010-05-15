@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "RoomFactory.h"
 #include "World.h"
 
 
@@ -39,35 +40,35 @@ World::World()
   
   // Create the starting room.
   roomFactory = new RoomFactory();
-  roomFactory->setWorld(self);
+  roomFactory->setWorld(this);
   roomFactory->setType(ROOM_FOREST);
   roomFactory->setTerrain(ROOM_NO_WATER);
   roomFactory->setNumber(1);
   roomFactory->setDifficulty(difficulty);
-  roomFactory->setPathBeginX(hero->getX()];
+  roomFactory->setPathBeginX(hero->getX());
   roomFactory->setPathBeginY(hero->getY());
   
   room = createNextRoom();
   room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
   room->setExitToPrevRoomY(-1);
   
-  rooms->push_back(room);
+  rooms.push_back(room);
   
   enemies = new std::vector<Enemy*>;
   items = new std::vector<Collectable*>;
   helpTiles = new std::vector<HelpTile*>;
   
   heartAnimation = new Animation();
-  heartAnimation->addFrame(getImage(IMG_ITEMS_HEART));
+  heartAnimation->addFrame(get_image(IMG_ITEMS_HEART));
   heartEmptyAnimation = new Animation();
-  heartEmptyAnimation->addFrame(getImage(IMG_ITEMS_EMPTYHEART));
+  heartEmptyAnimation->addFrame(get_image(IMG_ITEMS_EMPTYHEART));
   helpTileAnimation = new Animation();
-  helpTileAnimation->addFrame(getImage(IMG_HELP));
+  helpTileAnimation->addFrame(get_image(IMG_HELP));
   
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();
   
-  currentCharacter = nil;
+  currentCharacter = NULL;
   
   state = WORLD_UPDATE_STATE;
 }
@@ -75,7 +76,6 @@ World::World()
 
 World::~World()
 {
-  delete rooms;
   delete roomFactory;
   delete hero;
   delete enemies;
@@ -103,11 +103,11 @@ World::updateItems()
   //Enemy *enemy;
   
   
-  for (int i = 0; i < items->size(); i++) {
+  for (unsigned int i = 0; i < items->size(); i++) {
     
-    item = items[i];
+    item = (*items)[i];
     
-    item->update();
+    ((Updatable*)item)->update();
     
     // For the entire size of the hero
     // see if he is standing on an item
@@ -115,9 +115,11 @@ World::updateItems()
       for (int y = 0; y < hero->getHeight(); y++) {
         
         // Hero is standing on the item
-        if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
+        if (((Positionable*)item)->getX() == hero->getX() + x && ((Positionable*)item)->getY() == hero->getY() + y) {
           item->collectedBy(hero);
-          items->erase(item);
+          // YOU LEFT OFF HERE!!
+          // Figure out how to erase items
+          //items->erase(item);
         }
         
       }

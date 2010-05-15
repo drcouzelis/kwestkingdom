@@ -58,11 +58,11 @@ public:
   
   virtual void draw(BITMAP* buffer); // Drawable
   
-  virtual bool isSwimmable(int x, int y) = 0; // Traversable
-  virtual bool isWalkable(int x, int y) = 0;  // Traversable
-  virtual bool isJumpable(int x, int y) = 0;  // Traversable
-  virtual bool isFlyable(int x, int y) = 0;   // Traversable
-  virtual bool isSoarable(int x, int y) = 0;  // Traversable
+  virtual bool isSwimmable(int x, int y); // Traversable
+  virtual bool isWalkable(int x, int y);  // Traversable
+  virtual bool isJumpable(int x, int y);  // Traversable
+  virtual bool isFlyable(int x, int y);   // Traversable
+  virtual bool isSoarable(int x, int y);  // Traversable
   
   virtual void update(); // Updatable
   

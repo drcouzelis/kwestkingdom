@@ -17,6 +17,7 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Hero.h"
+#include "World.h"
 
 
 #define HERO_ATTACK_SPEED 12
@@ -35,159 +36,128 @@ typedef enum {
 } HERO_STATE;
 
 
-@implementation Hero
-
-
-- init {
+Hero::Hero()
+: shield()
+, sword()
+, bow()
+, upKey(KeyControl(KEY_UP))
+, downKey(KeyControl(KEY_DOWN))
+, rightKey(KeyControl(KEY_RIGHT))
+, leftKey(KeyControl(KEY_LEFT))
+, waitKey(KeyControl(KEY_SPACE))
+, attackKey(KeyControl(KEY_LCONTROL))
+, handKey(KeyControl(KEY_0))
+, shieldKey(KeyControl(KEY_1))
+, swordKey(KeyControl(KEY_2))
+, bowKey(KeyControl(KEY_3))
+{
+  speed = getWalkSpeed(); // In FPS
+  health = 3;
+  maxHealth = MAX_HERO_HEALTH;
+  team = HERO_TEAM;
   
-  self = [super init];
+  //shield = new Shield();
+  //sword = new Sword();
+  //bow = new Bow();
   
-  if (self) {
-    
-    speed = getWalkSpeed(); // In FPS
-    health = 3;
-    maxHealth = MAX_HERO_HEALTH;
-    team = HERO_TEAM;
-    
-    shield = [[Shield alloc] init];
-    sword = [[Sword alloc] init];
-    bow = [[Bow alloc] init];
-    
-    [shield setSpeed: speed];
-    [sword setSpeed: speed];
-    [bow setSpeed: speed];
-    
-    standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMG_HERO_STAND_1)];
-    [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
-    [standAnimation addFrame: getImage(IMG_HERO_STAND_3)];
-    [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
-    [standAnimation setLoop: YES];
-    [standAnimation setSpeed: 6];
-    
-    beginAttackAnimation = [[Animation alloc] init];
-    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
-    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
-    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_3)];
-    [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_4)];
-    [beginAttackAnimation setLoop: NO];
-    [beginAttackAnimation setSpeed: HERO_ATTACK_SPEED];
-    
-    endAttackAnimation = [[Animation alloc] init];
-    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_3)];
-    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
-    [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
-    [endAttackAnimation setLoop: NO];
-    [endAttackAnimation setSpeed: HERO_ATTACK_SPEED];
-    
-    hurtAnimation = [[Animation alloc] init];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_2)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_3)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_4)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_3)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_2)];
-    [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
-    [hurtAnimation setLoop: NO];
-    [hurtAnimation setSpeed: 12];
-    
-    deadAnimation = [[Animation alloc] init];
-    [deadAnimation addFrame: getImage(IMG_HERO_DIE_1)];
-    [deadAnimation addFrame: getImage(IMG_HERO_DIE_2)];
-    [deadAnimation addFrame: getImage(IMG_HERO_DIE_3)];
-    [deadAnimation addFrame: getImage(IMG_HERO_DIE_4)];
-    [deadAnimation addFrame: getImage(IMG_HERO_DIE_5)];
-    [deadAnimation setLoop: NO];
-    [deadAnimation setSpeed: 6];
-    
-    upKey = [[KeyControl alloc] initWithKey: KEY_UP];
-    downKey = [[KeyControl alloc] initWithKey: KEY_DOWN];
-    leftKey = [[KeyControl alloc] initWithKey: KEY_LEFT];
-    rightKey = [[KeyControl alloc] initWithKey: KEY_RIGHT];
-    waitKey = [[KeyControl alloc] initWithKey: KEY_SPACE];
-    [waitKey setDelay: GAME_TICKER];
-    attackKey = [[KeyControl alloc] initWithKey: KEY_LCONTROL];
-    handKey = [[KeyControl alloc] initWithKey: KEY_0];
-    [handKey setDelay: GAME_TICKER];
-    shieldKey = [[KeyControl alloc] initWithKey: KEY_1];
-    [shieldKey setDelay: GAME_TICKER];
-    swordKey = [[KeyControl alloc] initWithKey: KEY_2];
-    [swordKey setDelay: GAME_TICKER];
-    bowKey = [[KeyControl alloc] initWithKey: KEY_3];
-    [swordKey setDelay: GAME_TICKER];
-    
-    [self toStandState];
-    [sword toHoldState];
-    
-    [self go]; // The hero doesn't wait! At least not when the game starts. ;-)
-    
-  }
+  shield.setSpeed(speed);
+  sword.setSpeed(speed);
+  bow.setSpeed(speed);
   
-  return self;
+  standAnimation = new Animation(6, true);
+  standAnimation->addFrame(get_image(IMG_HERO_STAND_1));
+  standAnimation->addFrame(get_image(IMG_HERO_STAND_2));
+  standAnimation->addFrame(get_image(IMG_HERO_STAND_3));
+  standAnimation->addFrame(get_image(IMG_HERO_STAND_2));
   
+  beginAttackAnimation = new Animation(HERO_ATTACK_SPEED, false);
+  beginAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_1));
+  beginAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_2));
+  beginAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_3));
+  beginAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_4));
+  
+  endAttackAnimation = new Animation(HERO_ATTACK_SPEED, false);
+  endAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_3));
+  endAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_2));
+  endAttackAnimation->addFrame(get_image(IMG_HERO_ATTACK_1));
+  
+  hurtAnimation = new Animation(12, false);
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_1));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_2));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_3));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_4));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_3));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_2));
+  hurtAnimation->addFrame(get_image(IMG_HERO_HURT_1));
+  
+  deadAnimation = new Animation(6, false);
+  deadAnimation->addFrame(get_image(IMG_HERO_DIE_1));
+  deadAnimation->addFrame(get_image(IMG_HERO_DIE_2));
+  deadAnimation->addFrame(get_image(IMG_HERO_DIE_3));
+  deadAnimation->addFrame(get_image(IMG_HERO_DIE_4));
+  deadAnimation->addFrame(get_image(IMG_HERO_DIE_5));
+  
+  waitKey.setDelay(GAME_TICKER);
+  handKey.setDelay(GAME_TICKER);
+  shieldKey.setDelay(GAME_TICKER);
+  swordKey.setDelay(GAME_TICKER);
+  bowKey.setDelay(GAME_TICKER);
+  
+  toStandState();
+  sword.toHoldState();
+  
+  go(); // The hero doesn't wait! At least not when the game starts. ;-)
 }
 
 
-- free {
-  [shield free];
-  [sword free];
-  [bow free];
-  [standAnimation free];
-  [beginAttackAnimation free];
-  [endAttackAnimation free];
-  [upKey free];
-  [downKey free];
-  [leftKey free];
-  [rightKey free];
-  [waitKey free];
-  [attackKey free];
-  [shieldKey free];
-  [swordKey free];
-  [bowKey free];
-  [handKey free];
-  return [super free];
+Hero::~Hero()
+{
+  delete standAnimation;
+  delete beginAttackAnimation;
+  delete endAttackAnimation;
 }
 
 
-- updateStandState {
-  
+void
+Hero::updateStandState()
+{
   int toX;
   int toY;
   
   // Handle item key input.
   // Update the items.
-  if ([shieldKey isPressed]) {
-    [shield toHoldState];
-    [sword toAwayState];
-    [bow toAwayState];
-  } else if ([swordKey isPressed]) {
-    [shield toAwayState];
-    [sword toHoldState];
-    [bow toAwayState];
-  } else if ([bowKey isPressed]) {
-    [shield toAwayState];
-    [sword toAwayState];
-    [bow toHoldState];
-  } else if ([handKey isPressed]) {
-    [shield toAwayState];
-    [sword toAwayState];
-    [bow toAwayState];
+  if (shieldKey.isPressed()) {
+    shield.toHoldState();
+    sword.toAwayState();
+    bow.toAwayState();
+  } else if (swordKey.isPressed()) {
+    shield.toAwayState();
+    sword.toHoldState();
+    bow.toAwayState();
+  } else if (bowKey.isPressed()) {
+    shield.toAwayState();
+    sword.toAwayState();
+    bow.toHoldState();
+  } else if (handKey.isPressed()) {
+    shield.toAwayState();
+    sword.toAwayState();
+    bow.toAwayState();
   }
   
-  if ([attackKey isPressed]) {
+  if (attackKey.isPressed()) {
     
-    if ([upKey isPressed]) {
+    if (upKey.isPressed()) {
       direction = UP;
-      [self toAttackState];
-    } else if ([downKey isPressed]) {
+      toAttackState();
+    } else if (downKey.isPressed()) {
       direction = DOWN;
-      [self toAttackState];
-    } else if ([leftKey isPressed]) {
+      toAttackState();
+    } else if (leftKey.isPressed()) {
       direction = LEFT;
-      [self toAttackState];
-    } else if ([rightKey isPressed]) {
+      toAttackState();
+    } else if (rightKey.isPressed()) {
       direction = RIGHT;
-      [self toAttackState];
+      toAttackState();
     }
     
   } else {
@@ -198,101 +168,100 @@ typedef enum {
     toX = x;
     toY = y;
     
-    if ([upKey isPressed]) {
+    if (upKey.isPressed()) {
       toY--;
-      if ([sword held] && [world isAttackableFromTeam: team atX: x andY: y - 1]) {
+      if (sword.isHeld() && world->isAttackable(team, toX, toY)) {
         direction = UP;
-        [self toAttackState];
+        toAttackState();
       }
-    } else if ([downKey isPressed]) {
+    } else if (downKey.isPressed()) {
       toY++;
-      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+      if (sword.isHeld() && world->isAttackable(team, toX, toY)) {
         direction = DOWN;
-        [self toAttackState];
+        toAttackState();
       }
-    } else if ([leftKey isPressed]) {
+    } else if (leftKey.isPressed()) {
       toX--;
-      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+      if (sword.isHeld() && world->isAttackable(team, toX, toY)) {
         direction = LEFT;
-        [self toAttackState];
+        toAttackState();
       }
-    } else if ([rightKey isPressed]) {
+    } else if (rightKey.isPressed()) {
       toX++;
-      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+      if (sword.isHeld() && world->isAttackable(team, toX, toY)) {
         direction = RIGHT;
-        [self toAttackState];
+        toAttackState();
       }
     }
     
-    if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
+    if (world->isWalkable(toX, toY) && !world->isInhabited(toX, toY)) {
       
-      [self moveX: toX];
-      [self moveY: toY];
-      [self toMoveState];
-      [self wait];
+      moveX(toX);
+      moveY(toY);
+      toMoveState();
+      wait();
       
       // If the hero is holding the shield
       // then make him wait another turn.
-      if ([shield held]) {
-        [self wait];
+      if (shield.isHeld()) {
+        wait();
       }
       
     }
     
   }
-  
-  return self;
   
 }
 
 
-- update {
+void
+Hero::update()
+{
+  Character::update();
+  shield.update();
+  sword.update();
+  bow.update();
   
-  [super update];
-  [shield update];
-  [sword update];
-  [bow update];
-  
-  if ([self waiting]) {
-    return self;
+  if (isWaiting()) {
+    return;
   }
   
-  if ([waitKey isPressed]) {
-    [self wait];
+  if (waitKey.isPressed()) {
+    wait();
   }
   
   switch (state) {
   
   case HERO_STAND_STATE:
-    [self updateStandState];
+    updateStandState();
     break;
     
   case HERO_MOVE_STATE:
-    if (![self moving]) {
-      [self toStandState];
+    if (!isMoving()) {
+      toStandState();
     }
     break;
     
   case HERO_ATTACK_STATE:
-    if ([sword held]) {
-      [self toPushSwordState];
-    } else if ([bow held]) {
-      [self toDrawBowState];
-      [self wait];
+    if (sword.isHeld()) {
+      toPushSwordState();
+    } else if (bow.isHeld()) {
+      toDrawBowState();
+      wait();
     }else {
-      [self toStandState];
+      toStandState();
     }
     break;
   
   case HERO_HURT_STATE:
-    if ([animation finished]) {
+    if (animation->isFinished()) {
       if (health == 0) {
-        [shield toAwayState];
-        [sword toAwayState];
-        [bow toAwayState];
-        [self toDeadState];
+        shield.toAwayState();
+        sword.toAwayState();
+        bow.toAwayState();
+        toDeadState();
       } else {
-        [self toStandState];
+        toStandState();
       }
     }
     break;
@@ -303,245 +272,252 @@ typedef enum {
     break;
       
   case HERO_PUSH_SWORD_STATE:
-    if ([animation finished]) {
+    if (animation->isFinished()) {
       switch (direction) {
       case UP:
-        [world attackFromTeam: team atX: x andY: y - 1];
+        world->attack(team, x, y - 1);
         break;
       case DOWN:
-        [world attackFromTeam: team atX: x andY: y + 1];
+        world->attack(team, x, y + 1);
         break;
       case LEFT:
-        [world attackFromTeam: team atX: x - 1 andY: y ];
+        world->attack(team, x - 1, y);
         break;
       case RIGHT:
-        [world attackFromTeam: team atX: x + 1 andY: y];
+        world->attack(team, x + 1, y);
         break;
       }
-      [self toPullSwordState];
+      toPullSwordState();
     }
     break;
     
   case HERO_PULL_SWORD_STATE:
-    if ([animation finished]) {
-      [self toStandState];
-      [sword toHoldState];
-      [self wait];
+    if (animation->isFinished()) {
+      toStandState();
+      sword.toHoldState();
+      wait();
     }
     break;
     
   case HERO_DRAW_BOW_STATE:
-    if ([animation finished]) {
-      [self toShootArrowState];
+    if (animation->isFinished()) {
+      toShootArrowState();
     }
     break;
     
   case HERO_SHOOT_ARROW_STATE:
-    if ([animation finished]) {
+    if (animation->isFinished()) {
       animation = standAnimation;
-      [bow toHoldState];
+      bow.toHoldState();
     }
-    if ([[bow getArrow] stopped]) {
-      [[bow getArrow] free];
-      [bow setArrow: nil];
-      [self toStandState];
-      [self wait];
+    if (bow.getArrow()->isStopped()) {
+      delete bow.getArrow();
+      bow.setArrow(NULL);
+      toStandState();
+      wait();
     }
     break;
     
   }
   
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [shield draw: buffer];
-  [sword draw: buffer];
-  [bow draw: buffer];
-  return self;
+void
+Hero::draw(BITMAP* buffer)
+{
+  Character::draw(buffer);
+  shield.draw(buffer);
+  sword.draw(buffer);
+  bow.draw(buffer);
 }
 
 
-- emptyHands {
-  [shield toAwayState];
-  [sword toAwayState];
-  [bow toAwayState];
-  return self;
+void
+Hero::emptyHands()
+{
+  shield.toAwayState();
+  sword.toAwayState();
+  bow.toAwayState();
 }
 
 
-- toStandState {
+void
+Hero::toStandState()
+{
   state = HERO_STAND_STATE;
   animation = standAnimation;
-  return self;
 }
 
 
-- toMoveState {
+void
+Hero::toMoveState()
+{
   state = HERO_MOVE_STATE;
   animation = standAnimation;
-  return self;
 }
 
 
-- toAttackState {
+void
+Hero::toAttackState()
+{
   state = HERO_ATTACK_STATE;
   animation = standAnimation;
-  return self;
 }
 
 
-- toHurtState {
-  
+void
+Hero::toHurtState()
+{
   state = HERO_HURT_STATE;
   animation = hurtAnimation;
-  [animation reset];
+  animation->reset();
   
   // You can't shoot an arrow if you get
   // hurt whil trying to do it.
-  [[bow getArrow] free];
-  [bow setArrow: nil];
-  if ([bow held]) {
-    [bow toHoldState];
+  delete bow.getArrow();
+  bow.setArrow(NULL);
+  if (bow.isHeld()) {
+    bow.toHoldState();
   }
   
-  playSound(SND_GASP);
-  
-  return self;
+  play_sound(SND_GASP);
   
 }
 
 
-- toDeadState {
+void
+Hero::toDeadState()
+{
   state = HERO_DEAD_STATE;
   animation = deadAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- toPushSwordState {
+void
+Hero::toPushSwordState()
+{
   state = HERO_PUSH_SWORD_STATE;
   animation = beginAttackAnimation;
-  [animation reset];
+  animation->reset();
   switch (direction) {
   case UP:
-    [sword toAttackUpState];
+    sword.toAttackUpState();
     break;
   case DOWN:
-    [sword toAttackDownState];
+    sword.toAttackDownState();
     break;
   case LEFT:
-    [sword toAttackLeftState];
+    sword.toAttackLeftState();
     break;
   case RIGHT:
-    [sword toAttackRightState];
+    sword.toAttackRightState();
     break;
   }
-  return self;
 }
 
 
-- toPullSwordState {
+void
+Hero::toPullSwordState(){
   state = HERO_PULL_SWORD_STATE;
   animation = endAttackAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
 }
 
 
-- toDrawBowState {
-  
+void
+Hero::toDrawBowState()
+{
   state = HERO_DRAW_BOW_STATE;
   animation = beginAttackAnimation;
-  [animation reset];
+  animation->reset();
   
   switch (direction) {
   case UP:
-    [bow toAttackUpState];
+    bow.toAttackUpState();
     break;
   case DOWN:
-    [bow toAttackDownState];
+    bow.toAttackDownState();
     break;
   case LEFT:
-    [bow toAttackLeftState];
+    bow.toAttackLeftState();
     break;
   case RIGHT:
-    [bow toAttackRightState];
+    bow.toAttackRightState();
     break;
   }
   
-  [bow setArrowWithX: x andY: y andDirection: direction andTeam: team andWorld: world];
-  
-  return self;
-  
+  bow.setArrow(x, y, direction, team, world);
 }
 
 
-- toShootArrowState {
+void
+Hero::toShootArrowState()
+{
   state = HERO_SHOOT_ARROW_STATE;
   animation = endAttackAnimation;
-  [animation reset];
-  [[bow getArrow] toFlyingState];
-  [bow toHoldState];
-  return self;
+  animation->reset();
+  bow.getArrow()->toFlyingState();
+  bow.toHoldState();
 }
 
 
-- hurt {
-  if (![shield held]) {
-    [self toHurtState];
-    [super hurt];
+void
+Hero::hurt()
+{
+  if (!shield.isHeld()) {
+    toHurtState();
+    Character::hurt();
   }
-  return self;
 }
 
 
-- (BOOL) isDead {
-  if (state == HERO_DEAD_STATE && [animation finished]) {
-    return YES;
+bool
+Hero::isDead()
+{
+  if (state == HERO_DEAD_STATE && animation->isFinished()) {
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
-- setX: (int) newX {
-  [super setX: newX];
-  [shield setX: newX];
-  [sword setX: newX];
-  [bow setX: newX];
-  return self;
+void
+Hero::setX(int x)
+{
+  Character::setX(x);
+  shield.setX(x);
+  sword.setX(x);
+  bow.setX(x);
 }
 
 
-- setY: (int) newY {
-  [super setY: newY];
-  [shield setY: newY];
-  [sword setY: newY];
-  [bow setY: newY];
-  return self;
+void
+Hero::setY(int y)
+{
+  Character::setY(y);
+  shield.setY(y);
+  sword.setY(y);
+  bow.setY(y);
 }
 
 
-- moveX: (int) newX {
-  [super moveX: newX];
-  [shield moveX: newX];
-  [sword moveX: newX];
-  [bow moveX: newX];
-  return self;
+void
+Hero::moveX(int x)
+{
+  Character::moveX(x);
+  shield.moveX(x);
+  sword.moveX(x);
+  bow.moveX(x);
 }
 
 
-- moveY: (int) newY {
-  [super moveY: newY];
-  [shield moveY: newY];
-  [sword moveY: newY];
-  [bow moveY: newY];
-  return self;
+void
+Hero::moveY(int y)
+{
+  Character::moveY(y);
+  shield.moveY(y);
+  sword.moveY(y);
+  bow.moveY(y);
 }
-
-
-@end
