@@ -32,10 +32,11 @@ public:
 
   virtual void draw(BITMAP* buffer); // Drawable
   
-  virtual void setX(int x);  // Positionable
-  virtual void setY(int y);  // Positionable
-  virtual void moveX(int x); // Positionable
-  virtual void moveY(int y); // Positionable
+  virtual void setX(int x);         // Positionable
+  virtual void setY(int y);         // Positionable
+  virtual void moveX(int x);        // Positionable
+  virtual void moveY(int y);        // Positionable
+  virtual void setSpeed(int speed); // Positionable
   
   virtual void update(); // Updatable
   

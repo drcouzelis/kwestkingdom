@@ -1,0 +1,6 @@
+#/bin/bash
+for i in *.cpp
+do
+  make `basename $i .cpp`.o
+done
+

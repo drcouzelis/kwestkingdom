@@ -237,6 +237,12 @@ Animation::getCurrentFrameNumber()
 
 
 void
+Animation::setSpeed(int speed) {
+  this->speed = speed;
+}
+
+
+void
 Animation::setHorizontalFlip(bool hFlip)
 {
   this->hFlip = hFlip;

@@ -69,6 +69,7 @@ public:
   virtual int getHeight();
   virtual int getCurrentFrameNumber();
   
+  virtual void setSpeed(int speed);
   virtual void setHorizontalFlip(bool hFlip);
   virtual void setVerticalFlip(bool vFlip);
   virtual void setRotate(bool rotate);

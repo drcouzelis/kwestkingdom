@@ -1,0 +1,6 @@
+Conversion to C++:
+. Use a "Point" class
+. Use "shared_ptr" inside a "vector"
+. Implement proper constructors
+. Only use pointers where necessary
+

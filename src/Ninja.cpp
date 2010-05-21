@@ -17,6 +17,7 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ninja.h"
+#include "World.h"
 
 
 typedef enum {
@@ -29,37 +30,37 @@ typedef enum {
 
 Ninja::Ninja()
 {
-    x = 0;
-    y = 0;
-    
-    setSpeed(getWalkSpeed());
-    team = ENEMY_TEAM;
-    
-    //sword = [[Sword alloc] init];
-    sword.setSpeed(speed);
-    sword.toHoldState();
-    
-    standAnimation = new Animation(6, true);
-    standAnimation->addFrame(get_image(IMG_NINJA_1));
-    standAnimation->addFrame(get_image(IMG_NINJA_2));
-    standAnimation->addFrame(get_image(IMG_NINJA_3));
-    standAnimation->addFrame(get_image(IMG_NINJA_2));
-    
-    dashAnimation = standAnimation;
-    dashAnimation->setSpeed(24);
-    
-    attackAnimation = new Animation(12, false);
-    attackAnimation->addFrame(get_image(IMG_NINJA_1));
-    attackAnimation->addFrame(get_image(IMG_NINJA_2));
-    attackAnimation->addFrame(get_image(IMG_NINJA_2));
-    attackAnimation->addFrame(get_image(IMG_NINJA_3));
-    attackAnimation->addFrame(get_image(IMG_NINJA_3));
-    attackAnimation->addFrame(get_image(IMG_NINJA_2));
-    attackAnimation->addFrame(get_image(IMG_NINJA_2));
-    
-    animation = standAnimation;
-    state = NINJA_STAND_STATE;
-    wait();
+  x = 0;
+  y = 0;
+  
+  setSpeed(getWalkSpeed());
+  team = ENEMY_TEAM;
+  
+  //sword = [[Sword alloc] init];
+  sword.setSpeed(speed);
+  sword.toHoldState();
+  
+  standAnimation = new Animation(6, true);
+  standAnimation->addFrame(get_image(IMG_NINJA_1));
+  standAnimation->addFrame(get_image(IMG_NINJA_2));
+  standAnimation->addFrame(get_image(IMG_NINJA_3));
+  standAnimation->addFrame(get_image(IMG_NINJA_2));
+  
+  dashAnimation = standAnimation;
+  dashAnimation->setSpeed(24);
+  
+  attackAnimation = new Animation(12, false);
+  attackAnimation->addFrame(get_image(IMG_NINJA_1));
+  attackAnimation->addFrame(get_image(IMG_NINJA_2));
+  attackAnimation->addFrame(get_image(IMG_NINJA_2));
+  attackAnimation->addFrame(get_image(IMG_NINJA_3));
+  attackAnimation->addFrame(get_image(IMG_NINJA_3));
+  attackAnimation->addFrame(get_image(IMG_NINJA_2));
+  attackAnimation->addFrame(get_image(IMG_NINJA_2));
+  
+  animation = standAnimation;
+  state = NINJA_STAND_STATE;
+  wait();
 }
 
 
@@ -92,61 +93,60 @@ Ninja::update()
   
   target = world->getTarget();
 
-  // YOU LEFT OFF HERE!!  
   switch (state) {
   
   case NINJA_STAND_STATE:
     
     // If the target has a walking distance of one...
-    if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
+    if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
       
       state = NINJA_ATTACK_STATE;
       animation = attackAnimation;
-      [animation reset];
+      animation->reset();
       // Change the state of the sword.
-      if (x == [target getX] && y == [target getY] + 1) { // Up
-        [sword toAttackUpState];
-      } else if (x == [target getX] && y == [target getY] - 1) { // Down
-        [sword toAttackDownState];
-      } else if (x == [target getX] + 1 && y == [target getY]) { // Left
-        [sword toAttackLeftState];
-      } else if (x == [target getX] - 1 && y == [target getY]) { // Right
-        [sword toAttackRightState];
+      if (x == target->getX() && y == target->getY() + 1) { // Up
+        sword.toAttackUpState();
+      } else if (x == target->getX() && y == target->getY() - 1) { // Down
+        sword.toAttackDownState();
+      } else if (x == target->getX() + 1 && y == target->getY()) { // Left
+        sword.toAttackLeftState();
+      } else if (x == target->getX() - 1 && y == target->getY()) { // Right
+        sword.toAttackRightState();
       }
       
-    } else if (x == [target getX]) {
+    } else if (x == target->getX()) {
       
-      if (y > [target getY]) { // Hero is directly up.
-        while (y - 1 != [target getY] && [world isWalkableAtX: x andY: y - 1] && ![world isInhabitedAtX: x andY: y - 1]) {
-          [self moveY: y - 1];
+      if (y > target->getY()) { // Hero is directly up.
+        while (y - 1 != target->getY() && world->isWalkable(x, y - 1) && !world->isInhabited(x, y - 1)) {
+          moveY(y - 1);
         }
       } else { // Hero is directly down.
-        while (y + 1 != [target getY] && [world isWalkableAtX: x andY: y + 1] && ![world isInhabitedAtX: x andY: y + 1]) {
-          [self moveY: y + 1];
+        while (y + 1 != target->getY() && world->isWalkable(x, y + 1) && !world->isInhabited(x, y + 1)) {
+          moveY(y + 1);
         }
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
       animation = dashAnimation;
-      [animation reset];
+      animation->reset();
       
-    } else if (y == [target getY]) {
+    } else if (y == target->getY()) {
       
-      if (x > [target getX]) { // Hero is directly left.
-        while (x - 1 != [target getX] && [world isWalkableAtX: x - 1 andY: y] && ![world isInhabitedAtX: x - 1 andY: y]) {
-          [self moveX: x - 1];
+      if (x > target->getX()) { // Hero is directly left.
+        while (x - 1 != target->getX() && world->isWalkable(x - 1, y) && !world->isInhabited(x - 1, y)) {
+          moveX(x - 1);
         }
       } else { // Hero is directly right.
-        while (x + 1 != [target getX] && [world isWalkableAtX: x + 1 andY: y] && ![world isInhabitedAtX: x + 1 andY: y]) {
-          [self moveX: x + 1];
+        while (x + 1 != target->getX() && world->isWalkable(x + 1, y) && !world->isInhabited(x + 1, y)) {
+          moveX(x + 1);
         }
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
       animation = dashAnimation;
-      [animation reset];
+      animation->reset();
       
     } else {
       
@@ -166,68 +166,66 @@ Ninja::update()
         toX--;
       }
       
-      if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
-        [self moveX: toX];
-        [self moveY: toY];
+      if (world->isWalkable(toX, toY) && !world->isInhabited(toX, toY)) {
+        moveX(toX);
+        moveY(toY);
         state = NINJA_MOVE_STATE;
       }
       
-      [self wait];
+      wait();
       
     }
     
     // Bound him so he doesn't wander right out of the screen!
-    [self boundAtTop: 1 andBottom: ROWS - 2 andLeft: 1 andRight: COLS - 2];
+    bound(1, ROWS - 2, 1, COLS - 2);
     
     break;
     
   case NINJA_MOVE_STATE:
-    if (![self moving]) {
+    if (!isMoving()) {
       state = NINJA_STAND_STATE;
     }
     break;
     
   case NINJA_DASH_STATE:
-    if (![self moving]) {
-      [self setSpeed: getWalkSpeed()];
+    if (!isMoving()) {
+      setSpeed(getWalkSpeed());
       // If the target has a walking distance of one...
-      if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
+      if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
         state = NINJA_ATTACK_STATE;
         animation = attackAnimation;
-        [animation reset];
+        animation->reset();
         // Change the state of the sword.
-        if (x == [target getX] && y == [target getY] + 1) { // Up
-          [sword toAttackUpState];
-        } else if (x == [target getX] && y == [target getY] - 1) { // Down
-          [sword toAttackDownState];
-        } else if (x == [target getX] + 1 && y == [target getY]) { // Left
-          [sword toAttackLeftState];
-        } else if (x == [target getX] - 1 && y == [target getY]) { // Right
-          [sword toAttackRightState];
+        if (x == target->getX() && y == target->getY() + 1) { // Up
+          sword.toAttackUpState();
+        } else if (x == target->getX() && y == target->getY() - 1) { // Down
+          sword.toAttackDownState();
+        } else if (x == target->getX() + 1 && y == target->getY()) { // Left
+          sword.toAttackLeftState();
+        } else if (x == target->getX() - 1 && y == target->getY()) { // Right
+          sword.toAttackRightState();
         }
       } else {
         state = NINJA_STAND_STATE;
         animation = standAnimation;
-        [animation reset];
-        [self wait];
+        animation->reset();
+        wait();
       }
     }
     break;
     
   case NINJA_ATTACK_STATE:
-    if ([animation finished]) {
-      [world attackFromTeam: team atX: [target getX] andY: [target getY]];
+    if (animation->isFinished()) {
+      world->attack(team, target->getX(), target->getY());
       state = NINJA_STAND_STATE;
       animation = standAnimation;
-      [animation reset];
-      [sword toHoldState];
-      [self wait];
+      animation->reset();
+      sword.toHoldState();
+      wait();
     }
 	break;
 	
   }
-  
-  return self;
   
 }
 
