@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "Resources.h"
 #include "Shield.h"
 
 
@@ -25,59 +26,46 @@ typedef enum {
 } SHIELD_STATE;
 
 
-@implementation Shield
+Shield::Shield()
+{
+  holdAnimation = new Animation(6, true);
+  holdAnimation->addFrame(get_image(IMG_SHIELD_1));
+  holdAnimation->addFrame(get_image(IMG_SHIELD_2));
+  holdAnimation->addFrame(get_image(IMG_SHIELD_3));
+  holdAnimation->addFrame(get_image(IMG_SHIELD_4));
 
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_1)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_2)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_3)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_4)];
-    [holdAnimation setLoop: YES];
-    [holdAnimation setSpeed: 6];
-	
-    [self toAwayState];
-    
-  }
-  
-  return self;
-  
+  toAwayState();
 }
 
 
-- free {
-  [holdAnimation free];
-  return [super free];
+Shield::~Shield()
+{
+  delete holdAnimation;
 }
 
 
-- toHoldState {
+void
+Shield::toHoldState()
+{
   state = SHIELD_HOLD_STATE;
   animation = holdAnimation;
-  return self;
 }
 
 
-- toAwayState {
+void
+Shield::toAwayState()
+{
   state = SHIELD_AWAY_STATE;
-  animation = nil;
-  return self;
+  animation = NULL;
 }
 
 
-- (BOOL) held {
+bool
+Shield::isHeld()
+{
   if (state == SHIELD_HOLD_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
-
-
-@end
 

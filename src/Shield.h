@@ -27,6 +27,7 @@ class Shield : public Sprite
 {
 public:
   Shield();
+  ~Shield();
   
   virtual bool isHeld();
   
