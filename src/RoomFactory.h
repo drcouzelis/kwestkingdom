@@ -72,10 +72,10 @@ public:
   
   virtual Map* generatePathToEdge();
   virtual Map* generateTerrain();
-  virtual std::vector<Enemy*> generateEnemies();
-  virtual std::vector<Collectable*> generateItems();
+  virtual std::vector<Enemy*>* generateEnemies();
+  virtual std::vector<Collectable*>* generateItems();
 
-  virtual bool characterExists(std::vector<Enemy*> list, int x, int y, int w, int h);
+  virtual bool characterExists(std::vector<Enemy*>* list, int x, int y, int w, int h);
 
   virtual void setWorld(World* world);
   virtual void setType(int type);
@@ -109,8 +109,8 @@ private:
   int pathStopY;
   Map* pathMap;
   Map* terrainMap;
-  std::vector<Enemy*> enemies;
-  std::vector<Collectable*> items;
+  std::vector<Enemy*>* enemies;
+  std::vector<Collectable*>* items;
   
   int path[MAX_NUM_OF_STEPS];
   int steps;

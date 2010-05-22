@@ -153,6 +153,8 @@ RoomFactory::createRoom()
   for (int i = 0; path[i] != NO_STEP; i++) {
     room->addStep(path[i]);
   }
+
+  return room;
 }
 
 
@@ -162,7 +164,7 @@ RoomFactory::characterExists(std::vector<Enemy*>* list, int x, int y, int w, int
   for (int i = 0; i < w; i++) {
     for (int j = 0; j < h; j++) {
       
-      for (int n = 0; n < list->size(); n++) {
+      for (unsigned int n = 0; n < list->size(); n++) {
         Enemy* character = (*list)[n];
         for (int m = 0; m < character->getWidth(); m++) {
           for (int n = 0; n < character->getHeight(); n++) {
@@ -197,7 +199,7 @@ RoomFactory::generateEnemies()
   int lowerGiant;
   int upperGiant;
   
-  int maxEnemies;
+  unsigned int maxEnemies;
   
   int randomNum;
   

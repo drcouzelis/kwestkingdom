@@ -85,12 +85,12 @@ HelpTile::draw(BITMAP* buffer)
 
 void
 HelpTile::setLines(
-  char* line1,
-  char* line2,
-  char* line3,
-  char* line4,
-  char* line5,
-  char* line6
+  const char* line1,
+  const char* line2,
+  const char* line3,
+  const char* line4,
+  const char* line5,
+  const char* line6
 )
 {
   this->line1 = line1;

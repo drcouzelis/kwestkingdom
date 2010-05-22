@@ -29,7 +29,17 @@ class Snapshot : public Sprite
 {
 public:
   Snapshot();
+  ~Snapshot();
   
+  virtual void draw(BITMAP* buffer); // Drawable
+
+  virtual void setX(int x); // Positionable
+  virtual void setY(int y); // Positionable
+
+  virtual bool isMoving(); // Sprite
+
+  virtual void update(); // Updatable
+
   BITMAP* getCanvas();
   
 protected:

@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "KwestKingdom.h"
+#include "Resources.h"
 #include "Sword.h"
 
 
@@ -32,112 +34,106 @@ typedef enum {
 } SWORD_ATTACK_STATE;
 
 
-@implementation Sword
+Sword::Sword()
+{
+  holdAnimation = new Animation(6, true);
+  holdAnimation->addFrame(get_image(IMG_SWORD_HOLD_1));
+  holdAnimation->addFrame(get_image(IMG_SWORD_HOLD_2));
+  holdAnimation->addFrame(get_image(IMG_SWORD_HOLD_3));
+  holdAnimation->addFrame(get_image(IMG_SWORD_HOLD_4));
+  
+  attackRightAnimation = new Animation(12, false);
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_1));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_2));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_3));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_4));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_3));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_2));
+  attackRightAnimation->addFrame(get_image(IMG_SWORD_STAB_1));
+  attackRightAnimation->setHorizontalOffset(-getTileSize());
+  attackRightAnimation->setVerticalOffset(-getTileSize());
+  
+  attackLeftAnimation = attackRightAnimation;
+  attackLeftAnimation->setHorizontalFlip(true);
 
+  attackDownAnimation = attackRightAnimation;
+  attackDownAnimation->setRotate(true);
 
-- init {
+  attackUpAnimation = attackRightAnimation;
+  attackUpAnimation->setHorizontalFlip(true);
+  attackUpAnimation->setRotate(true);
   
-  self = [super init];
-  
-  if (self) {
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_4)];
-    [holdAnimation setLoop: YES];
-    [holdAnimation setSpeed: 6];
-    
-    attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_1)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_2)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_3)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_4)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_3)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_2)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_1)];
-    [attackRightAnimation setOffsetX: -TILE_SIZE];
-    [attackRightAnimation setOffsetY: -TILE_SIZE];
-    [attackRightAnimation setLoop: NO];
-    [attackRightAnimation setSpeed: 12];
-    
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
-    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
-    
-    [self toAwayState];
-    
-  }
-  
-  return self;
-  
+  toAwayState();
 }
 
 
-- free {
-  [holdAnimation free];
-  [attackUpAnimation free];
-  [attackDownAnimation free];
-  [attackLeftAnimation free];
-  [attackRightAnimation free];
-  return [super free];
+Sword::~Sword()
+{
+  delete holdAnimation;
+  delete attackUpAnimation;
+  delete attackDownAnimation;
+  delete attackLeftAnimation;
+  delete attackRightAnimation;
 }
 
 
-- toHoldState {
+void
+Sword::toHoldState()
+{
   state = SWORD_HOLD_STATE;
   animation = holdAnimation;
-  return self;
 }
 
 
-- toAwayState {
+void
+Sword::toAwayState()
+{
   state = SWORD_AWAY_STATE;
-  animation = nil;
-  return self;
+  animation = NULL;
 }
 
 
-- toAttackUpState {
+void
+Sword::toAttackUpState()
+{
   animation = attackUpAnimation;
-  [animation reset];
-  playSound(SND_SWORD);
-  return self;
+  animation->reset();
+  play_sound(SND_SWORD);
 }
 
 
-- toAttackDownState {
+void
+Sword::toAttackDownState()
+{
   animation = attackDownAnimation;
-  [animation reset];
-  playSound(SND_SWORD);
-  return self;
+  animation->reset();
+  play_sound(SND_SWORD);
 }
 
 
-- toAttackLeftState {
+void
+Sword::toAttackLeftState()
+{
   animation = attackLeftAnimation;
-  [animation reset];
-  playSound(SND_SWORD);
-  return self;
+  animation->reset();
+  play_sound(SND_SWORD);
 }
 
 
-- toAttackRightState {
+void
+Sword::toAttackRightState()
+{
   animation = attackRightAnimation;
-  [animation reset];
-  playSound(SND_SWORD);
-  return self;
+  animation->reset();
+  play_sound(SND_SWORD);
 }
 
 
-- (BOOL) held {
+bool
+Sword::isHeld(){
   if (state == SWORD_HOLD_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
-
-
-@end
 

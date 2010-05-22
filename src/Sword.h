@@ -27,6 +27,7 @@ class Sword : public Sprite
 {
 public:
   Sword();
+  ~Sword();
   
   virtual bool isHeld();
   

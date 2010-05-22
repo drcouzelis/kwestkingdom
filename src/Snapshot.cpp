@@ -16,34 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "KwestKingdom.h"
+#include "Screen.h"
 #include "Snapshot.h"
 
 
-@implementation Snapshot
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    canvas = create_bitmap(getWindowWidth(), getWindowHeight());
-  }
-  
-  return self;
-  
+Snapshot::Snapshot()
+{
+  canvas = create_bitmap(window_width(), window_height());
 }
 
 
-- free {
+Snapshot::~Snapshot()
+{
   destroy_bitmap(canvas);
-  return [super free];
 }
 
 
-- update {
-  
-  if ([self moving]) {
+void
+Snapshot::update()
+{
+  if (isMoving()) {
     
     if (speed > 0) {
       
@@ -72,48 +65,49 @@
       visualY = y;
     }
     
-    if (![self moving]) {
+    if (!isMoving()) {
       fudge = 0;
     }
     
   }
-  
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
-  draw_sprite(buffer, [self getCanvas], visualX, visualY);
-  return self;
+void
+Snapshot::draw(BITMAP* buffer)
+{
+  draw_sprite(buffer, getCanvas(), visualX, visualY);
 }
 
 
-- (BITMAP *) getCanvas {
+BITMAP*
+Snapshot::getCanvas()
+{
   return canvas;
 }
 
 
-- (BOOL) moving {
+bool
+Snapshot::isMoving(){
   if (visualX != x || visualY != y) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
-- setX: (int) newX {
-  x = newX;
+void
+Snapshot::setX(int x)
+{
+  this->x = x;
   visualX = x;
-  return self;
 }
 
 
-- setY: (int) newY {
-  y = newY;
+void
+Snapshot::setY(int y)
+{
+  this->y = y;
   visualY = y;
-  return self;
 }
 
-
-@end

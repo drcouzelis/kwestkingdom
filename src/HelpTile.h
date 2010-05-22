@@ -42,12 +42,12 @@ public:
   virtual void draw(BITMAP* buffer); // Drawable
   
   void setLines(
-    char* line1 = NULL,
-    char* line2 = NULL,
-    char* line3 = NULL,
-    char* line4 = NULL,
-    char* line5 = NULL,
-    char* line6 = NULL
+    const char* line1 = NULL,
+    const char* line2 = NULL,
+    const char* line3 = NULL,
+    const char* line4 = NULL,
+    const char* line5 = NULL,
+    const char* line6 = NULL
   );
   
   int getX();
@@ -57,12 +57,12 @@ protected:
   int x;
   int y;
   
-  char* line1;
-  char* line2;
-  char* line3;
-  char* line4;
-  char* line5;
-  char* line6;
+  const char* line1;
+  const char* line2;
+  const char* line3;
+  const char* line4;
+  const char* line5;
+  const char* line6;
 };
 
 
