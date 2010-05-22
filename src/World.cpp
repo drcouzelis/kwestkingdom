@@ -133,7 +133,7 @@ World::updateItems()
 void
 World::updateTurn()
 {
-  int index;
+  //int index;
   
   // Determine whose turn it is next and tell them to go.
   if (currentCharacter == NULL || currentCharacter->isWaiting()) {
@@ -141,7 +141,7 @@ World::updateTurn()
     if (currentCharacter == NULL) {
       currentCharacter = hero;
     } else if (currentCharacter == hero) {
-      currentCharacter = enemies[0];
+      currentCharacter = (Character*)enemies[0];
       if (currentCharacter == NULL) {
         currentCharacter = hero;
       }
@@ -202,9 +202,9 @@ World::updateEnemies()
   Enemy *enemy;
   
   // Update the enemies and remove any that are dead.
-  for (int i = 0; i < enemies->size(); i++) {
+  for (unsigned int i = 0; i < enemies->size(); i++) {
     
-    Enemy* enemy = enemies[i];
+    Enemy* enemy = (*enemies)[i];
     
     [enemy update];
     
@@ -251,7 +251,7 @@ World::update()
       if (prevRoomSnapshot->getY() == 10) {
         prevRoomSnapshot->moveY(-8);
       } else if (prevRoomSnapshot->getY() == -8) {
-        prevRoomSnapshot->moveY(6];
+        prevRoomSnapshot->moveY(6);
       } else if (prevRoomSnapshot->getY() == 6) {
         prevRoomSnapshot->moveY(-4);
       } else if (prevRoomSnapshot->getY() == -4) {
@@ -486,68 +486,71 @@ World::createNextRoom()
 }
 
 
-- changeRooms {
-  
-  Room *nextRoom;
+void
+World::changeRooms()
+{
+  Room *nextRoom = NULL;
   Room *firstRoom;
   int entranceX;
   int entranceY;
   
   // Prepare the room transition.
-  if ([hero getX] < 0) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: getWindowWidth()];
-    [prevRoomSnapshot setSpeed: getWindowWidth()];
-    [nextRoomSnapshot setX: -getWindowWidth()];
-    [nextRoomSnapshot setY: 0];
-    [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: getWindowWidth()];
-  } else if ([hero getX] > COLS - 1) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: -getWindowWidth()];
-    [prevRoomSnapshot setSpeed: getWindowWidth()];
-    [nextRoomSnapshot setX: getWindowWidth()];
-    [nextRoomSnapshot setY: 0];
-    [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: getWindowWidth()];
+  if (hero->getX < 0) {
+    prevRoomSnapshot->setX(0];
+    prevRoomSnapshot->setY(0];
+    prevRoomSnapshot->moveX(getWindowWidth());
+    prevRoomSnapshot->setSpeed(getWindowWidth());
+    nextRoomSnapshot->setX(-getWindowWidth());
+    nextRoomSnapshot->setY(0);
+    nextRoomSnapshot->moveX(0);
+    nextRoomSnapshot->setSpeed(window_width());
+  } else if (hero->getX > COLS - 1) {
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveX(-getWindowWidth());
+    prevRoomSnapshot->setSpeed(window_width());
+    nextRoomSnapshot->setX(window_width());
+    nextRoomSnapshot->setY(0);
+    nextRoomSnapshot->moveX(0);
+    nextRoomSnapshot->setSpeed(window_width());
   } else if ([hero getY] < 0) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: getWindowHeight()];
-    [prevRoomSnapshot setSpeed: getWindowHeight()];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: -getWindowHeight()];
-    [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: getWindowHeight()];
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveY(window_height());
+    prevRoomSnapshot->setSpeed(window_height());
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(-getWindowHeight());
+    nextRoomSnapshot->moveY(0);
+    nextRoomSnapshot->setSpeed(window_height());
   } else if ([hero getY] > ROWS - 1) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: -getWindowHeight()];
-    [prevRoomSnapshot setSpeed: getWindowHeight()];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: getWindowHeight()];
-    [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: getWindowHeight()];
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveY(-getWindowHeight());
+    prevRoomSnapshot->setSpeed(window_height());
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(window_height());
+    nextRoomSnapshot->moveY(0);
+    nextRoomSnapshot->setSpeed(window_height());
   } else {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: 0];
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(0);
   }
   
-  [self drawTerrain: [prevRoomSnapshot getCanvas]];
-  [self drawCharacters: [prevRoomSnapshot getCanvas]];
+  drawTerrain(prevRoomSnapshot->getCanvas());
+  drawCharacters(prevRoomSnapshot->getCanvas());
   
   // If the hero is at the exit that leads to the next room...
-  if ([hero getX] == [room getExitToNextRoomX] && [hero getY] == [room getExitToNextRoomY]) {
+  if (hero->getX == room->getExitToNextRoomX() && hero->getY() == room->getExitToNextRoomY()) {
     
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
+    room->storeEnemies(enemies);
+    room->storeItems(items);
+    room->storeHelpTiles(helpTiles);
     
-    nextRoom = (Room *)[rooms getIndex: [rooms findIndex: room] + 1];
+    // YOU LEFT OFF HERE!!
+    // Figure out how to find the room
+    //nextRoom = (Room *)[rooms getIndex: [rooms findIndex: room] + 1];
     
     // Create the next room here, if necessary.
     if (nextRoom != NULL) {
@@ -556,6 +559,8 @@ World::createNextRoom()
       
     } else {
       
+      /*
+      // YOU LEFT OFF HERE!!
       entranceX = [(Room *)[rooms getTail] getExitToNextRoomX];
       entranceY = [(Room *)[rooms getTail] getExitToNextRoomY];
       
@@ -598,23 +603,26 @@ World::createNextRoom()
         firstRoom = (Room *)[rooms getHead];
         [firstRoom removeExitToPrevRoom];
       }
+      */
       
     }
     
-    [hero setX: [room getEntranceFromPrevRoomX]];
-    [hero setY: [room getEntranceFromPrevRoomY]];
+    hero->setX(room->getEntranceFromPrevRoomX());
+    hero->setY(room->getEntranceFromPrevRoomY());
     
-    enemies = [room retrieveEnemies];
-    items = [room retrieveItems];
-    helpTiles = [room retrieveHelpTiles];
+    enemies = room->retrieveEnemies();
+    items = room->retrieveItems();
+    helpTiles = room->retrieveHelpTiles();
     
-  } else if ([hero getX] == [room getExitToPrevRoomX] && [hero getY] == [room getExitToPrevRoomY]) {
+  } else if (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY()) {
     
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
+    room->storeEnemies(enemies);
+    room->storeItems(items);
+    room->storeHelpTiles(helpTiles);
     
     // Go to the previous room.
+    /*
+    // YOU LEFT OFF HERE!!
     room = (Room *)[rooms getIndex: [rooms findIndex: room] - 1];
     [hero setX: [room getEntranceFromNextRoomX]];
     [hero setY: [room getEntranceFromNextRoomY]];
@@ -622,16 +630,14 @@ World::createNextRoom()
     enemies = [room retrieveEnemies];
     items = [room retrieveItems];
     helpTiles = [room retrieveHelpTiles];
+    */
     
   }
   
-  [self drawTerrain: [nextRoomSnapshot getCanvas]];
-  [self drawCharacters: [nextRoomSnapshot getCanvas]];
+  drawTerrain(nextRoomSnapshot->getCanvas());
+  drawCharacters(nextRoomSnapshot->getCanvas());
   
   state = WORLD_ROOM_TRANSITION_STATE;
-  
-  return self;
-  
 }
 
 
@@ -650,88 +656,88 @@ World::drawTerrain(BITMAP* buffer)
 }
 
 
-- drawCharacters: (BITMAP *) buffer{
-  
+void
+World::drawCharacters(BITMAP* buffer)
+{
   Enemy *enemy;
-  id<Collectable, Drawable> item;
   
-  [items iterate];
-  while ((item = (id<Collectable, Drawable>)[items next]) != NULL) {
-    [item draw: buffer];
+  for (int i = 0; i < items->size(); i++) {
+    items[i]->draw(buffer);
   }
   
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != NULL) {
-    [enemy draw: buffer];
+  for (int i = 0; i < enemies->size(); i++) {
+    enemies[i]->draw(buffer);
   }
   
-  [hero draw: buffer];
-  
-  return self;
-  
+  hero->draw(buffer);
 }
 
 
-- drawUserInterface: (BITMAP *) buffer {
-  
-  HelpTile *helpTile;
-  char moneyLine[256];
-  int i;
-  
+void
+World::drawUserInterface(BITMAP* buffer)
+{
   // Put the hero's health on the screen.
-  for (i = 0; i < [hero getMaxHealth]; i++) {
-    if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+  for (int i = 0; i < hero->getMaxHealth(); i++) {
+    if (i < hero->getHealth()) {
+      
+      heartAnimation->draw(
+        buffer,
+        window_width() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)),
+        0
+      );
+    
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+
+      heartEmptyAnimation->draw(
+        buffer,
+        window_width() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)),
+        0
+      );
+
     }
   }
   
-  sprintf(moneyLine, "$%d", [hero getMoney]);
-  resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
+  char moneyLine[256];
+  sprintf(moneyLine, "$%d", hero->getMoney());
+  resizedTextOut(buffer, window_width() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  [helpTiles iterate];
-  
-  while ((helpTile = (HelpTile *)[helpTiles next]) != NULL) {
-    if ([helpTile getX] == [hero getX] && [helpTile getY] == [hero getY]) {
-      [helpTile draw: buffer];
+  for (int i = 0; i < helpTiles->size(); i++) {
+    HelpTile* helpTile = helpTiles[i];
+    if (helpTile->getX() == hero->getX() && helpTile->getY() == hero->getY()) {
+      helpTile->draw(buffer);
     }
   }
-  
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
-  
+void
+World::draw(BITMAP* buffer)
+{
   switch (state) {
   
   case WORLD_UPDATE_STATE:
-    [self drawTerrain: buffer];
-    [self drawCharacters: buffer];
-    [self drawUserInterface: buffer];
+    drawTerrain(buffer);
+    drawCharacters(buffer);
+    drawUserInterface(buffer);
     break;
   
   case WORLD_ROOM_TRANSITION_STATE:
-    [prevRoomSnapshot draw: buffer];
-    [nextRoomSnapshot draw: buffer];
-    [self drawUserInterface: buffer];
+    prevRoomSnapshot->draw(buffer);
+    nextRoomSnapshot->draw(buffer);
+    drawUserInterface(buffer);
     break;
   
   case WORLD_SHAKING_STATE:
-    [self drawTerrain: [prevRoomSnapshot getCanvas]];
-    [self drawCharacters: [prevRoomSnapshot getCanvas]];
-    [prevRoomSnapshot draw: buffer];
-    [self drawUserInterface: buffer];
+    drawTerrain(prevRoomSnapshot->getCanvas());
+    drawCharacters(prevRoomSnapshot->getCanvas());
+    prevRoomSnapshot->draw(buffer);
+    drawUserInterface(buffer);
     break;
     
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
-  
-  return self;
-  
+  textprintf_ex(buffer, font, window_width() - (getTileSize() * 3), window_height() - (getTileSize() / 2), WHITE, -1, "Room %d", room->getNumber());
 }
+
