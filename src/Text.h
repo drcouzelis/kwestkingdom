@@ -16,16 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TEXT_H
-#define __TEXT_H
+#import <allegro.h>
+#import "KwestKingdom.h"
 
 
-#include <allegro.h>
+void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, char *text);
+void drawBox(BITMAP *buffer, int x, int y, int w, int h);
 
-
-void resized_text_out(BITMAP* dest, int x, int y, double multiplier, int color, const char* text);
-
-void draw_box(BITMAP* buffer, int x, int y, int w, int h);
-
-
-#endif // __TEXT_H

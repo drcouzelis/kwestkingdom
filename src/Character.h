@@ -16,17 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __CHARACTER_H
-#define __CHARACTER_H
-
-
-#include "Livable.h"
-#include "KwestKingdom.h"
-#include "Moneyable.h"
-#include "MoneyBag.h"
-#include "Screen.h"
-#include "Sprite.h"
-#include "Targetable.h"
+#import "Heart.h"
+#import "Inhabitable.h"
+#import "Livable.h"
+#import "KwestKingdom.h"
+#import "Moneyable.h"
+#import "MoneyBag.h"
+#import "Screen.h"
+#import "Sprite.h"
+#import "Targetable.h"
 
 
 typedef enum {
@@ -36,39 +34,24 @@ typedef enum {
 } TEAM;
 
 
-class Character
-: public Sprite
-, public virtual Livable
-, public virtual Moneyable
-{
-public:
-  Character();
+@interface Character : Sprite <Livable, Moneyable> {
   
-  virtual bool isDead();                 // Livable
-  virtual void setHealth(int health);    // Livable
-  virtual int  getHealth();              // Livable
-  virtual void setMaxHealth(int health); // Livable
-  virtual int  getMaxHealth();           // Livable
-  virtual void hurt();                   // Livable
-  
-  virtual int  getMoney();           // Moneyable
-  virtual void setMoney(int amount); // Moneyable
-  
-  virtual bool isWaiting();
-  virtual void wait();
-  virtual void go();
-
-  virtual void setTeam(int team);
-  virtual int  getTeam();
-  
-protected:  
   int health;
   int maxHealth;
   int money;
   int team; // Characters on the same team can't hurt each other.
   
   int turns;
-};
+  
+}
 
 
-#endif // __CHARACTER_H
+- (BOOL) waiting;
+- wait;
+- go;
+
+- setTeam: (int) aTeam;
+- (int) getTeam;
+
+
+@end

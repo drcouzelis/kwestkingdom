@@ -16,18 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __COLLECTABLE_H
-#define __COLLECTABLE_H
+#import "Livable.h"
+#import "Moneyable.h"
 
 
-class Character;
+@protocol Collectable
+- collectedBy: (id<Livable, Moneyable>) character;
+@end
 
-
-class Collectable
-{
-public:
-  virtual void collectedBy(Character* character) = 0;
-};
-
-
-#endif // __COLLECTABLE_H

@@ -16,62 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SPRITE_H
-#define __SPRITE_H
+#import <objc/Object.h>
+#import <allegro.h>
+#import "Animation.h"
+#import "Drawable.h"
+#import "Inhabitable.h"
+#import "KwestKingdom.h"
+#import "Positionable.h"
+#import "Resources.h"
+#import "Screen.h"
+#import "Targetable.h"
+#import "Traversable.h"
+#import "Updatable.h"
 
 
-#include <allegro.h>
-
-#include "Animation.h"
-#include "Drawable.h"
-#include "Positionable.h"
-#include "Updatable.h"
-
-
-class World;
-
-
-class Sprite
-: public virtual Drawable
-, public virtual Positionable
-, public virtual Updatable
-{
-public:
-  Sprite();
+@interface Sprite : Object <Drawable, Positionable, Updatable> {
   
-  virtual void draw(BITMAP* buffer); // Drawable
-  
-  virtual void update(); // Updatable
-  
-  virtual void setX(int x);         // Positionable
-  virtual void setY(int y);         // Positionable
-  virtual int  getX();              // Positionable
-  virtual int  getY();              // Positionable
-  virtual void moveX(int x);        // Positionable
-  virtual void moveY(int y);        // Positionable
-  virtual void setSpeed(int speed); // Positionable
-  virtual void bound(int top, int bottom, int left, int right); // Positionable
-  
-  virtual bool isMoving();
-  virtual int  getWidth();
-  virtual int  getHeight();
-
-  virtual void setWorld(World* world);
-  virtual void setState(int state);
-  
-protected:
-  
-  /**
-   * Position on the map.
-   */
+  // Position on the map
   int x; // Horizontal, from 0 to COLS - 1
   int y; // Vertical, from 0 to ROWS - 1
   int w; // Width of the sprite, or, how many square it occupies horizontally
   int h; // Height of the sprite
   
-  /**
-   * Where the image is on the screen.
-   */
+  // Where the image is on the screen
   int visualX; // Screen width
   int visualY; // Screen height
   int fudge;
@@ -80,10 +47,20 @@ protected:
   
   Animation *animation;
   
-  World* world;
+  id<Inhabitable, Targetable, Traversable> world;
   
   int state;
-};
+  
+}
 
 
-#endif // __SPRITE_H
+- (BOOL) moving;
+- (int) getWidth;
+- (int) getHeight;
+
+- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
+- setSpeed: (int) theSpeed;
+- setState: (int) aState;
+
+
+@end

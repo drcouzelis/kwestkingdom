@@ -16,24 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __STORY_WORLD_H
-#define __STORY_WORLD_H
+#import "World.h"
 
 
-#include "World.h"
+@interface StoryWorld : World {
+}
 
 
-class StoryWorld : public World
-{
-public:
-  StoryWorld();
-  
-  virtual void draw(BITMAP* buffer); // Drawable
-  
-  virtual void update(); // Updatable
-  
-  virtual void changeRooms(); // World
-};
+@end
 
-
-#endif // __STORY_WORLD_H

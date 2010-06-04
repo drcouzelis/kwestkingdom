@@ -16,45 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __ARCHER_H
-#define __ARCHER_H
+#import "Enemy.h"
+#import "Bow.h"
 
 
-#include "Bow.h"
-#include "Enemy.h"
-#include "Resources.h"
-
-
-class Archer : public Enemy
-{
-public:
-  Archer();
-  ~Archer();
+@interface Archer : Enemy {
   
-  virtual void draw(BITMAP* buffer); // Drawable
+  Bow *bow;
   
-  virtual void setX(int x);  // Positionable
-  virtual void setY(int y);  // Positionable
-  virtual void moveX(int x); // Positionable
-  virtual void moveY(int y); // Positionable
-  
-  virtual void update(); // Updatable
-  
-  // State control
-  virtual void toStandState();
-  virtual void toMoveState();
-  virtual void toDrawBowState();
-  virtual void toShootArrowState();
-  
-protected:
-  Bow* bow;
-  
-  Animation* standAnimation;
-  Animation* beginAttackAnimation;
-  Animation* endAttackAnimation;
+  Animation *standAnimation;
+  Animation *beginAttackAnimation;
+  Animation *endAttackAnimation;
   
   int direction;
-};
+  
+}
 
 
-#endif // __ARCHER_H
+// State control
+- toStandState;
+- toMoveState;
+- toDrawBowState;
+- toShootArrowState;
+
+
+@end

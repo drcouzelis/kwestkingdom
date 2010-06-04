@@ -16,14 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __HAMMER_H
-#define __HAMMER_H
-
-
-#include "Sprite.h"
-
-
-class World;
+#import "Sprite.h"
 
 
 typedef enum {
@@ -41,28 +34,18 @@ typedef enum {
 } HAMMER_STATE;
 
 
-class Hammer : public Sprite
-{
-public:
-  Hammer();
-  ~Hammer();
-
-  virtual void draw(BITMAP* buffer); // Drawable
-
-  virtual void update(); // Updatable
-
-  virtual void setState(int state); // Sprite
-
-  virtual bool isHeld();
+@interface Hammer : Sprite {
   
-protected:
-  Animation* holdAnimation;
-  Animation* attackUpAnimation;
-  Animation* attackDownAnimation;
-  Animation* attackLeftAnimation;
-  Animation* attackRightAnimation;
+  Animation *holdAnimation;
+  Animation *attackUpAnimation;
+  Animation *attackDownAnimation;
+  Animation *attackLeftAnimation;
+  Animation *attackRightAnimation;
   
-};
+}
 
 
-#endif // __HAMMER_H
+- (BOOL) held;
+
+
+@end

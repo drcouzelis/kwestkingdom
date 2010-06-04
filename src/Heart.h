@@ -16,22 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __HEART_H
-#define __HEART_H
+#import "Collectable.h"
+#import "Sprite.h"
 
 
-#include "Collectable.h"
-#include "Sprite.h"
+@interface Heart : Sprite <Collectable> {
+}
 
-
-class Heart : public Sprite, public virtual Collectable
-{
-public:
-  Heart();
-  
-  virtual void collectedBy(Character* character); // Collectable
-  
-};
-
-
-#endif // __HEART_H
+@end

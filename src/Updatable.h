@@ -16,15 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __UPDATABLE_H
-#define __UPDATABLE_H
+@protocol Updatable
+- update;
+@end
 
-
-class Updatable
-{
-public:
-  virtual void update() = 0;
-};
-
-
-#endif // __UPDATABLE_H

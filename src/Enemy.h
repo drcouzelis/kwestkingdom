@@ -16,23 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __ENEMY_H
-#define __ENEMY_H
-
-
-#include "Character.h"
+#import "Character.h"
 
 
 #define MAX_ENEMY_HEALTH 3
 
 
-class Enemy : public Character
-{
-public:
-  Enemy();
-  
-  virtual void dropItem();
-};
+@interface Enemy : Character {
+}
 
 
-#endif // __ENEMY_H
+- dropItem;
+
+
+@end

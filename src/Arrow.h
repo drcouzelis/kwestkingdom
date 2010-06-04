@@ -16,40 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __ARROW_H
-#define __ARROW_H
+#import "Character.h"
+#import "Resources.h"
 
 
-#include "Character.h"
-
-
-class Arrow : public Character
-{
-public:
-  Arrow();
-  ~Arrow();
+@interface Arrow : Character {
   
-  virtual void update(); // Updatable
-  
-  virtual bool isInsideScreen();
-  virtual void findTarget();
-  virtual void setDirection(int direction);
-  
-  virtual bool isStopped();
-  
-  // Deprecated
-  virtual void toHoldState();
-  virtual void toFlyingState();
-  virtual void toStoppedState();
-  
-protected:
-  Animation* flyUpAnimation;
-  Animation* flyDownAnimation;
-  Animation* flyLeftAnimation;
-  Animation* flyRightAnimation;
+  Animation *flyUpAnimation;
+  Animation *flyDownAnimation;
+  Animation *flyLeftAnimation;
+  Animation *flyRightAnimation;
   
   int direction;
-};
+  
+}
 
 
-#endif // __ARROW_H
+- (BOOL) isInsideScreen;
+- findTarget;
+- setDirection: (int) aDirection;
+
+- (BOOL) stopped;
+
+// Deprecated
+- toHoldState;
+- toFlyingState;
+- toStoppedState;
+
+
+@end

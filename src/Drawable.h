@@ -16,18 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __DRAWABLE_H
-#define __DRAWABLE_H
+#include <allegro.h>
 
 
-struct BITMAP;
+@protocol Drawable
+- (id) draw: (BITMAP *) buffer;
+@end
 
-
-class Drawable
-{
-public:
-  virtual void draw(BITMAP* buffer) = 0;
-};
-
-
-#endif // __DRAWABLE_H

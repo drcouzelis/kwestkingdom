@@ -16,11 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __KWEST_KINGDOM_H
-#define __KWEST_KINGDOM_H
-
-
-#include <allegro.h>
+#import <objc/Object.h>
+#import <allegro.h>
 
 
 #define GAME_TICKER 100
@@ -61,6 +58,3 @@ int getWalkSpeed();
 void game_over();
 
 int random_number(int low, int high);
-
-
-#endif // KWEST_KINGDOM_H

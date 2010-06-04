@@ -21,8 +21,6 @@ enum {
 		UPDATE_MAX
 };
 
-struct BITMAP;
-
 int     initialize_screen_updating(int i);
 void    update_screen();
 void    shutdown_screen_updating();

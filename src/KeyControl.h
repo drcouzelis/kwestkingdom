@@ -16,29 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __KEY_CONTROL_H
-#define __KEY_CONTROL_H
+#import <objc/Object.h>
+#import <allegro.h>
+#import "KwestKingdom.h"
 
 
-#include <allegro.h>
-#include "KwestKingdom.h"
-
-
-class KeyControl
-{
-public:
-  KeyControl();
-  KeyControl(int key);
-  
-  virtual void setDelay(bool delay);
-  virtual bool isPressed();
-  
-protected:
+@interface KeyControl : Object {
   int keyCode;
-  bool released;
+  BOOL released;
   int timer; // Update every tick while the key is pressed
   int delay; // Number of ticks to wait until the action for this key is performed again
-};
+}
 
 
-#endif // __KEY_CONTROL_H
+- initWithKey: (int) aKey;
+- setDelay: (BOOL) theDelay;
+- (BOOL) isPressed;
+
+
+@end
+

@@ -16,37 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __NINJA_H
-#define __NINJA_H
+#import "Enemy.h"
+#import "Sword.h"
 
 
-#include "Enemy.h"
-#include "Sword.h"
-
-
-class Ninja : public Enemy
-{
-public:
-  Ninja();
-  ~Ninja();
-
-  virtual void draw(BITMAP* buffer); // Drawable
+@interface Ninja : Enemy {
   
-  virtual void setX(int x);         // Positionable
-  virtual void setY(int y);         // Positionable
-  virtual void moveX(int x);        // Positionable
-  virtual void moveY(int y);        // Positionable
-  virtual void setSpeed(int speed); // Positionable
+  Sword *sword;
   
-  virtual void update(); // Updatable
+  Animation *standAnimation;
+  Animation *attackAnimation;
+  Animation *dashAnimation;
   
-private:
-  Sword sword;
-  
-  Animation* standAnimation;
-  Animation* attackAnimation;
-  Animation* dashAnimation;
-};
+}
 
 
-#endif // __NINJA_H
+@end

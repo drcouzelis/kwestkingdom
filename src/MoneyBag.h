@@ -16,28 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __MONEY_BAG_H
-#define __MONEY_BAG_H
+#import "Collectable.h"
+#import "Sprite.h"
 
 
-#include "Collectable.h"
-#include "Resources.h"
-#include "Sprite.h"
-
-
-class MoneyBag : public Sprite, public virtual Collectable
-{
-public:
-  MoneyBag();
-  
-  virtual void collectedBy(Character* character); // Collectable
-  
-  virtual int  getAmount();
-  virtual void setAmount(int amount);
-
-protected:
+@interface MoneyBag : Sprite <Collectable> {
   int amount;
-};
+}
 
 
-#endif // __MONEY_BAG_H
+- (int) getAmount;
+- setAmount: (int) anAmount;
+
+
+@end

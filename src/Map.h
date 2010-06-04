@@ -16,27 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __MAP_H
-#define __MAP_H
+#import <objc/Object.h>
+#import "KwestKingdom.h"
+#import "Screen.h"
 
 
-#include "KwestKingdom.h"
-#include "Screen.h"
-
-
-class Map
-{
-public:
-  Map();
-  
-  virtual void set(int x, int y, int value);
-  virtual int  getValue(int x, int y);
-
-protected:
+@interface Map : Object {
   int map[COLS][ROWS];
   int cols;
   int rows;
-};
+}
 
 
-#endif // __MAP_H
+- setX: (int) x andY: (int) y toValue: (int) value;
+- (int) getValueAtX: (int) x andY: (int) y;
+
+
+@end

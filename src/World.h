@@ -16,102 +16,69 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __WORLD_H
-#define __WORLD_H
+#import <objc/Object.h>
+#import "Collectable.h"
+#import "Drawable.h"
+#import "Enemy.h"
+#import "HelpTile.h"
+#import "Hero.h"
+#import "Inhabitable.h"
+#import "List.h"
+#import "Room.h"
+#import "RoomFactory.h"
+#import "Snapshot.h"
+#import "Targetable.h"
+#import "Traversable.h"
+#import "Updatable.h"
+#import "Text.h"
 
 
-#include <vector>
-
-#include "Collectable.h"
-#include "Drawable.h"
-#include "Enemy.h"
-#include "HelpTile.h"
-#include "Hero.h"
-#include "Inhabitable.h"
-#include "Room.h"
-#include "Snapshot.h"
-#include "Targetable.h"
-#include "Traversable.h"
-#include "Updatable.h"
-#include "Text.h"
-
-
-class HelpTile;
-class RoomFactory;
-
-
-class World
-: public virtual Drawable
-, public virtual Inhabitable
-, public virtual Targetable
-, public virtual Traversable
-, public virtual Updatable
-{
-public:
-  World();
-  ~World();
+@interface World : Object <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
   
-  virtual void draw(BITMAP* buffer); // Drawable
+  Hero *hero;
+  List *enemies;
+  List *rooms;
   
-  virtual bool isInhabited(int x, int y);            // Inhabitable
-  virtual bool isAttackable(int team, int x, int y); // Inhabitable
-  virtual void attack(int team, int x, int y);       // Inhabitable
-  virtual void addCharacter(Character* character);   // Inhabitable
-  virtual void addItem(Sprite* item);                // Inhabitable
-  virtual void shake();                              // Inhabitable
+  RoomFactory *roomFactory;
+  Room *room;
   
-  virtual Positionable* getTarget(); // Targetable
+  List *items;
+  List *helpTiles;
   
-  virtual bool isSwimmable(int x, int y); // Traversable
-  virtual bool isWalkable(int x, int y);  // Traversable
-  virtual bool isJumpable(int x, int y);  // Traversable
-  virtual bool isFlyable(int x, int y);   // Traversable
-  virtual bool isSoarable(int x, int y);  // Traversable
+  Animation *heartAnimation;
+  Animation *heartEmptyAnimation;
+  Animation *helpTileAnimation;
   
-  virtual void update(); // Updatable
-  
-  virtual void updateRoom();
-  virtual void updateItems();
-  virtual void updateTurn();
-  virtual void updateHero();
-  virtual void updateEnemies();
-  
-  virtual Room* createNextRoom();
-  virtual void changeRooms();
-  
-  virtual void drawTerrain(BITMAP* buffer);
-  virtual void drawCharacters(BITMAP* buffer);
-  virtual void drawUserInterface(BITMAP* buffer);
-  
-  virtual int getRoomNumber();
-  virtual int getMoney();
-  
-  virtual void addHelpTile(HelpTile* helpTile);
-  
-protected:
-  Hero* hero;
-  std::vector<Enemy*>* enemies;
-  std::vector<Room*> rooms;
-  
-  RoomFactory* roomFactory;
-  Room* room;
-  
-  std::vector<Collectable*>* items;
-  std::vector<HelpTile*>* helpTiles;
-  
-  Animation* heartAnimation;
-  Animation* heartEmptyAnimation;
-  Animation* helpTileAnimation;
-  
-  Character* currentCharacter;
+  Character *currentCharacter;
   
   int difficulty;
   
-  Snapshot* prevRoomSnapshot;
-  Snapshot* nextRoomSnapshot;
+  Snapshot *prevRoomSnapshot;
+  Snapshot *nextRoomSnapshot;
   
   int state;
-};
+  
+}
 
 
-#endif // __WORLD_H
+- updateRoom;
+- updateItems;
+- updateTurn;
+- updateHero;
+- updateEnemies;
+
+- (Room *) createNextRoom;
+- changeRooms;
+
+- drawTerrain: (BITMAP *) buffer;
+- drawCharacters: (BITMAP *) buffer;
+- drawUserInterface: (BITMAP *) buffer;
+
+- (int) getRoomNumber;
+- (int) getMoney;
+
+- addHelpTile: (id) aHelpTile;
+
+
+@end
+

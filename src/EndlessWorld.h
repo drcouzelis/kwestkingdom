@@ -16,18 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __ENDLESS_WORLD_H
-#define __ENDLESS_WORLD_H
+#import "World.h"
 
 
-#include "World.h"
+@interface EndlessWorld : World {
+}
 
 
-class EndlessWorld : public World
-{
-public:
-  EndlessWorld();
-};
+@end
 
-
-#endif // __ENDLESS_WORLD_H

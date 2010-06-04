@@ -16,19 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SNOW_ROOM_H
-#define __SNOW_ROOM_H
+#import "Resources.h"
+#import "Room.h"
 
 
-#include "Resources.h"
-#include "Room.h"
+@interface SnowRoom : Room {
+}
 
-
-class SnowRoom : public Room
-{
-public:
-  SnowRoom();
-};
-
-
-#endif // __SNOW_ROOM_H
+@end

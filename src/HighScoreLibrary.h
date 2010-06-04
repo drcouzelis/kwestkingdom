@@ -16,8 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __HIGH_SCORE_LIBRARY_H
-#define __HIGH_SCORE_LIBRARY_H
+#import <objc/Object.h>
 
 
 #define MAX_NUM_OF_HIGH_SCORES 5
@@ -30,13 +29,15 @@ typedef struct {
 } HighScore;
 
 
-void init_high_scores();
-
-int high_score_position(int room, int coins);
-
-void add_high_score(char* initials, int room, int coins);
-
-bool get_high_score(int num, char* retInitials, int* retRoom, int* retCoins);
+@interface HighScoreLibrary : Object {
+}
 
 
-#endif // __HIGH_SCORE_LIBRARY_H
++ initInstance;
++ freeInstance;
++ (int) highScorePositionWithRoom: (int) room andCoins: (int) coins;
++ addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins;
++ (BOOL) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins;
+
+
+@end

@@ -16,19 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TRAVERSABLE_H
-#define __TRAVERSABLE_H
+#import <objc/Object.h>
 
 
-class Traversable
-{
-public:
-  virtual bool isSwimmable(int x, int y) = 0;
-  virtual bool isWalkable(int x, int y) = 0;
-  virtual bool isJumpable(int x, int y) = 0;
-  virtual bool isFlyable(int x, int y) = 0;
-  virtual bool isSoarable(int x, int y) = 0;
-};
+@protocol Traversable
+- (BOOL) isSwimmableAtX: (int) x andY: (int) y;
+- (BOOL) isWalkableAtX: (int) x andY: (int) y;
+- (BOOL) isJumpableAtX: (int) x andY: (int) y;
+- (BOOL) isFlyableAtX: (int) x andY: (int) y;
+- (BOOL) isSoarableAtX: (int) x andY: (int) y;
+@end
 
-
-#endif // __TRAVERSABLE

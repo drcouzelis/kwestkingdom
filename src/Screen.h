@@ -16,23 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SCREEN_H
-#define __SCREEN_H
+#import <objc/Object.h>
+#import <allegro.h>
+#import "al_screen.h"
+#import "KwestKingdom.h"
 
 
-#include <allegro.h>
+void setWindowSize(int width, int height);
 
+BOOL initializeScreen(int width, int height, BOOL fullscreen);
+void destroyScreen();
 
-void set_window_size(int width, int height);
+int getWindowWidth();
+int getWindowHeight();
 
-bool init_screen(int width, int height, bool fullscreen);
-void free_screen();
+BITMAP *getWindow();
+BOOL showScreen();
 
-int window_width();
-int window_height();
-
-BITMAP* get_window();
-bool show_screen();
-
-
-#endif // __SCREEN_H

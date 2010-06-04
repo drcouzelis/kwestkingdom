@@ -16,35 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SNAPSHOT_H
-#define __SNAPSHOT_H
+#import "Sprite.h"
 
 
-#include <allegro.h>
-
-#include "Sprite.h"
-
-
-class Snapshot : public Sprite
-{
-public:
-  Snapshot();
-  ~Snapshot();
+@interface Snapshot : Sprite {
   
-  virtual void draw(BITMAP* buffer); // Drawable
-
-  virtual void setX(int x); // Positionable
-  virtual void setY(int y); // Positionable
-
-  virtual bool isMoving(); // Sprite
-
-  virtual void update(); // Updatable
-
-  BITMAP* getCanvas();
+  BITMAP *canvas;
   
-protected:
-  BITMAP* canvas;
-};
+}
 
 
-#endif // __SNAPSHOT_H
+- (BITMAP *) getCanvas;
+
+
+@end

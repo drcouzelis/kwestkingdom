@@ -16,12 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __RESOURCES_H
-#define __RESOURCES_H
-
-
-#include <allegro.h>
-
+#import <objc/Object.h>
+#import <allegro.h>
 
 typedef enum {
   IMG_SWORD_STAB_2,
@@ -112,7 +108,6 @@ typedef enum {
   NUMBER_OF_IMAGES
 } IMAGES;
 
-
 typedef enum {
   SND_MONEY,
   SND_ARROW_HIT,
@@ -125,17 +120,14 @@ typedef enum {
   NUMBER_OF_SOUNDS
 } SOUNDS;
 
+void initializeResources();
+void destroyResources();
 
-void init_resources();
-void free_resources();
+BITMAP * getImage(int image);
+void setPalette(void);
 
-BITMAP* get_image(int image);
-void    set_palette(void);
+void playSound(int sound);
+void toggleSound(void);
 
-void play_sound(int sound);
-void toggle_sound(void);
+BOOL soundEnabled(void);
 
-bool sound_enabled(void);
-
-
-#endif // __RESOURCES_H

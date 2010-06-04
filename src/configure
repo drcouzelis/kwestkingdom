@@ -19,7 +19,7 @@ echo >> Makefile
 echo HEADERS = `ls *.h` >> Makefile
 echo >> Makefile
 
-echo OBJECTS = $(ls *.cpp | sed -e 's/\.cpp/.o/') >> Makefile
+echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') >> Makefile
 echo >> Makefile
 
 
@@ -28,8 +28,8 @@ echo $'\t $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)' 
 echo >> Makefile
 
 
-for i in *.cpp; do
-  echo $(ls "$i" | sed -e 's/\.cpp/.o/')': '"$i" '$(HEADERS)' >> Makefile
+for i in *.m; do
+  echo $(ls "$i" | sed -e 's/\.m/.o/')': '"$i" '$(HEADERS)' >> Makefile
   echo $'\t $(CC) $(DEBUG) -c' "$i" '$(CFLAGS)' >> Makefile
   echo >> Makefile
 done;
@@ -42,6 +42,6 @@ echo >> Makefile
 
 # Redo the Windows section
 echo 'win:' >> Makefile
-echo $'\t $(WIN_CC) $(DEBUG) *.cpp -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
 echo >> Makefile
 
