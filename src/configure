@@ -24,6 +24,7 @@ echo >> Makefile
 
 
 echo 'kwestkingdom: $(OBJECTS)' >> Makefile
+echo $'\t mkdir -p ../Linux/share/kwestkingdom' >> Makefile
 echo $'\t $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)' >> Makefile
 echo >> Makefile
 
@@ -43,6 +44,7 @@ echo >> Makefile
 # Redo the Windows section
 echo 'win:' >> Makefile
 #echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+echo $'\t mkdir -p ../Windows' >> Makefile
 echo $'\t echo Pretending to build the Windows version...' >> Makefile
 echo >> Makefile
 
