@@ -7,10 +7,10 @@ rm -f Makefile
 echo 'all:' >> Makefile
 echo $'\t rm -rf Linux/share/kwestkingdom/img' >> Makefile
 echo $'\t rm -rf Linux/share/kwestkingdom/snd' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
+#echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
 echo $'\t cp -r res/img Linux/share/kwestkingdom/' >> Makefile
 echo $'\t cp -r res/snd Linux/share/kwestkingdom/' >> Makefile
-echo $'\t cp -r res/bgm Linux/share/kwestkingdom/' >> Makefile
+#echo $'\t cp -r res/bgm Linux/share/kwestkingdom/' >> Makefile
 echo $'\t make -C src' >> Makefile
 echo >> Makefile
 
@@ -25,12 +25,17 @@ echo >> Makefile
 echo 'clean:' >> Makefile
 echo $'\t rm -rf Linux/share/kwestkingdom/img' >> Makefile
 echo $'\t rm -rf Linux/share/kwestkingdom/snd' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
+#echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
 echo $'\t make -C src clean' >> Makefile
 echo >> Makefile
 
 echo 'win:' >> Makefile
-echo $'\t cp -f res/resources.dat Windows/resources.dat' >> Makefile
+echo $'\t rm -rf Windows/img' >> Makefile
+echo $'\t rm -rf Windows/snd' >> Makefile
+#echo $'\t rm -rf Windows/bgm' >> Makefile
+echo $'\t cp -r res/img Windows/' >> Makefile
+echo $'\t cp -r res/snd Windows/' >> Makefile
+#echo $'\t cp -r res/bgm Windows/' >> Makefile
 echo $'\t make -C src win' >> Makefile
 echo >> Makefile
 

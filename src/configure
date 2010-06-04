@@ -42,6 +42,7 @@ echo >> Makefile
 
 # Redo the Windows section
 echo 'win:' >> Makefile
-echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+#echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+echo $'\t echo Pretending to build the Windows version...' >> Makefile
 echo >> Makefile
 
