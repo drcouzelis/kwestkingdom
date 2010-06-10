@@ -19,7 +19,7 @@ echo >> Makefile
 echo HEADERS = `ls *.h` >> Makefile
 echo >> Makefile
 
-echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') >> Makefile
+echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') $(ls *.c | sed -e 's/\.c/.o/') >> Makefile
 echo >> Makefile
 
 
@@ -36,6 +36,13 @@ for i in *.m; do
 done;
 
 
+for i in *.c; do
+  echo $(ls "$i" | sed -e 's/\.c/.o/')': '"$i" '$(HEADERS)' >> Makefile
+  echo $'\t $(CC) $(DEBUG) -c' "$i" '$(CFLAGS)' >> Makefile
+  echo >> Makefile
+done;
+
+
 echo 'clean:' >> Makefile
 echo $'\t rm -f $(OBJECTS)' >> Makefile
 echo >> Makefile
@@ -43,7 +50,7 @@ echo >> Makefile
 
 # Redo the Windows section
 echo 'win:' >> Makefile
-#echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+#echo $'\t $(WIN_CC) $(DEBUG) *.m *.c -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
 echo $'\t mkdir -p ../Windows' >> Makefile
 echo $'\t echo Pretending to build the Windows version...' >> Makefile
 echo >> Makefile
