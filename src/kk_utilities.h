@@ -1,5 +1,5 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef KK_UTILITIES_H
+#define KK_UTILITIES_H
 
 
 #include <allegro.h>
@@ -24,7 +24,7 @@ enum DIRECTION {
 };
 
 
-int random_number(int low, int high);
+int KK_random_number(int low, int high);
 
 
 #endif

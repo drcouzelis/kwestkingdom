@@ -1,30 +1,22 @@
 #include <malloc.h>
 #include <stdio.h>
 
-#include "animation.h"
-#include "kwestkingdom.h"
-#include "timer.h"
-#include "utilities.h"
+#include "kk_animation.h"
+#include "kk_kwestkingdom.h"
+#include "kk_timer.h"
+#include "kk_utilities.h"
 
 
 
 
-#define ANIMATION_MAX_FRAMES 16
+#define KK_ANIMATION_MAX_FRAMES 16
 
 
 
 
-/**
- * Used to time the animation.
- */
-extern int timer;
-
-
-
-
-struct Animation
+struct KK_Animation
 {
-  BITMAP *frames[ANIMATION_MAX_FRAMES];
+  BITMAP *frames[KK_ANIMATION_MAX_FRAMES];
   
   int length;
   int pos;
@@ -45,23 +37,21 @@ struct Animation
 
 
 
-BITMAP *
-Animation_get_canvas(int width, int height);
+BITMAP * KK_Animation_get_canvas(int width, int height);
 
 
 
 
-Animation *
-Animation_create()
+KK_Animation * KK_Animation_create()
 {
-  Animation *animation;
+  KK_Animation *animation;
   int i;
   
   animation = malloc(sizeof(*animation));
   
   if (animation) {
     
-    for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
+    for (i = 0; i < KK_ANIMATION_MAX_FRAMES; i++) {
       animation->frames[i] = NULL;
     }
     
@@ -84,8 +74,7 @@ Animation_create()
 
 
 
-void
-Animation_destroy(Animation *animation)
+void KK_Animation_destroy(KK_Animation *animation)
 {
   free(animation);
 }
@@ -93,8 +82,7 @@ Animation_destroy(Animation *animation)
 
 
 
-void
-Animation_add_frame(Animation *animation, BITMAP *image)
+void KK_Animation_add_frame(KK_Animation *animation, BITMAP *image)
 {
   if (image) {
     animation->frames[animation->length] = image;
@@ -105,14 +93,13 @@ Animation_add_frame(Animation *animation, BITMAP *image)
 
 
 
-void
-Animation_animate(Animation *animation)
+void KK_Animation_animate(KK_Animation *animation)
 {
   if (animation->length > 1 && animation->speed != 0) {
     
     animation->fudge += animation->speed;
     
-    while (animation->fudge >= GAME_TICKER) {
+    while (animation->fudge >= KK_GAME_TICKER) {
       
       animation->pos++;
       
@@ -125,7 +112,7 @@ Animation_animate(Animation *animation)
         }
       }
             
-      animation->fudge -= GAME_TICKER;
+      animation->fudge -= KK_GAME_TICKER;
       
     }
     
@@ -139,8 +126,7 @@ Animation_animate(Animation *animation)
 
 
 
-void
-Animation_reset(Animation *animation)
+void KK_Animation_reset(KK_Animation *animation)
 {
   animation->pos = 0;
   animation->finished = OFF;
@@ -150,16 +136,15 @@ Animation_reset(Animation *animation)
 
 
 
-Animation *
-Animation_copy(Animation *animation)
+KK_Animation * KK_Animation_copy(KK_Animation *animation)
 {
-  Animation *new_anim;
+  KK_Animation *new_anim;
   int i;
   
-  new_anim = Animation_create();
+  new_anim = KK_Animation_create();
   
   for (i = 0; i < animation->length; i++) {
-    Animation_add_frame(new_anim, animation->frames[i]);
+    KK_Animation_add_frame(new_anim, animation->frames[i]);
   }
   
   new_anim->loop = animation->loop;
@@ -170,7 +155,7 @@ Animation_copy(Animation *animation)
   new_anim->x_offset = animation->x_offset;
   new_anim->y_offset = animation->y_offset;
   
-  Animation_reset(new_anim);
+  KK_Animation_reset(new_anim);
   
   return new_anim;
 }
@@ -178,8 +163,7 @@ Animation_copy(Animation *animation)
 
 
 
-void
-Animation_draw(Animation *animation, BITMAP *canvas, int x, int y)
+void KK_Animation_draw(KK_Animation *animation, BITMAP *canvas, int x, int y)
 {
   BITMAP *frame; // Points to the current frame
   BITMAP *image; // A temporary drawing area
@@ -202,7 +186,7 @@ Animation_draw(Animation *animation, BITMAP *canvas, int x, int y)
   // to work correctly.
   // Only necessary when rotating and flipping sprites.
   if (animation->rotate || animation->h_flip || animation->v_flip) {
-    image = Animation_get_canvas(frame->w, frame->h);
+    image = KK_Animation_get_canvas(frame->w, frame->h);
     if (image) {
       blit(frame, image, 0, 0, 0, 0, frame->w, frame->h);
     }
@@ -246,8 +230,8 @@ Animation_draw(Animation *animation, BITMAP *canvas, int x, int y)
 
 
 
-BITMAP *canvasStandardSize = NULL;
-BITMAP *canvasTripleSize = NULL;
+static BITMAP *canvasStandardSize = NULL;
+static BITMAP *canvasTripleSize = NULL;
 
 
 
@@ -256,19 +240,18 @@ BITMAP *canvasTripleSize = NULL;
  * This silly little function provides a fix for transparency
  * when using the rotate sprite and flip sprite functions.
  */
-BITMAP *
-Animation_get_canvas(int width, int height)
+BITMAP * KK_Animation_get_canvas(int width, int height)
 {
-  if (width == tile_size() && height == tile_size()) {
+  if (width == KK_tile_size() && height == KK_tile_size()) {
     if (canvasStandardSize == NULL) {
-      canvasStandardSize = create_bitmap(tile_size(), tile_size());
+      canvasStandardSize = create_bitmap(KK_tile_size(), KK_tile_size());
     }
     return canvasStandardSize;
   }
   
-  if (width == tile_size() * 3 && height == tile_size() * 3) {
+  if (width == KK_tile_size() * 3 && height == KK_tile_size() * 3) {
     if (canvasTripleSize == NULL) {
-      canvasTripleSize = create_bitmap(tile_size() * 3, tile_size() * 3);
+      canvasTripleSize = create_bitmap(KK_tile_size() * 3, KK_tile_size() * 3);
     }
     return canvasTripleSize;
   }
@@ -277,3 +260,4 @@ Animation_get_canvas(int width, int height)
   
   return NULL;
 }
+

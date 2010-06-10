@@ -150,7 +150,7 @@ typedef enum {
           }
         }
       } else {
-        dir = random_number(UP, LEFT);
+        dir = KK_random_number(UP, LEFT);
       }
       
       toX = x;

@@ -138,16 +138,16 @@ BITMAP *canvasTripleSize = NULL;
  */
 BITMAP * getCanvas(int width, int height) {
   
-  if (width == getTileSize() && height == getTileSize()) {
+  if (width == KK_tile_size() && height == KK_tile_size()) {
     if (canvasStandardSize == NULL) {
-      canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
+      canvasStandardSize = create_bitmap(KK_tile_size(), KK_tile_size());
     }
     return canvasStandardSize;
   }
   
-  if (width == getTileSize() * 3 && height == getTileSize() * 3) {
+  if (width == KK_tile_size() * 3 && height == KK_tile_size() * 3) {
     if (canvasTripleSize == NULL) {
-      canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
+      canvasTripleSize = create_bitmap(KK_tile_size() * 3, KK_tile_size() * 3);
     }
     return canvasTripleSize;
   }

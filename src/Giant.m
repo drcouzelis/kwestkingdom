@@ -41,7 +41,7 @@ typedef enum {
     w = 2;
     h = 2;
     
-    speed = getWalkSpeed();
+    speed = KK_walk_speed();
     maxHealth = 5;
     health = 5;
     team = ENEMY_TEAM;
@@ -235,7 +235,7 @@ typedef enum {
     } else {
       
       // Wander aimlessly
-      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;

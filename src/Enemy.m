@@ -42,7 +42,7 @@
   MoneyBag *bag;
   //int num;
   
-  //num = random_number(1, 3);
+  //num = KK_random_number(1, 3);
   
   //if (num == 1) {
     //heart = [[Heart alloc] init];

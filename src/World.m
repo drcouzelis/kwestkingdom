@@ -223,7 +223,7 @@ typedef enum {
   }
   
   if ([hero isDead]) {
-    game_over();
+    KK_quit_game();
   }
   
   return self;
@@ -680,7 +680,7 @@ typedef enum {
   // Draw help tiles.
   [helpTiles iterate];
   while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
+    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * KK_tile_size() andY: [helpTile getY] * KK_tile_size()];
   }
   
   return self;
@@ -719,14 +719,14 @@ typedef enum {
   // Put the hero's health on the screen.
   for (i = 0; i < [hero getMaxHealth]; i++) {
     if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (KK_tile_size() / 2) + (i * (KK_tile_size() / 2)) andY: 0];
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (KK_tile_size() / 2) + (i * (KK_tile_size() / 2)) andY: 0];
     }
   }
   
   sprintf(moneyLine, "$%d", [hero getMoney]);
-  resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
+  resizedTextOut(buffer, getWindowWidth() - (KK_tile_size() * 2), KK_tile_size(), 2, WHITE, moneyLine);
   
   // Draw help information.
   [helpTiles iterate];
@@ -768,7 +768,7 @@ typedef enum {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
+  textprintf_ex(buffer, font, getWindowWidth() - (KK_tile_size() * 3), getWindowHeight() - (KK_tile_size() / 2), WHITE, -1, "Room %d", [room getNumber]);
   
   return self;
   

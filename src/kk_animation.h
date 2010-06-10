@@ -1,5 +1,5 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef KK_ANIMATION_H
+#define KK_ANIMATION_H
 
 
 #include <allegro.h>
@@ -8,39 +8,34 @@
 /**
  * An animation represents an animated image.
  */
-typedef struct Animation Animation;
+typedef struct KK_Animation KK_Animation;
 
 
 /**
  * Create
  */
-Animation *
-Animation_create();
+KK_Animation * KK_Animation_create();
 
 /**
  * Destroy
  */
-void
-Animation_destroy(Animation *animation);
+void KK_Animation_destroy(KK_Animation *animation);
 
 /**
  * Add a fram to the animation.
  */
-void
-Animation_add_frame(Animation *animation, BITMAP *image);
+void KK_Animation_add_frame(KK_Animation *animation, BITMAP *image);
 
 /**
  * Animate the animation. If it is finished
  * animating, then nothing will happen.
  */
-void
-Animation_animate(Animation *animation);
+void KK_Animation_animate(KK_Animation *animation);
 
 /**
  * Reset the animation.
  */
-void
-Animation_reset(Animation *animation);
+void KK_Animation_reset(KK_Animation *animation);
 
 /**
  * Copy an animation, including the
@@ -48,14 +43,12 @@ Animation_reset(Animation *animation);
  *
  * Returns a pointer to a new animation.
  */
-Animation *
-Animation_copy(Animation *animation);
+KK_Animation * KK_Animation_copy(KK_Animation *animation);
 
 /**
  * Draw the animation to a bitmap.
  */
-void
-Animation_draw(Animation *animation, BITMAP *canvas, int x, int y);
+void KK_Animation_draw(KK_Animation *animation, BITMAP *canvas, int x, int y);
 
 
 #endif

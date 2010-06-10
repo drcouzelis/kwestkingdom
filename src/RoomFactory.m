@@ -82,7 +82,7 @@ int roomNumber;
   }
   
   if (terrain == ROOM_RANDOM) {
-    terrain = random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
+    terrain = KK_random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
   }
   
   for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
@@ -260,13 +260,13 @@ int roomNumber;
         
         if (
           [terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN &&
-          random_number(0, 99) < chanceOfEnemy &&
+          KK_random_number(0, 99) < chanceOfEnemy &&
           [self characterExistsInList: list atX: x andY: y withWidth: 1 andHeight: 1] == NO
         ) {
           
           enemy = nil;
           randomNum = chanceOfChomper + chanceOfArcher + chanceOfNinja + chanceOfGiant;
-          randomNum = random_number(1, randomNum);
+          randomNum = KK_random_number(1, randomNum);
           
           if (randomNum > lowerChomper && randomNum <= upperChomper) { // Chomper
             enemy = [[Chomper alloc] init];
@@ -338,7 +338,7 @@ int roomNumber;
         if ([pathMap getValueAtX: x andY: y] == YES) {
           backupX = x;
           backupY = y;
-          if (random_number(1, 5) == 1) {
+          if (KK_random_number(1, 5) == 1) {
             // Add a heart item.
             heart = [[Heart alloc] init];
             [heart setX: x];
@@ -430,7 +430,7 @@ int roomNumber;
     
     // Determine how many new steps to take and in which direction.
     if (facing == STRAIGHT) {
-      num = random_number(1, 3);
+      num = KK_random_number(1, 3);
       if (direction == UP) {
         changeY = -num;
       } else if (direction == DOWN) {
@@ -441,7 +441,7 @@ int roomNumber;
         changeX = -num;
       }
     } else if (facing == TURN) {
-      num = random_number(-4, 4);
+      num = KK_random_number(-4, 4);
       if (direction == UP || direction == DOWN) {
         changeX = num;
       } else if (direction == LEFT || direction == RIGHT) {
@@ -606,9 +606,9 @@ int roomNumber;
             actualChanceOfTrees = chanceOfClumpedTrees;
           }
           
-          if (random_number(1, 100) <= actualChanceOfWater) {
+          if (KK_random_number(1, 100) <= actualChanceOfWater) {
             [map setX: x andY: y toValue: WATER_TERRAIN];
-          } else if (random_number(1, 100) <= actualChanceOfTrees) {
+          } else if (KK_random_number(1, 100) <= actualChanceOfTrees) {
             [map setX: x andY: y toValue: TREE_TERRAIN];
           }
           

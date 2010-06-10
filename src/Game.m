@@ -238,12 +238,12 @@ typedef enum {
   int hTextOffset;
   int vTextOffset;
   
-  x = (getWindowWidth() / 2) - (getTileSize() * 4);
-  y = (getWindowHeight() / 2) - (getTileSize() / 2);
-  w = getTileSize() * 4 * 2;
-  h = getTileSize() * 5;
-  lineSpacing = getTileSize() / 2;
-  hTextOffset = getTileSize();
+  x = (getWindowWidth() / 2) - (KK_tile_size() * 4);
+  y = (getWindowHeight() / 2) - (KK_tile_size() / 2);
+  w = KK_tile_size() * 4 * 2;
+  h = KK_tile_size() * 5;
+  lineSpacing = KK_tile_size() / 2;
+  hTextOffset = KK_tile_size();
   vTextOffset = lineSpacing;
   
   [menuBackground draw: buffer];
@@ -311,21 +311,21 @@ typedef enum {
   char line[256];
   int i;
   
-  x = getTileSize() * 3;
-  y = getTileSize() * 2;
-  w = getTileSize() * 10;
-  h = getTileSize() * 8;
-  lineSpacing = getTileSize() / 2;
+  x = KK_tile_size() * 3;
+  y = KK_tile_size() * 2;
+  w = KK_tile_size() * 10;
+  h = KK_tile_size() * 8;
+  lineSpacing = KK_tile_size() / 2;
   vTextOffset = lineSpacing;
   
   [highScoresBackground draw: buffer];
   drawBox(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, "High Scores");
+  resizedTextOut(buffer, x + KK_tile_size() * 3, y + vTextOffset, 2, WHITE, "High Scores");
   
   // Header
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
+  resizedTextOut(buffer, x + KK_tile_size() + (KK_tile_size() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
@@ -334,11 +334,11 @@ typedef enum {
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    resizedTextOut(buffer, x + KK_tile_size() + (KK_tile_size() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
   }
   
   // Return
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
+  resizedTextOut(buffer, x + KK_tile_size() + (KK_tile_size() / 4), y + h - (lineSpacing * 2), 2, WHITE, "Press ESC to RETURN");
   
   return self;
   
@@ -355,11 +355,11 @@ typedef enum {
   int lineSpacing;
   int vTextOffset;
   
-  x = getTileSize();
-  y = getTileSize() * 5;
-  w = getTileSize() * 14;
-  h = (getTileSize() * 2) + (getTileSize() / 2);
-  lineSpacing = getTileSize() / 2;
+  x = KK_tile_size();
+  y = KK_tile_size() * 5;
+  w = KK_tile_size() * 14;
+  h = (KK_tile_size() * 2) + (KK_tile_size() / 2);
+  lineSpacing = KK_tile_size() / 2;
   vTextOffset = lineSpacing;
   
   [world draw: buffer];
@@ -367,12 +367,12 @@ typedef enum {
   drawBox(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, "Congratulations!");
-  resizedTextOut(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
-  resizedTextOut(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
+  resizedTextOut(buffer, x + (KK_tile_size() * 4), y + vTextOffset, 2, WHITE, "Congratulations!");
+  resizedTextOut(buffer, x + (KK_tile_size() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, "You got a high score!");
+  resizedTextOut(buffer, x + KK_tile_size(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, "Please enter your initials: ");
   
   // Initials
-  resizedTextOut(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
+  resizedTextOut(buffer, x + (KK_tile_size() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
   
   return self;
   

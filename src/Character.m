@@ -32,7 +32,7 @@
     maxHealth = 3;
     money = 0;
     team = NO_TEAM;
-    speed = getWalkSpeed();
+    speed = KK_walk_speed();
   }
   
   return self;

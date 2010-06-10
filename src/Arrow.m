@@ -35,7 +35,7 @@ typedef enum {
   
   if (self) {
     
-    [self setSpeed: getWalkSpeed() * 4];
+    [self setSpeed: KK_walk_speed() * 4];
     
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(IMG_ARROW)];
@@ -155,7 +155,7 @@ typedef enum {
   
   int visualOffset;
   
-  visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
+  visualOffset = (KK_tile_size() / 3) + (KK_tile_size() / 10);
   
   state = ARROW_HOLD_STATE;
   

@@ -39,7 +39,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    [self setSpeed: getWalkSpeed()];
+    [self setSpeed: KK_walk_speed()];
     team = ENEMY_TEAM;
     
     sword = [[Sword alloc] init];
@@ -142,7 +142,7 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      [self setSpeed: KK_walk_speed() + (KK_walk_speed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
@@ -159,14 +159,14 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      [self setSpeed: KK_walk_speed() + (KK_walk_speed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
     } else {
       
       // Wander aimlessly
-      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;
@@ -204,7 +204,7 @@ typedef enum {
     
   case NINJA_DASH_STATE:
     if (![self moving]) {
-      [self setSpeed: getWalkSpeed()];
+      [self setSpeed: KK_walk_speed()];
       // If the target has a walking distance of one...
       if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
         state = NINJA_ATTACK_STATE;

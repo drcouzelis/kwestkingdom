@@ -58,15 +58,15 @@
       fudge += speed;
       
       while (fudge >= GAME_TICKER) {
-        if (visualX != x * getTileSize()) {
-          if (visualX < x * getTileSize()) {
+        if (visualX != x * KK_tile_size()) {
+          if (visualX < x * KK_tile_size()) {
             visualX++;
           } else {
             visualX--;
           }
         }
-        if (visualY != y * getTileSize()) {
-          if (visualY < y * getTileSize()) {
+        if (visualY != y * KK_tile_size()) {
+          if (visualY < y * KK_tile_size()) {
             visualY++;
           } else {
             visualY--;
@@ -76,8 +76,8 @@
       }
       
     } else {
-      visualX = x * getTileSize();
-      visualY = y * getTileSize();
+      visualX = x * KK_tile_size();
+      visualY = y * KK_tile_size();
     }
     
     if (![self moving]) {
@@ -111,7 +111,7 @@
 
 
 - (BOOL) moving {
-  if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
+  if (visualX != x * KK_tile_size() || visualY != y * KK_tile_size()) {
     return YES;
   }
   return NO;
@@ -149,14 +149,14 @@
 
 - setX: (int) newX {
   x = newX;
-  visualX = x * getTileSize();
+  visualX = x * KK_tile_size();
   return self;
 }
 
 
 - setY: (int) newY {
   y = newY;
-  visualY = y * getTileSize();
+  visualY = y * KK_tile_size();
   return self;
 }
 

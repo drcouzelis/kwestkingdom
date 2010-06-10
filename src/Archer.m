@@ -40,7 +40,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    speed = getWalkSpeed();
+    speed = KK_walk_speed();
     team = ENEMY_TEAM;
     
     bow = [[Bow alloc] init];
@@ -137,7 +137,7 @@ typedef enum {
       [self toDrawBowState];
       [self wait];
       
-    } else if ((x == [target getX] - 1 || x == [target getX] + 1) && random_number(0, 1) == 1) {
+    } else if ((x == [target getX] - 1 || x == [target getX] + 1) && KK_random_number(0, 1) == 1) {
       
       if (y > [target getY]) { // Hero is up.
         direction = UP;
@@ -148,7 +148,7 @@ typedef enum {
       [self toDrawBowState];
       [self wait];
       
-    } else if ((y == [target getY] - 1 || y == [target getY] + 1) && random_number(0, 1) == 1) {
+    } else if ((y == [target getY] - 1 || y == [target getY] + 1) && KK_random_number(0, 1) == 1) {
       
       if (x > [target getX]) { // Hero is left.
         direction = LEFT;
@@ -162,7 +162,7 @@ typedef enum {
     } else {
       
       // Wander aimlessly
-      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;
