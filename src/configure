@@ -19,21 +19,22 @@ echo >> Makefile
 echo HEADERS = `ls *.h` >> Makefile
 echo >> Makefile
 
-echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') $(ls *.c | sed -e 's/\.c/.o/') >> Makefile
+#echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') $(ls *.c | sed -e 's/\.c/.o/') >> Makefile
+echo OBJECTS = $(ls *.c | sed -e 's/\.c/.o/') >> Makefile
 echo >> Makefile
 
 
-echo 'kwestkingdom: $(OBJECTS)' >> Makefile
+echo 'kk_main: $(OBJECTS)' >> Makefile
 echo $'\t mkdir -p ../Linux/share/kwestkingdom' >> Makefile
 echo $'\t $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)' >> Makefile
 echo >> Makefile
 
 
-for i in *.m; do
-  echo $(ls "$i" | sed -e 's/\.m/.o/')': '"$i" '$(HEADERS)' >> Makefile
-  echo $'\t $(CC) $(DEBUG) -c' "$i" '$(CFLAGS)' >> Makefile
-  echo >> Makefile
-done;
+#for i in *.m; do
+  #echo $(ls "$i" | sed -e 's/\.m/.o/')': '"$i" '$(HEADERS)' >> Makefile
+  #echo $'\t $(CC) $(DEBUG) -c' "$i" '$(CFLAGS)' >> Makefile
+  #echo >> Makefile
+#done;
 
 
 for i in *.c; do

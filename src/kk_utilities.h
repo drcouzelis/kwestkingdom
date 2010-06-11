@@ -2,30 +2,18 @@
 #define KK_UTILITIES_H
 
 
-#include <allegro.h>
+typedef enum KK_DIRECTION KK_DIRECTION;
 
 
-typedef enum FLAG FLAG;
-typedef enum DIRECTION DIRECTION;
-
-
-enum FLAG
-{
-  OFF = 0,
-  ON  = 1
+enum KK_DIRECTION {
+  KK_U,
+  KK_D,
+  KK_L,
+  KK_R
 };
 
 
-enum DIRECTION {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT
-};
-
-
-int KK_random_number(int low, int high);
+int kk_random_number(int low, int high);
 
 
 #endif
-

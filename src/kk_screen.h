@@ -3,22 +3,30 @@
 
 
 #include <allegro.h>
-
-#include "al_screen.h"
-#include "kk_kwestkingdom.h"
-#include "kk_utilities.h"
+#include <stdbool.h>
 
 
-void KK_set_window_size(int width, int height);
+#define KK_SCREEN_UPDATE_STR_LEN 20
 
-FLAG KK_init_screen(int width, int height, FLAG fullscreen);
-void KK_free_screen();
 
-int KK_window_width();
-int KK_window_height();
+bool kk_init_screen(int width, int height, bool fullscreen);
+void kk_free_screen();
 
-BITMAP *KK_get_window();
-FLAG KK_refresh_screen();
+void kk_set_colors(PALETTE *palette);
+
+void kk_get_screen_update_method(char *empty_string);
+
+inline int kk_screen_width();
+inline int kk_screen_height();
+
+void kk_set_canvas_size(int width, int height);
+
+inline int kk_canvas_width();
+inline int kk_canvas_height();
+
+inline BITMAP *kk_get_canvas();
+
+bool kk_update_screen();
 
 
 #endif

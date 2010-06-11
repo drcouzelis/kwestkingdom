@@ -5,15 +5,15 @@
 #define KK_GAME_TICKER 100
 
 
-void KK_init_timer();
-void KK_reset_timer();
+void kk_init_timer();
+void kk_reset_timer();
 
-inline int KK_ticks();
+inline int kk_ticks();
 
-inline void KK_decrease_timer();
+inline void kk_decrease_timer();
 
-inline void KK_update_fps();
-inline int KK_get_fps();
+inline int kk_get_fps();
+inline void kk_frame_complete();
 
 
 #endif

@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "al_screen.h"
 #include "kk_screen.h"
 
 
@@ -10,15 +11,226 @@
 
 
 
-// The window is the area inside the screen that
+// The canvas is the area inside the screen that
 // the game is drawn on.
-static BITMAP *kk_window = NULL;
+static BITMAP *kk_canvas = NULL;
 
-// The scale is used to know how big to multiply the window.
-static int kk_scale = KK_DEFAULT_SCREEN_RATIO;
+// The scale is used to know how big to multiply the canvas.
+static int kk_scale = 1;
 
 
-FLAG KK_select_best_screen()
+
+
+bool kk_select_best_screen();
+bool kk_set_scale();
+
+
+
+
+void kk_set_canvas_size(int width, int height)
+{
+  if (kk_canvas) {
+    destroy_bitmap(kk_canvas);
+  }
+  
+  kk_canvas = create_bitmap(width, height);
+  clear_to_color(kk_canvas, makecol(0, 0, 0)); // Black
+  kk_set_scale();
+}
+
+
+
+
+bool kk_init_screen(int width, int height, bool fullscreen)
+{
+  int colordepth;
+  
+  if (screen) {
+    shutdown_screen_updating();
+  }
+  
+  // Set the color depth.
+  colordepth = desktop_color_depth();
+  
+  if (colordepth == 0) {
+    colordepth = KK_DEFAULT_COLOR_DEPTH;
+  }
+  
+  set_color_depth(colordepth);
+  
+  if (width < 0) {
+    width = SCREEN_W;
+  }
+  
+  if (height < 0) {
+    height = SCREEN_H;
+  }
+  
+  // Start the screen.
+  if (fullscreen) {
+    
+    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
+      fprintf(stderr, "Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
+      return false;
+    }
+    
+  } else {
+  
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
+      fprintf(stderr, "Failed to set graphics mode to windowed %dx%d. \n", width, height);
+      return false;
+    }
+    
+  }
+  
+  if (!kk_select_best_screen()) {
+    return false;
+  }
+  
+  kk_set_scale();
+  
+  return true;
+}
+
+
+
+
+void kk_free_screen()
+{
+  if (kk_canvas) {
+    destroy_bitmap(kk_canvas);
+    kk_canvas = NULL;
+  }
+  shutdown_screen_updating();
+}
+
+
+
+
+void kk_set_colors(PALETTE *palette)
+{
+  set_palette(*palette);
+}
+
+
+
+
+inline int kk_canvas_width()
+{
+  if (kk_canvas) {
+    return kk_canvas->w;
+  }
+  return 0;
+}
+
+
+
+
+inline int kk_canvas_height()
+{
+  if (kk_canvas) {
+    return kk_canvas->h;
+  }
+  return 0;
+}
+
+
+
+
+bool kk_update_screen()
+{
+  if (!screen) {
+    fprintf(stderr, "Failed to find a screen to show. \n");
+    return false;
+  }
+
+  if (!kk_canvas) {
+    fprintf(stderr, "Failed to find a window to draw. \n");
+    return false;
+  }
+  
+  // Scale the window onto the screen.
+  stretch_blit(
+    kk_canvas,
+    get_buffer(),
+    0,
+    0,
+    kk_canvas_width(),
+    kk_canvas_height(),
+    (SCREEN_W / 2) - (kk_canvas_width() / 2 * kk_scale),
+    (SCREEN_H / 2) - (kk_canvas_height() / 2 * kk_scale),
+    kk_canvas_width() * kk_scale,
+    kk_canvas_height() * kk_scale
+  );
+  
+  update_screen();
+
+  return true;
+}
+ 
+
+
+
+inline BITMAP * kk_get_canvas()
+{
+  return kk_canvas;
+}
+
+
+
+
+inline int kk_screen_width()
+{
+  if (screen) {
+    return screen->w;
+  }
+  return 0;
+}
+
+
+
+
+inline int kk_screen_height()
+{
+  if (screen) {
+    return screen->h;
+  }
+  return 0;
+}
+
+
+
+
+void kk_get_screen_update_method(char *empty_string)
+{
+  int method;
+  
+  method = get_update_method();
+  
+  if (method == UPDATE_TRIPLE_BUFFER) {
+    strcpy(empty_string, "Triple Buffering");
+  } else if (method == UPDATE_PAGE_FLIP) {
+    strcpy(empty_string, "Page Flipping");
+  } else if (method == UPDATE_SYSTEM_BUFFER) {
+    strcpy(empty_string, "System Buffering");
+  } else if (method == UPDATE_DOUBLE_BUFFER) {
+    strcpy(empty_string, "Double Buffering");
+  } else {
+    strcpy(empty_string, "Unknown");
+  }
+}
+
+
+
+
+/**
+ * Internal functions
+ */
+
+
+
+
+bool kk_select_best_screen()
 {
   enable_vsync();
   
@@ -31,195 +243,36 @@ FLAG KK_select_best_screen()
   } else if (initialize_screen_updating(UPDATE_DOUBLE_BUFFER)) {
     // Using double buffer.
   } else {
-    printf("Failed to initialize screen updating. \n");
-    return OFF;
+    fprintf(stderr, "Failed to initialize screen updating. \n");
+    return false;
   }
   
-  return ON;
+  return true;
 }
 
 
-FLAG KK_set_scale()
+
+
+bool kk_set_scale()
 {
   int x_scale;
   int y_scale;
-
-  if (screen && kk_window) {
   
-    x_scale = screen->w / kk_window->w;
-    y_scale = screen->h / kk_window->h;
+  if (screen && kk_canvas) {
+  
+    x_scale = screen->w / kk_canvas->w;
+    y_scale = screen->h / kk_canvas->h;
     
     if (x_scale < y_scale) {
       kk_scale = x_scale;
     } else {
       kk_scale = y_scale;
     }
-
-    return ON;
-  }
-  
-  return OFF;
-}
-
-
-void KK_set_window_size(int width, int height)
-{
-  if (kk_window) {
-    destroy_bitmap(kk_window);
-  }
-  
-  kk_window = create_bitmap(width, height);
-  clear_to_color(kk_window, makecol(0, 0, 0));
-  KK_set_scale();
-}
-
-
-FLAG KK_init_screen(int width, int height, FLAG fullscreen)
-{
-  int colordepth;
-
-  if (screen) {
-    shutdown_screen_updating();
-  }
-
-  // Set the color depth.
-  colordepth = desktop_color_depth();
-  
-  if (colordepth == 0) {
-    colordepth = KK_DEFAULT_COLOR_DEPTH;
-  }
-  
-  set_color_depth(colordepth);
-
-  if (width < 0) {
-    width = SCREEN_W;
-  }
-
-  if (height < 0) {
-    height = SCREEN_H;
-  }
- 
-  // Start the screen.
-  if (fullscreen) {
     
-    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
-      printf("Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
-      return OFF;
-    }
-    
-  } else {
-  
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
-      printf("Failed to set graphics mode to windowed %dx%d. \n", width, height);
-      return OFF;
-    }
-
+    return true;
   }
   
-  if (!KK_select_best_screen()) {
-    return OFF;
-  }
-
-  KK_set_scale();
-  
-  return ON;
-}
- 
-
-
-
-void KK_free_screen()
-{
-  if (kk_window) {
-    destroy_bitmap(kk_window);
-    kk_window = NULL;
-  }
-  shutdown_screen_updating();
+  return false;
 }
 
-
-int KK_window_width()
-{
-  if (kk_window) {
-    return kk_window->w;
-  }
-  return 0;
-}
-
-
-
-
-int KK_window_height()
-{
-  if (kk_window) {
-    return kk_window->h;
-  }
-  return 0;
-}
-
-
-
-
-FLAG KK_refresh_screen()
-{
-  int x;
-  int y;
-  int color;
-
-  if (!screen) {
-    printf("Failed to find a screen to show. \n");
-    return OFF;
-  }
-
-  if (!kk_window) {
-    printf("Failed to find a window to draw. \n");
-    return OFF;
-  }
-
-  x = KK_tile_size() / 5;
-  y = KK_window_height() - (KK_tile_size() / 2);
-  
-  color = makecol(255, 255, 255);
-  
-  switch (get_update_method()) {
-  case UPDATE_TRIPLE_BUFFER:
-    textprintf_ex(kk_window, font, x, y, color, -1, "Triple Buffering");
-    break;
-  case UPDATE_PAGE_FLIP:
-    textprintf_ex(kk_window, font, x, y, color, -1, "Page Flipping");
-    break;
-  case UPDATE_SYSTEM_BUFFER:
-    textprintf_ex(kk_window, font, x, y, color, -1, "System Buffering");
-    break;
-  case UPDATE_DOUBLE_BUFFER:
-    textprintf_ex(kk_window, font, x, y, color, -1, "Double Buffering");
-    break;
-  }
-  
-  // Scale the window onto the screen.
-  stretch_blit(
-    kk_window,
-    get_buffer(),
-    0,
-    0,
-    KK_window_width(),
-    KK_window_height(),
-    (SCREEN_W / 2) - (KK_window_width() / 2 * kk_scale),
-    (SCREEN_H / 2) - (KK_window_height() / 2 * kk_scale),
-    KK_window_width() * kk_scale,
-    KK_window_height() * kk_scale
-  );
-  
-  update_screen();
-
-  return ON;
-}
- 
-
-
-
-BITMAP * KK_get_window()
-{
-  return kk_window;
-}
 
