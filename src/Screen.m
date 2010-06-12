@@ -181,8 +181,8 @@ BOOL showScreen() {
     return NO;
   }
 
-  x = KK_tile_size() / 5;
-  y = getWindowHeight() - (KK_tile_size() / 2);
+  x = getTileSize() / 5;
+  y = getWindowHeight() - (getTileSize() / 2);
   
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:

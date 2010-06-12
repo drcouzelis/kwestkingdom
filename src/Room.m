@@ -137,28 +137,28 @@
     for (x = 0; x < COLS; x++) {
       
       //if ([pathMap getValueAtX: x andY: y] == YES) { // Draw the path
-        //[pathAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+        //[pathAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       //} else
       if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
-        [grassAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+        [grassAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
-        [mountainAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+        [mountainAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
         
-        [waterAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+        [waterAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         
         // Add the shore borders
         if ([terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN) { // North
-          [shoreNorthAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreNorthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN) { // South
-          [shoreSouthAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreSouthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN) { // East
-          [shoreEastAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreEastAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN) { // West
-          [shoreWestAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreWestAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
           
       }
@@ -177,25 +177,25 @@
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
         ) { // North East
-          [shoreInsideNEAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreInsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
         ) { // South East
-          [shoreInsideSEAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreInsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
         ) { // North West
-          [shoreInsideNWAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreInsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
         ) { // South West
-          [shoreInsideSWAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreInsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
           
         // Add the shore outside corners.
@@ -204,28 +204,28 @@
           [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y - 1] != WATER_TERRAIN
         ) { // North East
-          [shoreOutsideNEAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreOutsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y + 1] != WATER_TERRAIN
         ) { // South East
-          [shoreOutsideSEAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreOutsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y - 1] != WATER_TERRAIN
         ) { // North West
-          [shoreOutsideNWAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreOutsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y + 1] != WATER_TERRAIN
         ) { // South West
-          [shoreOutsideSWAnimation drawTo: buffer atX: x * KK_tile_size() andY: y * KK_tile_size()];
+          [shoreOutsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
           
       }

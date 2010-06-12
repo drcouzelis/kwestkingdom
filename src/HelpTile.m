@@ -58,10 +58,10 @@
   leftSide = 0;
   upperSide = 0;
  
-  leftSide = KK_tile_size(); //(KK_tile_size() / 2);
-  upperSide = (getWindowHeight() / 2) - (KK_tile_size() * 2); //(KK_tile_size() / 2);
+  leftSide = getTileSize(); //(getTileSize() / 2);
+  upperSide = (getWindowHeight() / 2) - (getTileSize() * 2); //(getTileSize() / 2);
 
-  width = getWindowWidth() - (KK_tile_size() * 2);
+  width = getWindowWidth() - (getTileSize() * 2);
   height = (numOfLines + 2) * lineSpacing;
   
   //drawBox(buffer, leftSide, upperSide, leftSide + width, upperSide + height);

@@ -1,22 +1,5 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Ninja.h"
+#import "World.h"
 
 
 typedef enum {
@@ -39,7 +22,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    [self setSpeed: KK_walk_speed()];
+    [self setSpeed: getWalkSpeed()];
     team = ENEMY_TEAM;
     
     sword = [[Sword alloc] init];
@@ -93,7 +76,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Character *target;
   
   [super update];
   [sword update];
@@ -142,7 +125,7 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: KK_walk_speed() + (KK_walk_speed() / 5)];
+      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
@@ -159,14 +142,14 @@ typedef enum {
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: KK_walk_speed() + (KK_walk_speed() / 5)];
+      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
       
     } else {
       
       // Wander aimlessly
-      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;
@@ -204,7 +187,7 @@ typedef enum {
     
   case NINJA_DASH_STATE:
     if (![self moving]) {
-      [self setSpeed: KK_walk_speed()];
+      [self setSpeed: getWalkSpeed()];
       // If the target has a walking distance of one...
       if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
         state = NINJA_ATTACK_STATE;

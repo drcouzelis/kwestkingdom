@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "World.h"
 
 
@@ -110,13 +92,13 @@ typedef enum {
 
 - updateItems {
   
-  id<Collectable, Positionable, Updatable> item;
+  Powerup *item;
   //Enemy *enemy;
   int x;
   int y;
   
   [items iterate];
-  while ((item = (id<Collectable, Positionable, Updatable>)[items next]) != nil) {
+  while ((item = (Powerup *)[items next]) != nil) {
     
     [item update];
     
@@ -223,7 +205,7 @@ typedef enum {
   }
   
   if ([hero isDead]) {
-    KK_quit_game();
+    game_over();
   }
   
   return self;
@@ -303,7 +285,7 @@ typedef enum {
 }
 
 
-- addCharacter: (id) aCharacter {
+- addCharacter: (Character *) aCharacter {
   if (aCharacter != nil) {
     [aCharacter setWorld: self];
     [enemies append: aCharacter];
@@ -312,7 +294,7 @@ typedef enum {
 }
 
 
-- addItem: (id) anItem {
+- addItem: (Powerup *) anItem {
   if (anItem != nil) {
     [items append: anItem];
   }
@@ -328,7 +310,7 @@ typedef enum {
 }
 
 
-- (id<Positionable>) getTarget {
+- (Character *)getTarget {
   return hero;
 }
 
@@ -680,7 +662,7 @@ typedef enum {
   // Draw help tiles.
   [helpTiles iterate];
   while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * KK_tile_size() andY: [helpTile getY] * KK_tile_size()];
+    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
   }
   
   return self;
@@ -691,10 +673,10 @@ typedef enum {
 - drawCharacters: (BITMAP *) buffer{
   
   Enemy *enemy;
-  id<Collectable, Drawable> item;
+  Powerup *item;
   
   [items iterate];
-  while ((item = (id<Collectable, Drawable>)[items next]) != nil) {
+  while ((item = (Powerup *)[items next]) != nil) {
     [item draw: buffer];
   }
   
@@ -719,14 +701,14 @@ typedef enum {
   // Put the hero's health on the screen.
   for (i = 0; i < [hero getMaxHealth]; i++) {
     if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (KK_tile_size() / 2) + (i * (KK_tile_size() / 2)) andY: 0];
+      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (KK_tile_size() / 2) + (i * (KK_tile_size() / 2)) andY: 0];
+      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
     }
   }
   
   sprintf(moneyLine, "$%d", [hero getMoney]);
-  resizedTextOut(buffer, getWindowWidth() - (KK_tile_size() * 2), KK_tile_size(), 2, WHITE, moneyLine);
+  resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   [helpTiles iterate];
@@ -768,7 +750,7 @@ typedef enum {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - (KK_tile_size() * 3), getWindowHeight() - (KK_tile_size() / 2), WHITE, -1, "Room %d", [room getNumber]);
+  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
   
   return self;
   

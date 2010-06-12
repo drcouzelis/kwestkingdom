@@ -1,22 +1,5 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Giant.h"
+#import "World.h"
 
 
 typedef enum {
@@ -41,7 +24,7 @@ typedef enum {
     w = 2;
     h = 2;
     
-    speed = KK_walk_speed();
+    speed = getWalkSpeed();
     maxHealth = 5;
     health = 5;
     team = ENEMY_TEAM;
@@ -92,7 +75,7 @@ typedef enum {
 }
 
 
-- (BOOL) target: (id<Positionable>) target isInRange: (int) range {
+- (BOOL) target: (Character *) target isInRange: (int) range {
   
   if (
     abs(x - [target getX]) + abs(y - [target getY]) <= range ||
@@ -110,7 +93,7 @@ typedef enum {
 }
 
 
-- (int) directionToTarget: (id<Positionable>) target {
+- (int) directionToTarget: (Character *) target {
   
   if ( // Up
     (x == [target getX] && y == [target getY] + 1) ||
@@ -191,7 +174,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Character *target;
   
   [super update];
   [hammer update];
@@ -235,7 +218,7 @@ typedef enum {
     } else {
       
       // Wander aimlessly
-      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;
@@ -336,7 +319,7 @@ typedef enum {
 }
 
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
+- setWorld: (World *) aWorld {
   world = aWorld;
   [hammer setWorld: world];
   return self;

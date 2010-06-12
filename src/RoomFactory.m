@@ -1,22 +1,5 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "RoomFactory.h"
+#import "World.h"
 
 
 #define STRAIGHT 0
@@ -82,7 +65,7 @@ int roomNumber;
   }
   
   if (terrain == ROOM_RANDOM) {
-    terrain = KK_random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
+    terrain = random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
   }
   
   for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
@@ -260,13 +243,13 @@ int roomNumber;
         
         if (
           [terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN &&
-          KK_random_number(0, 99) < chanceOfEnemy &&
+          random_number(0, 99) < chanceOfEnemy &&
           [self characterExistsInList: list atX: x andY: y withWidth: 1 andHeight: 1] == NO
         ) {
           
           enemy = nil;
           randomNum = chanceOfChomper + chanceOfArcher + chanceOfNinja + chanceOfGiant;
-          randomNum = KK_random_number(1, randomNum);
+          randomNum = random_number(1, randomNum);
           
           if (randomNum > lowerChomper && randomNum <= upperChomper) { // Chomper
             enemy = [[Chomper alloc] init];
@@ -338,7 +321,7 @@ int roomNumber;
         if ([pathMap getValueAtX: x andY: y] == YES) {
           backupX = x;
           backupY = y;
-          if (KK_random_number(1, 5) == 1) {
+          if (random_number(1, 5) == 1) {
             // Add a heart item.
             heart = [[Heart alloc] init];
             [heart setX: x];
@@ -430,7 +413,7 @@ int roomNumber;
     
     // Determine how many new steps to take and in which direction.
     if (facing == STRAIGHT) {
-      num = KK_random_number(1, 3);
+      num = random_number(1, 3);
       if (direction == UP) {
         changeY = -num;
       } else if (direction == DOWN) {
@@ -441,7 +424,7 @@ int roomNumber;
         changeX = -num;
       }
     } else if (facing == TURN) {
-      num = KK_random_number(-4, 4);
+      num = random_number(-4, 4);
       if (direction == UP || direction == DOWN) {
         changeX = num;
       } else if (direction == LEFT || direction == RIGHT) {
@@ -606,9 +589,9 @@ int roomNumber;
             actualChanceOfTrees = chanceOfClumpedTrees;
           }
           
-          if (KK_random_number(1, 100) <= actualChanceOfWater) {
+          if (random_number(1, 100) <= actualChanceOfWater) {
             [map setX: x andY: y toValue: WATER_TERRAIN];
-          } else if (KK_random_number(1, 100) <= actualChanceOfTrees) {
+          } else if (random_number(1, 100) <= actualChanceOfTrees) {
             [map setX: x andY: y toValue: TREE_TERRAIN];
           }
           
@@ -624,7 +607,7 @@ int roomNumber;
 }
 
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
+- setWorld:(World *)aWorld {
   world = aWorld;
   return self;
 }

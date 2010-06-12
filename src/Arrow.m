@@ -1,22 +1,5 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Arrow.h"
+#import "World.h"
 
 
 typedef enum {
@@ -35,7 +18,7 @@ typedef enum {
   
   if (self) {
     
-    [self setSpeed: KK_walk_speed() * 4];
+    [self setSpeed: getWalkSpeed() * 4];
     
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(IMG_ARROW)];
@@ -155,7 +138,7 @@ typedef enum {
   
   int visualOffset;
   
-  visualOffset = (KK_tile_size() / 3) + (KK_tile_size() / 10);
+  visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
   
   state = ARROW_HOLD_STATE;
   

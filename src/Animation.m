@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Animation.h"
 
 
@@ -138,16 +120,16 @@ BITMAP *canvasTripleSize = NULL;
  */
 BITMAP * getCanvas(int width, int height) {
   
-  if (width == KK_tile_size() && height == KK_tile_size()) {
+  if (width == getTileSize() && height == getTileSize()) {
     if (canvasStandardSize == NULL) {
-      canvasStandardSize = create_bitmap(KK_tile_size(), KK_tile_size());
+      canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
     }
     return canvasStandardSize;
   }
   
-  if (width == KK_tile_size() * 3 && height == KK_tile_size() * 3) {
+  if (width == getTileSize() * 3 && height == getTileSize() * 3) {
     if (canvasTripleSize == NULL) {
-      canvasTripleSize = create_bitmap(KK_tile_size() * 3, KK_tile_size() * 3);
+      canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
     }
     return canvasTripleSize;
   }

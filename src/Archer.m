@@ -1,22 +1,5 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Archer.h"
+#import "World.h"
 
 
 typedef enum {
@@ -40,7 +23,7 @@ typedef enum {
     x = 0;
     y = 0;
     
-    speed = KK_walk_speed();
+    speed = getWalkSpeed();
     team = ENEMY_TEAM;
     
     bow = [[Bow alloc] init];
@@ -96,7 +79,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Character *target;
   
   [super update];
   [bow update];
@@ -137,7 +120,7 @@ typedef enum {
       [self toDrawBowState];
       [self wait];
       
-    } else if ((x == [target getX] - 1 || x == [target getX] + 1) && KK_random_number(0, 1) == 1) {
+    } else if ((x == [target getX] - 1 || x == [target getX] + 1) && random_number(0, 1) == 1) {
       
       if (y > [target getY]) { // Hero is up.
         direction = UP;
@@ -148,7 +131,7 @@ typedef enum {
       [self toDrawBowState];
       [self wait];
       
-    } else if ((y == [target getY] - 1 || y == [target getY] + 1) && KK_random_number(0, 1) == 1) {
+    } else if ((y == [target getY] - 1 || y == [target getY] + 1) && random_number(0, 1) == 1) {
       
       if (x > [target getX]) { // Hero is left.
         direction = LEFT;
@@ -162,7 +145,7 @@ typedef enum {
     } else {
       
       // Wander aimlessly
-      dir = KK_random_number(UP, /*DOWN, LEFT,*/ RIGHT);
+      dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
       
       toX = x;
       toY = y;

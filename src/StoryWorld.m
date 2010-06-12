@@ -154,7 +154,7 @@
     // There are no more rooms to explore!
     // It's the end of the game.
     //playSound(ENDING_SOUND);
-    KK_quit_game();
+    game_over();
   }
   
   return self;
