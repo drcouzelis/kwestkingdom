@@ -662,7 +662,7 @@ typedef enum {
   // Draw help tiles.
   [helpTiles iterate];
   while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
+    [helpTileAnimation draw: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
   }
   
   return self;
@@ -701,9 +701,9 @@ typedef enum {
   // Put the hero's health on the screen.
   for (i = 0; i < [hero getMaxHealth]; i++) {
     if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+      [heartAnimation draw: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+      [heartEmptyAnimation draw: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
     }
   }
   

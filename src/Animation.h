@@ -7,7 +7,7 @@
 
 
 @interface Animation : Object {
-
+ @private
   BITMAP *frames[ANIMATION_MAX_FRAMES];
   
   // An animation is drawn with respect to its offset.
@@ -28,28 +28,28 @@
 
 }
 
-- (BITMAP *) getImage;
+- (BITMAP *)getImage;
 
-- addFrame: (BITMAP *) bitmap;
+- addFrame:(BITMAP *)bitmap;
 
-- setLoop: (BOOL) loopOn;
-- setSpeed: (int) newSpeed;
-- setOffsetX: (int) newOffsetX;
-- setOffsetY: (int) newOffsetY;
-- setRotate: (BOOL) rotateOn;
-- setHorizontalFlip: (BOOL) hFlipOn;
-- setVerticalFlip: (BOOL) vFlipOn;
+- setLoop:(BOOL)loopOn;
+- setSpeed:(int)newSpeed;
+- setOffsetX:(int)newOffsetX;
+- setOffsetY:(int)newOffsetY;
+- setRotate:(BOOL)rotateOn;
+- setHorizontalFlip:(BOOL)hFlipOn;
+- setVerticalFlip:(BOOL)vFlipOn;
 
 - reset;
 
 - update;
-- drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y;
-- (Animation *) copy;
+- draw:(BITMAP *)buffer atX:(int)x andY:(int)y;
+- (Animation *)copy;
 
-- (BOOL) finished;
-- (int) width;
-- (int) height;
-- (int) currentFrameNumber;
+- (BOOL)finished;
+- (int)width;
+- (int)height;
+- (int)currentFrameNumber;
 
 
 @end

@@ -233,7 +233,7 @@ typedef enum {
   drawBox(buffer, x, y, w, h);
 
   // Draw the title of the game
-  [titleAnimation drawTo: buffer
+  [titleAnimation draw: buffer
     atX: (getWindowWidth() / 2) - ([titleAnimation width] / 2)
     andY: (getWindowWidth() - [titleAnimation width]) / 2
   ];
@@ -271,7 +271,7 @@ typedef enum {
     resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (Off)");
   }
   
-  [menuPointer drawTo: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
+  [menuPointer draw: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
   
   return self;
   
@@ -376,7 +376,7 @@ typedef enum {
   
   case GAME_OVER_STATE:
     [world draw: buffer];
-    [gameOverAnimation drawTo: buffer
+    [gameOverAnimation draw: buffer
       atX: (getWindowWidth() / 2) - ([gameOverAnimation width] / 2)
       andY: (getWindowHeight() / 2) - ([gameOverAnimation height] / 2)];
     break;

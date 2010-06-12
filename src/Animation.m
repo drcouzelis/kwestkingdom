@@ -7,38 +7,7 @@ extern int timer;
 @implementation Animation
 
 
-- init {
-  
-  int i;
-  
-  self = [super init];
-  
-  if (self) {
-    
-    for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
-      frames[i] = NULL;
-    }
-    
-    length = 0;
-    pos = 0;
-    loop = YES;
-    finished = NO;
-    speed = 0;
-    fudge = 0;
-    offsetX = 0;
-    offsetY = 0;
-    hFlip = NO;
-    vFlip = NO;
-    rotate = NO;
-    
-  }
-  
-  return self;
-
-}
-
-
-- (Animation *) copy {
+- (Animation *)copy {
   
   Animation *animation;
   int i;
@@ -71,17 +40,17 @@ extern int timer;
 }
 
 
-- (int) currentFrameNumber {
+- (int)currentFrameNumber {
   return pos;
 }
 
 
-- (BOOL) finished {
+- (BOOL)finished {
   return finished;
 }
 
 
-- (BITMAP *) getImage {
+- (BITMAP *)getImage {
   if (length == 0) {
     return NULL;
   }
@@ -89,7 +58,7 @@ extern int timer;
 }
 
 
-- addFrame: (BITMAP *) bitmap {
+- addFrame:(BITMAP *)bitmap {
   if (bitmap) {
     frames[length] = bitmap;
     length++;
@@ -98,13 +67,13 @@ extern int timer;
 }
 
 
-- setSpeed: (int) newSpeed {
+- setSpeed:(int)newSpeed {
   speed = newSpeed;
   return self;
 }
 
 
-- setLoop: (BOOL) loopOn {
+- setLoop:(BOOL)loopOn {
   loop = loopOn;
   return self;
 }
@@ -141,7 +110,7 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y {
+- draw:(BITMAP *)buffer atX:(int)x andY:(int)y {
   
   BITMAP *canvas;
   
@@ -223,19 +192,19 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- setOffsetX: (int) newOffsetX {
+- setOffsetX:(int)newOffsetX {
   offsetX = newOffsetX;
   return self;
 }
 
 
-- setOffsetY: (int) newOffsetY {
+- setOffsetY:(int)newOffsetY {
   offsetY = newOffsetY;
   return self;
 }
 
 
-- (int) width {
+- (int)width {
   if ([self getImage] != NULL) {
     return [self getImage]->w;
   }
@@ -243,7 +212,7 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- (int) height {
+- (int)height {
   if ([self getImage] != NULL) {
     return [self getImage]->h;
   }
@@ -251,19 +220,19 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- setRotate: (BOOL) rotateOn {
+- setRotate:(BOOL)rotateOn {
   rotate = rotateOn;
   return self;
 }
 
 
-- setHorizontalFlip: (BOOL) hFlipOn {
+- setHorizontalFlip:(BOOL)hFlipOn {
   hFlip = hFlipOn;
   return self;
 }
 
 
-- setVerticalFlip: (BOOL) vFlipOn {
+- setVerticalFlip:(BOOL)vFlipOn {
   vFlip = vFlipOn;
   return self;
 }

@@ -1,8 +1,9 @@
-#import "Sprite.h"
+#import "Command.h"
+#import "Sprite2.h"
 #import "World.h"
 
 
-@implementation Sprite
+@implementation Sprite2
 
 
 - init {
@@ -10,21 +11,11 @@
   self = [super init];
   
   if (self) {
-    x = 0;
-    y = 0;
     w = 1;
     h = 1;
-    visualX = 0;
-    visualY = 0;
-    fudge = 0;
-    speed = 0;
-    animation = nil;
-    world = nil;
-    state = 0;
   }
   
   return self;
-  
 }
 
 
@@ -34,7 +25,7 @@
   
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
-  if ([self moving]) {
+  if ([self isMoving]) {
     
     if (speed > 0) {
       
@@ -63,18 +54,20 @@
       visualY = y * getTileSize();
     }
     
-    if (![self moving]) {
+    if (![self isMoving]) {
       fudge = 0;
     }
     
   }
+  
+  [command execute];
   
   return self;
   
 }
 
 
-- draw: (BITMAP *) buffer {
+- draw:(BITMAP *)buffer {
   
   // Add a shadow.
   /*
@@ -93,7 +86,7 @@
 }
 
 
-- (BOOL) moving {
+- (BOOL)isMoving {
   if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
     return YES;
   }
@@ -101,84 +94,83 @@
 }
 
 
-- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right {
-  
+- boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right {
+
   if (x < left) {
-    [self moveX: left];
+    [self moveToX: left];
   } else if (x + w - 1 > right) {
-    [self moveX: right];
+    [self moveToX: right];
   }
   
   if (y < top) {
-    [self moveY: top];
+    [self moveToY: top];
   } else if (y + h - 1 > bottom) {
-    [self moveY: bottom];
+    [self moveToY: bottom];
   }
   
   return self;
-  
 }
 
 
-- (int) getX {
+- (int)x {
   return x;
 }
 
 
-- (int) getY {
+- (int)y {
   return y;
 }
 
 
-- setX: (int) newX {
+- setX:(int)newX {
   x = newX;
   visualX = x * getTileSize();
   return self;
 }
 
 
-- setY: (int) newY {
+- setY:(int)newY {
   y = newY;
   visualY = y * getTileSize();
   return self;
 }
 
 
-- moveX: (int) newX {
+- moveToX:(int)newX {
   x = newX;
   return self;
 }
 
 
-- moveY: (int) newY {
+- moveToY:(int)newY {
   y = newY;
   return self;
 }
 
 
-- (int) getWidth {
+- (int)width {
   return w;
 }
 
 
-- (int) getHeight {
+- (int)height {
   return h;
 }
 
 
-- setWorld: (World *) aWorld {
+- setWorld:(World *)aWorld {
   world = aWorld;
   return self;
 }
 
 
-- setState: (int) aState {
+- setState:(int)aState {
   state = aState;
   return self;
 }
 
 
-- setSpeed: (int) theSpeed {
+- setSpeed:(int)theSpeed {
   speed = theSpeed;
   return self;
 }
