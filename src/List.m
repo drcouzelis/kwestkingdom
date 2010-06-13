@@ -1,67 +1,52 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "List.h"
+
+
+@interface Node : Object {
+  id item;
+  Node *next;
+  Node *prev;
+}
+- setItem:(id)anItem;
+- setNext:(Node *)node;
+- setPrev:(Node *)node;
+- (id)item;
+- (Node *)next;
+- (Node *)prev;
+@end
 
 
 @implementation Node
 
 
-- init {
-  self = [super init];
-  if (self) {
-    item = nil;
-    next = nil;
-    prev = nil;
-  }
-  return self;
-}
-
-
-- setItem: (id) anItem {
+- setItem:(id)anItem {
   item = anItem;
   return self;
 }
 
 
-- setNext: (Node *) theNext {
-  next = theNext;
+- setNext:(Node *)node {
+  next = node;
   return self;
 }
 
 
-- setPrev: (Node *) thePrev {
-  prev = thePrev;
+- setPrev:(Node *)node {
+  prev = node;
   return self;
 }
 
 
-- (id) getItem {
+- (id)item {
   return item;
 }
 
 
-- (Node *) getNext {
+- (Node *)next {
   return next;
 }
 
 
-- (Node *) getPrev {
+- (Node *)prev {
   return prev;
 }
 
@@ -72,22 +57,6 @@
 @implementation List
 
 
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    head = nil;
-    tail = nil;
-    next = nil;
-    size = 0;
-  }
-  
-  return self;
-  
-}
-
-
 - free {
   
   Node *node;
@@ -95,24 +64,23 @@
   
   node = head;
   
-  while (node != nil) {
-    tmp = [node getNext];
-    [[node getItem] free];
+  while (node) {
+    tmp = [node next];
+    [[node item] free];
     [node free];
     node = tmp;
   }
   
-  return self;
-  
+  return [super free];
 }
 
 
-- append: (id) item {
+- append:(id)item {
   
   Node *node;
   
   node = [[Node alloc] init];
-  [node setItem: item];
+  [node setItem:item];
   
   if (head == nil) {
     head = node;
@@ -125,21 +93,20 @@
   size++;
   
   return self;
-  
 }
 
 
-- remove: (id) item {
+- remove:(id)item {
   
   Node *node;
   
   node = head;
   
-  while (node != nil && [node getItem] != item) {
-    node = [node getNext];
+  while (node && [node item] != item) {
+    node = [node next];
   }
   
-  if (node == nil) {
+  if (!node) {
     return nil;
   }
   
@@ -149,25 +116,24 @@
   }
   
   if (node == head) {
-    head = [head getNext];
-    [head setPrev: nil];
+    head = [head next];
+    [head setPrev:nil];
   } else if (node == tail) {
-    tail = [tail getPrev];
-    [tail setNext: nil];
+    tail = [tail prev];
+    [tail setNext:nil];
   } else {
-    [[node getPrev] setNext: [node getNext]];
-    [[node getNext] setPrev: [node getPrev]];
+    [[node prev] setNext: [node next]];
+    [[node next] setPrev: [node prev]];
   }
   
   [node free];
   size--;
   
   return self;
-  
 }
 
 
-- (int) findIndex: (id) item {
+- (int)findIndexOf:(id)item {
   
   Node *node;
   int index;
@@ -175,16 +141,16 @@
   node = head;
   index = 0;
   
-  if (item == nil) {
+  if (!item) {
     return -1;
   }
   
-  while (node != nil && [node getItem] != item) {
-    node = [node getNext];
+  while (node && [node item] != item) {
+    node = [node next];
     index++;
   }
   
-  if (node == nil) {
+  if (!node) {
     return -1;
   }
   
@@ -193,7 +159,7 @@
 }
 
 
-- (id) getIndex: (int) index {
+- (id)itemAtIndex:(int)index {
   
   Node *node;
   int count;
@@ -205,18 +171,38 @@
     return nil;
   }
   
-  while (node != nil && count != index) {
-    node = [node getNext];
+  while (node && count != index) {
+    node = [node next];
     count++;
   }
   
-  if (node == nil) {
+  if (!node) {
     return nil;
   }
   
-  return [node getItem];
-  
+  return [node item];
 }
+
+
+- (id)head {
+  return [head item];
+}
+
+
+- (id)tail {
+  return [tail item];
+}
+
+
+- (int)size {
+  return size;
+}
+
+
+@end
+
+
+@implementation List (Iterator)
 
 
 - iterate {
@@ -225,35 +211,20 @@
 }
 
 
-- (id) getHead {
-  return [head getItem];
-}
-
-
-- (id) getTail {
-  return [tail getItem];
-}
-
-
-- (id) next {
+- (id)next {
   
   id item;
   
-  if (next == nil) {
+  if (!next) {
     return nil;
   }
   
-  item = [next getItem];
-  next = [next getNext];
+  item = [next item];
+  next = [next next];
   
   return item;
-  
-}
-
-
-- (int) size {
-  return size;
 }
 
 
 @end
+

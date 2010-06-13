@@ -157,14 +157,14 @@ typedef enum {
     if (currentCharacter == nil) {
       currentCharacter = hero;
     } else if (currentCharacter == hero) {
-      currentCharacter = (Character *)[enemies getIndex: 0];
+      currentCharacter = (Character *)[enemies itemAtIndex: 0];
       if (currentCharacter == nil) {
         currentCharacter = hero;
       }
     } else {
-      index = [enemies findIndex: currentCharacter];
+      index = [enemies findIndexOf: currentCharacter];
       if (index >= 0) {
-        currentCharacter = [enemies getIndex: index + 1];
+        currentCharacter = [enemies itemAtIndex: index + 1];
       } else {
         currentCharacter = nil;
       }
@@ -565,7 +565,7 @@ typedef enum {
     [room storeItems: items];
     [room storeHelpTiles: helpTiles];
     
-    nextRoom = (Room *)[rooms getIndex: [rooms findIndex: room] + 1];
+    nextRoom = (Room *)[rooms itemAtIndex: [rooms findIndexOf: room] + 1];
     
     // Create the next room here, if necessary.
     if (nextRoom != nil) {
@@ -574,8 +574,8 @@ typedef enum {
       
     } else {
       
-      entranceX = [(Room *)[rooms getTail] getExitToNextRoomX];
-      entranceY = [(Room *)[rooms getTail] getExitToNextRoomY];
+      entranceX = [(Room *)[rooms tail] getExitToNextRoomX];
+      entranceY = [(Room *)[rooms tail] getExitToNextRoomY];
       
       // Bound the entrance.
       if (entranceX < 0) {
@@ -610,10 +610,10 @@ typedef enum {
       
       // Delete the oldest room.
       if ([rooms size] > 2) {
-        firstRoom = (Room *)[rooms getHead];
-        [rooms remove: [rooms getHead]];
+        firstRoom = (Room *)[rooms head];
+        [rooms remove: [rooms head]];
         [firstRoom free];
-        firstRoom = (Room *)[rooms getHead];
+        firstRoom = (Room *)[rooms head];
         [firstRoom removeExitToPrevRoom];
       }
       
@@ -633,7 +633,7 @@ typedef enum {
     [room storeHelpTiles: helpTiles];
     
     // Go to the previous room.
-    room = (Room *)[rooms getIndex: [rooms findIndex: room] - 1];
+    room = (Room *)[rooms itemAtIndex: [rooms findIndexOf: room] - 2];
     [hero setX: [room getEntranceFromNextRoomX]];
     [hero setY: [room getEntranceFromNextRoomY]];
     

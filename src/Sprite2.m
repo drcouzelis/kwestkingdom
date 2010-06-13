@@ -1,28 +1,144 @@
+#include <allegro.h>
+
+#import "Animation.h"
 #import "Command.h"
+#import "List.h"
+#import "KwestKingdom.h"
+#import "Resources.h"
+#import "Screen.h"
 #import "Sprite2.h"
 #import "World.h"
+
+
+@interface Sprite2 (PrivateMethods)
+- move;
+@end
 
 
 @implementation Sprite2
 
 
-- init {
+- initWorld:(World *)aWorld width:(int)width height:(int)height {
   
-  self = [super init];
+  self = [self init];
   
   if (self) {
-    w = 1;
-    h = 1;
+    world = aWorld;
+    w = width;
+    h = height;
+    commands = [[List alloc] init];
   }
   
   return self;
 }
 
 
+- free {
+  [commands free];
+  return [super free];
+}
+
+
 - update {
-  
   [animation update];
+  [command execute];
+  [self move];
+  return self;
+}
+
+
+- draw:(BITMAP *)canvas {
+  [animation draw:canvas atX:visualX andY:visualY];
+  return self;
+}
+
+
+- (BOOL)isMoving {
+  if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
+    return YES;
+  }
+  return NO;
+}
+
+
+- (int)width {
+  return w;
+}
+
+
+- (int)height {
+  return h;
+}
+
+
+- setSpeed:(int)fps {
+  speed = fps;
+  return self;
+}
+
+
+- boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right {
+
+  if (x < left) {
+    [self moveToX: left];
+  } else if (x + w - 1 > right) {
+    [self moveToX: right];
+  }
   
+  if (y < top) {
+    [self moveToY: top];
+  } else if (y + h - 1 > bottom) {
+    [self moveToY: bottom];
+  }
+  
+  return self;
+}
+
+
+- (int)x {
+  return x;
+}
+
+
+- (int)y {
+  return y;
+}
+
+
+- setX:(int)pos {
+  x = pos;
+  visualX = x * getTileSize();
+  return self;
+}
+
+
+- setY:(int)pos {
+  y = pos;
+  visualY = y * getTileSize();
+  return self;
+}
+
+
+- moveToX:(int)pos {
+  x = pos;
+  return self;
+}
+
+
+- moveToY:(int)pos {
+  y = pos;
+  return self;
+}
+
+
+@end
+
+
+@implementation Sprite2 (PrivateMethods)
+
+
+- move {
+
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
   if ([self isMoving]) {
@@ -60,118 +176,6 @@
     
   }
   
-  [command execute];
-  
-  return self;
-  
-}
-
-
-- draw:(BITMAP *)buffer {
-  
-  // Add a shadow.
-  /*
-  hline(buffer, visualX + 6, visualY + 30, visualX + 33, BLACK);
-  hline(buffer, visualX + 6, visualY + 31, visualX + 33, BLACK);
-  hline(buffer, visualX + 4, visualY + 32, visualX + 35, BLACK);
-  hline(buffer, visualX + 4, visualY + 33, visualX + 35, BLACK);
-  hline(buffer, visualX + 6, visualY + 34, visualX + 33, BLACK);
-  hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
-  */
-  
-  [animation draw: buffer atX: visualX andY: visualY];
-  
-  return self;
-  
-}
-
-
-- (BOOL)isMoving {
-  if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
-    return YES;
-  }
-  return NO;
-}
-
-
-- boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right {
-
-  if (x < left) {
-    [self moveToX: left];
-  } else if (x + w - 1 > right) {
-    [self moveToX: right];
-  }
-  
-  if (y < top) {
-    [self moveToY: top];
-  } else if (y + h - 1 > bottom) {
-    [self moveToY: bottom];
-  }
-  
-  return self;
-}
-
-
-- (int)x {
-  return x;
-}
-
-
-- (int)y {
-  return y;
-}
-
-
-- setX:(int)newX {
-  x = newX;
-  visualX = x * getTileSize();
-  return self;
-}
-
-
-- setY:(int)newY {
-  y = newY;
-  visualY = y * getTileSize();
-  return self;
-}
-
-
-- moveToX:(int)newX {
-  x = newX;
-  return self;
-}
-
-
-- moveToY:(int)newY {
-  y = newY;
-  return self;
-}
-
-
-- (int)width {
-  return w;
-}
-
-
-- (int)height {
-  return h;
-}
-
-
-- setWorld:(World *)aWorld {
-  world = aWorld;
-  return self;
-}
-
-
-- setState:(int)aState {
-  state = aState;
-  return self;
-}
-
-
-- setSpeed:(int)theSpeed {
-  speed = theSpeed;
   return self;
 }
 

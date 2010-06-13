@@ -1,3 +1,4 @@
+#import "Command.h"
 #import "Condition.h"
 
 
@@ -6,6 +7,11 @@
 
 - (BOOL)isMet {
   return NO;
+}
+
+
+- (Command *)nextCommand {
+  return nil;
 }
 
 
