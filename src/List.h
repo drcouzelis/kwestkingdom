@@ -7,33 +7,36 @@
 @interface List : Object {
   Node *head;
   Node *tail;
-  Node *next;
-  Node *curr;
   int size;
 }
 
-- append:(id)item;
-- remove:(id)item;
+- freeIncludingItems; // Call "free" to keep the items in memory
+
+- add:(id)item;
+- add:(id)item named:(char *)name;
+
+- (id)remove:(id)item; // Returns a pointer to the item
+- (id)removeItemNamed:(char *)name; // This one does too
+
+- (id)itemAtIndex:(int)index;
+- (id)itemNamed:(char *)name;
 
 - (int)findIndexOf:(id)item;
-- (id)itemAtIndex:(int)index;
 
-- (id)head;
-- (id)tail;
+- (id)head; // Returns a pointer to the first item in the list...
+- (id)tail; // ...and the last item in the list
 
 - (int)size;
 
 @end
 
 
-@interface List (Iterator)
-- iterate;
+@interface Iterator : Object {
+  List *list;
+  Node *next;
+}
+- initList:(List *)aList;
+- (BOOL)hasNext;
 - (id)next;
-@end
-
-
-@interface List (Current)
-- setCurrent:(id)currentItem;
-- (id)current;
 @end
 

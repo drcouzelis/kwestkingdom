@@ -41,7 +41,7 @@ typedef enum {
     [room setExitToPrevRoomY: -1];
     
     rooms = [[List alloc] init];
-    [rooms append: room];
+    [rooms add: room];
     
     enemies = [[List alloc] init];
     items = [[List alloc] init];
@@ -92,13 +92,14 @@ typedef enum {
 
 - updateItems {
   
-  Powerup *item;
-  //Enemy *enemy;
   int x;
   int y;
   
-  [items iterate];
-  while ((item = (Powerup *)[items next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList: items];
+  
+  while ([iterator hasNext]) {
+    
+    Powerup *item = (Powerup *)[iterator next]; 
     
     [item update];
     
@@ -117,33 +118,11 @@ typedef enum {
       }
     }
     
-    /*
-    // Enemies can not collect items.
-    [enemies iterate];
-    while ((enemy = (Enemy *)[enemies next]) != nil) {
-      
-      // For the entire size of the hero
-      // see if he is standing on an item
-      for (x = 0; x < [enemy getWidth]; x++) {
-        for (y = 0; y < [enemy getHeight]; y++) {
-          
-          // If an enemy is standing on the item
-          if ([item getX] == [enemy getX] + x && [item getY] == [enemy getY] + y) {
-            [item collectedBy: enemy];
-            [items remove: item];
-            return self;
-          }
-          
-        }
-      }
-      
-    }
-    */
-    
   }
   
-  return self;
+  [iterator free];
   
+  return self;
 }
 
 
@@ -215,11 +194,12 @@ typedef enum {
 
 - updateEnemies {
   
-  Enemy *enemy;
-  
   // Update the enemies and remove any that are dead.
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList:enemies];
+  
+  while ([iterator hasNext]) {
+    
+    Enemy *enemy = (Enemy *)[iterator next];
     
     [enemy update];
     
@@ -229,6 +209,8 @@ typedef enum {
     }
     
   }
+  
+  [iterator free];
   
   return self;
   
@@ -288,7 +270,7 @@ typedef enum {
 - addCharacter: (Character *) aCharacter {
   if (aCharacter != nil) {
     [aCharacter setWorld: self];
-    [enemies append: aCharacter];
+    [enemies add: aCharacter];
   }
   return self;
 }
@@ -296,7 +278,7 @@ typedef enum {
 
 - addItem: (Powerup *) anItem {
   if (anItem != nil) {
-    [items append: anItem];
+    [items add: anItem];
   }
   return self;
 }
@@ -304,7 +286,7 @@ typedef enum {
 
 - addHelpTile: (id) aHelpTile {
   if (aHelpTile != nil) {
-    [helpTiles append: aHelpTile];
+    [helpTiles add: aHelpTile];
   }
   return self;
 }
@@ -317,7 +299,6 @@ typedef enum {
 
 - (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
   
-  Enemy *enemy;
   int i, j;
   int m, n;
   
@@ -339,8 +320,10 @@ typedef enum {
         }
       }
       
-      [enemies iterate];
-      while ((enemy = (Enemy *)[enemies next]) != nil) {
+      Iterator *iterator = [[Iterator alloc] initList:enemies];
+      
+      while ([iterator hasNext]) {
+        Enemy *enemy = (Enemy *)[iterator next]; 
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -349,6 +332,8 @@ typedef enum {
           }
         }
       }
+      
+      [iterator free];
       
     }
   }
@@ -360,7 +345,6 @@ typedef enum {
 
 - attackFromTeam: (int) team atX: (int) x andY: (int) y {
   
-  Enemy *enemy;
   int m, n;
   
   for (m = 0; m < [hero getWidth]; m++) {
@@ -371,8 +355,10 @@ typedef enum {
     }
   }
   
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList:enemies];
+  
+  while ([iterator hasNext]) {
+    Enemy *enemy = (Enemy *)[iterator next];
     for (m = 0; m < [enemy getWidth]; m++) {
       for (n = 0; n < [enemy getHeight]; n++) {
         if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
@@ -381,6 +367,8 @@ typedef enum {
       }
     }
   }
+  
+  [iterator free];
   
   return self;
   
@@ -414,7 +402,6 @@ typedef enum {
 
 - (BOOL) isInhabitedAtX: (int) x andY: (int) y {
   
-  Enemy *enemy;
   int i, j;
   int m, n;
   
@@ -436,8 +423,10 @@ typedef enum {
         }
       }
       
-      [enemies iterate];
-      while ((enemy = (Enemy *)[enemies next]) != nil) {
+      Iterator *iterator = [[Iterator alloc] initList:enemies];
+      
+      while ([iterator hasNext]) {
+        Enemy *enemy = (Enemy *)[iterator next];
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -446,6 +435,8 @@ typedef enum {
           }
         }
       }
+      
+      [iterator free];
       
     }
   }
@@ -604,7 +595,7 @@ typedef enum {
       [roomFactory setPathBeginX: entranceX];
       [roomFactory setPathBeginY: entranceY];
       nextRoom = [self createNextRoom];
-      [rooms append: nextRoom];
+      [rooms add: nextRoom];
       
       room = nextRoom;
       
@@ -655,46 +646,44 @@ typedef enum {
 
 - drawTerrain: (BITMAP *) buffer {
   
-  HelpTile *helpTile;
-  
   [room draw: buffer];
   
   // Draw help tiles.
-  [helpTiles iterate];
-  while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList:helpTiles];
+  while ([iterator hasNext]) {
+    HelpTile *helpTile = (HelpTile *)[iterator next];
     [helpTileAnimation draw: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
   }
+  [iterator free];
   
   return self;
-  
 }
 
 
-- drawCharacters: (BITMAP *) buffer{
+- drawCharacters: (BITMAP *) buffer {
   
-  Enemy *enemy;
-  Powerup *item;
-  
-  [items iterate];
-  while ((item = (Powerup *)[items next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList:items];
+  while ([iterator hasNext]) {
+    Powerup *item = (Powerup *)[iterator next];
     [item draw: buffer];
   }
+  [iterator free];
   
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
+  iterator = [[Iterator alloc] initList:enemies];
+  while ([iterator hasNext]) {
+    Enemy *enemy = (Enemy *)[iterator next];
     [enemy draw: buffer];
   }
+  [iterator free];
   
   [hero draw: buffer];
   
   return self;
-  
 }
 
 
 - drawUserInterface: (BITMAP *) buffer {
   
-  HelpTile *helpTile;
   char moneyLine[256];
   int i;
   
@@ -711,16 +700,16 @@ typedef enum {
   resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  [helpTiles iterate];
-  
-  while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
+  Iterator *iterator = [[Iterator alloc] initList:helpTiles];
+  while ([iterator hasNext]) {
+    HelpTile *helpTile = (HelpTile *)[iterator next];
     if ([helpTile getX] == [hero getX] && [helpTile getY] == [hero getY]) {
       [helpTile draw: buffer];
     }
   }
+  [iterator free];
   
   return self;
-  
 }
 
 

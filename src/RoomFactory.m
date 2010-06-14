@@ -154,15 +154,15 @@ int roomNumber;
 
 - (BOOL) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h {
   
-  Character *character;
   int i, j;
   int m, n;
   
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       
-      [list iterate];
-      while ((character = (Character *)[list next]) != nil) {
+      Iterator *iterator = [[Iterator alloc] initList:list];
+      while ([iterator hasNext]) {
+        Character *character = (Character *)[iterator next];
         for (m = 0; m < [character getWidth]; m++) {
           for (n = 0; n < [character getHeight]; n++) {
             if (x + i == [character getX] + m && y + j == [character getY] + n) {
@@ -171,6 +171,7 @@ int roomNumber;
           }
         }
       }
+      [iterator free];
       
     }
   }
@@ -281,7 +282,7 @@ int roomNumber;
             [enemy setWorld: world];
             [enemy setX: x];
             [enemy setY: y];
-            [list append: enemy];
+            [list add: enemy];
           }
           
         }
@@ -337,12 +338,11 @@ int roomNumber;
       [heart setY: backupY];
     }
     
-    [list append: heart];
+    [list add: heart];
     
   }
   
   return list;
-  
 }
 
 

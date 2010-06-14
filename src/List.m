@@ -1,15 +1,28 @@
+#include <string.h>
+
 #import "List.h"
+
+
+#define NODE_NAME_LENGTH 256
+
+
+@interface List (PrivateMethods)
+- (Node *)headNode;
+@end
 
 
 @interface Node : Object {
   id item;
+  char name[NODE_NAME_LENGTH];
   Node *next;
   Node *prev;
 }
 - setItem:(id)anItem;
+- setName:(char *)aName;
 - setNext:(Node *)node;
 - setPrev:(Node *)node;
 - (id)item;
+- (char *)name;
 - (Node *)next;
 - (Node *)prev;
 @end
@@ -20,6 +33,12 @@
 
 - setItem:(id)anItem {
   item = anItem;
+  return self;
+}
+
+
+- setName:(char *)aName {
+  strncpy(name, aName, NODE_NAME_LENGTH);
   return self;
 }
 
@@ -41,6 +60,11 @@
 }
 
 
+- (char *)name {
+  return name;
+}
+
+
 - (Node *)next {
   return next;
 }
@@ -58,31 +82,32 @@
 
 
 - free {
-  
-  Node *node;
-  Node *tmp;
-  
-  node = head;
-  
-  while (node) {
-    tmp = [node next];
-    [[node item] free];
-    [node free];
-    node = tmp;
+  while (head) {
+    [self remove:[head item]];
   }
-  
   return [super free];
 }
 
 
-- append:(id)item {
+- freeIncludingItems {
+  while (head) {
+    [[head item] free];
+    [self remove:[head item]];
+  }
+  return [super free];
+}
+
+
+- add:(id)item {
   
-  Node *node;
+  if (!item) {
+    return self;
+  }
   
-  node = [[Node alloc] init];
+  Node *node = [[Node alloc] init];
   [node setItem:item];
   
-  if (head == nil) {
+  if (!head) {
     head = node;
   } else {
     [node setPrev: tail];
@@ -96,17 +121,27 @@
 }
 
 
-- remove:(id)item {
+- add:(id)item named:(char *)name {
+  [self add:item];
+  [tail setName:name];
+  return self;
+}
+
+
+- (id)remove:(id)item {
+
+  if (!item) {
+    return nil;
+  }
   
-  Node *node;
-  
-  node = head;
+  Node *node = head;
   
   while (node && [node item] != item) {
     node = [node next];
   }
   
   if (!node) {
+    // Item not found!
     return nil;
   }
   
@@ -129,17 +164,82 @@
   [node free];
   size--;
   
-  return self;
+  return item;
+}
+
+
+- (id)removeItemNamed:(char *)name {
+
+  Node *node = head;
+  
+  while (node && strncmp([node name], name, NODE_NAME_LENGTH) != 0) {
+    node = [node next];
+  }
+  
+  if (!node) {
+    // Item not found!
+    return nil;
+  }
+  
+  if (node == head && node == tail) {
+    head = nil;
+    tail = nil;
+  }
+  
+  if (node == head) {
+    head = [head next];
+    [head setPrev:nil];
+  } else if (node == tail) {
+    tail = [tail prev];
+    [tail setNext:nil];
+  } else {
+    [[node prev] setNext: [node next]];
+    [[node next] setPrev: [node prev]];
+  }
+  
+  id item = [node item];
+
+  [node free];
+  size--;
+  
+  return item;
+}
+
+
+- (id)itemAtIndex:(int)index {
+  
+  Node *node = head;
+  int count = 0;
+  
+  if (index < 0) {
+    return nil;
+  }
+  
+  while (node && count != index) {
+    node = [node next];
+    count++;
+  }
+  
+  return [node item];
+}
+
+
+- (id)itemNamed:(char *)name {
+  
+  Node *node = head;
+  
+  while (node && strncmp([node name], name, NODE_NAME_LENGTH) != 0) {
+    node = [node next];
+  }
+  
+  return [node item];
 }
 
 
 - (int)findIndexOf:(id)item {
   
-  Node *node;
-  int index;
-  
-  node = head;
-  index = 0;
+  Node *node = head;
+  int index = 0;
   
   if (!item) {
     return -1;
@@ -155,32 +255,6 @@
   }
   
   return index;
-  
-}
-
-
-- (id)itemAtIndex:(int)index {
-  
-  Node *node;
-  int count;
-  
-  node = head;
-  count = 0;
-  
-  if (index < 0) {
-    return nil;
-  }
-  
-  while (node && count != index) {
-    node = [node next];
-    count++;
-  }
-  
-  if (!node) {
-    return nil;
-  }
-  
-  return [node item];
 }
 
 
@@ -202,26 +276,40 @@
 @end
 
 
-@implementation List (Iterator)
+@implementation List (PrivateMethods)
+
+- (Node *)headNode {
+  return head;
+}
+
+@end
 
 
-- iterate {
-  next = head;
+@implementation Iterator
+
+
+- initList:(List *)aList {
+  self = [self init];
+  if (self) {
+    list = aList;
+    next = [list headNode];
+  }
   return self;
 }
 
 
-- (id)next {
-  
-  id item;
-  
-  if (!next) {
-    return nil;
+- (BOOL)hasNext {
+  if (next) {
+    return YES;
   }
-  
+  return NO;
+}
+
+
+- (id)next {
+  id item;
   item = [next item];
-  next = [next next];
-  
+  next = [next next]; // :-P
   return item;
 }
 
