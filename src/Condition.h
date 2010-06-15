@@ -5,9 +5,6 @@
 
 
 @interface Condition : Object
-
-- (BOOL)isMet;
-- (Command *)nextCommand;
-
+- check;
 @end
 

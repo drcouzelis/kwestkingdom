@@ -34,8 +34,20 @@
 
 
 - free {
-  [commands free];
+  [commands freeIncludingItems];
   return [super free];
+}
+
+
+- addCommand:(Command *)aCommand named:(char *)aName {
+  [commands add:aCommand named:aName];
+  return self;
+}
+
+
+- setCommandTo:(char *)aName {
+  command = [commands itemNamed:aName];
+  return self;
 }
 
 

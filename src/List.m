@@ -291,8 +291,7 @@
 - initList:(List *)aList {
   self = [self init];
   if (self) {
-    list = aList;
-    next = [list headNode];
+    next = [aList headNode];
   }
   return self;
 }

@@ -41,6 +41,9 @@ struct BITMAP;
 
 - setSpeed:(int)fps;
 
+- addCommand:(Command *)aCommand named:(char *)aName;
+- setCommandTo:(char *)aName;
+
 - update;
 - draw:(BITMAP *)canvas;
 

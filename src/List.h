@@ -32,7 +32,6 @@
 
 
 @interface Iterator : Object {
-  List *list;
   Node *next;
 }
 - initList:(List *)aList;

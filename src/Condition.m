@@ -5,12 +5,7 @@
 @implementation Condition
 
 
-- (BOOL)isMet {
-  return NO;
-}
-
-
-- (Command *)nextCommand {
+- check {
   return nil;
 }
 

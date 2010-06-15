@@ -2,15 +2,22 @@
 
 
 @class Condition;
+@class List;
 
 
 @interface Command : Object {
  @private
-  Condition *condition;
+  List *conditions;
 }
 
-- execute;
+- addCondition:(Condition *)aCondition;
 
+- start;
+- execute;
+- finish;
+
+- enable;
+- disable;
 
 @end
 
