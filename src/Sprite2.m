@@ -1,7 +1,4 @@
-#include <allegro.h>
-
 #import "Animation.h"
-#import "Command.h"
 #import "List.h"
 #import "KwestKingdom.h"
 #import "Resources.h"
@@ -26,7 +23,7 @@
     world = aWorld;
     w = width;
     h = height;
-    commands = [[List alloc] init];
+    animations = [[List alloc] init];
   }
   
   return self;
@@ -34,26 +31,27 @@
 
 
 - free {
-  [commands freeIncludingItems];
+  [animations freeIncludingItems];
   return [super free];
 }
 
 
-- addCommand:(Command *)aCommand named:(char *)aName {
-  [commands add:aCommand named:aName];
+- addAnimation:(Animation *)anAnimation named:(char *)aName {
+  [animations add:anAnimation named:aName];
+  animation = anAnimation;
   return self;
 }
 
 
-- setCommandTo:(char *)aName {
-  command = [commands itemNamed:aName];
+- setAnimationTo:(char *)aName {
+  animation = [animations itemNamed:aName];
+  [animation reset];
   return self;
 }
 
 
 - update {
   [animation update];
-  [command execute];
   [self move];
   return self;
 }
@@ -140,6 +138,11 @@
 - moveToY:(int)pos {
   y = pos;
   return self;
+}
+
+
+- (World *)world {
+  return world;
 }
 
 

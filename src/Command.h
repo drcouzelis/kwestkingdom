@@ -8,6 +8,7 @@
 @interface Command : Object {
  @private
   List *conditions;
+  BOOL enabled;
 }
 
 - addCondition:(Condition *)aCondition;

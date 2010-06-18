@@ -1,3 +1,14 @@
+#import "Animation.h"
+#import "Character.h"
+#import "Enemy.h"
+#import "HelpTile.h"
+#import "Hero.h"
+#import "List.h"
+#import "Powerup.h"
+#import "Room.h"
+#import "RoomFactory.h"
+#import "Snapshot.h"
+#import "Text.h"
 #import "World.h"
 
 

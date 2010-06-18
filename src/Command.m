@@ -20,9 +20,13 @@
 }
 
 
-
 - addCondition:(Condition *)aCondition {
   [conditions add:aCondition];
+  return self;
+}
+
+
+- start {
   return self;
 }
 
@@ -34,6 +38,23 @@
     [condition check];
   }
   [iterator free];
+  return self;
+}
+
+
+- finish {
+  return self;
+}
+
+
+- enable {
+  enabled = YES;
+  return self;
+}
+
+
+- disable {
+  enabled = NO;
   return self;
 }
 

@@ -1,14 +1,12 @@
 #import <objc/Object.h>
 
+#include <allegro.h>
+
 
 @class Animation;
-@class Command;
 @class List;
 @class Object;
 @class World;
-
-
-struct BITMAP;
 
 
 @interface Sprite2 : Object {
@@ -28,21 +26,17 @@ struct BITMAP;
   int speed; // In FPS
   
   Animation *animation;
+  List *animations;
   
   World *world;
-  
-  // Keep a collection of commands
-  // Select the one you want via a string "label"
-  Command *command; // TEMP
-  List *commands;
 }
 
 - initWorld:(World *)aWorld width:(int)width height:(int)height;
 
 - setSpeed:(int)fps;
 
-- addCommand:(Command *)aCommand named:(char *)aName;
-- setCommandTo:(char *)aName;
+- addAnimation:(Animation *)anAnimation named:(char *)aName;
+- setAnimationTo:(char *)aName;
 
 - update;
 - draw:(BITMAP *)canvas;
@@ -66,6 +60,8 @@ struct BITMAP;
 
 // Ensure the sprite stays inside these boundaries
 - boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right;
+
+- (World *)world;
 
 @end
 

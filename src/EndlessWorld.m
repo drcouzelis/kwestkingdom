@@ -1,21 +1,10 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
+// TEMP
+#import "Animation.h"
+#import "Character2.h"
+#import "CharacterCommands.h"
+#import "Resources.h"
+#import "Sprite2.h"
+
 #import "EndlessWorld.h"
 
 
@@ -28,10 +17,42 @@
   
   if (self) {
     difficulty = 100;
+
+    // TEMP
+    Sprite2 *sprite = [[Sprite2 alloc] initWorld:self width:1 height:1];
+    [sprite setX:5];
+    [sprite setY:5];
+    Animation *anim = [[Animation alloc] init];
+    [anim addFrame:getImage(IMG_CHOMPER_STAND_1)];
+    [anim addFrame:getImage(IMG_CHOMPER_STAND_2)];
+    [anim addFrame:getImage(IMG_CHOMPER_STAND_3)];
+    [anim addFrame:getImage(IMG_CHOMPER_STAND_2)];
+    [anim setLoop:YES];
+    [anim setSpeed:6];
+    [sprite addAnimation:anim named:"STANDING"];
+    enemy = [[Character2 alloc] initSprite:sprite];
+    Command *command = [[WanderCommand alloc] initCharacter:enemy];
+    [enemy addCommand:command named:"WANDER"];
   }
   
   return self;
   
+}
+
+
+// TEMP
+- update {
+  [super update];
+  [enemy update];
+  return self;
+}
+
+
+// TEMP
+- draw:(BITMAP *)canvas {
+  [super draw:canvas];
+  [enemy draw:canvas];
+  return self;
 }
 
 

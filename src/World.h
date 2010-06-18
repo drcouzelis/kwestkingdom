@@ -1,13 +1,18 @@
 #import <objc/Object.h>
-#import "Enemy.h"
-#import "HelpTile.h"
-#import "Hero.h"
-#import "List.h"
-#import "Powerup.h"
-#import "Room.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "Text.h"
+
+#include <allegro.h>
+
+
+@class Animation;
+@class Character;
+@class Enemy;
+@class HelpTile;
+@class Hero;
+@class List;
+@class Powerup;
+@class Room;
+@class RoomFactory;
+@class Snapshot;
 
 
 @interface World : Object {
