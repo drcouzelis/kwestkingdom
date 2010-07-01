@@ -6,11 +6,6 @@
 #define NODE_NAME_LENGTH 256
 
 
-@interface List (PrivateMethods)
-- (Node *)headNode;
-@end
-
-
 @interface Node : Object {
   id item;
   char name[NODE_NAME_LENGTH];
@@ -18,13 +13,18 @@
   Node *prev;
 }
 - setItem:(id)anItem;
-- setName:(char *)aName;
 - setNext:(Node *)node;
 - setPrev:(Node *)node;
+- setName:(char *)aName;
 - (id)item;
-- (char *)name;
 - (Node *)next;
 - (Node *)prev;
+- (char *)name;
+@end
+
+
+@interface List (Private)
+- removeNode:(Node *)node;
 @end
 
 
@@ -33,12 +33,6 @@
 
 - setItem:(id)anItem {
   item = anItem;
-  return self;
-}
-
-
-- setName:(char *)aName {
-  strncpy(name, aName, NODE_NAME_LENGTH);
   return self;
 }
 
@@ -55,13 +49,14 @@
 }
 
 
-- (id)item {
-  return item;
+- setName:(char *)aName {
+  strncpy(name, aName, NODE_NAME_LENGTH);
+  return self;
 }
 
 
-- (char *)name {
-  return name;
+- (id)item {
+  return item;
 }
 
 
@@ -75,6 +70,11 @@
 }
 
 
+- (char *)name {
+  return name;
+}
+
+
 @end
 
 
@@ -82,23 +82,25 @@
 
 
 - free {
-  while (head) {
-    [self remove:[head item]];
+  while (![self isEmpty]) {
+    [[self pop] free];
   }
   return [super free];
 }
 
 
-- freeIncludingItems {
-  while (head) {
-    [[head item] free];
-    [self remove:[head item]];
-  }
-  return [super free];
+- (int)size {
+  return size;
 }
 
 
-- add:(id)item {
+@end
+
+
+@implementation List (Insert)
+
+
+- insert:(id)item {
   
   if (!item) {
     return self;
@@ -107,25 +109,73 @@
   Node *node = [[Node alloc] init];
   [node setItem:item];
   
-  if (!head) {
-    head = node;
+  // Put the new node at the head of the list
+  if (!tail) {
+    tail = node;
   } else {
-    [node setPrev: tail];
-    [tail setNext: node];
+    [head setPrev:node];
+    [node setNext:head];
   }
+  head = node;
   
-  tail = node;
   size++;
   
   return self;
 }
 
 
-- add:(id)item named:(char *)name {
-  [self add:item];
+- insert:(id)item named:(char *)name {
+  [self insert:item];
   [tail setName:name];
   return self;
 }
+
+
+- push:(id)item {
+
+  if (!item) {
+    return self;
+  }
+  
+  Node *node = [[Node alloc] init];
+  [node setItem:item];
+  
+  // Put the new node at the tail of the list
+  if (!head) {
+    head = node;
+  } else {
+    [node setPrev:tail];
+    [tail setNext:node];
+  }
+  tail = node;
+  
+  size++;
+  
+  return self;
+}
+
+
+- push:(id)item named:(char *)name {
+  [self push:item];
+  [tail setName:name];
+  return self;
+}
+
+
+- enqueue:(id)item {
+  return [self push:item];
+}
+
+
+- enqueue:(id)item named:(char *)name {
+  return [self push:item named:name];
+}
+
+
+@end
+
+
+@implementation List (Remove)
 
 
 - (id)remove:(id)item {
@@ -145,65 +195,51 @@
     return nil;
   }
   
-  if (node == head && node == tail) {
-    head = nil;
-    tail = nil;
-  }
-  
-  if (node == head) {
-    head = [head next];
-    [head setPrev:nil];
-  } else if (node == tail) {
-    tail = [tail prev];
-    [tail setNext:nil];
-  } else {
-    [[node prev] setNext: [node next]];
-    [[node next] setPrev: [node prev]];
-  }
-  
-  [node free];
-  size--;
-  
-  return item;
+  return [self removeNode:node];
 }
 
 
 - (id)removeItemNamed:(char *)name {
-
   Node *node = head;
-  
   while (node && strncmp([node name], name, NODE_NAME_LENGTH) != 0) {
     node = [node next];
   }
-  
-  if (!node) {
-    // Item not found!
+  return [self removeNode:node];
+}
+
+
+- (id)removeItemAtIndex:(int)index {
+
+  if (index < 0 || index >= size) {
     return nil;
   }
   
-  if (node == head && node == tail) {
-    head = nil;
-    tail = nil;
+  Node *node = head;
+  int count = 0;
+  
+  while (count < index) {
+    node = [node next];
+    count++;
   }
   
-  if (node == head) {
-    head = [head next];
-    [head setPrev:nil];
-  } else if (node == tail) {
-    tail = [tail prev];
-    [tail setNext:nil];
-  } else {
-    [[node prev] setNext: [node next]];
-    [[node next] setPrev: [node prev]];
-  }
-  
-  id item = [node item];
-
-  [node free];
-  size--;
-  
-  return item;
+  return [self removeNode:node];
 }
+
+
+- (id)pop {
+  return [self removeNode:tail];
+}
+
+
+- (id)dequeue {
+  return [self removeNode:head];
+}
+
+
+@end
+
+
+@implementation List (Retrieve)
 
 
 - (id)itemAtIndex:(int)index {
@@ -211,11 +247,11 @@
   Node *node = head;
   int count = 0;
   
-  if (index < 0) {
+  if (index < 0 || index >= size) {
     return nil;
   }
   
-  while (node && count != index) {
+  while (count < index) {
     node = [node next];
     count++;
   }
@@ -233,6 +269,30 @@
   }
   
   return [node item];
+}
+
+
+- (id)first {
+  return [head item];
+}
+
+
+- (id)last {
+  return [tail item];
+}
+
+
+@end
+
+
+@implementation List (Query)
+
+
+- (BOOL) isEmpty {
+  if (size == 0) {
+    return YES;
+  }
+  return NO;
 }
 
 
@@ -258,41 +318,14 @@
 }
 
 
-- (id)head {
-  return [head item];
-}
-
-
-- (id)tail {
-  return [tail item];
-}
-
-
-- (int)size {
-  return size;
-}
-
-
 @end
 
 
-@implementation List (PrivateMethods)
-
-- (Node *)headNode {
-  return head;
-}
-
-@end
+@implementation List (Iterator)
 
 
-@implementation Iterator
-
-
-- initList:(List *)aList {
-  self = [self init];
-  if (self) {
-    next = [aList headNode];
-  }
+- iterate {
+  next = head;
   return self;
 }
 
@@ -306,9 +339,44 @@
 
 
 - (id)next {
-  id item;
-  item = [next item];
+  id item = [next item];
   next = [next next]; // :-P
+  return item;
+}
+
+
+@end
+
+
+@implementation List (Private)
+
+
+- removeNode:(Node *)node {
+
+  if (!node) {
+    return self;
+  }
+
+  if (node == head && node == tail) {
+    head = nil;
+    tail = nil;
+  }
+  
+  if (node == head) {
+    head = [head next];
+    [head setPrev:nil];
+  } else if (node == tail) {
+    tail = [tail prev];
+    [tail setNext:nil];
+  } else {
+    [[node prev] setNext: [node next]];
+    [[node next] setPrev: [node prev]];
+  }
+  
+  id item = [node item];
+  [node free];
+  size--;
+
   return item;
 }
 

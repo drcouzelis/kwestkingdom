@@ -19,7 +19,8 @@
     difficulty = 100;
 
     // TEMP
-    Sprite2 *sprite = [[Sprite2 alloc] initWorld:self width:1 height:1];
+    Sprite2 *sprite = [[Sprite2 alloc] initWidth:1 height:1];
+    [sprite setWorld:self];
     [sprite setX:5];
     [sprite setY:5];
     Animation *anim = [[Animation alloc] init];

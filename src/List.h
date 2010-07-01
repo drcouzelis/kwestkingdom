@@ -8,33 +8,47 @@
   Node *head;
   Node *tail;
   int size;
+  Node *next; // For the iterator
 }
-
-- freeIncludingItems; // Call "free" to keep the items in memory
-
-- add:(id)item;
-- add:(id)item named:(char *)name;
-
-- (id)remove:(id)item; // Returns a pointer to the item
-- (id)removeItemNamed:(char *)name; // This one does too
-
-- (id)itemAtIndex:(int)index;
-- (id)itemNamed:(char *)name;
-
-- (int)findIndexOf:(id)item;
-
-- (id)head; // Returns a pointer to the first item in the list...
-- (id)tail; // ...and the last item in the list
-
 - (int)size;
-
 @end
 
 
-@interface Iterator : Object {
-  Node *next;
-}
-- initList:(List *)aList;
+@interface List (Insert)
+- insert:(id)item;
+- insert:(id)item named:(char *)name;
+- push:(id)item;
+- push:(id)item named:(char *)name;
+- enqueue:(id)item;
+- enqueue:(id)item named:(char *)name;
+@end
+
+
+@interface List (Remove)
+- (id)remove:(id)item; // Returns a pointer to the item
+- (id)removeItemNamed:(char *)name; // This one does too
+- (id)removeItemAtIndex:(int)index;
+- (id)pop;
+- (id)dequeue;
+@end
+
+
+@interface List (Retrieve)
+- (id)itemAtIndex:(int)index;
+- (id)itemNamed:(char *)name;
+- (id)first; // Returns a pointer to the first item in the list...
+- (id)last; // ...and the last item in the list
+@end
+
+
+@interface List (Query)
+- (BOOL)isEmpty;
+- (int)findIndexOf:(id)item;
+@end
+
+
+@interface List (Iterator)
+- iterate;
 - (BOOL)hasNext;
 - (id)next;
 @end

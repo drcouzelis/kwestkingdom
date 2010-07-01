@@ -15,13 +15,13 @@
 
 
 - free {
-  [conditions freeIncludingItems];
+  [conditions free];
   return [super free];
 }
 
 
 - addCondition:(Condition *)aCondition {
-  [conditions add:aCondition];
+  [conditions push:aCondition];
   return self;
 }
 
@@ -32,12 +32,11 @@
 
 
 - execute {
-  Iterator *iterator = [[Iterator alloc] initList:conditions];
-  while ([iterator hasNext]) {
-    Condition *condition = (Condition *)[iterator next];
+  [conditions iterate];
+  while ([conditions hasNext]) {
+    Condition *condition = (Condition *)[conditions next];
     [condition check];
   }
-  [iterator free];
   return self;
 }
 

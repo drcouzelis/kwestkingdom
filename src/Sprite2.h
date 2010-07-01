@@ -31,12 +31,12 @@
   World *world;
 }
 
-- initWorld:(World *)aWorld width:(int)width height:(int)height;
+- initWidth:(int)width height:(int)height;
 
 - setSpeed:(int)fps;
 
 - addAnimation:(Animation *)anAnimation named:(char *)aName;
-- setAnimationTo:(char *)aName;
+- setAnimationNamed:(char *)aName;
 
 - update;
 - draw:(BITMAP *)canvas;
@@ -61,6 +61,7 @@
 // Ensure the sprite stays inside these boundaries
 - boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right;
 
+- setWorld:(World *)aWorld;
 - (World *)world;
 
 @end

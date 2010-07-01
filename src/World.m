@@ -52,7 +52,7 @@ typedef enum {
     [room setExitToPrevRoomY: -1];
     
     rooms = [[List alloc] init];
-    [rooms add: room];
+    [rooms push: room];
     
     enemies = [[List alloc] init];
     items = [[List alloc] init];
@@ -106,11 +106,11 @@ typedef enum {
   int x;
   int y;
   
-  Iterator *iterator = [[Iterator alloc] initList: items];
+  [items iterate];
   
-  while ([iterator hasNext]) {
+  while ([items hasNext]) {
     
-    Powerup *item = (Powerup *)[iterator next]; 
+    Powerup *item = (Powerup *)[items next]; 
     
     [item update];
     
@@ -130,8 +130,6 @@ typedef enum {
     }
     
   }
-  
-  [iterator free];
   
   return self;
 }
@@ -206,11 +204,11 @@ typedef enum {
 - updateEnemies {
   
   // Update the enemies and remove any that are dead.
-  Iterator *iterator = [[Iterator alloc] initList:enemies];
+  [enemies iterate];
   
-  while ([iterator hasNext]) {
+  while ([enemies hasNext]) {
     
-    Enemy *enemy = (Enemy *)[iterator next];
+    Enemy *enemy = (Enemy *)[enemies next];
     
     [enemy update];
     
@@ -221,10 +219,7 @@ typedef enum {
     
   }
   
-  [iterator free];
-  
   return self;
-  
 }
 
 
@@ -281,7 +276,7 @@ typedef enum {
 - addCharacter: (Character *) aCharacter {
   if (aCharacter != nil) {
     [aCharacter setWorld: self];
-    [enemies add: aCharacter];
+    [enemies push: aCharacter];
   }
   return self;
 }
@@ -289,7 +284,7 @@ typedef enum {
 
 - addItem: (Powerup *) anItem {
   if (anItem != nil) {
-    [items add: anItem];
+    [items push: anItem];
   }
   return self;
 }
@@ -297,7 +292,7 @@ typedef enum {
 
 - addHelpTile: (id) aHelpTile {
   if (aHelpTile != nil) {
-    [helpTiles add: aHelpTile];
+    [helpTiles push: aHelpTile];
   }
   return self;
 }
@@ -331,10 +326,10 @@ typedef enum {
         }
       }
       
-      Iterator *iterator = [[Iterator alloc] initList:enemies];
+      [enemies iterate];
       
-      while ([iterator hasNext]) {
-        Enemy *enemy = (Enemy *)[iterator next]; 
+      while ([enemies hasNext]) {
+        Enemy *enemy = (Enemy *)[enemies next]; 
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -343,8 +338,6 @@ typedef enum {
           }
         }
       }
-      
-      [iterator free];
       
     }
   }
@@ -366,10 +359,10 @@ typedef enum {
     }
   }
   
-  Iterator *iterator = [[Iterator alloc] initList:enemies];
+  [enemies iterate];
   
-  while ([iterator hasNext]) {
-    Enemy *enemy = (Enemy *)[iterator next];
+  while ([enemies hasNext]) {
+    Enemy *enemy = (Enemy *)[enemies next];
     for (m = 0; m < [enemy getWidth]; m++) {
       for (n = 0; n < [enemy getHeight]; n++) {
         if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
@@ -378,8 +371,6 @@ typedef enum {
       }
     }
   }
-  
-  [iterator free];
   
   return self;
   
@@ -434,10 +425,10 @@ typedef enum {
         }
       }
       
-      Iterator *iterator = [[Iterator alloc] initList:enemies];
+      [enemies iterate];
       
-      while ([iterator hasNext]) {
-        Enemy *enemy = (Enemy *)[iterator next];
+      while ([enemies hasNext]) {
+        Enemy *enemy = (Enemy *)[enemies next];
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -446,8 +437,6 @@ typedef enum {
           }
         }
       }
-      
-      [iterator free];
       
     }
   }
@@ -509,7 +498,6 @@ typedef enum {
 - changeRooms {
   
   Room *nextRoom;
-  Room *firstRoom;
   int entranceX;
   int entranceY;
   
@@ -576,8 +564,8 @@ typedef enum {
       
     } else {
       
-      entranceX = [(Room *)[rooms tail] getExitToNextRoomX];
-      entranceY = [(Room *)[rooms tail] getExitToNextRoomY];
+      entranceX = [(Room *)[rooms last] getExitToNextRoomX];
+      entranceY = [(Room *)[rooms last] getExitToNextRoomY];
       
       // Bound the entrance.
       if (entranceX < 0) {
@@ -606,17 +594,14 @@ typedef enum {
       [roomFactory setPathBeginX: entranceX];
       [roomFactory setPathBeginY: entranceY];
       nextRoom = [self createNextRoom];
-      [rooms add: nextRoom];
+      [rooms push: nextRoom];
       
       room = nextRoom;
       
       // Delete the oldest room.
       if ([rooms size] > 2) {
-        firstRoom = (Room *)[rooms head];
-        [rooms remove: [rooms head]];
-        [firstRoom free];
-        firstRoom = (Room *)[rooms head];
-        [firstRoom removeExitToPrevRoom];
+        [[rooms dequeue] free];
+        [(Room *)[rooms first] removeExitToPrevRoom];
       }
       
     }
@@ -660,12 +645,12 @@ typedef enum {
   [room draw: buffer];
   
   // Draw help tiles.
-  Iterator *iterator = [[Iterator alloc] initList:helpTiles];
-  while ([iterator hasNext]) {
-    HelpTile *helpTile = (HelpTile *)[iterator next];
+  [helpTiles iterate];
+
+  while ([helpTiles hasNext]) {
+    HelpTile *helpTile = (HelpTile *)[helpTiles next];
     [helpTileAnimation draw: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
   }
-  [iterator free];
   
   return self;
 }
@@ -673,19 +658,19 @@ typedef enum {
 
 - drawCharacters: (BITMAP *) buffer {
   
-  Iterator *iterator = [[Iterator alloc] initList:items];
-  while ([iterator hasNext]) {
-    Powerup *item = (Powerup *)[iterator next];
+  [items iterate];
+
+  while ([items hasNext]) {
+    Powerup *item = (Powerup *)[items next];
     [item draw: buffer];
   }
-  [iterator free];
   
-  iterator = [[Iterator alloc] initList:enemies];
-  while ([iterator hasNext]) {
-    Enemy *enemy = (Enemy *)[iterator next];
+  [enemies iterate];
+
+  while ([enemies hasNext]) {
+    Enemy *enemy = (Enemy *)[enemies next];
     [enemy draw: buffer];
   }
-  [iterator free];
   
   [hero draw: buffer];
   
@@ -711,14 +696,14 @@ typedef enum {
   resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  Iterator *iterator = [[Iterator alloc] initList:helpTiles];
-  while ([iterator hasNext]) {
-    HelpTile *helpTile = (HelpTile *)[iterator next];
+  [helpTiles iterate];
+
+  while ([helpTiles hasNext]) {
+    HelpTile *helpTile = (HelpTile *)[helpTiles next];
     if ([helpTile getX] == [hero getX] && [helpTile getY] == [hero getY]) {
       [helpTile draw: buffer];
     }
   }
-  [iterator free];
   
   return self;
 }

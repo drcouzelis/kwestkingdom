@@ -160,9 +160,9 @@ int roomNumber;
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       
-      Iterator *iterator = [[Iterator alloc] initList:list];
-      while ([iterator hasNext]) {
-        Character *character = (Character *)[iterator next];
+      [list iterate];
+      while ([list hasNext]) {
+        Character *character = (Character *)[list next];
         for (m = 0; m < [character getWidth]; m++) {
           for (n = 0; n < [character getHeight]; n++) {
             if (x + i == [character getX] + m && y + j == [character getY] + n) {
@@ -171,7 +171,6 @@ int roomNumber;
           }
         }
       }
-      [iterator free];
       
     }
   }
@@ -282,7 +281,7 @@ int roomNumber;
             [enemy setWorld: world];
             [enemy setX: x];
             [enemy setY: y];
-            [list add: enemy];
+            [list push: enemy];
           }
           
         }
@@ -338,7 +337,7 @@ int roomNumber;
       [heart setY: backupY];
     }
     
-    [list add: heart];
+    [list push: heart];
     
   }
   

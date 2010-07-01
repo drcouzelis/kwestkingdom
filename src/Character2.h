@@ -34,11 +34,12 @@ typedef enum {
 
 - initSprite:(Sprite2 *)aSprite;
 
+- takeTurn;
 - update;
 - draw:(BITMAP *)canvas;
 
 - addCommand:(Command *)aCommand named:(char *)aName;
-- setCommandTo:(char *)aName;
+- setCommandNamed:(char *)aName;
 
 - (Sprite2 *)sprite;
 

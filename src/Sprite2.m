@@ -15,12 +15,11 @@
 @implementation Sprite2
 
 
-- initWorld:(World *)aWorld width:(int)width height:(int)height {
+- initWidth:(int)width height:(int)height {
   
   self = [self init];
   
   if (self) {
-    world = aWorld;
     w = width;
     h = height;
     animations = [[List alloc] init];
@@ -31,19 +30,19 @@
 
 
 - free {
-  [animations freeIncludingItems];
+  [animations free];
   return [super free];
 }
 
 
 - addAnimation:(Animation *)anAnimation named:(char *)aName {
-  [animations add:anAnimation named:aName];
+  [animations push:anAnimation named:aName];
   animation = anAnimation;
   return self;
 }
 
 
-- setAnimationTo:(char *)aName {
+- setAnimationNamed:(char *)aName {
   animation = [animations itemNamed:aName];
   [animation reset];
   return self;
@@ -137,6 +136,12 @@
 
 - moveToY:(int)pos {
   y = pos;
+  return self;
+}
+
+
+- setWorld:(World *)aWorld {
+  world = aWorld;
   return self;
 }
 

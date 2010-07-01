@@ -19,13 +19,18 @@
 
 - free {
   [sprite free];
-  [commands freeIncludingItems];
+  [commands free];
   return [super free];
 }
 
 
-- update {
+- takeTurn {
   [command execute];
+  return self;
+}
+
+
+- update {
   [sprite update];
   return self;
 }
@@ -38,13 +43,13 @@
 
 
 - addCommand:(Command *)aCommand named:(char *)aName {
-  [commands add:aCommand named:aName];
+  [commands push:aCommand named:aName];
   command = aCommand;
   return self;
 }
 
 
-- setCommandTo:(char *)aName {
+- setCommandNamed:(char *)aName {
   [command finish];
   command = [commands itemNamed:aName];
   [command start];
