@@ -3,12 +3,12 @@
 #import "List.h"
 
 
-#define NODE_NAME_LENGTH 256
+#define MAX_LIST_NAME_LENGTH 256
 
 
 @interface Node : Object {
   id item;
-  char name[NODE_NAME_LENGTH];
+  char name[MAX_LIST_NAME_LENGTH];
   Node *next;
   Node *prev;
 }
@@ -50,7 +50,7 @@
 
 
 - setName:(char *)aName {
-  strncpy(name, aName, NODE_NAME_LENGTH);
+  strncpy(name, aName, MAX_LIST_NAME_LENGTH);
   return self;
 }
 
@@ -201,7 +201,7 @@
 
 - (id)removeItemNamed:(char *)name {
   Node *node = head;
-  while (node && strncmp([node name], name, NODE_NAME_LENGTH) != 0) {
+  while (node && strncmp([node name], name, MAX_LIST_NAME_LENGTH) != 0) {
     node = [node next];
   }
   return [self removeNode:node];
@@ -264,7 +264,7 @@
   
   Node *node = head;
   
-  while (node && strncmp([node name], name, NODE_NAME_LENGTH) != 0) {
+  while (node && strncmp([node name], name, MAX_LIST_NAME_LENGTH) != 0) {
     node = [node next];
   }
   

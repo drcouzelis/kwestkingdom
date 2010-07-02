@@ -36,7 +36,8 @@
 - setSpeed:(int)fps;
 
 - addAnimation:(Animation *)anAnimation named:(char *)aName;
-- setAnimationNamed:(char *)aName;
+- (Animation *)animationNamed:(char *)aName;
+- setAnimation:(Animation *)anAnimation;
 
 - update;
 - draw:(BITMAP *)canvas;

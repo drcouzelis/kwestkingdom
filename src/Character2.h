@@ -3,7 +3,7 @@
 #include <allegro.h>
 
 
-@class Command;
+@class CharacterCommand;
 @class List;
 @class Sprite2;
 
@@ -18,27 +18,26 @@ typedef enum {
 @interface Character2 : Object {
  @private
   Sprite2 *sprite;
-
+  
   int health;
   int maxHealth;
   int money;
   int team; // Characters on the same team can't hurt each other.
-
+  
   int turns;
-
+  
   // Keep a collection of commands
   // Select the one you want via a string "label"
-  Command *command; // TEMP
+  CharacterCommand *command; // TEMP
   List *commands;
 }
 
 - initSprite:(Sprite2 *)aSprite;
 
-- takeTurn;
 - update;
 - draw:(BITMAP *)canvas;
 
-- addCommand:(Command *)aCommand named:(char *)aName;
+- addCommand:(CharacterCommand *)aCommand named:(char *)aName;
 - setCommandNamed:(char *)aName;
 
 - (Sprite2 *)sprite;
@@ -47,9 +46,9 @@ typedef enum {
 
 
 @interface Character2 (Moves)
-- (BOOL)isWaiting;
+- takeTurn;
+- (BOOL)finishedTurn;
 - wait;
-- go;
 @end
 
 

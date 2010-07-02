@@ -1,5 +1,5 @@
 #import "Character2.h"
-#import "Command.h"
+#import "CharacterCommands.h"
 #import "List.h"
 #import "Sprite2.h"
 
@@ -24,12 +24,6 @@
 }
 
 
-- takeTurn {
-  [command execute];
-  return self;
-}
-
-
 - update {
   [sprite update];
   return self;
@@ -42,7 +36,8 @@
 }
 
 
-- addCommand:(Command *)aCommand named:(char *)aName {
+- addCommand:(CharacterCommand *)aCommand named:(char *)aName {
+  [aCommand setCharacter:self];
   [commands push:aCommand named:aName];
   command = aCommand;
   return self;
@@ -68,7 +63,7 @@
 @implementation Character2 (Moves)
 
 
-- (BOOL)isWaiting {
+- (BOOL)finishedTurn {
   if (turns > 0) {
     return YES;
   }
@@ -76,10 +71,13 @@
 }
 
 
-- go {
+- takeTurn {
   turns--;
   if (turns < 0) {
     turns = 0;
+  }
+  if (turns == 0) {
+    [command execute];
   }
   return self;
 }

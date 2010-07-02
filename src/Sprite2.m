@@ -37,14 +37,18 @@
 
 - addAnimation:(Animation *)anAnimation named:(char *)aName {
   [animations push:anAnimation named:aName];
-  animation = anAnimation;
+  animation = [anAnimation reset];
   return self;
 }
 
 
-- setAnimationNamed:(char *)aName {
-  animation = [animations itemNamed:aName];
-  [animation reset];
+- (Animation *)animationNamed:(char *)aName {
+  return [animations itemNamed:aName];
+}
+
+
+- setAnimation:(Animation *)anAnimation {
+  animation = [anAnimation reset];
   return self;
 }
 

@@ -3,20 +3,27 @@
 #import "Command.h"
 
 
+@class Animation;
 @class Character2;
 
 
-@interface WanderCommand : Command {
- @private
+@interface CharacterCommand : Command {
+ @protected
   Character2 *character;
-  int prevDir;
+  Animation *animation;
 }
-- initCharacter:(Character2 *)aCharacter;
+- setCharacter:(Character2 *)aCharacter;
+- setAnimation:(Animation *)anAnimation;
 @end
 
 
-@interface ChaseCommand : Command {
+@interface WanderCommand : CharacterCommand {
  @private
-  Sprite2 *sprite;
+  int prevDir;
+}
+@end
+
+
+@interface ChaseCommand : CharacterCommand {
 }
 @end

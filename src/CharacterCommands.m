@@ -1,3 +1,4 @@
+#import "Animation.h"
 #import "Character2.h"
 #import "CharacterCommands.h"
 #import "Command.h"
@@ -6,16 +7,25 @@
 #import "World.h"
 
 
-@implementation WanderCommand
+@implementation CharacterCommand
 
 
-- initCharacter:(Character2 *)aCharacter {
-  self = [self init];
-  if (self) {
-    character = aCharacter;
-  }
+- setCharacter:(Character2 *)aCharacter {
+  character = aCharacter;
   return self;
 }
+
+
+- setAnimation:(Animation *)anAnimation {
+  animation = anAnimation;
+  return self;
+}
+
+
+@end
+
+
+@implementation WanderCommand
 
 
 - execute {
@@ -64,11 +74,7 @@
 @implementation ChaseCommand
 
 
-- initSprite:(Sprite2 *)aSprite {
-  self = [self init];
-  if (self) {
-    sprite = aSprite;
-  }
+- execute {
   return self;
 }
 
