@@ -1,5 +1,20 @@
+#import "EnemyFactory.h"
+#import "KwestKingdom.h"
+#import "List.h"
+#import "Map.h"
 #import "RoomFactory.h"
 #import "World.h"
+
+// Rooms
+#import "ForestRoom.h"
+#import "SnowRoom.h"
+#import "UndergroundRoom.h"
+
+// Enemies
+#import "Archer.h"
+//#import "Chomper.h"
+#import "Giant.h"
+#import "Ninja.h"
 
 
 #define STRAIGHT 0
@@ -183,7 +198,7 @@ int roomNumber;
 - (List *) generateEnemies {
   
   List *list;
-  Character *enemy;
+  id enemy;
   int x;
   int y;
   
@@ -202,7 +217,7 @@ int roomNumber;
   
   int randomNum;
   
-  list = [[List alloc] init];
+  list = [[[List alloc] init] ownsItems:YES];
   
   if (difficulty == 0) {
     return list;
@@ -252,7 +267,7 @@ int roomNumber;
           randomNum = random_number(1, randomNum);
           
           if (randomNum > lowerChomper && randomNum <= upperChomper) { // Chomper
-            enemy = [[Chomper alloc] init];
+            enemy = [EnemyFactory createChomperX:x y:y]; //[[Chomper alloc] init];
           } else if (randomNum > lowerArcher && randomNum <= upperArcher) { // Archer
             enemy = [[Archer alloc] init];
           } else if (randomNum > lowerNinja && randomNum <= upperNinja) { // Ninja
@@ -268,7 +283,7 @@ int roomNumber;
             } else {
               // If there's no room for a Giant, make someone else.
               if (randomNum % 3 == 0) {
-                enemy = [[Chomper alloc] init];
+                enemy = [EnemyFactory createChomperX:x y:y]; //[[Chomper alloc] init];
               } else if (randomNum % 3 == 1) {
                 enemy = [[Archer alloc] init];
               } else {
@@ -305,7 +320,7 @@ int roomNumber;
   int backupX;
   int backupY;
   
-  list = [[List alloc] init];
+  list = [[[List alloc] init] ownsItems:YES];
   
   heart = nil;
   

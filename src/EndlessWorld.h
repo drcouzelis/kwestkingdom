@@ -2,12 +2,12 @@
 
 
 // TEMP
-@class Character2;
+//@class Character2;
 
 
 @interface EndlessWorld : World {
   // TEMP
-  Character2 *enemy;
+  //Character2 *enemy;
 }
 
 

@@ -31,7 +31,7 @@
   Animation *heartEmptyAnimation;
   Animation *helpTileAnimation;
   
-  Character *currentCharacter;
+  id currentCharacter;
   
   int difficulty;
   
@@ -67,7 +67,7 @@
 - attackFromTeam: (int) team atX: (int) x andY: (int) y;
 - shake;
 
-- addCharacter:(Character *)aCharacter;
+- addCharacter:(id)aCharacter;
 - addItem:(Powerup *)anItem;
 
 - (Character *)getTarget;

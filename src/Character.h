@@ -28,6 +28,9 @@ typedef enum {
 - wait;
 - go;
 
+- (BOOL)isWaiting;
+- takeTurn;
+
 - setTeam: (int) aTeam;
 - (int) getTeam;
 

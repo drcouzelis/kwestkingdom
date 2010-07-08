@@ -2,6 +2,7 @@
 #import "CharacterCommands.h"
 #import "List.h"
 #import "Sprite2.h"
+#import "World.h"
 
 
 @implementation Character2
@@ -11,7 +12,7 @@
   self = [self init];
   if (self) {
     sprite = aSprite;
-    commands = [[List alloc] init];
+    commands = [[[List alloc] init] ownsItems:YES];
   }
   return self;
 }
@@ -179,3 +180,67 @@
 
 
 @end
+
+
+@implementation Character2 (Sprite)
+
+
+- setWorld:(World *)aWorld {
+  [sprite setWorld:aWorld];
+  return self;
+}
+
+
+- (int)width {
+  return [sprite width];
+}
+
+
+- (int)height {
+  return [sprite height];
+}
+
+
+- (int)x {
+  return [sprite x];
+}
+
+
+- (int)y {
+  return [sprite y];
+}
+
+
+@end
+
+
+@implementation Character2 (Deprecated)
+
+
+- (int)getWidth {
+  return [self width];
+}
+
+
+- (int)getHeight {
+  return [self height];
+}
+
+
+- (int)getX {
+  return [self x];
+}
+
+
+- (int)getY {
+  return [self y];
+}
+
+
+- (int)getTeam {
+  return [self team];
+}
+
+
+@end
+

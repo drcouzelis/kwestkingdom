@@ -89,6 +89,16 @@
 }
 
 
+- (BOOL)isWaiting {
+  return [self waiting];
+}
+
+
+- takeTurn {
+  return [self go];
+}
+
+
 - setTeam: (int) aTeam {
   team = aTeam;
   return self;

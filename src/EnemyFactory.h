@@ -1,7 +1,7 @@
 #import <objc/Object.h>
 
 
-@class Character;
+@class Character2;
 
 
 @interface EnemyFactory : Object

@@ -1,19 +1,6 @@
 #import <objc/Object.h>
-#import "List.h"
-#import "Map.h"
-#import "KwestKingdom.h"
 
-// Rooms
-#import "ForestRoom.h"
-#import "SnowRoom.h"
-#import "UndergroundRoom.h"
-
-// Enemies
-#import "Archer.h"
-#import "Giant.h"
-#import "Ninja.h"
-#import "Chomper.h"
-
+#import "Room.h"
 
 // Types
 #define ROOM_FOREST 0
@@ -37,6 +24,8 @@
 #define DEFAULT_CHANCE_OF_GIANT 3
 
 
+@class List;
+@class Map;
 @class World;
 
 

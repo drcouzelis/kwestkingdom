@@ -8,7 +8,7 @@
 
 - init {
   if ([super init]) {
-    conditions = [[List alloc] init];
+    conditions = [[[List alloc] init] ownsItems:YES];
   }
   return self;
 }

@@ -22,7 +22,7 @@
   if (self) {
     w = width;
     h = height;
-    animations = [[List alloc] init];
+    animations = [[[List alloc] init] ownsItems:YES];
   }
   
   return self;

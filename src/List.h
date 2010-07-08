@@ -9,7 +9,9 @@
   Node *tail;
   int size;
   Node *next; // For the iterator
+  BOOL ownsItems; // If true, it will free the items when deallocating the list
 }
+- ownsItems:(BOOL)flag;
 - (int)size;
 @end
 

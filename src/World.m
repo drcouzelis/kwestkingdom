@@ -51,12 +51,12 @@ typedef enum {
     [room setExitToPrevRoomX: -1]; // Remove the entrance to the first room.
     [room setExitToPrevRoomY: -1];
     
-    rooms = [[List alloc] init];
+    rooms = [[[List alloc] init] ownsItems:YES];
     [rooms push: room];
     
-    enemies = [[List alloc] init];
-    items = [[List alloc] init];
-    helpTiles = [[List alloc] init];
+    enemies = [[[List alloc] init] ownsItems:YES];
+    items = [[[List alloc] init] ownsItems:YES];
+    helpTiles = [[[List alloc] init] ownsItems:YES];
     
     heartAnimation = [[Animation alloc] init];
     [heartAnimation addFrame: getImage(IMG_ITEMS_HEART)];
@@ -140,12 +140,12 @@ typedef enum {
   int index;
   
   // Determine whose turn it is next and tell them to go.
-  if (currentCharacter == nil || [currentCharacter waiting]) {
+  if (currentCharacter == nil || [currentCharacter isWaiting]) {
     
     if (currentCharacter == nil) {
       currentCharacter = hero;
     } else if (currentCharacter == hero) {
-      currentCharacter = (Character *)[enemies itemAtIndex: 0];
+      currentCharacter = [enemies itemAtIndex: 0];
       if (currentCharacter == nil) {
         currentCharacter = hero;
       }
@@ -161,7 +161,7 @@ typedef enum {
       }
     }
     
-    [currentCharacter go];
+    [currentCharacter takeTurn];
     
   }
   
@@ -208,12 +208,12 @@ typedef enum {
   
   while ([enemies hasNext]) {
     
-    Enemy *enemy = (Enemy *)[enemies next];
+    id enemy = [enemies next];
     
     [enemy update];
     
     if ([enemy isDead]) {
-      [enemy dropItem];
+      [enemy dropItem]; // WARNING: This doesn't do anything in Character2
       [enemies remove: enemy];
     }
     
@@ -273,11 +273,9 @@ typedef enum {
 }
 
 
-- addCharacter: (Character *) aCharacter {
-  if (aCharacter != nil) {
-    [aCharacter setWorld: self];
-    [enemies push: aCharacter];
-  }
+- addCharacter:(id)aCharacter {
+  [aCharacter setWorld:self];
+  [enemies push:aCharacter];
   return self;
 }
 
@@ -329,7 +327,7 @@ typedef enum {
       [enemies iterate];
       
       while ([enemies hasNext]) {
-        Enemy *enemy = (Enemy *)[enemies next]; 
+        id enemy = [enemies next]; 
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -362,7 +360,7 @@ typedef enum {
   [enemies iterate];
   
   while ([enemies hasNext]) {
-    Enemy *enemy = (Enemy *)[enemies next];
+    id enemy = [enemies next];
     for (m = 0; m < [enemy getWidth]; m++) {
       for (n = 0; n < [enemy getHeight]; n++) {
         if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
@@ -428,7 +426,7 @@ typedef enum {
       [enemies iterate];
       
       while ([enemies hasNext]) {
-        Enemy *enemy = (Enemy *)[enemies next];
+        id enemy = [enemies next];
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -668,7 +666,7 @@ typedef enum {
   [enemies iterate];
 
   while ([enemies hasNext]) {
-    Enemy *enemy = (Enemy *)[enemies next];
+    id enemy = [enemies next];
     [enemy draw: buffer];
   }
   

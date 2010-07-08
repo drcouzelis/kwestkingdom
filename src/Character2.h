@@ -6,6 +6,7 @@
 @class CharacterCommand;
 @class List;
 @class Sprite2;
+@class World;
 
 
 typedef enum {
@@ -72,3 +73,22 @@ typedef enum {
 - (int)money;
 - setMoney:(int)amount;
 @end
+
+
+@interface Character2 (Sprite)
+- setWorld:(World *)aWorld;
+- (int)width;
+- (int)height;
+- (int)x;
+- (int)y;
+@end
+
+
+@interface Character2 (Deprecated)
+- (int)getWidth;
+- (int)getHeight;
+- (int)getX;
+- (int)getY;
+- (int)getTeam;
+@end
+

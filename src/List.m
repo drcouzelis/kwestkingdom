@@ -83,9 +83,19 @@
 
 - free {
   while (![self isEmpty]) {
-    [[self pop] free];
+    if (ownsItems) {
+      [[self pop] free];
+    } else {
+      [self pop];
+    }
   }
   return [super free];
+}
+
+
+- ownsItems:(BOOL)flag {
+  ownsItems = flag;
+  return self;
 }
 
 
