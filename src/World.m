@@ -1,6 +1,7 @@
 #import "Animation.h"
 #import "Character.h"
 #import "Enemy.h"
+#import "EnemyFactory.h"
 #import "HelpTile.h"
 #import "Hero.h"
 #import "List.h"
@@ -23,20 +24,20 @@ typedef enum {
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     difficulty = 0;
-    
+
     hero = [[Hero alloc] init];
     [hero setMaxHealth: MAX_HERO_HEALTH];
     [hero setHealth: MAX_HERO_HEALTH];
     [hero setWorld: self];
     [hero setX: COLS / 2 - 1];
     [hero setY: ROWS - 2];
-    
+
     // Create the starting room.
     roomFactory = [[RoomFactory alloc] init];
     [roomFactory setWorld: self];
@@ -46,36 +47,35 @@ typedef enum {
     [roomFactory setDifficulty: difficulty];
     [roomFactory setPathBeginX: [hero getX]];
     [roomFactory setPathBeginY: [hero getY]];
-    
+
     room = [self createNextRoom];
     [room setExitToPrevRoomX: -1]; // Remove the entrance to the first room.
     [room setExitToPrevRoomY: -1];
-    
+
     rooms = [[[List alloc] init] ownsItems:YES];
     [rooms push: room];
-    
-    enemies = [[[List alloc] init] ownsItems:YES];
-    items = [[[List alloc] init] ownsItems:YES];
-    helpTiles = [[[List alloc] init] ownsItems:YES];
-    
+
+    // Throw a Chomper into the first room
+    [self addCharacter:[EnemyFactory createChomperX:5 y:5]];
+
     heartAnimation = [[Animation alloc] init];
     [heartAnimation addFrame: getImage(IMG_ITEMS_HEART)];
     heartEmptyAnimation = [[Animation alloc] init];
     [heartEmptyAnimation addFrame: getImage(IMG_ITEMS_EMPTYHEART)];
     helpTileAnimation = [[Animation alloc] init];
     [helpTileAnimation addFrame: getImage(IMG_HELP)];
-    
+
     prevRoomSnapshot = [[Snapshot alloc] init];
     nextRoomSnapshot = [[Snapshot alloc] init];
-    
+
     currentCharacter = nil;
-    
+
     state = WORLD_UPDATE_STATE;
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -83,9 +83,6 @@ typedef enum {
   [rooms free];
   [roomFactory free];
   [hero free];
-  [enemies free];
-  [items free];
-  [helpTiles free];
   [heartAnimation free];
   [heartEmptyAnimation free];
   [helpTileAnimation free];
@@ -101,58 +98,63 @@ typedef enum {
 }
 
 
-- updateItems {
-  
+- updateItems
+{
   int x;
   int y;
-  
+
+  List *items = [room items];
+
   [items iterate];
-  
+
   while ([items hasNext]) {
-    
-    Powerup *item = (Powerup *)[items next]; 
-    
+
+    Powerup *item = (Powerup *)[items next];
+
     [item update];
-    
+
     // For the entire size of the hero
     // see if he is standing on an item
     for (x = 0; x < [hero getWidth]; x++) {
       for (y = 0; y < [hero getHeight]; y++) {
-        
+
         // Hero is standing on the item
         if ([item getX] == [hero getX] + x && [item getY] == [hero getY] + y) {
           [item collectedBy: hero];
           [items remove: item];
           return self;
         }
-        
+
       }
     }
-    
+
   }
-  
+
   return self;
 }
 
 
 - updateTurn {
-  
+
   int index;
-  
+
+  List *enemies = [room enemies];
+
   // Determine whose turn it is next and tell them to go.
   if (currentCharacter == nil || [currentCharacter isWaiting]) {
-    
+
     if (currentCharacter == nil) {
       currentCharacter = hero;
     } else if (currentCharacter == hero) {
-      currentCharacter = [enemies itemAtIndex: 0];
+      currentCharacter = [enemies itemAtIndex:0];
       if (currentCharacter == nil) {
+        // There are no enemies, just let the hero go again.
         currentCharacter = hero;
       }
     } else {
-      index = [enemies findIndexOf: currentCharacter];
+      index = [enemies findIndexOf:currentCharacter];
       if (index >= 0) {
-        currentCharacter = [enemies itemAtIndex: index + 1];
+        currentCharacter = [enemies itemAtIndex:index + 1];
       } else {
         currentCharacter = nil;
       }
@@ -160,73 +162,74 @@ typedef enum {
         currentCharacter = hero;
       }
     }
-    
+
     [currentCharacter takeTurn];
-    
   }
-  
+
   return self;
-  
 }
 
 
 - updateHero {
-  
+
   [hero update];
-  
+
   // If the hero is at an exit...
   if (
     ([hero getX] == [room getExitToNextRoomX] && [hero getY] == [room getExitToNextRoomY]) ||
     ([hero getX] == [room getExitToPrevRoomX] && [hero getY] == [room getExitToPrevRoomY])
   ) {
-    
+
     // This prevents enemies from moving around during a change of rooms.
     if ([hero waiting]) {
       [hero go];
     }
-    
+
     if (![hero moving]) {
       [self changeRooms];
       currentCharacter = hero;
     }
-    
+
   }
-  
+
   if ([hero isDead]) {
     game_over();
   }
-  
+
   return self;
-  
+
 }
 
 
 - updateEnemies {
-  
+
+  List *enemies = [room enemies];
+
   // Update the enemies and remove any that are dead.
   [enemies iterate];
-  
+
   while ([enemies hasNext]) {
-    
+
     id enemy = [enemies next];
-    
+
     [enemy update];
-    
+
     if ([enemy isDead]) {
       [enemy dropItem]; // WARNING: This doesn't do anything in Character2
       [enemies remove: enemy];
+      [enemy free];
     }
-    
+
   }
-  
+
   return self;
 }
 
 
 - update {
-  
+
   switch (state) {
-  
+
   case WORLD_UPDATE_STATE:
     [self updateRoom];
     [self updateItems];
@@ -234,7 +237,7 @@ typedef enum {
     [self updateHero];
     [self updateEnemies];
     break;
-    
+
   case WORLD_ROOM_TRANSITION_STATE:
     [prevRoomSnapshot update];
     [nextRoomSnapshot update];
@@ -242,7 +245,7 @@ typedef enum {
       state = WORLD_UPDATE_STATE;
     }
     break;
-  
+
   case WORLD_SHAKING_STATE:
     [self updateRoom];
     [self updateItems];
@@ -266,23 +269,23 @@ typedef enum {
       }
     }
     break;
-  
+
   }
-  
+
   return self;
 }
 
 
 - addCharacter:(id)aCharacter {
   [aCharacter setWorld:self];
-  [enemies push:aCharacter];
+  [[room enemies] push:aCharacter];
   return self;
 }
 
 
 - addItem: (Powerup *) anItem {
   if (anItem != nil) {
-    [items push: anItem];
+    [[room items] push:anItem];
   }
   return self;
 }
@@ -290,7 +293,7 @@ typedef enum {
 
 - addHelpTile: (id) aHelpTile {
   if (aHelpTile != nil) {
-    [helpTiles push: aHelpTile];
+    [[room helpTiles] push:aHelpTile];
   }
   return self;
 }
@@ -302,32 +305,34 @@ typedef enum {
 
 
 - (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
-  
+
   int i, j;
   int m, n;
-  
+
   int w, h;
-  
+
   w = 1;
   h = 1;
-  
+
+  List *enemies = [room enemies];
+
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      
+
       for (m = 0; m < [hero getWidth]; m++) {
         for (n = 0; n < [hero getHeight]; n++) {
-          
+
           if (team != [hero getTeam] && x + i == [hero getX] + m && y + j == [hero getY] + n) {
             return YES;
           }
-          
+
         }
       }
-      
+
       [enemies iterate];
-      
+
       while ([enemies hasNext]) {
-        id enemy = [enemies next]; 
+        id enemy = [enemies next];
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
@@ -336,19 +341,19 @@ typedef enum {
           }
         }
       }
-      
+
     }
   }
-  
+
   return NO;
-  
+
 }
 
 
 - attackFromTeam: (int) team atX: (int) x andY: (int) y {
-  
+
   int m, n;
-  
+
   for (m = 0; m < [hero getWidth]; m++) {
     for (n = 0; n < [hero getHeight]; n++) {
       if (team != [hero getTeam] && x == [hero getX] + m && y == [hero getY] + n) {
@@ -356,9 +361,11 @@ typedef enum {
       }
     }
   }
-  
+
+  List *enemies = [room enemies];
+
   [enemies iterate];
-  
+
   while ([enemies hasNext]) {
     id enemy = [enemies next];
     for (m = 0; m < [enemy getWidth]; m++) {
@@ -369,9 +376,9 @@ typedef enum {
       }
     }
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -401,30 +408,32 @@ typedef enum {
 
 
 - (BOOL) isInhabitedAtX: (int) x andY: (int) y {
-  
+
   int i, j;
   int m, n;
-  
+
   int w, h;
-  
+
   w = 1;
   h = 1;
-  
+
+  List *enemies = [room enemies];
+
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      
+
       for (m = 0; m < [hero getWidth]; m++) {
         for (n = 0; n < [hero getHeight]; n++) {
-          
+
           if (x + i == [hero getX] + m && y + j == [hero getY] + n) {
             return YES;
           }
-          
+
         }
       }
-      
+
       [enemies iterate];
-      
+
       while ([enemies hasNext]) {
         id enemy = [enemies next];
         for (m = 0; m < [enemy getWidth]; m++) {
@@ -435,12 +444,12 @@ typedef enum {
           }
         }
       }
-      
+
     }
   }
-  
+
   return NO;
-  
+
 }
 
 
@@ -467,11 +476,11 @@ typedef enum {
 
 
 - (Room *) createNextRoom {
-  
+
   int number;
-  
+
   number = [room getNumber] + 1;
-  
+
   if (number % 20 == 0) {
     [roomFactory setType: ROOM_UNDERGROUND];
     [roomFactory setTerrain: ROOM_NO_WATER];
@@ -485,20 +494,20 @@ typedef enum {
     [roomFactory setTerrain: ROOM_RANDOM];
     [roomFactory setDifficulty: difficulty];
   }
-  
+
   [roomFactory setNumber: number];
-  
+
   return [roomFactory createRoom];
-  
+
 }
 
 
 - changeRooms {
-  
+
   Room *nextRoom;
   int entranceX;
   int entranceY;
-  
+
   // Prepare the room transition.
   if ([hero getX] < 0) {
     [prevRoomSnapshot setX: 0];
@@ -542,29 +551,29 @@ typedef enum {
     [nextRoomSnapshot setX: 0];
     [nextRoomSnapshot setY: 0];
   }
-  
+
   [self drawTerrain: [prevRoomSnapshot getCanvas]];
   [self drawCharacters: [prevRoomSnapshot getCanvas]];
-  
+
   // If the hero is at the exit that leads to the next room...
   if ([hero getX] == [room getExitToNextRoomX] && [hero getY] == [room getExitToNextRoomY]) {
-    
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
-    
+
+    //[room storeEnemies: enemies];
+    //[room storeItems: items];
+    //[room storeHelpTiles: helpTiles];
+
     nextRoom = (Room *)[rooms itemAtIndex: [rooms findIndexOf: room] + 1];
-    
+
     // Create the next room here, if necessary.
     if (nextRoom != nil) {
-      
+
       room = nextRoom;
-      
+
     } else {
-      
+
       entranceX = [(Room *)[rooms last] getExitToNextRoomX];
       entranceY = [(Room *)[rooms last] getExitToNextRoomY];
-      
+
       // Bound the entrance.
       if (entranceX < 0) {
         entranceX = 0;
@@ -576,7 +585,7 @@ typedef enum {
       } else if (entranceY > ROWS - 1) {
         entranceY = ROWS - 1;
       }
-      
+
       // Flip the side of the screen that the entrance is on.
       if (entranceX == 0) {
         entranceX = COLS - 1;
@@ -588,99 +597,105 @@ typedef enum {
       } else if (entranceY == ROWS - 1) {
         entranceY = 0;
       }
-      
+
       [roomFactory setPathBeginX: entranceX];
       [roomFactory setPathBeginY: entranceY];
       nextRoom = [self createNextRoom];
       [rooms push: nextRoom];
-      
+
       room = nextRoom;
-      
+
       // Delete the oldest room.
-      if ([rooms size] > 2) {
-        [[rooms dequeue] free];
-        [(Room *)[rooms first] removeExitToPrevRoom];
-      }
-      
+      //if ([rooms size] > 2) {
+      //  [[rooms dequeue] free];
+      //  [(Room *)[rooms first] removeExitToPrevRoom];
+      //}
+
     }
-    
+
     [hero setX: [room getEntranceFromPrevRoomX]];
     [hero setY: [room getEntranceFromPrevRoomY]];
-    
-    enemies = [room retrieveEnemies];
-    items = [room retrieveItems];
-    helpTiles = [room retrieveHelpTiles];
-    
+
+    //enemies = [room retrieveEnemies];
+    //items = [room retrieveItems];
+    //helpTiles = [room retrieveHelpTiles];
+
   } else if ([hero getX] == [room getExitToPrevRoomX] && [hero getY] == [room getExitToPrevRoomY]) {
-    
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
-    
+
+    //[room storeEnemies: enemies];
+    //[room storeItems: items];
+    //[room storeHelpTiles: helpTiles];
+
     // Go to the previous room.
     room = (Room *)[rooms itemAtIndex: [rooms findIndexOf: room] - 2];
     [hero setX: [room getEntranceFromNextRoomX]];
     [hero setY: [room getEntranceFromNextRoomY]];
-    
-    enemies = [room retrieveEnemies];
-    items = [room retrieveItems];
-    helpTiles = [room retrieveHelpTiles];
-    
+
+    //enemies = [room retrieveEnemies];
+    //items = [room retrieveItems];
+    //helpTiles = [room retrieveHelpTiles];
+
   }
-  
+
   [self drawTerrain: [nextRoomSnapshot getCanvas]];
   [self drawCharacters: [nextRoomSnapshot getCanvas]];
-  
+
   state = WORLD_ROOM_TRANSITION_STATE;
-  
+
   return self;
-  
+
 }
 
 
 - drawTerrain: (BITMAP *) buffer {
-  
+
   [room draw: buffer];
-  
+
   // Draw help tiles.
+  List *helpTiles = [room helpTiles];
+
   [helpTiles iterate];
 
   while ([helpTiles hasNext]) {
     HelpTile *helpTile = (HelpTile *)[helpTiles next];
     [helpTileAnimation draw: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
   }
-  
+
   return self;
 }
 
 
 - drawCharacters: (BITMAP *) buffer {
-  
+
+  List *items = [room items];
+
   [items iterate];
 
   while ([items hasNext]) {
     Powerup *item = (Powerup *)[items next];
     [item draw: buffer];
   }
-  
+
+  List *enemies = [room enemies];
+
   [enemies iterate];
 
   while ([enemies hasNext]) {
     id enemy = [enemies next];
     [enemy draw: buffer];
   }
-  
+
   [hero draw: buffer];
-  
+
   return self;
 }
 
 
 - drawUserInterface: (BITMAP *) buffer {
-  
+
   char moneyLine[256];
   int i;
-  
+
   // Put the hero's health on the screen.
   for (i = 0; i < [hero getMaxHealth]; i++) {
     if (i < [hero getHealth]) {
@@ -689,11 +704,12 @@ typedef enum {
       [heartEmptyAnimation draw: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
     }
   }
-  
+
   sprintf(moneyLine, "$%d", [hero getMoney]);
   resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
-  
+
   // Draw help information.
+  List *helpTiles = [room helpTiles];
   [helpTiles iterate];
 
   while ([helpTiles hasNext]) {
@@ -702,41 +718,41 @@ typedef enum {
       [helpTile draw: buffer];
     }
   }
-  
+
   return self;
 }
 
 
 - draw: (BITMAP *) buffer {
-  
+
   switch (state) {
-  
+
   case WORLD_UPDATE_STATE:
     [self drawTerrain: buffer];
     [self drawCharacters: buffer];
     [self drawUserInterface: buffer];
     break;
-  
+
   case WORLD_ROOM_TRANSITION_STATE:
     [prevRoomSnapshot draw: buffer];
     [nextRoomSnapshot draw: buffer];
     [self drawUserInterface: buffer];
     break;
-  
+
   case WORLD_SHAKING_STATE:
     [self drawTerrain: [prevRoomSnapshot getCanvas]];
     [self drawCharacters: [prevRoomSnapshot getCanvas]];
     [prevRoomSnapshot draw: buffer];
     [self drawUserInterface: buffer];
     break;
-    
+
   }
-  
+
   // Put the current room number on the screen.
   textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
-  
+
   return self;
-  
+
 }
 
 

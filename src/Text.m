@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- *
- * This file is part of "Kwest Kingdom".
- *
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Text.h"
 
 
@@ -24,45 +6,45 @@ void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, ch
   //tempBitmap = create_bitmap(text_length(font, text), text_height(font));
   //clear_to_color(tempBitmap, makecol(255, 0, 255));
   //textout_ex(tempBitmap, font, text, 0, 0, color, -1);
-  //masked_stretch_blit(tempBitmap, dest, 0, 0, tempBitmap->w, tempBitmap->h, x, y, (int)(tempBitmap->w * multiplier), (int)(tempBitmap->h * multiplier)); 
+  //masked_stretch_blit(tempBitmap, dest, 0, 0, tempBitmap->w, tempBitmap->h, x, y, (int)(tempBitmap->w * multiplier), (int)(tempBitmap->h * multiplier));
   //destroy_bitmap(tempBitmap);
   textout_ex(dest, font, text, x, y, color, -1);
 }
 
 
 void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
-  
+
   /*
   int leftOutside;
   int rightOutside;
   int topOutside;
   int bottomOutside;
-  
+
   int leftInside;
   int rightInside;
   int topInside;
   int bottomInside;
-  
+
   int offset;
   int depth;
-  
+
   offset = 4;
   depth = 12;
-  
+
   leftOutside = x - offset;
   rightOutside = x + w + offset;
   topOutside = y - offset;
   bottomOutside = y + h + offset;
-  
+
   leftInside = leftOutside + depth;
   rightInside = rightOutside - depth;
   topInside = topOutside + depth;
   bottomInside = bottomOutside - depth;
   */
-  
+
   //rectfill(buffer, leftInside, topInside, rightInside, bottomInside, RED);
   rectfill(buffer, x, y, x + w, y + h, RED);
-  
+
   /*
   // Top
   hline(buffer, leftOutside + 2, topOutside + 0, rightOutside - 2, WHITE);
@@ -83,7 +65,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, rightOutside - 9, topOutside + 11, rightOutside - 8, WHITE);
   hline(buffer, rightOutside - 11, topOutside + 12, rightOutside - 8, WHITE);
   hline(buffer, rightOutside - 11, topOutside + 13, rightOutside - 8, WHITE);
-  
+
   hline(buffer, leftOutside + 6, topOutside + 4, rightOutside - 6, BLACK);
   hline(buffer, leftOutside + 6, topOutside + 5, rightOutside - 6, BLACK);
   hline(buffer, leftOutside + 4, topOutside + 6, rightOutside - 4, BLACK);
@@ -100,7 +82,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, rightOutside - 7, topOutside + 11, rightOutside - 4, BLACK);
   hline(buffer, rightOutside - 7, topOutside + 12, rightOutside - 4, BLACK);
   hline(buffer, rightOutside - 7, topOutside + 13, rightOutside - 4, BLACK);
-  
+
   hline(buffer, leftOutside + 10, topOutside + 8, rightOutside - 8, GRAY);
   hline(buffer, leftOutside + 10, topOutside + 9, rightOutside - 8, GRAY);
   hline(buffer, leftOutside + 8, topOutside + 10, rightOutside - 10, GRAY);
@@ -121,7 +103,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, rightOutside - 3, topOutside + 11, rightOutside, GRAY);
   hline(buffer, rightOutside - 3, topOutside + 12, rightOutside, GRAY);
   hline(buffer, rightOutside - 3, topOutside + 13, rightOutside, GRAY);
-  
+
   // Bottom
   hline(buffer, leftOutside + 2, bottomOutside - 0, rightOutside - 2, GRAY);
   hline(buffer, leftOutside + 2, bottomOutside - 1, rightOutside - 2, GRAY);
@@ -145,7 +127,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, leftOutside + 8, bottomOutside - 13, leftOutside + 11, GRAY);
   hline(buffer, leftOutside + 12, bottomOutside - 12, leftOutside + 13, GRAY);
   hline(buffer, leftOutside + 12, bottomOutside - 13, leftOutside + 13, GRAY);
-  
+
   hline(buffer, leftOutside + 6, bottomOutside - 4, rightOutside - 6, BLACK);
   hline(buffer, leftOutside + 6, bottomOutside - 5, rightOutside - 6, BLACK);
   hline(buffer, leftOutside + 4, bottomOutside - 6, rightOutside - 4, BLACK);
@@ -164,7 +146,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, leftOutside + 4, bottomOutside - 13, leftOutside + 7, BLACK);
   hline(buffer, leftOutside + 8, bottomOutside - 8, leftOutside + 9, BLACK);
   hline(buffer, leftOutside + 8, bottomOutside - 9, leftOutside + 9, BLACK);
-  
+
   hline(buffer, leftOutside + 10, bottomOutside - 8, rightOutside - 10, WHITE);
   hline(buffer, leftOutside + 10, bottomOutside - 9, rightOutside - 10, WHITE);
   hline(buffer, leftOutside + 12, bottomOutside - 10, rightOutside - 8, WHITE);
@@ -183,7 +165,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   hline(buffer, leftOutside, bottomOutside - 11, leftOutside + 3, WHITE);
   hline(buffer, leftOutside, bottomOutside - 12, leftOutside + 3, WHITE);
   hline(buffer, leftOutside, bottomOutside - 13, leftOutside + 3, WHITE);
-  
+
   // Left
   vline(buffer, leftOutside + 0, topOutside + 14, bottomOutside - 14, WHITE);
   vline(buffer, leftOutside + 1, topOutside + 14, bottomOutside - 14, WHITE);
@@ -197,7 +179,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   vline(buffer, leftOutside + 9, topOutside + 14, bottomOutside - 14, GRAY);
   vline(buffer, leftOutside + 10, topOutside + 14, bottomOutside - 14, GRAY);
   vline(buffer, leftOutside + 11, topOutside + 14, bottomOutside - 14, GRAY);
-  
+
   // Right
   vline(buffer, rightOutside - 0, topOutside + 14, bottomOutside - 14, GRAY);
   vline(buffer, rightOutside - 1, topOutside + 14, bottomOutside - 14, GRAY);
@@ -212,7 +194,7 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   vline(buffer, rightOutside - 10, topOutside + 14, bottomOutside - 14, WHITE);
   vline(buffer, rightOutside - 11, topOutside + 14, bottomOutside - 14, WHITE);
   */
-  
+
 }
 
 

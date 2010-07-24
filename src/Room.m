@@ -5,20 +5,20 @@
 
 
 - init {
-  
+
   int i;
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     pathMap = nil;
     terrainMap = nil;
-    
-    enemyStorage = nil;
-    itemStorage = nil;
-    helpTileStorage = [[[List alloc] init] ownsItems:YES];
-    
+
+    enemies = [[[List alloc] init] ownsItems:YES];
+    items = [[[List alloc] init] ownsItems:YES];
+    helpTiles = [[[List alloc] init] ownsItems:YES];
+
     entranceFromNextRoomX = 0;
     entranceFromNextRoomY = 0;
     entranceFromPrevRoomX = 0;
@@ -27,9 +27,9 @@
     exitToNextRoomY = 0;
     exitToPrevRoomX = 0;
     exitToPrevRoomY = 0;
-    
+
     number = 0;
-    
+
     grassAnimation = nil;
     pathAnimation = nil;
     mountainAnimation = nil;
@@ -46,21 +46,21 @@
     shoreOutsideNWAnimation = nil;
     shoreOutsideSEAnimation = nil;
     shoreOutsideSWAnimation = nil;
-    
+
     for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
       path[i] = NO_STEP;
     }
     steps = 0;
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - free {
-  
+
   [grassAnimation free];
   [pathAnimation free];
   [mountainAnimation free];
@@ -77,15 +77,16 @@
   [shoreOutsideNWAnimation free];
   [shoreOutsideSEAnimation free];
   [shoreOutsideSWAnimation free];
-  
+
   [pathMap free];
   [terrainMap free];
-  [enemyStorage free];
-  [itemStorage free];
-  [helpTileStorage free];
-  
+
+  [enemies free];
+  [items free];
+  [helpTiles free];
+
   return [super free];
-  
+
 }
 
 
@@ -111,13 +112,13 @@
 
 
 - draw: (BITMAP *) buffer {
-  
+
   int x;
   int y;
-  
+
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-      
+
       //if ([pathMap getValueAtX: x andY: y] == YES) { // Draw the path
         //[pathAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
       //} else
@@ -126,9 +127,9 @@
       } else if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
         [mountainAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-        
+
         [waterAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
-        
+
         // Add the shore borders
         if ([terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN) { // North
           [shoreNorthAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
@@ -142,18 +143,18 @@
         if ([terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN) { // West
           [shoreWestAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
       }
-      
+
     }
   }
-  
+
   // Add the shore corners
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-      
+
       if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-        
+
         // Add the shore inside corners
         if (
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
@@ -179,7 +180,7 @@
         ) { // South West
           [shoreInsideSWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
         // Add the shore outside corners.
         if (
           [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
@@ -209,58 +210,46 @@
         ) { // South West
           [shoreOutsideSWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
       }
-      
+
     }
   }
-  
+
   return self;
-  
+
 }
 
 
-- (List *) retrieveEnemies {
-  List *list;
-  list = enemyStorage;
-  enemyStorage = nil;
-  return list;
+- (List *)enemies {
+  return enemies;
 }
 
 
-- storeEnemies: (List *) list {
-  [enemyStorage free];
-  enemyStorage = list;
+- setEnemies:(List *)list {
+  enemies = list;
   return self;
 }
 
 
-- (List *) retrieveItems {
-  List *list;
-  list = itemStorage;
-  itemStorage = nil;
-  return list;
+- (List *)items {
+  return items;
 }
 
 
-- storeItems: (List *) list {
-  [itemStorage free];
-  itemStorage = list;
+- setItems:(List *)list {
+  items = list;
   return self;
 }
 
 
-- (List *) retrieveHelpTiles {
-  List *list;
-  list = helpTileStorage;
-  helpTileStorage = nil;
-  return list;
+- (List *)helpTiles {
+  return helpTiles;
 }
 
 
-- storeHelpTiles: (List *) list {
-  [helpTileStorage free];
-  helpTileStorage = list;
+- setHelpTiles:(List *)list {
+  helpTiles = list;
   return self;
 }
 

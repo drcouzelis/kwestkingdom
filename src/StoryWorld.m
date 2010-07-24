@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Hero.h"
 #import "RoomFactory.h"
 #import "Snapshot.h"
@@ -90,18 +72,18 @@
 
 
 - init {
-  
+
   HelpTile *helpTile;
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     [roomFactory setChanceOfChomper: 0];
     [roomFactory setChanceOfArcher: 0];
     [roomFactory setChanceOfNinja: 0];
     [roomFactory setChanceOfGiant: 0];
-    
+
     // Welcome help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 2]];
@@ -113,7 +95,7 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
     // About help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 4]];
@@ -125,20 +107,20 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
     [hero emptyHands];
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - update {
-  
+
   [super update];
-  
+
   // This will add the enemy to the room AFTER the room number that is shown here.
   if ([room getNumber] == 2) {
     [roomFactory setChanceOfChomper: DEFAULT_CHANCE_OF_CHOMPER];
@@ -152,26 +134,26 @@
   } else if ([room getNumber] == 16) {
     difficulty = 100;
   }
-  
+
   if ([room getNumber] == MAX_NUM_OF_ROOMS) {
     // There are no more rooms to explore!
     // It's the end of the game.
     //playSound(ENDING_SOUND);
     game_over();
   }
-  
+
   return self;
 }
 
 
 - changeRooms {
-  
+
   HelpTile *helpTile;
-  
+
   [super changeRooms];
-  
+
   if ([room getNumber] == 2) {
-    
+
     // Sword help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 2]];
@@ -183,7 +165,7 @@
                   and5: SWORD_TEXT_LINE_5
                   and6: SWORD_TEXT_LINE_6];
     [self addHelpTile: helpTile];
-    
+
     // Chomper help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
@@ -195,9 +177,9 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   } else if ([room getNumber] == 3) {
-    
+
     // Wait help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 2]];
@@ -209,9 +191,9 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   } else if ([room getNumber] == 4) {
-    
+
     // Shield help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 2]];
@@ -223,9 +205,9 @@
                   and5: SHIELD_TEXT_LINE_5
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   } else if ([room getNumber] == 5) {
-    
+
     // Bow help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: 2]];
@@ -237,7 +219,7 @@
                   and5: BOW_TEXT_LINE_5
                   and6: BOW_TEXT_LINE_6];
     [self addHelpTile: helpTile];
-    
+
     // Archer help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
@@ -249,9 +231,9 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   } else if ([room getNumber] == 8) {
-    
+
     // Ninja help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
@@ -263,9 +245,9 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   } else if ([room getNumber] == 11) {
-    
+
     // Giant help
     helpTile = [[HelpTile alloc] init];
     [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
@@ -277,14 +259,14 @@
                   and5: NULL
                   and6: NULL];
     [self addHelpTile: helpTile];
-    
+
   }
-  
+
   [self drawTerrain: [nextRoomSnapshot getCanvas]];
   [self drawCharacters: [nextRoomSnapshot getCanvas]];
-  
+
   return self;
-  
+
 }
 
 

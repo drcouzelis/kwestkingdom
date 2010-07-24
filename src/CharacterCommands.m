@@ -22,6 +22,12 @@
 }
 
 
+- start {
+  [[character sprite] setAnimation:animation];
+  return [super start];
+}
+
+
 @end
 
 
@@ -32,9 +38,7 @@
 
   Sprite2 *sprite = [character sprite];
 
-  /**
-   * Pick a random direction to head
-   */
+  // Pick a random direction to head
   int dir = random_number(UP, LEFT);
 
   int x = [sprite x];

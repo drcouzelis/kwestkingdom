@@ -129,6 +129,9 @@
   if (health < 0) {
     health = 0;
   } else if (health > maxHealth) {
+    if (maxHealth <= 0) {
+      fprintf(stderr, "Warning, max health of character is %d. \n", maxHealth);
+    }
     health = maxHealth;
   }
   return self;
@@ -211,6 +214,16 @@
 }
 
 
+- setX:(int)x {
+  return [sprite setX:x];
+}
+
+
+- setY:(int)y {
+  return [sprite setY:y];
+}
+
+
 @end
 
 
@@ -239,6 +252,16 @@
 
 - (int)getTeam {
   return [self team];
+}
+
+
+- dropItem {
+  return self;
+}
+
+
+- (BOOL)isWaiting {
+  return [self finishedTurn];
 }
 
 

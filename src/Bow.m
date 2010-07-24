@@ -12,13 +12,13 @@ typedef enum {
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     arrow = nil;
-    
+
     holdAnimation = [[Animation alloc] init];
     [holdAnimation addFrame: getImage(IMG_BOW_HOLD_1)];
     [holdAnimation addFrame: getImage(IMG_BOW_HOLD_2)];
@@ -26,24 +26,24 @@ typedef enum {
     [holdAnimation addFrame: getImage(IMG_BOW_HOLD_4)];
     [holdAnimation setLoop: YES];
     [holdAnimation setSpeed: 6];
-	
+
     attackRightAnimation = [[Animation alloc] init];
     [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_1)];
     [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_2)];
     [attackRightAnimation addFrame: getImage(IMG_BOW_DRAW_3)];
     [attackRightAnimation setLoop: NO];
     [attackRightAnimation setSpeed: 12];
-	
+
     attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
     attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
     attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
-    
+
     [self toAwayState];
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -88,7 +88,7 @@ typedef enum {
     andDirection: (int) aDirection
     andTeam: (int) aTeam
     andWorld: (World *) aWorld {
-  
+
   arrow = [[Arrow alloc] init];
   [arrow setTeam: aTeam];
   [arrow setX: newX];
@@ -96,9 +96,9 @@ typedef enum {
   [arrow setWorld: aWorld];
   [arrow setDirection: aDirection];
   [arrow toHoldState];
-  
+
   return self;
-  
+
 }
 
 

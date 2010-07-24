@@ -16,15 +16,15 @@
 
 
 - initWidth:(int)width height:(int)height {
-  
+
   self = [self init];
-  
+
   if (self) {
     w = width;
     h = height;
     animations = [[[List alloc] init] ownsItems:YES];
   }
-  
+
   return self;
 }
 
@@ -97,13 +97,13 @@
   } else if (x + w - 1 > right) {
     [self moveToX: right];
   }
-  
+
   if (y < top) {
     [self moveToY: top];
   } else if (y + h - 1 > bottom) {
     [self moveToY: bottom];
   }
-  
+
   return self;
 }
 
@@ -166,11 +166,11 @@
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
   if ([self isMoving]) {
-    
+
     if (speed > 0) {
-      
+
       fudge += speed;
-      
+
       while (fudge >= GAME_TICKER) {
         if (visualX != x * getTileSize()) {
           if (visualX < x * getTileSize()) {
@@ -188,18 +188,18 @@
         }
         fudge -= GAME_TICKER;
       }
-      
+
     } else {
       visualX = x * getTileSize();
       visualY = y * getTileSize();
     }
-    
+
     if (![self isMoving]) {
       fudge = 0;
     }
-    
+
   }
-  
+
   return self;
 }
 

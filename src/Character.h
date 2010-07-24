@@ -13,14 +13,14 @@ typedef enum {
 
 
 @interface Character : Sprite {
-  
+
   int health;
   int maxHealth;
   int money;
   int team; // Characters on the same team can't hurt each other.
-  
+
   int turns;
-  
+
 }
 
 

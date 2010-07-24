@@ -9,7 +9,7 @@
 @interface Animation : Object {
  @private
   BITMAP *frames[ANIMATION_MAX_FRAMES];
-  
+
   // An animation is drawn with respect to its offset.
   int offsetX;
   int offsetY;
@@ -18,10 +18,10 @@
   int pos;
   BOOL loop;
   BOOL finished;
-  
+
   int speed;
   int fudge;
-  
+
   BOOL hFlip;
   BOOL vFlip;
   BOOL rotate;

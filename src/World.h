@@ -16,30 +16,26 @@
 
 
 @interface World : Object {
-  
+
   Hero *hero;
-  List *enemies;
   List *rooms;
-  
+
   RoomFactory *roomFactory;
   Room *room;
-  
-  List *items;
-  List *helpTiles;
-  
+
   Animation *heartAnimation;
   Animation *heartEmptyAnimation;
   Animation *helpTileAnimation;
-  
+
   id currentCharacter;
-  
+
   int difficulty;
-  
+
   Snapshot *prevRoomSnapshot;
   Snapshot *nextRoomSnapshot;
-  
+
   int state;
-  
+
 }
 
 

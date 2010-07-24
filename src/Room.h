@@ -18,27 +18,27 @@
 
 
 @interface Room : Object {
-  
+
   // Add a terrain map, item map, character map...
   Map *terrainMap;
   Map *pathMap;
-  
-  List *enemyStorage;
-  List *itemStorage;
-  List *helpTileStorage;
-  
+
+  List *enemies;
+  List *items;
+  List *helpTiles;
+
   int entranceFromNextRoomX;
   int entranceFromNextRoomY;
   int entranceFromPrevRoomX;
   int entranceFromPrevRoomY;
-  
+
   int exitToNextRoomX;
   int exitToNextRoomY;
   int exitToPrevRoomX;
   int exitToPrevRoomY;
-  
+
   int number;
-  
+
   Animation *grassAnimation;
   Animation *pathAnimation;
   Animation *mountainAnimation;
@@ -55,10 +55,10 @@
   Animation *shoreOutsideNWAnimation;
   Animation *shoreOutsideSEAnimation;
   Animation *shoreOutsideSWAnimation;
-  
+
   int path[MAX_NUM_OF_STEPS];
   int steps;
-  
+
 }
 
 
@@ -70,14 +70,13 @@
 - (int) getXOfStepNumber: (int) aStep;
 - (int) getYOfStepNumber: (int) aStep;
 
-- (List *) retrieveEnemies;
-- storeEnemies: (List *) list;
+- (List *)enemies;
+- (List *)items;
+- (List *)helpTiles;
 
-- (List *) retrieveItems;
-- storeItems: (List *) list;
-
-- (List *) retrieveHelpTiles;
-- storeHelpTiles: (List *) list;
+- setEnemies:(List *)list;
+- setItems:(List *)list;
+- setHelpTiles:(List *)list;
 
 - (int) getEntranceFromNextRoomX;
 - (int) getEntranceFromNextRoomY;

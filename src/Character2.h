@@ -19,14 +19,14 @@ typedef enum {
 @interface Character2 : Object {
  @private
   Sprite2 *sprite;
-  
+
   int health;
   int maxHealth;
   int money;
   int team; // Characters on the same team can't hurt each other.
-  
+
   int turns;
-  
+
   // Keep a collection of commands
   // Select the one you want via a string "label"
   CharacterCommand *command; // TEMP
@@ -81,6 +81,8 @@ typedef enum {
 - (int)height;
 - (int)x;
 - (int)y;
+- setX:(int)x;
+- setY:(int)y;
 @end
 
 
@@ -90,5 +92,7 @@ typedef enum {
 - (int)getX;
 - (int)getY;
 - (int)getTeam;
+- dropItem;
+- (BOOL)isWaiting;
 @end
 

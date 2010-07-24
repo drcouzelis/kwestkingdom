@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "HighScoreLibrary.h"
 
 
@@ -28,45 +10,45 @@ static int numOfHighScores;
 
 
 void writeHighScores() {
-  
+
   FILE *file;
   int i;
-  
+
   file = fopen(HIGH_SCORES_FILENAME, "w");
-  
+
   if (file == NULL) {
     return;
   }
-  
+
   for (i = 0; i < numOfHighScores; i++) {
     fprintf(file, "%s %d %d\n", highScores[i].initials, highScores[i].room, highScores[i].coins);
   }
-  
+
   fclose(file);
-  
+
 }
 
 
 void readHighScores() {
-  
+
   FILE *file;
   char line[256];
-  
+
   numOfHighScores = 0;
-  
+
   file = fopen(HIGH_SCORES_FILENAME, "r");
-  
+
   if (file == NULL) {
     return;
   }
-  
+
   while (fgets(line, 255, file) != NULL) {
     sscanf(line, "%s %d %d", highScores[numOfHighScores].initials, &(highScores[numOfHighScores].room), &(highScores[numOfHighScores].coins));
     numOfHighScores++;
   }
-  
+
   fclose(file);
-  
+
 }
 
 
@@ -96,12 +78,12 @@ void readHighScores() {
 
 
 + (int) highScorePositionWithRoom: (int) room andCoins: (int) coins {
-  
+
   int position;
   int i;
-  
+
   position = numOfHighScores;
-  
+
   for (i = numOfHighScores - 1; i >= 0; i--) {
     if (room > highScores[i].room) {
       position = i;
@@ -113,40 +95,40 @@ void readHighScores() {
       }
     }
   }
-  
+
   return position;
-  
+
 }
 
 
 + addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins {
-  
+
   int position;
   int i;
-  
+
   position = [HighScoreLibrary highScorePositionWithRoom: room andCoins: coins];
-  
+
   if (position == MAX_NUM_OF_HIGH_SCORES) {
     return self;
   }
-  
+
   for (i = MAX_NUM_OF_HIGH_SCORES - 2; i >= position; i--) {
     strcpy(highScores[i + 1].initials, highScores[i].initials);
     highScores[i + 1].room = highScores[i].room;
     highScores[i + 1].coins = highScores[i].coins;
   }
-  
+
   strcpy(highScores[position].initials, initials);
   highScores[position].room = room;
   highScores[position].coins = coins;
-  
+
   numOfHighScores++;
-  
+
   writeHighScores();
   readHighScores();
-  
+
   return self;
-  
+
 }
 
 

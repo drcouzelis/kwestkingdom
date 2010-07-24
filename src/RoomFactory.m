@@ -31,11 +31,11 @@ int roomNumber;
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     world = nil;
     type = ROOM_FOREST;
     terrain = ROOM_RANDOM;
@@ -45,30 +45,30 @@ int roomNumber;
     pathStartY = -1;
     pathStopX = 0;;
     pathStopY = 0;
-    
+
     // Default values for enemies
     chanceOfChomper = DEFAULT_CHANCE_OF_CHOMPER;
     chanceOfNinja = DEFAULT_CHANCE_OF_NINJA;
     chanceOfArcher = DEFAULT_CHANCE_OF_ARCHER;
     chanceOfGiant = DEFAULT_CHANCE_OF_GIANT;
-    
+
     pathMap = nil;
     terrainMap = nil;
     enemies = nil;
     items = nil;
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - (Room *) createRoom {
-  
+
   Room *room;
   int i;
-  
+
   if (type == ROOM_FOREST) {
     room = [[ForestRoom alloc] init];
   } else if (type == ROOM_SNOW) {
@@ -78,34 +78,34 @@ int roomNumber;
   } else {
     return nil;
   }
-  
+
   if (terrain == ROOM_RANDOM) {
     terrain = random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
   }
-  
+
   for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
     path[i] = NO_STEP;
   }
   steps = 0;
-  
+
   // Create a path from the entrance to a random exit.
   if (pathStartX == -1 && pathStartY == -1) {
     pathMap = [[Map alloc] init];
   } else {
     pathMap = [self generatePathToEdge];
   }
-  
+
   // Create the terrain, enemies, and items.
   terrainMap = [self generateTerrain];
   enemies = [self generateEnemies];
   items = [self generateItems];
-  
+
   // Set the two entrances to this room.
   [room setEntranceFromPrevRoomX: pathStartX];
   [room setEntranceFromPrevRoomY: pathStartY];
   [room setEntranceFromNextRoomX: pathStopX];
   [room setEntranceFromNextRoomY: pathStopY];
-  
+
   // Set the two exits from this room.
   if ([room getEntranceFromPrevRoomX] == 0) {
     [room setExitToPrevRoomX: [room getEntranceFromPrevRoomX] - 1];
@@ -114,7 +114,7 @@ int roomNumber;
   } else {
     [room setExitToPrevRoomX: [room getEntranceFromPrevRoomX]];
   }
-  
+
   if ([room getEntranceFromPrevRoomY] == 0) {
     [room setExitToPrevRoomY: [room getEntranceFromPrevRoomY] - 1];
   } else if ([room getEntranceFromPrevRoomY] == ROWS - 1) {
@@ -122,7 +122,7 @@ int roomNumber;
   } else {
     [room setExitToPrevRoomY: [room getEntranceFromPrevRoomY]];
   }
-  
+
   if ([room getEntranceFromNextRoomX] == 0) {
     [room setExitToNextRoomX: [room getEntranceFromNextRoomX] - 1];
   } else if ([room getEntranceFromNextRoomX] == COLS - 1) {
@@ -130,7 +130,7 @@ int roomNumber;
   } else {
     [room setExitToNextRoomX: [room getEntranceFromNextRoomX]];
   }
-  
+
   if ([room getEntranceFromNextRoomY] == 0) {
     [room setExitToNextRoomY: [room getEntranceFromNextRoomY] - 1];
   } else if ([room getEntranceFromNextRoomY] == ROWS - 1) {
@@ -138,7 +138,7 @@ int roomNumber;
   } else {
     [room setExitToNextRoomY: [room getEntranceFromNextRoomY]];
   }
-  
+
   /*
   printf("Entrance from prev %d %d; next %d %d; Exit to prev %d %d; next %d %d \n",
     [room getEntranceFromPrevRoomX],
@@ -150,31 +150,31 @@ int roomNumber;
     [room getExitToNextRoomX],
     [room getExitToNextRoomY]);
   */
-  
+
   // Set other information.
   [room setNumber: number];
   [room setPathMap: pathMap];
   [room setTerrainMap: terrainMap];
-  [room storeEnemies: enemies];
-  [room storeItems: items];
-  
+  [room setEnemies:enemies];
+  [room setItems:items];
+
   for (i = 0; path[i] != NO_STEP; i++) {
     [room addStep: path[i]];
   }
-  
+
   return room;
-  
+
 }
 
 
 - (BOOL) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h {
-  
+
   int i, j;
   int m, n;
-  
+
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      
+
       [list iterate];
       while ([list hasNext]) {
         Character *character = (Character *)[list next];
@@ -186,24 +186,24 @@ int roomNumber;
           }
         }
       }
-      
+
     }
   }
-  
+
   return NO;
-  
+
 }
 
 
 - (List *) generateEnemies {
-  
+
   List *list;
   id enemy;
   int x;
   int y;
-  
+
   int chanceOfEnemy;
-  
+
   int lowerChomper;
   int upperChomper;
   int lowerArcher;
@@ -212,29 +212,29 @@ int roomNumber;
   int upperNinja;
   int lowerGiant;
   int upperGiant;
-  
+
   int maxEnemies;
-  
+
   int randomNum;
-  
+
   list = [[[List alloc] init] ownsItems:YES];
-  
+
   if (difficulty == 0) {
     return list;
   }
-  
+
   // The default difficulty.
   chanceOfEnemy = difficulty;
   if (chanceOfEnemy > 7) {
     chanceOfEnemy = 7;
   }
-  
+
   if (difficulty < 7) {
     maxEnemies = 5;
   } else {
     maxEnemies = ROWS * COLS;
   }
-  
+
   lowerChomper = 0;
   upperChomper = chanceOfChomper;
   lowerArcher = upperChomper;
@@ -243,29 +243,29 @@ int roomNumber;
   upperNinja = upperArcher + chanceOfNinja;
   lowerGiant = upperNinja;
   upperGiant = upperNinja + chanceOfGiant;
-  
+
   for (y = 1; y < ROWS - 1 && [list size] <= maxEnemies; y++) {
     for (x = 1; x < COLS - 1 && [list size] <= maxEnemies; x++) {
-      
+
       if (
         x > pathStartX - 3 && x < pathStartX + 3 &&
         y > pathStartY - 3 && y < pathStartY + 3
       ) {
-        
+
         // Don't create enemies too close to the entrance.
-        
+
       } else {
-        
+
         if (
           [terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN &&
           random_number(0, 99) < chanceOfEnemy &&
           [self characterExistsInList: list atX: x andY: y withWidth: 1 andHeight: 1] == NO
         ) {
-          
+
           enemy = nil;
           randomNum = chanceOfChomper + chanceOfArcher + chanceOfNinja + chanceOfGiant;
           randomNum = random_number(1, randomNum);
-          
+
           if (randomNum > lowerChomper && randomNum <= upperChomper) { // Chomper
             enemy = [EnemyFactory createChomperX:x y:y]; //[[Chomper alloc] init];
           } else if (randomNum > lowerArcher && randomNum <= upperArcher) { // Archer
@@ -291,46 +291,46 @@ int roomNumber;
               }
             }
           }
-          
+
           if (enemy != nil) {
             [enemy setWorld: world];
             [enemy setX: x];
             [enemy setY: y];
             [list push: enemy];
           }
-          
+
         }
-        
+
       }
-      
+
     }
   }
-  
+
   return list;
-  
+
 }
 
 
 - (List *) generateItems {
-  
+
   List *list;
   Heart *heart;
   int x;
   int y;
   int backupX;
   int backupY;
-  
+
   list = [[[List alloc] init] ownsItems:YES];
-  
+
   heart = nil;
-  
+
   // The underground passage
   if (type == ROOM_UNDERGROUND) {
-    
+
   }
-  
+
   if (number % 5 == 0) {
-    
+
     for (y = 1; heart == nil && y < ROWS - 1; y++) {
       for (x = 1; heart == nil && x < COLS - 1; x++) {
         if ([pathMap getValueAtX: x andY: y] == YES) {
@@ -345,17 +345,17 @@ int roomNumber;
         }
       }
     }
-    
+
     if (heart == nil) {
       heart = [[Heart alloc] init];
       [heart setX: backupX];
       [heart setY: backupY];
     }
-    
+
     [list push: heart];
-    
+
   }
-  
+
   return list;
 }
 
@@ -364,49 +364,49 @@ int roomNumber;
 
 
 - (Map *) generatePathToEdge {
-  
+
   Map *map;
-  
+
   int pathX;
   int pathY;
   int changeX;
   int changeY;
-  
+
   int direction;
   int facing;
   int stepsTaken;
-  
+
   int x;
   int y;
-  
+
   int num;
   int i;
-  
+
   map = [[Map alloc] init];
   pathX = pathStartX;
   pathY = pathStartY;
   direction = UP;
   facing = STRAIGHT;
   stepsTaken = 0;
-  
+
   // Clear the pathway grid.
   for (x = 0; x < COLS; x++) {
     for (y = 0; y < ROWS; y++) {
       [map setX: x andY: y toValue: OPEN];
     }
   }
-  
+
   // Clear the list of ordered steps.
   for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
     path[i] = NO_STEP;
   }
   steps = 0;
-  
+
   // Mark the starting location as part of the path
   [map setX: pathX andY: pathY toValue: PATH];
   path[steps] = (pathY * COLS) + pathX;
   steps++;
-  
+
   if (pathY == ROWS - 1) {
     direction = UP;
   } else if (pathY == 0) {
@@ -418,13 +418,13 @@ int roomNumber;
   } else {
     direction = UP;
   }
-  
+
   // Loop while not at the edge of the screen...
   do {
-    
+
     changeX = 0;
     changeY = 0;
-    
+
     // Determine how many new steps to take and in which direction.
     if (facing == STRAIGHT) {
       num = random_number(1, 3);
@@ -445,20 +445,20 @@ int roomNumber;
         changeY = num;
       }
     }
-    
+
     // Make sure the path is pretty long.
     if (pathX + changeX >= COLS - 1 || pathX + changeX <= 0) {
       if (stepsTaken + abs(changeX) < MIN_NUM_OF_STEPS_IN_PATH) {
         changeX = -changeX;
       }
     }
-    
+
     if (pathY + changeY >= ROWS - 1 || pathY + changeY <= 0) {
       if (stepsTaken + abs(changeY) < MIN_NUM_OF_STEPS_IN_PATH) {
         changeY = -changeY;
       }
     }
-    
+
     // Add the new random X steps to the path map.
     for (i = 0; i < abs(changeX); i++) {
       pathX += changeX / abs(changeX);
@@ -472,7 +472,7 @@ int roomNumber;
       path[steps] = (pathY * COLS) + pathX;
       steps++;
     }
-    
+
     // Same for the Y steps.
     for (i = 0; i < abs(changeY); i++) {
       pathY += changeY / abs(changeY);
@@ -486,19 +486,19 @@ int roomNumber;
       path[steps] = (pathY * COLS) + pathX;
       steps++;
     }
-    
+
     // Change direction.
     if (facing == STRAIGHT) {
       facing = TURN;
     } else {
       facing = STRAIGHT;
     }
-    
+
   } while (pathX != 0 && pathX != COLS - 1 && pathY != 0 && pathY != ROWS - 1);
-  
+
   pathStopX = pathX;
   pathStopY = pathY;
-  
+
   // Let's see what the newly created pathway looks like!
   /*
   for (y = 0; y < ROWS; y++) {
@@ -508,29 +508,29 @@ int roomNumber;
     printf("\n");
   }
   */
-  
+
   return map;
-  
+
 }
 
 
 - (Map *) generateTerrain {
-  
+
   Map *map;
-  
+
   int chanceOfWater;
   int chanceOfTrees;
   int chanceOfClumpedWater;
   int chanceOfClumpedTrees;
-  
+
   int actualChanceOfWater;
   int actualChanceOfTrees;
-  
+
   int x;
   int y;
-  
+
   map = [[Map alloc] init];
-  
+
   if (terrain == ROOM_NO_WATER_AND_NO_TREES) {
     chanceOfWater = 0;
     chanceOfTrees = 0;
@@ -567,22 +567,22 @@ int roomNumber;
     chanceOfClumpedWater = 50;
     chanceOfClumpedTrees = 10;
   }
-  
+
   for (x = 0; x < COLS; x++) {
     for (y = 0; y < ROWS; y++) {
-      
+
       [map setX: x andY: y toValue: GRASS_TERRAIN];
-      
+
       if ([pathMap getValueAtX: x andY: y] != PATH) {
-        
+
         // Make a border of mountains.
         if (x == 0 || x == COLS - 1 || y == 0 || y == ROWS - 1) {
           [map setX: x andY: y toValue: TREE_TERRAIN];
         } else {
-          
+
           actualChanceOfWater = chanceOfWater;
           actualChanceOfTrees = chanceOfTrees;
-          
+
           // If this spot has any water around it
           // then increase its chance of being water.
           if (
@@ -593,7 +593,7 @@ int roomNumber;
           ) {
             actualChanceOfWater = chanceOfClumpedWater;
           }
-          
+
           if (
             [map getValueAtX: x andY: y - 1] == TREE_TERRAIN ||
             [map getValueAtX: x andY: y + 1] == TREE_TERRAIN ||
@@ -602,20 +602,20 @@ int roomNumber;
           ) {
             actualChanceOfTrees = chanceOfClumpedTrees;
           }
-          
+
           if (random_number(1, 100) <= actualChanceOfWater) {
             [map setX: x andY: y toValue: WATER_TERRAIN];
           } else if (random_number(1, 100) <= actualChanceOfTrees) {
             [map setX: x andY: y toValue: TREE_TERRAIN];
           }
-          
+
         }
-        
+
       }
-      
+
     }
   }
-  
+
   return map;
 
 }
