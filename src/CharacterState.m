@@ -1,23 +1,21 @@
 #import "Animation.h"
 #import "Character2.h"
-#import "CharacterCommands.h"
-#import "Command.h"
+#import "CharacterState.h"
 #import "KwestKingdom.h"
 #import "Sprite2.h"
-#import "World.h"
 
 
-@implementation CharacterCommand
+@implementation CharacterState
 
 
-- setCharacter:(Character2 *)aCharacter {
-  character = aCharacter;
-  return self;
-}
-
-
-- setAnimation:(Animation *)anAnimation {
-  animation = anAnimation;
+- initCharacter:(Character2 *)aCharacter
+    environment:(id<Environment>)anEnvironment
+      animation:(Animation *)anAnimation {
+  if ([super init]) {
+    character = aCharacter;
+    environment = anEnvironment;
+    animation = anAnimation;
+  }
   return self;
 }
 
@@ -31,10 +29,10 @@
 @end
 
 
-@implementation WanderCommand
+@implementation WanderState
 
 
-- execute {
+- update {
 
   Sprite2 *sprite = [character sprite];
 
@@ -54,9 +52,7 @@
     x--;
   }
 
-  World *world = [sprite world];
-
-  if ([world isWalkableAtX:x andY:y] && ![world isInhabitedAtX:x andY:y]) {
+  if ([environment isWalkableAtX:x y:y] && ![environment isInhabitedAtX:x y:y]) {
     [sprite moveToX:x];
     [sprite moveToY:y];
   }
@@ -75,7 +71,7 @@
 @end
 
 
-@implementation ChaseCommand
+@implementation ChaseState
 
 
 - execute {

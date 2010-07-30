@@ -2,6 +2,8 @@
 
 #include <allegro.h>
 
+#import "Environment.h"
+
 
 @class Animation;
 @class Character;
@@ -15,7 +17,7 @@
 @class Snapshot;
 
 
-@interface World : Object {
+@interface World : Object <Environment> {
 
   Hero *hero;
   List *rooms;
@@ -38,45 +40,28 @@
 
 }
 
-
-- updateRoom;
-- updateItems;
-- updateTurn;
-- updateHero;
-- updateEnemies;
-
 - (Room *) createNextRoom;
 - changeRooms;
-
-- drawTerrain: (BITMAP *) buffer;
-- drawCharacters: (BITMAP *) buffer;
-- drawUserInterface: (BITMAP *) buffer;
 
 - (int) getRoomNumber;
 - (int) getMoney;
 
 - addHelpTile: (id) aHelpTile;
 
-- (BOOL) isInhabitedAtX: (int) x andY: (int) y;
-
-- (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y;
-- attackFromTeam: (int) team atX: (int) x andY: (int) y;
-- shake;
-
 - addCharacter:(id)aCharacter;
 - addItem:(Powerup *)anItem;
 
-- (Character *)getTarget;
-
-- (BOOL) isSwimmableAtX: (int) x andY: (int) y;
-- (BOOL) isWalkableAtX: (int) x andY: (int) y;
-- (BOOL) isJumpableAtX: (int) x andY: (int) y;
-- (BOOL) isFlyableAtX: (int) x andY: (int) y;
-- (BOOL) isSoarableAtX: (int) x andY: (int) y;
-
 - update;
-- draw:(BITMAP *)buffer;
+- updateRoom;
+- updateItems;
+- updateTurn;
+- updateHero;
+- updateEnemies;
 
+- draw:(BITMAP *)buffer;
+- drawTerrain: (BITMAP *) buffer;
+- drawCharacters: (BITMAP *) buffer;
+- drawUserInterface: (BITMAP *) buffer;
 
 @end
 

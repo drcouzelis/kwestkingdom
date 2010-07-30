@@ -1,4 +1,3 @@
-#import "Command.h"
 #import "Condition.h"
 
 
@@ -6,9 +5,8 @@
 
 
 - check {
-  return nil;
+  return self;
 }
 
 
 @end
-

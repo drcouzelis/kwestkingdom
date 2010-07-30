@@ -4,7 +4,6 @@
 #import "Resources.h"
 #import "Screen.h"
 #import "Sprite2.h"
-#import "World.h"
 
 
 @interface Sprite2 (PrivateMethods)
@@ -141,17 +140,6 @@
 - moveToY:(int)pos {
   y = pos;
   return self;
-}
-
-
-- setWorld:(World *)aWorld {
-  world = aWorld;
-  return self;
-}
-
-
-- (World *)world {
-  return world;
 }
 
 

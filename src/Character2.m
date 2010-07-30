@@ -1,18 +1,14 @@
 #import "Character2.h"
-#import "CharacterCommands.h"
-#import "List.h"
 #import "Sprite2.h"
-#import "World.h"
+#import "State.h"
 
 
 @implementation Character2
 
 
 - initSprite:(Sprite2 *)aSprite {
-  self = [self init];
-  if (self) {
+  if ([self init]) {
     sprite = aSprite;
-    commands = [[[List alloc] init] ownsItems:YES];
   }
   return self;
 }
@@ -20,7 +16,10 @@
 
 - free {
   [sprite free];
-  [commands free];
+  int i;
+  for (i = 0; i < numStates; i++) {
+    [states[i] free];
+  }
   return [super free];
 }
 
@@ -37,24 +36,23 @@
 }
 
 
-- addCommand:(CharacterCommand *)aCommand named:(char *)aName {
-  [aCommand setCharacter:self];
-  [commands push:aCommand named:aName];
-  command = aCommand;
+- addState:(State *)aState {
+  if (numStates < MAX_STATES) {
+    states[numStates] = aState;
+    numStates++;
+    [self setState:aState]; // Set the current state to the new state
+  } else {
+    fprintf(stderr, "Failed to add state because there are too many. \n");
+  }
   return self;
 }
 
 
-- setCommandNamed:(char *)aName {
-  [command finish];
-  command = [commands itemNamed:aName];
-  [command start];
+- setState:(State *)aState {
+  [state finish];
+  state = aState;
+  [state start];
   return self;
-}
-
-
-- (Sprite2 *)sprite {
-  return sprite;
 }
 
 
@@ -78,7 +76,7 @@
     turns = 0;
   }
   if (turns == 0) {
-    [command execute];
+    [state update];
   }
   return self;
 }
@@ -188,12 +186,6 @@
 @implementation Character2 (Sprite)
 
 
-- setWorld:(World *)aWorld {
-  [sprite setWorld:aWorld];
-  return self;
-}
-
-
 - (int)width {
   return [sprite width];
 }
@@ -262,6 +254,11 @@
 
 - (BOOL)isWaiting {
   return [self finishedTurn];
+}
+
+
+- (Sprite2 *)sprite {
+  return sprite;
 }
 
 

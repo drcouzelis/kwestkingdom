@@ -3,10 +3,11 @@
 #include <allegro.h>
 
 
-@class CharacterCommand;
-@class List;
+#define MAX_STATES 16
+
+
+@class State;
 @class Sprite2;
-@class World;
 
 
 typedef enum {
@@ -28,9 +29,9 @@ typedef enum {
   int turns;
 
   // Keep a collection of commands
-  // Select the one you want via a string "label"
-  CharacterCommand *command; // TEMP
-  List *commands;
+  State *state;
+  State *states[MAX_STATES];
+  int numStates;
 }
 
 - initSprite:(Sprite2 *)aSprite;
@@ -38,10 +39,8 @@ typedef enum {
 - update;
 - draw:(BITMAP *)canvas;
 
-- addCommand:(CharacterCommand *)aCommand named:(char *)aName;
-- setCommandNamed:(char *)aName;
-
-- (Sprite2 *)sprite;
+- addState:(State *)aState;
+- setState:(State *)aState;
 
 @end
 
@@ -76,7 +75,6 @@ typedef enum {
 
 
 @interface Character2 (Sprite)
-- setWorld:(World *)aWorld;
 - (int)width;
 - (int)height;
 - (int)x;
@@ -94,5 +92,6 @@ typedef enum {
 - (int)getTeam;
 - dropItem;
 - (BOOL)isWaiting;
+- (Sprite2 *)sprite;
 @end
 

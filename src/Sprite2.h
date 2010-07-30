@@ -6,29 +6,26 @@
 @class Animation;
 @class List;
 @class Object;
-@class World;
 
 
 @interface Sprite2 : Object {
- @private 
+ @private
   // Position on the map
   int x; // Horizontal, from 0 to COLS - 1
   int y; // Vertical, from 0 to ROWS - 1
 
   int w; // Width of the sprite, or, how many square it occupies horizontally
   int h; // Height of the sprite
-  
+
   // Where the image is on the screen
   int visualX; // Screen width
   int visualY; // Screen height
   int fudge;
-  
+
   int speed; // In FPS
-  
+
   Animation *animation;
   List *animations;
-  
-  World *world;
 }
 
 - initWidth:(int)width height:(int)height;
@@ -61,9 +58,6 @@
 
 // Ensure the sprite stays inside these boundaries
 - boundAtTop:(int)top bottom:(int)bottom left:(int)left right:(int)right;
-
-- setWorld:(World *)aWorld;
-- (World *)world;
 
 @end
 

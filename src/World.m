@@ -299,160 +299,6 @@ typedef enum {
 }
 
 
-- (Character *)getTarget {
-  return hero;
-}
-
-
-- (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
-
-  int i, j;
-  int m, n;
-
-  int w, h;
-
-  w = 1;
-  h = 1;
-
-  List *enemies = [room enemies];
-
-  for (i = 0; i < w; i++) {
-    for (j = 0; j < h; j++) {
-
-      for (m = 0; m < [hero getWidth]; m++) {
-        for (n = 0; n < [hero getHeight]; n++) {
-
-          if (team != [hero getTeam] && x + i == [hero getX] + m && y + j == [hero getY] + n) {
-            return YES;
-          }
-
-        }
-      }
-
-      [enemies iterate];
-
-      while ([enemies hasNext]) {
-        id enemy = [enemies next];
-        for (m = 0; m < [enemy getWidth]; m++) {
-          for (n = 0; n < [enemy getHeight]; n++) {
-            if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
-              return YES;
-            }
-          }
-        }
-      }
-
-    }
-  }
-
-  return NO;
-
-}
-
-
-- attackFromTeam: (int) team atX: (int) x andY: (int) y {
-
-  int m, n;
-
-  for (m = 0; m < [hero getWidth]; m++) {
-    for (n = 0; n < [hero getHeight]; n++) {
-      if (team != [hero getTeam] && x == [hero getX] + m && y == [hero getY] + n) {
-        [hero hurt];
-      }
-    }
-  }
-
-  List *enemies = [room enemies];
-
-  [enemies iterate];
-
-  while ([enemies hasNext]) {
-    id enemy = [enemies next];
-    for (m = 0; m < [enemy getWidth]; m++) {
-      for (n = 0; n < [enemy getHeight]; n++) {
-        if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
-          [enemy hurt];
-        }
-      }
-    }
-  }
-
-  return self;
-
-}
-
-
-- (BOOL) isSwimmableAtX: (int) x andY: (int) y {
-  return [room isSwimmableAtX: x andY: y];
-}
-
-
-- (BOOL) isWalkableAtX: (int) x andY: (int) y {
-  return [room isWalkableAtX: x andY: y];
-}
-
-
-- (BOOL) isJumpableAtX: (int) x andY: (int) y {
-  return [room isJumpableAtX: x andY: y];
-}
-
-
-- (BOOL) isFlyableAtX: (int) x andY: (int) y {
-  return [room isFlyableAtX: x andY: y];
-}
-
-
-- (BOOL) isSoarableAtX: (int) x andY: (int) y {
-  return [room isSoarableAtX: x andY: y];
-}
-
-
-- (BOOL) isInhabitedAtX: (int) x andY: (int) y {
-
-  int i, j;
-  int m, n;
-
-  int w, h;
-
-  w = 1;
-  h = 1;
-
-  List *enemies = [room enemies];
-
-  for (i = 0; i < w; i++) {
-    for (j = 0; j < h; j++) {
-
-      for (m = 0; m < [hero getWidth]; m++) {
-        for (n = 0; n < [hero getHeight]; n++) {
-
-          if (x + i == [hero getX] + m && y + j == [hero getY] + n) {
-            return YES;
-          }
-
-        }
-      }
-
-      [enemies iterate];
-
-      while ([enemies hasNext]) {
-        id enemy = [enemies next];
-        for (m = 0; m < [enemy getWidth]; m++) {
-          for (n = 0; n < [enemy getHeight]; n++) {
-            if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
-              return YES;
-            }
-          }
-        }
-      }
-
-    }
-  }
-
-  return NO;
-
-}
-
-
 - (int) getRoomNumber {
   return [room getNumber];
 }
@@ -460,18 +306,6 @@ typedef enum {
 
 - (int) getMoney {
   return [hero getMoney];
-}
-
-
-- shake {
-  state = WORLD_SHAKING_STATE;
-  [prevRoomSnapshot setX: 0];
-  [prevRoomSnapshot setY: 0];
-  [prevRoomSnapshot moveY: 10];
-  [prevRoomSnapshot setSpeed: getWindowHeight()];
-  [self drawTerrain: [prevRoomSnapshot getCanvas]];
-  [self drawCharacters: [prevRoomSnapshot getCanvas]];
-  return self;
 }
 
 
@@ -753,6 +587,173 @@ typedef enum {
 
   return self;
 
+}
+
+
+/**
+ * Environment methods
+ */
+- (BOOL) isSwimmableAtX:(int)x y:(int)y {
+  return [room isSwimmableAtX: x andY: y];
+}
+
+
+- (BOOL) isWalkableAtX:(int)x y:(int)y {
+  return [room isWalkableAtX: x andY: y];
+}
+
+
+- (BOOL) isJumpableAtX:(int)x y:(int)y {
+  return [room isJumpableAtX: x andY: y];
+}
+
+
+- (BOOL) isFlyableAtX:(int)x y:(int)y {
+  return [room isFlyableAtX: x andY: y];
+}
+
+
+- (BOOL) isSoarableAtX:(int)x y:(int)y {
+  return [room isSoarableAtX: x andY: y];
+}
+
+
+- (Character *)player {
+  return hero;
+}
+
+
+- (BOOL) isInhabitedAtX:(int)x y:(int)y {
+
+  int i, j;
+  int m, n;
+
+  int w, h;
+
+  w = 1;
+  h = 1;
+
+  List *enemies = [room enemies];
+
+  for (i = 0; i < w; i++) {
+    for (j = 0; j < h; j++) {
+
+      for (m = 0; m < [hero getWidth]; m++) {
+        for (n = 0; n < [hero getHeight]; n++) {
+
+          if (x + i == [hero getX] + m && y + j == [hero getY] + n) {
+            return YES;
+          }
+
+        }
+      }
+
+      [enemies iterate];
+
+      while ([enemies hasNext]) {
+        id enemy = [enemies next];
+        for (m = 0; m < [enemy getWidth]; m++) {
+          for (n = 0; n < [enemy getHeight]; n++) {
+            if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
+              return YES;
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  return NO;
+
+}
+
+
+- (BOOL)isAttackableFromTeam:(int)team x:(int)x y:(int)y {
+
+  int i, j;
+  int m, n;
+
+  int w, h;
+
+  w = 1;
+  h = 1;
+
+  List *enemies = [room enemies];
+
+  for (i = 0; i < w; i++) {
+    for (j = 0; j < h; j++) {
+
+      for (m = 0; m < [hero getWidth]; m++) {
+        for (n = 0; n < [hero getHeight]; n++) {
+
+          if (team != [hero getTeam] && x + i == [hero getX] + m && y + j == [hero getY] + n) {
+            return YES;
+          }
+
+        }
+      }
+
+      [enemies iterate];
+
+      while ([enemies hasNext]) {
+        id enemy = [enemies next];
+        for (m = 0; m < [enemy getWidth]; m++) {
+          for (n = 0; n < [enemy getHeight]; n++) {
+            if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
+              return YES;
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  return NO;
+}
+
+
+- attackFromTeam:(int)team x:(int)x y:(int)y {
+
+  int m, n;
+
+  for (m = 0; m < [hero getWidth]; m++) {
+    for (n = 0; n < [hero getHeight]; n++) {
+      if (team != [hero getTeam] && x == [hero getX] + m && y == [hero getY] + n) {
+        [hero hurt];
+      }
+    }
+  }
+
+  List *enemies = [room enemies];
+
+  [enemies iterate];
+
+  while ([enemies hasNext]) {
+    id enemy = [enemies next];
+    for (m = 0; m < [enemy getWidth]; m++) {
+      for (n = 0; n < [enemy getHeight]; n++) {
+        if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
+          [enemy hurt];
+        }
+      }
+    }
+  }
+
+  return self;
+}
+
+
+- shake {
+  state = WORLD_SHAKING_STATE;
+  [prevRoomSnapshot setX: 0];
+  [prevRoomSnapshot setY: 0];
+  [prevRoomSnapshot moveY: 10];
+  [prevRoomSnapshot setSpeed: getWindowHeight()];
+  [self drawTerrain: [prevRoomSnapshot getCanvas]];
+  [self drawCharacters: [prevRoomSnapshot getCanvas]];
+  return self;
 }
 
 
