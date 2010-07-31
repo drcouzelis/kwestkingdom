@@ -1,5 +1,22 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "Game.h"
-#import "World.h"
 
 
 typedef enum {
@@ -233,7 +250,7 @@ typedef enum {
   drawBox(buffer, x, y, w, h);
 
   // Draw the title of the game
-  [titleAnimation draw: buffer
+  [titleAnimation drawTo: buffer
     atX: (getWindowWidth() / 2) - ([titleAnimation width] / 2)
     andY: (getWindowWidth() - [titleAnimation width]) / 2
   ];
@@ -271,7 +288,7 @@ typedef enum {
     resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, "S for Sound (Off)");
   }
   
-  [menuPointer draw: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
+  [menuPointer drawTo: buffer atX: x - 4 andY: y + vTextOffset + (lineSpacing * menuSelection) - 1];
   
   return self;
   
@@ -376,7 +393,7 @@ typedef enum {
   
   case GAME_OVER_STATE:
     [world draw: buffer];
-    [gameOverAnimation draw: buffer
+    [gameOverAnimation drawTo: buffer
       atX: (getWindowWidth() / 2) - ([gameOverAnimation width] / 2)
       andY: (getWindowHeight() / 2) - ([gameOverAnimation height] / 2)];
     break;

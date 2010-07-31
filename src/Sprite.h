@@ -1,15 +1,36 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import <objc/Object.h>
 #import <allegro.h>
 #import "Animation.h"
+#import "Drawable.h"
+#import "Inhabitable.h"
 #import "KwestKingdom.h"
+#import "Positionable.h"
 #import "Resources.h"
 #import "Screen.h"
+#import "Targetable.h"
+#import "Traversable.h"
+#import "Updatable.h"
 
 
-@class World;
-
-
-@interface Sprite : Object {
+@interface Sprite : Object <Drawable, Positionable, Updatable> {
   
   // Position on the map
   int x; // Horizontal, from 0 to COLS - 1
@@ -26,32 +47,20 @@
   
   Animation *animation;
   
-  World *world;
+  id<Inhabitable, Targetable, Traversable> world;
   
   int state;
   
 }
 
 
-- update;
-- draw:(BITMAP *)buffer;
-
 - (BOOL) moving;
 - (int) getWidth;
 - (int) getHeight;
 
-- setWorld: (World *)aWorld;
+- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
 - setSpeed: (int) theSpeed;
 - setState: (int) aState;
-
-- setX: (int) newX;
-- setY: (int) newY;
-- (int) getX;
-- (int) getY;
-- moveX: (int) newX;
-- moveY: (int) newY;
-- setSpeed: (int) newSpeed;
-- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right;
 
 
 @end

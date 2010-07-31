@@ -16,17 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Collectable.h"
-#import "Sprite.h"
+#import <objc/Object.h>
 
 
-@interface MoneyBag : Sprite <Collectable> {
-  int amount;
-}
-
-
-- (int) getAmount;
-- setAmount: (int) anAmount;
-
-
+@protocol Traversable
+- (BOOL) isSwimmableAtX: (int) x andY: (int) y;
+- (BOOL) isWalkableAtX: (int) x andY: (int) y;
+- (BOOL) isJumpableAtX: (int) x andY: (int) y;
+- (BOOL) isFlyableAtX: (int) x andY: (int) y;
+- (BOOL) isSoarableAtX: (int) x andY: (int) y;
 @end
+

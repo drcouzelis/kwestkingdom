@@ -1,57 +1,63 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import <objc/Object.h>
 
 
-@class Node;
+@interface Node : Object {
+  id item;
+  Node *next;
+  Node *prev;
+}
+
+
+- setItem: (id) anItem;
+- setNext: (Node *) theNext;
+- setPrev: (Node *) thePrev;
+- (id) getItem;
+- (Node *) getNext;
+- (Node *) getPrev;
+
+
+@end
 
 
 @interface List : Object {
   Node *head;
   Node *tail;
+  Node *next;
   int size;
-  Node *next; // For the iterator
-  BOOL ownsItems; // If true, it will free the items when deallocating the list
 }
-- ownsItems:(BOOL)flag;
-- (int)size;
-@end
 
 
-@interface List (Insert)
-- insert:(id)item;
-- insert:(id)item named:(char *)name;
-- push:(id)item;
-- push:(id)item named:(char *)name;
-- enqueue:(id)item;
-- enqueue:(id)item named:(char *)name;
-@end
+- append: (id) item;
+- remove: (id) item;
 
+- (int) findIndex: (id) item;
+- (id) getIndex: (int) index;
 
-@interface List (Remove)
-- (id)remove:(id)item; // Returns a pointer to the item
-- (id)removeItemNamed:(char *)name; // This one does too
-- (id)removeItemAtIndex:(int)index;
-- (id)pop;
-- (id)dequeue;
-@end
+- (id) getHead;
+- (id) getTail;
 
-
-@interface List (Retrieve)
-- (id)itemAtIndex:(int)index;
-- (id)itemNamed:(char *)name;
-- (id)first; // Returns a pointer to the first item in the list...
-- (id)last; // ...and the last item in the list
-@end
-
-
-@interface List (Query)
-- (BOOL)isEmpty;
-- (int)findIndexOf:(id)item;
-@end
-
-
-@interface List (Iterator)
 - iterate;
-- (BOOL)hasNext;
-- (id)next;
-@end
+- (id) next;
 
+- (int) size;
+
+
+@end

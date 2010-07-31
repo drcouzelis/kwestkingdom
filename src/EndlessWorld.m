@@ -1,7 +1,22 @@
-#import "Character2.h"
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "EndlessWorld.h"
-//#import "EnemyFactory.h" // TEMP
-#import "Sprite2.h"
 
 
 @implementation EndlessWorld
@@ -13,30 +28,11 @@
   
   if (self) {
     difficulty = 100;
-    
-    // TEMP
-    //enemy = [[[EnemyFactory createChomperX:5 y:5] sprite] setWorld:self];
   }
   
   return self;
   
 }
-
-
-// TEMP
-//- update {
-//  [super update];
-//  [enemy update];
-//  return self;
-//}
-
-
-// TEMP
-//- draw:(BITMAP *)canvas {
-//  [super draw:canvas];
-//  [enemy draw:canvas];
-//  return self;
-//}
 
 
 @end

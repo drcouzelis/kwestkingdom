@@ -6,8 +6,6 @@
 #ifndef SCREEN_UPDATE_H
 #define SCREEN_UPDATE_H
 
-#include <allegro.h>
-
 #ifdef __cplusplus
 	extern "C" {
 #endif

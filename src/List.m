@@ -1,77 +1,68 @@
-#include <string.h>
-
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "List.h"
-
-
-#define MAX_LIST_NAME_LENGTH 256
-
-
-@interface Node : Object {
-  id item;
-  char name[MAX_LIST_NAME_LENGTH];
-  Node *next;
-  Node *prev;
-}
-- setItem:(id)anItem;
-- setNext:(Node *)node;
-- setPrev:(Node *)node;
-- setName:(char *)aName;
-- (id)item;
-- (Node *)next;
-- (Node *)prev;
-- (char *)name;
-@end
-
-
-@interface List (Private)
-- removeNode:(Node *)node;
-@end
 
 
 @implementation Node
 
 
-- setItem:(id)anItem {
+- init {
+  self = [super init];
+  if (self) {
+    item = nil;
+    next = nil;
+    prev = nil;
+  }
+  return self;
+}
+
+
+- setItem: (id) anItem {
   item = anItem;
   return self;
 }
 
 
-- setNext:(Node *)node {
-  next = node;
+- setNext: (Node *) theNext {
+  next = theNext;
   return self;
 }
 
 
-- setPrev:(Node *)node {
-  prev = node;
+- setPrev: (Node *) thePrev {
+  prev = thePrev;
   return self;
 }
 
 
-- setName:(char *)aName {
-  strncpy(name, aName, MAX_LIST_NAME_LENGTH);
-  return self;
-}
-
-
-- (id)item {
+- (id) getItem {
   return item;
 }
 
 
-- (Node *)next {
+- (Node *) getNext {
   return next;
 }
 
 
-- (Node *)prev {
+- (Node *) getPrev {
   return prev;
-}
-
-
-- (char *)name {
-  return name;
 }
 
 
@@ -81,257 +72,151 @@
 @implementation List
 
 
+- init {
+  
+  self = [super init];
+  
+  if (self) {
+    head = nil;
+    tail = nil;
+    next = nil;
+    size = 0;
+  }
+  
+  return self;
+  
+}
+
+
 - free {
-  while (![self isEmpty]) {
-    if (ownsItems) {
-      [[self pop] free];
-    } else {
-      [self pop];
-    }
+  
+  Node *node;
+  Node *tmp;
+  
+  node = head;
+  
+  while (node != nil) {
+    tmp = [node getNext];
+    [[node getItem] free];
+    [node free];
+    node = tmp;
   }
-  return [super free];
-}
-
-
-- ownsItems:(BOOL)flag {
-  ownsItems = flag;
-  return self;
-}
-
-
-- (int)size {
-  return size;
-}
-
-
-@end
-
-
-@implementation List (Insert)
-
-
-- insert:(id)item {
-  
-  if (!item) {
-    return self;
-  }
-  
-  Node *node = [[Node alloc] init];
-  [node setItem:item];
-  
-  // Put the new node at the head of the list
-  if (!tail) {
-    tail = node;
-  } else {
-    [head setPrev:node];
-    [node setNext:head];
-  }
-  head = node;
-  
-  size++;
   
   return self;
+  
 }
 
 
-- insert:(id)item named:(char *)name {
-  [self insert:item];
-  [tail setName:name];
-  return self;
-}
-
-
-- push:(id)item {
-
-  if (!item) {
-    return self;
-  }
+- append: (id) item {
   
-  Node *node = [[Node alloc] init];
-  [node setItem:item];
+  Node *node;
   
-  // Put the new node at the tail of the list
-  if (!head) {
+  node = [[Node alloc] init];
+  [node setItem: item];
+  
+  if (head == nil) {
     head = node;
   } else {
-    [node setPrev:tail];
-    [tail setNext:node];
+    [node setPrev: tail];
+    [tail setNext: node];
   }
-  tail = node;
   
+  tail = node;
   size++;
   
   return self;
+  
 }
 
 
-- push:(id)item named:(char *)name {
-  [self push:item];
-  [tail setName:name];
+- remove: (id) item {
+  
+  Node *node;
+  
+  node = head;
+  
+  while (node != nil && [node getItem] != item) {
+    node = [node getNext];
+  }
+  
+  if (node == nil) {
+    return nil;
+  }
+  
+  if (node == head && node == tail) {
+    head = nil;
+    tail = nil;
+  }
+  
+  if (node == head) {
+    head = [head getNext];
+    [head setPrev: nil];
+  } else if (node == tail) {
+    tail = [tail getPrev];
+    [tail setNext: nil];
+  } else {
+    [[node getPrev] setNext: [node getNext]];
+    [[node getNext] setPrev: [node getPrev]];
+  }
+  
+  [node free];
+  size--;
+  
   return self;
+  
 }
 
 
-- enqueue:(id)item {
-  return [self push:item];
-}
-
-
-- enqueue:(id)item named:(char *)name {
-  return [self push:item named:name];
-}
-
-
-@end
-
-
-@implementation List (Remove)
-
-
-- (id)remove:(id)item {
-
-  if (!item) {
-    return nil;
-  }
+- (int) findIndex: (id) item {
   
-  Node *node = head;
+  Node *node;
+  int index;
   
-  while (node && [node item] != item) {
-    node = [node next];
-  }
+  node = head;
+  index = 0;
   
-  if (!node) {
-    // Item not found!
-    return nil;
-  }
-  
-  return [self removeNode:node];
-}
-
-
-- (id)removeItemNamed:(char *)name {
-  Node *node = head;
-  while (node && strncmp([node name], name, MAX_LIST_NAME_LENGTH) != 0) {
-    node = [node next];
-  }
-  return [self removeNode:node];
-}
-
-
-- (id)removeItemAtIndex:(int)index {
-
-  if (index < 0 || index >= size) {
-    return nil;
-  }
-  
-  Node *node = head;
-  int count = 0;
-  
-  while (count < index) {
-    node = [node next];
-    count++;
-  }
-  
-  return [self removeNode:node];
-}
-
-
-- (id)pop {
-  return [self removeNode:tail];
-}
-
-
-- (id)dequeue {
-  return [self removeNode:head];
-}
-
-
-@end
-
-
-@implementation List (Retrieve)
-
-
-- (id)itemAtIndex:(int)index {
-  
-  Node *node = head;
-  int count = 0;
-  
-  if (index < 0 || index >= size) {
-    return nil;
-  }
-  
-  while (count < index) {
-    node = [node next];
-    count++;
-  }
-  
-  return [node item];
-}
-
-
-- (id)itemNamed:(char *)name {
-  
-  Node *node = head;
-  
-  while (node && strncmp([node name], name, MAX_LIST_NAME_LENGTH) != 0) {
-    node = [node next];
-  }
-  
-  return [node item];
-}
-
-
-- (id)first {
-  return [head item];
-}
-
-
-- (id)last {
-  return [tail item];
-}
-
-
-@end
-
-
-@implementation List (Query)
-
-
-- (BOOL) isEmpty {
-  if (size == 0) {
-    return YES;
-  }
-  return NO;
-}
-
-
-- (int)findIndexOf:(id)item {
-  
-  Node *node = head;
-  int index = 0;
-  
-  if (!item) {
+  if (item == nil) {
     return -1;
   }
   
-  while (node && [node item] != item) {
-    node = [node next];
+  while (node != nil && [node getItem] != item) {
+    node = [node getNext];
     index++;
   }
   
-  if (!node) {
+  if (node == nil) {
     return -1;
   }
   
   return index;
+  
 }
 
 
-@end
-
-
-@implementation List (Iterator)
+- (id) getIndex: (int) index {
+  
+  Node *node;
+  int count;
+  
+  node = head;
+  count = 0;
+  
+  if (index < 0) {
+    return nil;
+  }
+  
+  while (node != nil && count != index) {
+    node = [node getNext];
+    count++;
+  }
+  
+  if (node == nil) {
+    return nil;
+  }
+  
+  return [node getItem];
+  
+}
 
 
 - iterate {
@@ -340,56 +225,35 @@
 }
 
 
-- (BOOL)hasNext {
-  if (next) {
-    return YES;
-  }
-  return NO;
+- (id) getHead {
+  return [head getItem];
 }
 
 
-- (id)next {
-  id item = [next item];
-  next = [next next]; // :-P
+- (id) getTail {
+  return [tail getItem];
+}
+
+
+- (id) next {
+  
+  id item;
+  
+  if (next == nil) {
+    return nil;
+  }
+  
+  item = [next getItem];
+  next = [next getNext];
+  
   return item;
+  
+}
+
+
+- (int) size {
+  return size;
 }
 
 
 @end
-
-
-@implementation List (Private)
-
-
-- removeNode:(Node *)node {
-
-  if (!node) {
-    return self;
-  }
-
-  if (node == head && node == tail) {
-    head = nil;
-    tail = nil;
-  }
-  
-  if (node == head) {
-    head = [head next];
-    [head setPrev:nil];
-  } else if (node == tail) {
-    tail = [tail prev];
-    [tail setNext:nil];
-  } else {
-    [[node prev] setNext: [node next]];
-    [[node next] setPrev: [node prev]];
-  }
-  
-  id item = [node item];
-  [node free];
-  size--;
-
-  return item;
-}
-
-
-@end
-

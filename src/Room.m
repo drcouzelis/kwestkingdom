@@ -1,3 +1,21 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "Room.h"
 
 
@@ -5,20 +23,20 @@
 
 
 - init {
-
+  
   int i;
-
+  
   self = [super init];
-
+  
   if (self) {
-
+    
     pathMap = nil;
     terrainMap = nil;
-
-    enemies = [[[List alloc] init] ownsItems:YES];
-    items = [[[List alloc] init] ownsItems:YES];
-    helpTiles = [[[List alloc] init] ownsItems:YES];
-
+    
+    enemyStorage = nil;
+    itemStorage = nil;
+    helpTileStorage = [[List alloc] init]; //nil;
+    
     entranceFromNextRoomX = 0;
     entranceFromNextRoomY = 0;
     entranceFromPrevRoomX = 0;
@@ -27,9 +45,9 @@
     exitToNextRoomY = 0;
     exitToPrevRoomX = 0;
     exitToPrevRoomY = 0;
-
+    
     number = 0;
-
+    
     grassAnimation = nil;
     pathAnimation = nil;
     mountainAnimation = nil;
@@ -46,21 +64,21 @@
     shoreOutsideNWAnimation = nil;
     shoreOutsideSEAnimation = nil;
     shoreOutsideSWAnimation = nil;
-
+    
     for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
       path[i] = NO_STEP;
     }
     steps = 0;
-
+    
   }
-
+  
   return self;
-
+  
 }
 
 
 - free {
-
+  
   [grassAnimation free];
   [pathAnimation free];
   [mountainAnimation free];
@@ -77,16 +95,15 @@
   [shoreOutsideNWAnimation free];
   [shoreOutsideSEAnimation free];
   [shoreOutsideSWAnimation free];
-
+  
   [pathMap free];
   [terrainMap free];
-
-  [enemies free];
-  [items free];
-  [helpTiles free];
-
+  [enemyStorage free];
+  [itemStorage free];
+  [helpTileStorage free];
+  
   return [super free];
-
+  
 }
 
 
@@ -112,144 +129,156 @@
 
 
 - draw: (BITMAP *) buffer {
-
+  
   int x;
   int y;
-
+  
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-
+      
       //if ([pathMap getValueAtX: x andY: y] == YES) { // Draw the path
-        //[pathAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        //[pathAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       //} else
       if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
-        [grassAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        [grassAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
-        [mountainAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        [mountainAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-
-        [waterAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
-
+        
+        [waterAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        
         // Add the shore borders
         if ([terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN) { // North
-          [shoreNorthAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreNorthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN) { // South
-          [shoreSouthAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreSouthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN) { // East
-          [shoreEastAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreEastAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if ([terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN) { // West
-          [shoreWestAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreWestAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-
+          
       }
-
+      
     }
   }
-
+  
   // Add the shore corners
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-
+      
       if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-
+        
         // Add the shore inside corners
         if (
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
         ) { // North East
-          [shoreInsideNEAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreInsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
         ) { // South East
-          [shoreInsideSEAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreInsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
         ) { // North West
-          [shoreInsideNWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreInsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
         ) { // South West
-          [shoreInsideSWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreInsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-
+          
         // Add the shore outside corners.
         if (
           [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y - 1] != WATER_TERRAIN
         ) { // North East
-          [shoreOutsideNEAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreOutsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x + 1 andY: y + 1] != WATER_TERRAIN
         ) { // South East
-          [shoreOutsideSEAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreOutsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y - 1] != WATER_TERRAIN
         ) { // North West
-          [shoreOutsideNWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreOutsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
         if (
           [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
           [terrainMap getValueAtX: x - 1 andY: y + 1] != WATER_TERRAIN
         ) { // South West
-          [shoreOutsideSWAnimation draw: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          [shoreOutsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-
+          
       }
-
+      
     }
   }
-
+  
   return self;
-
+  
 }
 
 
-- (List *)enemies {
-  return enemies;
+- (List *) retrieveEnemies {
+  List *list;
+  list = enemyStorage;
+  enemyStorage = nil;
+  return list;
 }
 
 
-- setEnemies:(List *)list {
-  enemies = list;
-  return self;
-}
-
-
-- (List *)items {
-  return items;
-}
-
-
-- setItems:(List *)list {
-  items = list;
+- storeEnemies: (List *) list {
+  [enemyStorage free];
+  enemyStorage = list;
   return self;
 }
 
 
-- (List *)helpTiles {
-  return helpTiles;
+- (List *) retrieveItems {
+  List *list;
+  list = itemStorage;
+  itemStorage = nil;
+  return list;
 }
 
 
-- setHelpTiles:(List *)list {
-  helpTiles = list;
+- storeItems: (List *) list {
+  [itemStorage free];
+  itemStorage = list;
+  return self;
+}
+
+
+- (List *) retrieveHelpTiles {
+  List *list;
+  list = helpTileStorage;
+  helpTileStorage = nil;
+  return list;
+}
+
+
+- storeHelpTiles: (List *) list {
+  [helpTileStorage free];
+  helpTileStorage = list;
   return self;
 }
 

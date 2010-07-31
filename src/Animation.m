@@ -1,3 +1,21 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "Animation.h"
 
 
@@ -7,7 +25,38 @@ extern int timer;
 @implementation Animation
 
 
-- (Animation *)copy {
+- init {
+  
+  int i;
+  
+  self = [super init];
+  
+  if (self) {
+    
+    for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
+      frames[i] = NULL;
+    }
+    
+    length = 0;
+    pos = 0;
+    loop = YES;
+    finished = NO;
+    speed = 0;
+    fudge = 0;
+    offsetX = 0;
+    offsetY = 0;
+    hFlip = NO;
+    vFlip = NO;
+    rotate = NO;
+    
+  }
+  
+  return self;
+
+}
+
+
+- (Animation *) copy {
   
   Animation *animation;
   int i;
@@ -40,17 +89,17 @@ extern int timer;
 }
 
 
-- (int)currentFrameNumber {
+- (int) currentFrameNumber {
   return pos;
 }
 
 
-- (BOOL)finished {
+- (BOOL) finished {
   return finished;
 }
 
 
-- (BITMAP *)getImage {
+- (BITMAP *) getImage {
   if (length == 0) {
     return NULL;
   }
@@ -58,7 +107,7 @@ extern int timer;
 }
 
 
-- addFrame:(BITMAP *)bitmap {
+- addFrame: (BITMAP *) bitmap {
   if (bitmap) {
     frames[length] = bitmap;
     length++;
@@ -67,13 +116,13 @@ extern int timer;
 }
 
 
-- setSpeed:(int)newSpeed {
+- setSpeed: (int) newSpeed {
   speed = newSpeed;
   return self;
 }
 
 
-- setLoop:(BOOL)loopOn {
+- setLoop: (BOOL) loopOn {
   loop = loopOn;
   return self;
 }
@@ -110,7 +159,7 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- draw:(BITMAP *)buffer atX:(int)x andY:(int)y {
+- drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y {
   
   BITMAP *canvas;
   
@@ -192,19 +241,19 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- setOffsetX:(int)newOffsetX {
+- setOffsetX: (int) newOffsetX {
   offsetX = newOffsetX;
   return self;
 }
 
 
-- setOffsetY:(int)newOffsetY {
+- setOffsetY: (int) newOffsetY {
   offsetY = newOffsetY;
   return self;
 }
 
 
-- (int)width {
+- (int) width {
   if ([self getImage] != NULL) {
     return [self getImage]->w;
   }
@@ -212,7 +261,7 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- (int)height {
+- (int) height {
   if ([self getImage] != NULL) {
     return [self getImage]->h;
   }
@@ -220,19 +269,19 @@ BITMAP * getCanvas(int width, int height) {
 }
 
 
-- setRotate:(BOOL)rotateOn {
+- setRotate: (BOOL) rotateOn {
   rotate = rotateOn;
   return self;
 }
 
 
-- setHorizontalFlip:(BOOL)hFlipOn {
+- setHorizontalFlip: (BOOL) hFlipOn {
   hFlip = hFlipOn;
   return self;
 }
 
 
-- setVerticalFlip:(BOOL)vFlipOn {
+- setVerticalFlip: (BOOL) vFlipOn {
   vFlip = vFlipOn;
   return self;
 }

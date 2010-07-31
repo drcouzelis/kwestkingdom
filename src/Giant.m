@@ -1,5 +1,22 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "Giant.h"
-#import "World.h"
 
 
 typedef enum {
@@ -75,7 +92,7 @@ typedef enum {
 }
 
 
-- (BOOL) target: (Character *) target isInRange: (int) range {
+- (BOOL) target: (id<Positionable>) target isInRange: (int) range {
   
   if (
     abs(x - [target getX]) + abs(y - [target getY]) <= range ||
@@ -93,7 +110,7 @@ typedef enum {
 }
 
 
-- (int) directionToTarget: (Character *) target {
+- (int) directionToTarget: (id<Positionable>) target {
   
   if ( // Up
     (x == [target getX] && y == [target getY] + 1) ||
@@ -174,7 +191,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  Character *target;
+  id<Positionable> target;
   
   [super update];
   [hammer update];
@@ -319,7 +336,7 @@ typedef enum {
 }
 
 
-- setWorld: (World *) aWorld {
+- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
   world = aWorld;
   [hammer setWorld: world];
   return self;

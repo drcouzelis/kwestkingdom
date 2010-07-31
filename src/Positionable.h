@@ -16,17 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
-#import "Collectable.h"
-#import "Sprite.h"
-
-
-@interface MoneyBag : Sprite <Collectable> {
-  int amount;
-}
-
-
-- (int) getAmount;
-- setAmount: (int) anAmount;
-
-
+@protocol Positionable
+- setX: (int) newX;
+- setY: (int) newY;
+- (int) getX;
+- (int) getY;
+- moveX: (int) newX;
+- moveY: (int) newY;
+- setSpeed: (int) newSpeed;
+- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right;
 @end
+

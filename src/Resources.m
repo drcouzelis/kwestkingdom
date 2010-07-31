@@ -1,3 +1,21 @@
+/**
+ * Copyright 2009 David Couzelis
+ * 
+ * This file is part of "Kwest Kingdom".
+ * 
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
 #import "Resources.h"
 
 
@@ -9,13 +27,13 @@ PALETTE palette;
 
 
 void initializeResources() {
-
+  
   int i;
 
   if (initializedResources) {
     return;
   }
-
+  
   images[IMG_SWORD_STAB_2] = load_bitmap("img/sword/stab/2.bmp", palette);
   images[IMG_SWORD_STAB_4] = load_bitmap("img/sword/stab/4.bmp", palette);
   images[IMG_SWORD_STAB_3] = load_bitmap("img/sword/stab/3.bmp", palette);
@@ -100,7 +118,7 @@ void initializeResources() {
   images[IMG_NINJA_2] = load_bitmap("img/ninja/2.bmp", palette);
   images[IMG_NINJA_3] = load_bitmap("img/ninja/3.bmp", palette);
   images[IMG_NINJA_1] = load_bitmap("img/ninja/1.bmp", palette);
-
+  
   // Load the palette last to get the correct colors.
   images[IMG_PALETTE] = load_bitmap("img/palette.bmp", palette);
 
@@ -123,7 +141,7 @@ void initializeResources() {
       return;
     }
   }
-
+  
   for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
     if (sounds[i] == NULL) {
       initializedResources = NO;
@@ -175,33 +193,33 @@ void playSound(int sound) {
 
 
 void toggleSound(void) {
-
+  
   int digiVolume;
   int midiVolume;
-
+  
   get_volume(&digiVolume, &midiVolume);
-
+  
   if (digiVolume == 0) {
     set_volume(GAME_VOLUME, GAME_VOLUME);
   } else {
     set_volume(0, 0);
   }
-
+  
 }
 
 
 BOOL soundEnabled(void) {
-
+  
   int digiVolume;
   int midiVolume;
-
+  
   get_volume(&digiVolume, &midiVolume);
-
+  
   if (digiVolume == 0) {
     return NO;
   }
-
+  
   return YES;
-
+  
 }
 
