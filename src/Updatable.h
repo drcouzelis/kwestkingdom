@@ -1,4 +1,0 @@
-@protocol Updatable
-- update;
-@end
-

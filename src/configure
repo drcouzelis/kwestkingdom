@@ -6,8 +6,8 @@ rm -f Makefile
 
 echo 'CC = gcc' >> Makefile
 echo 'OUTPUT = ../Linux/share/kwestkingdom/kwestkingdom' >> Makefile
-echo 'DEBUG = -g -Wall' >> Makefile
-echo 'LINKING_OPTIONS = -l objc' >> Makefile
+echo 'DEBUG = -O2 -Wall -Wextra -ansi -pedantic' >> Makefile # -g
+echo 'LINKING_OPTIONS = ' >> Makefile
 echo 'CFLAGS = $(shell allegro-config --cflags)' >> Makefile
 echo 'LDFLAGS = $(shell allegro-config --libs)' >> Makefile
 echo >> Makefile
@@ -19,18 +19,18 @@ echo >> Makefile
 echo HEADERS = `ls *.h` >> Makefile
 echo >> Makefile
 
-echo OBJECTS = $(ls *.m | sed -e 's/\.m/.o/') >> Makefile
+echo OBJECTS = $(ls *.c | sed -e 's/\.c/.o/') >> Makefile
 echo >> Makefile
 
 
-echo 'kk_main: $(OBJECTS)' >> Makefile
+echo 'kwestkingdom: $(OBJECTS)' >> Makefile
 echo $'\t mkdir -p ../Linux/share/kwestkingdom' >> Makefile
 echo $'\t $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)' >> Makefile
 echo >> Makefile
 
 
-for i in *.m; do
-  echo $(ls "$i" | sed -e 's/\.m/.o/')': '"$i" '$(HEADERS)' >> Makefile
+for i in *.c; do
+  echo $(ls "$i" | sed -e 's/\.c/.o/')': '"$i" '$(HEADERS)' >> Makefile
   echo $'\t $(CC) $(DEBUG) -c' "$i" '$(CFLAGS)' >> Makefile
   echo >> Makefile
 done;
@@ -43,7 +43,7 @@ echo >> Makefile
 
 # Redo the Windows section
 echo 'win:' >> Makefile
-#echo $'\t $(WIN_CC) $(DEBUG) *.m -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
+#echo $'\t $(WIN_CC) $(DEBUG) *.c -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
 echo $'\t mkdir -p ../Windows' >> Makefile
 echo $'\t echo Pretending to build the Windows version...' >> Makefile
 echo >> Makefile
