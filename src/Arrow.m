@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Arrow.h"
 
 
@@ -30,28 +12,28 @@ typedef enum {
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     [self setSpeed: getWalkSpeed() * 4];
-    
+
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(IMG_ARROW)];
-    
+
     flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: YES];
     flyDownAnimation = [[flyRightAnimation copy] setRotate: YES];
     flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
-    
+
     direction = UP;
-    
+
     [self toHoldState];
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -65,18 +47,18 @@ typedef enum {
 
 
 - update {
-  
+
   [super update];
-  
+
   switch (state) {
   case ARROW_HOLD_STATE:
     // There's just not much going on when it's being held.
     break;
-    
+
   case ARROW_FLYING_STATE:
-    
+
     if (![self moving]) {
-      
+
       if (direction == LEFT) {
         [world attackFromTeam: team atX: x - 1 andY: y];
       } else if (direction == RIGHT) {
@@ -86,20 +68,20 @@ typedef enum {
       } else {
         [world attackFromTeam: team atX: x andY: y + 1];
       }
-      
+
       [self toStoppedState];
-      
+
     }
-    
+
     break;
-    
+
   case ARROW_STOPPED_STATE:
     // There's not much going on when it's stopped.
     break;
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -112,7 +94,7 @@ typedef enum {
 
 
 - findTarget {
-  
+
   if (direction == LEFT) {
     while ([world isFlyableAtX: x - 1 andY: y] && ![world isAttackableFromTeam: team atX: x - 1 andY: y] && [self isInsideScreen]) {
       x--;
@@ -130,9 +112,9 @@ typedef enum {
       y++;
     }
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -152,15 +134,15 @@ typedef enum {
 
 
 - toHoldState {
-  
+
   int visualOffset;
-  
+
   visualOffset = (getTileSize() / 3) + (getTileSize() / 10);
-  
+
   state = ARROW_HOLD_STATE;
-  
+
   [self setDirection: direction];
-  
+
   // Offset the animation a little bit to make it look like
   // the arrow is in the bow string.
   [flyUpAnimation setOffsetX: 0];
@@ -171,7 +153,7 @@ typedef enum {
   [flyLeftAnimation setOffsetY: 0];
   [flyRightAnimation setOffsetX: -visualOffset];
   [flyRightAnimation setOffsetY: 0];
-  
+
   return self;
 }
 

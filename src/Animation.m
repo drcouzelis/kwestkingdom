@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Animation.h"
 
 
@@ -26,17 +8,17 @@ extern int timer;
 
 
 - init {
-  
+
   int i;
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
       frames[i] = NULL;
     }
-    
+
     length = 0;
     pos = 0;
     loop = YES;
@@ -48,25 +30,25 @@ extern int timer;
     hFlip = NO;
     vFlip = NO;
     rotate = NO;
-    
+
   }
-  
+
   return self;
 
 }
 
 
 - (Animation *) copy {
-  
+
   Animation *animation;
   int i;
-  
+
   animation = [[Animation alloc] init];
-  
+
   for (i = 0; i < length; i++) {
     [animation addFrame: frames[i]];
   }
-  
+
   [animation setOffsetX: offsetX];
   [animation setOffsetY: offsetY];
   [animation setLoop: loop];
@@ -75,9 +57,9 @@ extern int timer;
   [animation setVerticalFlip: vFlip];
   [animation setRotate: rotate];
   [animation reset];
-  
+
   return animation;
-  
+
 }
 
 
@@ -137,14 +119,14 @@ BITMAP *canvasTripleSize = NULL;
  * when using the rotate sprite and flip sprite functions.
  */
 BITMAP * getCanvas(int width, int height) {
-  
+
   if (width == getTileSize() && height == getTileSize()) {
     if (canvasStandardSize == NULL) {
       canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
     }
     return canvasStandardSize;
   }
-  
+
   if (width == getTileSize() * 3 && height == getTileSize() * 3) {
     if (canvasTripleSize == NULL) {
       canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
@@ -153,20 +135,20 @@ BITMAP * getCanvas(int width, int height) {
   }
 
   fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
-  
+
   return NULL;
-  
+
 }
 
 
 - drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y {
-  
+
   BITMAP *canvas;
-  
+
   if ([self getImage] == NULL) {
     return self;
   }
-  
+
   // Write to a temporary canvas to get transparency
   // to work correctly.
   // Only necessary when rotating and flipping sprites.
@@ -178,11 +160,11 @@ BITMAP * getCanvas(int width, int height) {
   } else {
     canvas = [self getImage];
   }
-  
+
   if (canvas == NULL) {
     return self;
   }
-  
+
   if (rotate && hFlip && vFlip) {
     rotate_sprite(buffer, canvas, x + offsetX, y + offsetY, itofix(192));
   } else if (rotate && hFlip) {
@@ -200,23 +182,23 @@ BITMAP * getCanvas(int width, int height) {
   } else {
     draw_sprite(buffer, canvas, x + offsetX, y + offsetY);
   }
-  
+
   return self;
-  
+
 }
 
 
 // Animate the animation.
 - update {
-  
+
   if (length > 1 && speed != 0) {
-    
+
     fudge += speed;
-    
+
     while (fudge >= GAME_TICKER) {
-      
+
       pos++;
-      
+
       if (pos == length) {
         if (loop) {
           pos = 0;
@@ -225,17 +207,17 @@ BITMAP * getCanvas(int width, int height) {
           finished = YES;
         }
       }
-            
+
       fudge -= GAME_TICKER;
-      
+
     }
-    
+
   } else {
-    
+
     finished = YES;
-    
+
   }
-  
+
   return self;
 
 }

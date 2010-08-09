@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Ninja.h"
 
 
@@ -31,21 +13,21 @@ typedef enum {
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     x = 0;
     y = 0;
-    
+
     [self setSpeed: getWalkSpeed()];
     team = ENEMY_TEAM;
-    
+
     sword = [[Sword alloc] init];
     [sword setSpeed: speed];
     [sword toHoldState];
-    
+
     standAnimation = [[Animation alloc] init];
     [standAnimation addFrame: getImage(IMG_NINJA_1)];
     [standAnimation addFrame: getImage(IMG_NINJA_2)];
@@ -53,10 +35,10 @@ typedef enum {
     [standAnimation addFrame: getImage(IMG_NINJA_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 6];
-    
+
     dashAnimation = [standAnimation copy];
     [dashAnimation setSpeed: 24];
-    
+
     attackAnimation = [[Animation alloc] init];
     [attackAnimation addFrame: getImage(IMG_NINJA_1)];
     [attackAnimation addFrame: getImage(IMG_NINJA_2)];
@@ -67,15 +49,15 @@ typedef enum {
     [attackAnimation addFrame: getImage(IMG_NINJA_2)];
     [attackAnimation setLoop: NO];
     [attackAnimation setSpeed: 12];
-    
+
     animation = standAnimation;
     state = NINJA_STAND_STATE;
     [self wait];
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -89,32 +71,32 @@ typedef enum {
 
 
 - update {
-  
+
   int dir;
   int toX;
   int toY;
   id<Positionable> target;
-  
+
   [super update];
   [sword update];
-  
+
   if ([self waiting]) {
     return self;
   }
-  
+
   if (health == 0) {
     return self;
   }
-  
+
   target = [world getTarget];
-  
+
   switch (state) {
-  
+
   case NINJA_STAND_STATE:
-    
+
     // If the target has a walking distance of one...
     if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
-      
+
       state = NINJA_ATTACK_STATE;
       animation = attackAnimation;
       [animation reset];
@@ -128,9 +110,9 @@ typedef enum {
       } else if (x == [target getX] - 1 && y == [target getY]) { // Right
         [sword toAttackRightState];
       }
-      
+
     } else if (x == [target getX]) {
-      
+
       if (y > [target getY]) { // Hero is directly up.
         while (y - 1 != [target getY] && [world isWalkableAtX: x andY: y - 1] && ![world isInhabitedAtX: x andY: y - 1]) {
           [self moveY: y - 1];
@@ -140,14 +122,14 @@ typedef enum {
           [self moveY: y + 1];
         }
       }
-      
+
       state = NINJA_DASH_STATE;
       [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
-      
+
     } else if (y == [target getY]) {
-      
+
       if (x > [target getX]) { // Hero is directly left.
         while (x - 1 != [target getX] && [world isWalkableAtX: x - 1 andY: y] && ![world isInhabitedAtX: x - 1 andY: y]) {
           [self moveX: x - 1];
@@ -157,20 +139,20 @@ typedef enum {
           [self moveX: x + 1];
         }
       }
-      
+
       state = NINJA_DASH_STATE;
       [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
       animation = dashAnimation;
       [animation reset];
-      
+
     } else {
-      
+
       // Wander aimlessly
       dir = random_number(UP, /*DOWN, LEFT,*/ RIGHT);
-      
+
       toX = x;
       toY = y;
-      
+
       if (dir == UP) {
         toY--;
       } else if (dir == DOWN) {
@@ -180,28 +162,28 @@ typedef enum {
       } else if (dir == LEFT) {
         toX--;
       }
-      
+
       if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
         [self moveX: toX];
         [self moveY: toY];
         state = NINJA_MOVE_STATE;
       }
-      
+
       [self wait];
-      
+
     }
-    
+
     // Bound him so he doesn't wander right out of the screen!
     [self boundAtTop: 1 andBottom: ROWS - 2 andLeft: 1 andRight: COLS - 2];
-    
+
     break;
-    
+
   case NINJA_MOVE_STATE:
     if (![self moving]) {
       state = NINJA_STAND_STATE;
     }
     break;
-    
+
   case NINJA_DASH_STATE:
     if (![self moving]) {
       [self setSpeed: getWalkSpeed()];
@@ -228,7 +210,7 @@ typedef enum {
       }
     }
     break;
-    
+
   case NINJA_ATTACK_STATE:
     if ([animation finished]) {
       [world attackFromTeam: team atX: [target getX] andY: [target getY]];
@@ -239,11 +221,11 @@ typedef enum {
       [self wait];
     }
 	break;
-	
+
   }
-  
+
   return self;
-  
+
 }
 
 

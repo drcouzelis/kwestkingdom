@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Screen.h"
 
 
@@ -31,9 +13,9 @@ static int scale = DEFAULT_SCREEN_RATIO;
 
 
 BOOL selectBestScreen() {
-  
+
   enable_vsync();
-  
+
   if (initialize_screen_updating(UPDATE_TRIPLE_BUFFER)) {
     // Using triple buffer.
   } else if (initialize_screen_updating(UPDATE_PAGE_FLIP)) {
@@ -46,22 +28,22 @@ BOOL selectBestScreen() {
     printf("Failed to initialize screen updating. \n");
     return NO;
   }
-  
+
   return YES;
-  
+
 }
 
 
 BOOL setScale() {
-  
+
   int xScale;
   int yScale;
 
   if (screen && window) {
-  
+
     xScale = screen->w / window->w;
     yScale = screen->h / window->h;
-    
+
     if (xScale < yScale) {
       scale = xScale;
     } else {
@@ -71,18 +53,18 @@ BOOL setScale() {
     return YES;
 
   }
-  
+
   return NO;
-  
+
 }
 
 
 void setWindowSize(int width, int height) {
-  
+
   if (window) {
     destroy_bitmap(window);
   }
-  
+
   window = create_bitmap(width, height);
   clear_to_color(window, BLACK);
   setScale();
@@ -112,34 +94,34 @@ BOOL initializeScreen(int width, int height, BOOL fullscreen) {
   if (height < 0) {
     height = SCREEN_H;
   }
- 
+
   // Start the screen.
   if (fullscreen) {
-    
+
     if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
       printf("Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
       return NO;
     }
-    
+
   } else {
-  
+
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
       printf("Failed to set graphics mode to windowed %dx%d. \n", width, height);
       return NO;
     }
 
   }
-  
+
   if (selectBestScreen() == NO) {
     return NO;
   }
 
   setScale();
-  
+
   return YES;
 
 }
- 
+
 
 void destroyScreen() {
   if (window) {
@@ -167,7 +149,7 @@ int getWindowHeight() {
 
 
 BOOL showScreen() {
-  
+
   int x;
   int y;
 
@@ -183,7 +165,7 @@ BOOL showScreen() {
 
   x = getTileSize() / 5;
   y = getWindowHeight() - (getTileSize() / 2);
-  
+
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
     textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Triple Buffering");
@@ -198,7 +180,7 @@ BOOL showScreen() {
     textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Double Buffering");
     break;
   }
-  
+
   // Scale the window onto the screen.
   stretch_blit(
     getWindow(),
@@ -212,13 +194,13 @@ BOOL showScreen() {
     getWindowWidth() * scale,
     getWindowHeight() * scale
   );
-  
+
   update_screen();
 
   return YES;
 
 }
- 
+
 
 BITMAP *getWindow() {
   return window;

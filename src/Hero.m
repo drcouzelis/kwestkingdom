@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Hero.h"
 
 
@@ -39,24 +21,24 @@ typedef enum {
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     speed = getWalkSpeed(); // In FPS
     health = 3;
     maxHealth = MAX_HERO_HEALTH;
     team = HERO_TEAM;
-    
+
     shield = [[Shield alloc] init];
     sword = [[Sword alloc] init];
     bow = [[Bow alloc] init];
-    
+
     [shield setSpeed: speed];
     [sword setSpeed: speed];
     [bow setSpeed: speed];
-    
+
     standAnimation = [[Animation alloc] init];
     [standAnimation addFrame: getImage(IMG_HERO_STAND_1)];
     [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
@@ -64,7 +46,7 @@ typedef enum {
     [standAnimation addFrame: getImage(IMG_HERO_STAND_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 6];
-    
+
     beginAttackAnimation = [[Animation alloc] init];
     [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
     [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
@@ -72,14 +54,14 @@ typedef enum {
     [beginAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_4)];
     [beginAttackAnimation setLoop: NO];
     [beginAttackAnimation setSpeed: HERO_ATTACK_SPEED];
-    
+
     endAttackAnimation = [[Animation alloc] init];
     [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_3)];
     [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_2)];
     [endAttackAnimation addFrame: getImage(IMG_HERO_ATTACK_1)];
     [endAttackAnimation setLoop: NO];
     [endAttackAnimation setSpeed: HERO_ATTACK_SPEED];
-    
+
     hurtAnimation = [[Animation alloc] init];
     [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
     [hurtAnimation addFrame: getImage(IMG_HERO_HURT_2)];
@@ -90,7 +72,7 @@ typedef enum {
     [hurtAnimation addFrame: getImage(IMG_HERO_HURT_1)];
     [hurtAnimation setLoop: NO];
     [hurtAnimation setSpeed: 12];
-    
+
     deadAnimation = [[Animation alloc] init];
     [deadAnimation addFrame: getImage(IMG_HERO_DIE_1)];
     [deadAnimation addFrame: getImage(IMG_HERO_DIE_2)];
@@ -99,7 +81,7 @@ typedef enum {
     [deadAnimation addFrame: getImage(IMG_HERO_DIE_5)];
     [deadAnimation setLoop: NO];
     [deadAnimation setSpeed: 6];
-    
+
     upKey = [[KeyControl alloc] initWithKey: KEY_UP];
     downKey = [[KeyControl alloc] initWithKey: KEY_DOWN];
     leftKey = [[KeyControl alloc] initWithKey: KEY_LEFT];
@@ -115,16 +97,16 @@ typedef enum {
     [swordKey setDelay: GAME_TICKER];
     bowKey = [[KeyControl alloc] initWithKey: KEY_3];
     [swordKey setDelay: GAME_TICKER];
-    
+
     [self toStandState];
     [sword toHoldState];
-    
+
     [self go]; // The hero doesn't wait! At least not when the game starts. ;-)
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -150,10 +132,10 @@ typedef enum {
 
 
 - updateStandState {
-  
+
   int toX;
   int toY;
-  
+
   // Handle item key input.
   // Update the items.
   if ([shieldKey isPressed]) {
@@ -173,9 +155,9 @@ typedef enum {
     [sword toAwayState];
     [bow toAwayState];
   }
-  
+
   if ([attackKey isPressed]) {
-    
+
     if ([upKey isPressed]) {
       direction = UP;
       [self toAttackState];
@@ -189,15 +171,15 @@ typedef enum {
       direction = RIGHT;
       [self toAttackState];
     }
-    
+
   } else {
-    
+
     // If you're not attacking with the attack key,
     // then maybe you are trying to walk...
-    
+
     toX = x;
     toY = y;
-    
+
     if ([upKey isPressed]) {
       toY--;
       if ([sword held] && [world isAttackableFromTeam: team atX: x andY: y - 1]) {
@@ -223,56 +205,56 @@ typedef enum {
         [self toAttackState];
       }
     }
-    
+
     if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
-      
+
       [self moveX: toX];
       [self moveY: toY];
       [self toMoveState];
       [self wait];
-      
+
       // If the hero is holding the shield
       // then make him wait another turn.
       if ([shield held]) {
         [self wait];
       }
-      
+
     }
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - update {
-  
+
   [super update];
   [shield update];
   [sword update];
   [bow update];
-  
+
   if ([self waiting]) {
     return self;
   }
-  
+
   if ([waitKey isPressed]) {
     [self wait];
   }
-  
+
   switch (state) {
-  
+
   case HERO_STAND_STATE:
     [self updateStandState];
     break;
-    
+
   case HERO_MOVE_STATE:
     if (![self moving]) {
       [self toStandState];
     }
     break;
-    
+
   case HERO_ATTACK_STATE:
     if ([sword held]) {
       [self toPushSwordState];
@@ -283,7 +265,7 @@ typedef enum {
       [self toStandState];
     }
     break;
-  
+
   case HERO_HURT_STATE:
     if ([animation finished]) {
       if (health == 0) {
@@ -296,12 +278,12 @@ typedef enum {
       }
     }
     break;
-  
+
   case HERO_DEAD_STATE:
     // You are not going to do anything once you enter
     // the state of being dead.
     break;
-      
+
   case HERO_PUSH_SWORD_STATE:
     if ([animation finished]) {
       switch (direction) {
@@ -321,7 +303,7 @@ typedef enum {
       [self toPullSwordState];
     }
     break;
-    
+
   case HERO_PULL_SWORD_STATE:
     if ([animation finished]) {
       [self toStandState];
@@ -329,13 +311,13 @@ typedef enum {
       [self wait];
     }
     break;
-    
+
   case HERO_DRAW_BOW_STATE:
     if ([animation finished]) {
       [self toShootArrowState];
     }
     break;
-    
+
   case HERO_SHOOT_ARROW_STATE:
     if ([animation finished]) {
       animation = standAnimation;
@@ -348,11 +330,11 @@ typedef enum {
       [self wait];
     }
     break;
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
@@ -395,11 +377,11 @@ typedef enum {
 
 
 - toHurtState {
-  
+
   state = HERO_HURT_STATE;
   animation = hurtAnimation;
   [animation reset];
-  
+
   // You can't shoot an arrow if you get
   // hurt whil trying to do it.
   [[bow getArrow] free];
@@ -407,11 +389,11 @@ typedef enum {
   if ([bow held]) {
     [bow toHoldState];
   }
-  
+
   playSound(SND_GASP);
-  
+
   return self;
-  
+
 }
 
 
@@ -454,11 +436,11 @@ typedef enum {
 
 
 - toDrawBowState {
-  
+
   state = HERO_DRAW_BOW_STATE;
   animation = beginAttackAnimation;
   [animation reset];
-  
+
   switch (direction) {
   case UP:
     [bow toAttackUpState];
@@ -473,11 +455,11 @@ typedef enum {
     [bow toAttackRightState];
     break;
   }
-  
+
   [bow setArrowWithX: x andY: y andDirection: direction andTeam: team andWorld: world];
-  
+
   return self;
-  
+
 }
 
 

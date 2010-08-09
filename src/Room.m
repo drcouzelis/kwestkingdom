@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Room.h"
 
 
@@ -23,20 +5,20 @@
 
 
 - init {
-  
+
   int i;
-  
+
   self = [super init];
-  
+
   if (self) {
-    
+
     pathMap = nil;
     terrainMap = nil;
-    
+
     enemyStorage = nil;
     itemStorage = nil;
     helpTileStorage = [[List alloc] init]; //nil;
-    
+
     entranceFromNextRoomX = 0;
     entranceFromNextRoomY = 0;
     entranceFromPrevRoomX = 0;
@@ -45,9 +27,9 @@
     exitToNextRoomY = 0;
     exitToPrevRoomX = 0;
     exitToPrevRoomY = 0;
-    
+
     number = 0;
-    
+
     grassAnimation = nil;
     pathAnimation = nil;
     mountainAnimation = nil;
@@ -64,21 +46,21 @@
     shoreOutsideNWAnimation = nil;
     shoreOutsideSEAnimation = nil;
     shoreOutsideSWAnimation = nil;
-    
+
     for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
       path[i] = NO_STEP;
     }
     steps = 0;
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - free {
-  
+
   [grassAnimation free];
   [pathAnimation free];
   [mountainAnimation free];
@@ -95,15 +77,15 @@
   [shoreOutsideNWAnimation free];
   [shoreOutsideSEAnimation free];
   [shoreOutsideSWAnimation free];
-  
+
   [pathMap free];
   [terrainMap free];
   [enemyStorage free];
   [itemStorage free];
   [helpTileStorage free];
-  
+
   return [super free];
-  
+
 }
 
 
@@ -129,13 +111,13 @@
 
 
 - draw: (BITMAP *) buffer {
-  
+
   int x;
   int y;
-  
+
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-      
+
       //if ([pathMap getValueAtX: x andY: y] == YES) { // Draw the path
         //[pathAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       //} else
@@ -144,9 +126,9 @@
       } else if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
         [mountainAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       } else if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-        
+
         [waterAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
-        
+
         // Add the shore borders
         if ([terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN) { // North
           [shoreNorthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
@@ -160,18 +142,18 @@
         if ([terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN) { // West
           [shoreWestAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
       }
-      
+
     }
   }
-  
+
   // Add the shore corners
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
-      
+
       if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-        
+
         // Add the shore inside corners
         if (
           [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
@@ -197,7 +179,7 @@
         ) { // South West
           [shoreInsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
         // Add the shore outside corners.
         if (
           [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
@@ -227,14 +209,14 @@
         ) { // South West
           [shoreOutsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
         }
-          
+
       }
-      
+
     }
   }
-  
+
   return self;
-  
+
 }
 
 

@@ -1,21 +1,3 @@
-/**
- * Copyright 2009 David Couzelis
- * 
- * This file is part of "Kwest Kingdom".
- * 
- * "Kwest Kingdom" is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * "Kwest Kingdom" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
- */
 #import "Sprite.h"
 
 
@@ -23,9 +5,9 @@
 
 
 - init {
-  
+
   self = [super init];
-  
+
   if (self) {
     x = 0;
     y = 0;
@@ -39,24 +21,24 @@
     world = nil;
     state = 0;
   }
-  
+
   return self;
-  
+
 }
 
 
 - update {
-  
+
   [animation update];
-  
+
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
   if ([self moving]) {
-    
+
     if (speed > 0) {
-      
+
       fudge += speed;
-      
+
       while (fudge >= GAME_TICKER) {
         if (visualX != x * getTileSize()) {
           if (visualX < x * getTileSize()) {
@@ -74,25 +56,25 @@
         }
         fudge -= GAME_TICKER;
       }
-      
+
     } else {
       visualX = x * getTileSize();
       visualY = y * getTileSize();
     }
-    
+
     if (![self moving]) {
       fudge = 0;
     }
-    
+
   }
-  
+
   return self;
-  
+
 }
 
 
 - draw: (BITMAP *) buffer {
-  
+
   // Add a shadow.
   /*
   hline(buffer, visualX + 6, visualY + 30, visualX + 33, BLACK);
@@ -102,11 +84,11 @@
   hline(buffer, visualX + 6, visualY + 34, visualX + 33, BLACK);
   hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
-  
+
   [animation drawTo: buffer atX: visualX andY: visualY];
-  
+
   return self;
-  
+
 }
 
 
@@ -119,21 +101,21 @@
 
 
 - boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right {
-  
+
   if (x < left) {
     [self moveX: left];
   } else if (x + w - 1 > right) {
     [self moveX: right];
   }
-  
+
   if (y < top) {
     [self moveY: top];
   } else if (y + h - 1 > bottom) {
     [self moveY: bottom];
   }
-  
+
   return self;
-  
+
 }
 
 
