@@ -6,19 +6,16 @@
 #include "kk_utilities.h"
 
 
-#define MAX_FRAMES 20
-
-
 typedef struct ANIM ANIM;
 
 
-ANIM * create_anim(void);
-ANIM * destroy_anim(ANIM *anim);
+ANIM *create_anim(int speed, FLAG loop);
+void destroy_anim(ANIM *anim);
 
 /**
  * Add a frame to an animation.
  */
-void add_frame(BITMAP *frame, ANIM *anim);
+void add_frame(ANIM *anim, BITMAP *frame);
 
 /**
  * Set the visual offset of an animation.
@@ -43,6 +40,12 @@ FLAG is_done_animating(ANIM *anim);
  * Reset an animation to its first frame.
  */
 void reset_anim(ANIM *anim);
+
+/**
+ * Copy an animation.
+ * Returns a pointer to a new animation.
+ */
+ANIM *copy_anim(ANIM *anim);
 
 /**
  * Draw an animation.
