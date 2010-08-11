@@ -1,9 +1,9 @@
-#ifndef KK_MESSENGER_H
-#define KK_MESSENGER_H
+#ifndef MESSENGER_HEADER
+#define MESSENGER_HEADER
 
 
 #include <allegro.h>
-#include "kk_utilities.h"
+#include "utilities.h"
 
 
 #define MESSAGE_LEN 256

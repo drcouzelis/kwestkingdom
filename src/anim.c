@@ -1,5 +1,5 @@
-#include "kk_anim.h"
-#include "kk_timer.h"
+#include "anim.h"
+#include "timer.h"
 
 
 
@@ -110,7 +110,7 @@ void set_visual_offset(ANIM *anim, int x_offset, int y_offset)
 
 
 
-void anim_animate(ANIM *anim)
+void animate(ANIM *anim)
 {
   if (anim == NULL) {
     return;
@@ -152,6 +152,28 @@ FLAG is_done_animating(ANIM *anim)
     return ON;
   }
   return anim->finished;
+}
+
+
+
+
+int anim_width(ANIM *anim)
+{
+  if (anim == NULL) {
+    return 0;
+  }
+  return anim->frames[anim->pos]->w;
+}
+
+
+
+
+int anim_height(ANIM *anim)
+{
+  if (anim == NULL) {
+    return 0;
+  }
+  return anim->frames[anim->pos]->h;
 }
 
 

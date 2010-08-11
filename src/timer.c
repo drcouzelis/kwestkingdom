@@ -1,5 +1,5 @@
 #include <allegro.h>
-#include "kk_timer.h"
+#include "timer.h"
 
 
 static volatile int timer = 0;
@@ -60,7 +60,7 @@ int get_fps()
 }
 
 
-void frame_complete()
+void mark_frame_complete()
 {
   frames_done++;
 }

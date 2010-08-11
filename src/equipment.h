@@ -1,8 +1,8 @@
-#ifndef KK_EQUIPMENT_H
-#define KK_EQUIPMENT_H
+#ifndef EQUIPMENT_HEADER
+#define EQUIPMENT_HEADER
 
 
-#include "kk_utilities.h"
+#include "utilities.h"
 
 
 typedef struct EQUIPMENT EQUIPMENT;

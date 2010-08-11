@@ -1,5 +1,5 @@
-#ifndef KK_WORLD_H
-#define KK_WORLD_H
+#ifndef WORLD_HEADER
+#define WORLD_HEADER
 
 
 #include <allegro.h>
@@ -30,7 +30,7 @@ struct WORLD
 
 
 WORLD *create_world();
-WORLD *destroy_world(WORLD *world);
+void destroy_world(WORLD *world);
 
 void update_world(WORLD *world);
 void paint_world(WORLD *world, BITMAP *canvas);

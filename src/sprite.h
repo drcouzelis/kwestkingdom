@@ -1,5 +1,5 @@
-#ifndef KK_SPRITE_H
-#define KK_SPRITE_H
+#ifndef SPRITE_HEADER
+#define SPRITE_HEADER
 
 
 #include <allegro.h>

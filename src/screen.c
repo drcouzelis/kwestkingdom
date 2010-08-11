@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include "al_screen.h"
-#include "kk_screen.h"
+#include "screen.h"
+
+
 
 
 #define DEFAULT_COLOR_DEPTH 8
+
+
 
 
 /**
@@ -17,9 +21,10 @@ static BITMAP *canvas = NULL;
  */
 static int scale = 1;
 
-
 FLAG select_best_screen();
 FLAG update_scale();
+
+
 
 
 void set_canvas_size(int width, int height)
@@ -32,6 +37,8 @@ void set_canvas_size(int width, int height)
   clear_to_color(canvas, makecol(0, 0, 0)); /* Black */
   update_scale();
 }
+
+
 
 
 FLAG init_screen(int width, int height, FLAG fullscreen)
@@ -86,6 +93,8 @@ FLAG init_screen(int width, int height, FLAG fullscreen)
 }
 
 
+
+
 void stop_screen()
 {
   if (canvas) {
@@ -96,10 +105,14 @@ void stop_screen()
 }
 
 
+
+
 void set_colors(PALETTE *palette)
 {
   set_palette(*palette);
 }
+
+
 
 
 int canvas_width()
@@ -111,6 +124,8 @@ int canvas_width()
 }
 
 
+
+
 int canvas_height()
 {
   if (canvas) {
@@ -120,16 +135,18 @@ int canvas_height()
 }
 
 
-FLAG refresh_screen()
+
+
+void refresh_screen()
 {
   if (!screen) {
     fprintf(stderr, "Failed to find a screen to show.\n");
-    return OFF;
+    return;
   }
 
   if (!canvas) {
     fprintf(stderr, "Failed to find a canvas to draw.\n");
-    return OFF;
+    return;
   }
   
   /**
@@ -149,15 +166,17 @@ FLAG refresh_screen()
   );
   
   update_screen();
-
-  return ON;
 }
- 
+
+
+
 
 BITMAP * get_canvas()
 {
   return canvas;
 }
+
+
 
 
 int screen_width()
@@ -169,6 +188,8 @@ int screen_width()
 }
 
 
+
+
 int screen_height()
 {
   if (screen) {
@@ -176,6 +197,8 @@ int screen_height()
   }
   return 0;
 }
+
+
 
 
 void get_screen_update_method(char *empty_string)
@@ -198,9 +221,13 @@ void get_screen_update_method(char *empty_string)
 }
 
 
+
+
 /**
  * Internal functions
  */
+
+
 
 
 FLAG select_best_screen()
@@ -222,6 +249,8 @@ FLAG select_best_screen()
   
   return ON;
 }
+
+
 
 
 FLAG update_scale()

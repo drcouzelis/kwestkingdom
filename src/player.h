@@ -1,5 +1,5 @@
-#ifndef KK_PLAYER_H
-#define KK_PLAYER_H
+#ifndef PLAYER_HEADER
+#define PLAYER_HEADER
 
 
 /**
@@ -35,6 +35,7 @@ enum
 
 typedef struct PLAYER PLAYER;
 struct CHARACTER;
+struct WORLD;
 
 
 struct PLAYER

@@ -2,19 +2,19 @@
 #include <stdio.h>
 
 #include <allegro.h>
-#include "kk_colors.h"
-#include "kk_game.h"
-/*#include "kk_input.h"*/
-#include "kk_screen.h"
-#include "kk_timer.h"
-#include "kk_utilities.h"
+#include "colors.h"
+#include "game.h"
+/*#include "input.h"*/
+#include "resources.h"
+#include "room.h"
+#include "screen.h"
+#include "sound.h"
+#include "timer.h"
+#include "utilities.h"
 #include "kwestkingdom.h"
 
 
 #define TILE_SIZE 20
-
-#define COLS 16
-#define ROWS 12
 
 #define CANVAS_WIDTH (COLS * TILE_SIZE)
 #define CANVAS_HEIGHT (ROWS * TILE_SIZE)
@@ -50,7 +50,7 @@ void init_kwestkingdom()
   allegro_init();
   init_timer();
   install_keyboard();
-  /*init_resources();*/ /* Load images */
+  init_resources(); /* Load images */
   
   screen_init = init_screen(
     CANVAS_WIDTH * DEFAULT_SCREEN_RATIO,
@@ -62,11 +62,11 @@ void init_kwestkingdom()
     exit(0);
   }
   
-  /*set_colors(get_palette());*/
+  set_colors(get_color_palette());
   set_canvas_size(CANVAS_WIDTH, CANVAS_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
-  /*toggle_sound();*/ /* Turn off sound */
+  toggle_sound(); /* Turn off sound */
 }
 
 
@@ -123,7 +123,6 @@ int main(int argc, char *argv[])
     /**
      * DRAW
      */
-    clear_to_color(get_canvas(), RED); /* TEMP */
     paint_game(game, get_canvas());
     
     /*
@@ -168,7 +167,7 @@ int main(int argc, char *argv[])
    */
   destroy_game(game);
   stop_screen();
-  /*stop_resources();*/
+  stop_resources();
   
   return 0;
 }

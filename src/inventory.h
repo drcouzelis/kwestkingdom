@@ -1,5 +1,5 @@
-#ifndef KK_INVENTORY_H
-#define KK_INVENTORY_H
+#ifndef INVENTORY_HEADER
+#define INVENTORY_HEADER
 
 
 #include <allegro.h>

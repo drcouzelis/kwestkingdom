@@ -1,5 +1,5 @@
-#ifndef KK_UTILITIES_H
-#define KK_UTILITIES_H
+#ifndef UTILITIES_HEADER
+#define UTILITIES_HEADER
 
 
 #include <allegro.h>

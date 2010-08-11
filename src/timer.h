@@ -1,5 +1,5 @@
-#ifndef KK_TIMER_H
-#define KK_TIMER_H
+#ifndef TIMER_HEADER
+#define TIMER_HEADER
 
 
 #define GAME_TICKER 100

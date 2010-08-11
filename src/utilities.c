@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-#include "kk_utilities.h"
+#include "utilities.h"
 
 
 static FLAG init_random_numbers = OFF;

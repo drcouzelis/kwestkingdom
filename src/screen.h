@@ -1,9 +1,9 @@
-#ifndef KK_SCREEN_H
-#define KK_SCREEN_H
+#ifndef SCREEN_HEADER
+#define SCREEN_HEADER
 
 
 #include <allegro.h>
-#include "kk_utilities.h"
+#include "utilities.h"
 
 
 #define SCREEN_UPDATE_STR_LEN 20
@@ -28,6 +28,10 @@ int screen_height();
 
 void set_canvas_size(int width, int height);
 
+/**
+ * The canvas is the important part.
+ * This is what you'll be drawing to.
+ */
 int canvas_width();
 int canvas_height();
 
@@ -36,7 +40,7 @@ BITMAP *get_canvas();
 /**
  * Draw the contents of the the canvas to the screen.
  */
-FLAG refresh_screen();
+void refresh_screen();
 
 
 #endif

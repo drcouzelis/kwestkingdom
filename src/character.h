@@ -1,5 +1,5 @@
-#ifndef KK_CHARACTER_H
-#define KK_CHARACTER_H
+#ifndef CHARACTER_HEADER
+#define CHARACTER_HEADER
 
 
 #include <allegro.h>

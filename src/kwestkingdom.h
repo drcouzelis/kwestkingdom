@@ -1,5 +1,5 @@
-#ifndef KWESTKINGDOM_H
-#define KWESTKINGDOM_H
+#ifndef KWESTKINGDOM_HEADER
+#define KWESTKINGDOM_HEADER
 
 
 int get_tile_size();

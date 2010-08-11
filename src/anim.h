@@ -1,9 +1,9 @@
-#ifndef KK_ANIM_H
-#define KK_ANIM_H
+#ifndef ANIM_HEADER
+#define ANIM_HEADER
 
 
 #include <allegro.h>
-#include "kk_utilities.h"
+#include "utilities.h"
 
 
 typedef struct ANIM ANIM;
@@ -35,6 +35,9 @@ void animate(ANIM *anim);
  * A looping animation will never finish.
  */
 FLAG is_done_animating(ANIM *anim);
+
+int anim_width(ANIM *anim);
+int anim_height(ANIM *anim);
 
 /**
  * Reset an animation to its first frame.

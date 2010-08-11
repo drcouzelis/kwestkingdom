@@ -1,8 +1,8 @@
-#ifndef KK_ENEMY_H
-#define KK_ENEMY_H
+#ifndef ENEMY_HEADER
+#define ENEMY_HEADER
 
 
-#include "kk_direction.h"
+#include "direction.h"
 
 
 typedef struct ENEMY ENEMY;
