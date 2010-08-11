@@ -10,12 +10,12 @@
  * Returns true if the key has been pressed since
  * the last time this function was called.
  */
-FLAG is_key_pressed(char key);
+FLAG is_key_pressed(char keycode);
 
 /**
  * Returns true if the key is being held down.
  */
-FLAG is_key_held(char key);
+FLAG is_key_held(char keycode);
 
 
 #endif
