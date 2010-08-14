@@ -16,15 +16,6 @@ typedef enum
 } ROOM_THEME;
 
 
-typedef struct
-{
-  int percent_walls;
-  FLAG group_walls;
-  int percent_holes;
-  FLAG group_holes;
-} TERRAIN_OPTIONS;
-
-
 /**
  * Set the appearance of a room.
  */
@@ -45,6 +36,44 @@ void create_path(struct ROOM *room, int start_row, int start_col, int end_row, i
  * If there's no existing path, then only the point will be added.
  */
 void add_to_path(struct ROOM *room, int row, int col);
+
+typedef enum
+{
+  WALL_PRIORITY = 0,
+  HOLE_PRIORITY
+} TERRAIN_PRIORITY;
+
+
+typedef struct
+{
+  /**
+   * What percentage of the available tiles you want marked
+   * as walls or holes.
+   * A tile is unavailable if it is part of the path.
+   */
+  int percent_walls;
+  int percent_holes;
+
+  /**
+   * The higher the percent scattered, the more individual
+   * walls and holes you will get.
+   */
+  int percent_scattered_walls;
+  int percent_scattered_holes;
+
+  /**
+   * Whether you want the holes or the walls generated first.
+   * There probably won't be that much of a difference, but
+   * could give a little different effect.
+   */
+  TERRAIN_PRIORITY priority;
+
+  /**
+   * Use this to remove the areas of the room that are inaccessable.
+   */
+  FLAG remove_gaps;
+} TERRAIN_OPTIONS;
+
 
 /**
  * Randomly generate the layout of a specified style for a room.
