@@ -1,41 +1,56 @@
+#include <allegro.h>
 #include "input.h"
 
 
 
 
-FLAG is_key_pressed(char keycode)
-{
-  /**
-   * Check every key that made it into the key buffer since we last checked it.
-   */
-  while (keypressed())
-  {
-    /**
-     * Check what the key code is for the current key we're
-     * reading from the key buffer.
-     */
-    if (readkey() >> 8 == keycode) {
-      return ON;
-    }
-  }
+static char key_held[KEY_MAX];
 
+
+
+
+void init_input()
+{
+  unsigned int i;
+  
+  for (i = 0; i < KEY_MAX; i++) {
+    key_held[i] = OFF;
+  }
+}
+
+
+
+
+FLAG is_key_pressed(char code)
+{
+  unsigned int i = code;
+  
+  if (!key_held[i] && key[i]) {
+    key_held[i] = ON;
+    return ON;
+  }
+  
+  if (key_held[i] && !key[i]) {
+    key_held[i] = OFF;
+    return OFF;
+  }
+  
   return OFF;
 }
 
 
 
 
-FLAG is_key_held(char keycode)
+FLAG is_key_held(char code)
 {
-  /*
-  if (key[keycode]) {
-    key_released[keycode] = OFF;
+  unsigned int i = code;
+  
+  if (key[i]) {
+    key_held[i] = ON;
     return ON;
   }
 
-  key_released[keycode] = ON;
+  key_held[i] = OFF;
 
   return OFF;
-  */
-  return key[keycode];
 }

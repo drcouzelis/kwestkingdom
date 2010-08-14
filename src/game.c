@@ -346,7 +346,7 @@ void activate_game_menu_selection(GAME *game)
 void change_game_state(GAME *game, int state)
 {
   ROOM *room;
-  LAYOUT_OPTIONS options = {50, ON, 0, OFF};
+  TERRAIN_OPTIONS terrain = {50, ON, 0, OFF};
   
   game->state = state;
   
@@ -355,7 +355,9 @@ void change_game_state(GAME *game, int state)
   case GAME_MENU_STATE:
     room = create_room();
     set_room_theme(room, ROOM_THEME_FOREST);
-    generate_layout(room, &options);
+    create_path(room, ROWS - 1, COLS / 2, 0, (COLS / 2) - 1);
+    add_to_path(room, ROWS - 2, 1);
+    generate_terrain(room, &terrain);
     paint_room(room, game->title_background);
     destroy_room(room);
     

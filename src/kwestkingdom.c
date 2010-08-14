@@ -50,6 +50,7 @@ void init_kwestkingdom()
   allegro_init();
   init_timer();
   install_keyboard();
+  init_input();
   init_resources(); /* Load images */
 
   screen_init = init_screen(
@@ -77,7 +78,7 @@ int main(int argc, char *argv[])
 
   int time;
   char method[SCREEN_UPDATE_STR_LEN];
-
+  
   if (argc > 1) {
     if (strstr(argv[1], "help")) {
       printf("Type \"kwestkingdom\" to play!\n");
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
       if (is_key_pressed(quit_key)) {
         quit_kwestkingdom();
       }
-
+      
       /**
        * UPDATE
        */

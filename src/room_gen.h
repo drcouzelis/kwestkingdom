@@ -22,7 +22,7 @@ typedef struct
   FLAG group_walls;
   int percent_holes;
   FLAG group_holes;
-} LAYOUT_OPTIONS;
+} TERRAIN_OPTIONS;
 
 
 /**
@@ -31,13 +31,26 @@ typedef struct
 void set_room_theme(struct ROOM *room, ROOM_THEME theme);
 
 
-void create_path(struct ROOM *room, int start_x, int start_y, int end_x, int end_y);
+/**
+ * Create a path between two points.
+ * A path guarantees that a character will be able
+ * to move between the two points.
+ */
+void create_path(struct ROOM *room, int start_row, int start_col, int end_row, int end_col);
+
+/**
+ * Create a path between the existing path and another point.
+ * This guarantees that a character will be able to move
+ * to the point.
+ * If there's no existing path, then only the point will be added.
+ */
+void add_to_path(struct ROOM *room, int row, int col);
 
 /**
  * Randomly generate the layout of a specified style for a room.
- * It will not generate anything on part of the path or any door.
+ * It will not generate anything on part of the path.
  */
-void generate_layout(struct ROOM *room, LAYOUT_OPTIONS *options);
+void generate_terrain(struct ROOM *room, TERRAIN_OPTIONS *options);
 
 /**
  * Randomly generate enemies in a room.

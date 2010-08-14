@@ -47,35 +47,17 @@ ROOM *create_room()
   
   room->num_enemies = 0;
   
-  /**
-   * By default there is no path in the room.
-   */
   for (i = 0; i < ROWS; i++) {
     for (j = 0; j < COLS; j++) {
       room->path[i][j] = OFF;
-    }
-  }
-  
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
       room->tiles[i][j] = NULL;
+      room->help[i][j] = NULL;
+      room->doors[i][j] = NULL;
     }
   }
   
   for (i = 0; i < MAX_TILE_TYPES; i++) {
     room->tile_anims[i] = NULL;
-  }
-  
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      room->help[i][j] = NULL;
-    }
-  }
-  
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      room->doors[i][j] = NULL;
-    }
   }
   
   return room;
@@ -100,23 +82,13 @@ void destroy_room(ROOM *room)
   for (i = 0; i < ROWS; i++) {
     for (j = 0; j < COLS; j++) {
       free(room->tiles[i][j]);
+      free(room->help[i][j]);
+      free(room->doors[i][j]);
     }
   }
   
   for (i = 0; i < MAX_TILE_TYPES; i++) {
     free(room->tile_anims[i]);
-  }
-  
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      free(room->help[i][j]);
-    }
-  }
-  
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      free(room->doors[i][j]);
-    }
   }
   
   free(room);
