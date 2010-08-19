@@ -23,7 +23,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   }
 
   for (i = 0; i < MAX_TILE_TYPES; i++) {
-    free(room->tile_anims[i]);
+    free(room->terrain_anims[i]);
   }
 
   /**
@@ -31,7 +31,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
    * Just initialize them all here.
    */
   for (i = 0; i < MAX_TILE_TYPES; i++) {
-    room->tile_anims[i] = create_anim(0, OFF);
+    room->terrain_anims[i] = create_anim(0, OFF);
   }
 
   switch (theme) {
@@ -67,17 +67,17 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
     return;
   }
 
-  add_frame(room->tile_anims[TILE_TYPE_EMPTY], get_image(empty, NORMAL));
-  add_frame(room->tile_anims[TILE_TYPE_HOLE], get_image(hole, NORMAL));
-  add_frame(room->tile_anims[TILE_TYPE_WALL], get_image(wall, NORMAL));
-  add_frame(room->tile_anims[TILE_TYPE_N_EDGE], get_image(edge, NORMAL));
-  add_frame(room->tile_anims[TILE_TYPE_S_EDGE], get_image(edge, V_FLIP));
-  add_frame(room->tile_anims[TILE_TYPE_E_EDGE], get_image(edge, ROTATE));
-  add_frame(room->tile_anims[TILE_TYPE_W_EDGE], get_image(edge, ROTATE_V_FLIP));
-  add_frame(room->tile_anims[TILE_TYPE_NE_INSIDE], get_image(inside, NORMAL));
-  add_frame(room->tile_anims[TILE_TYPE_NW_INSIDE], get_image(inside, H_FLIP));
-  add_frame(room->tile_anims[TILE_TYPE_SE_INSIDE], get_image(inside, V_FLIP));
-  add_frame(room->tile_anims[TILE_TYPE_SW_INSIDE], get_image(inside, H_V_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_EMPTY], get_image(empty, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_HOLE], get_image(hole, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_WALL], get_image(wall, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_N_EDGE], get_image(edge, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_S_EDGE], get_image(edge, V_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_E_EDGE], get_image(edge, ROTATE));
+  add_frame(room->terrain_anims[TILE_TYPE_W_EDGE], get_image(edge, ROTATE_V_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_NE_INSIDE], get_image(inside, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_NW_INSIDE], get_image(inside, H_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_SE_INSIDE], get_image(inside, V_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_SW_INSIDE], get_image(inside, H_V_FLIP));
 }
 
 
@@ -221,7 +221,6 @@ void create_path(ROOM *room, int start_row, int start_col, int end_row, int end_
       }
     }
 
-
     /**
      * You can kind of think of this line of code as doing a "sort"
      * on the list of tiles.
@@ -305,54 +304,138 @@ void add_to_path(struct ROOM *room, int row, int col)
 
 
 
+void check_terrain_options(TERRAIN_OPTIONS *options);
+void clear_terrain(ROOM *room);
+void add_terrain_border(ROOM *room);
+void mark_path(ROOM *room);
+int calc_percentage(int value, int percent);
+void randomly_place_adjacent_tile(ROOM *room, TILE *tile);
+
+
+
+
 void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
 {
-  /* TEMP */
+  int list[ROWS * COLS];
+  int len = 0;
+  
   int row;
   int col;
-
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-
-      if (room->path[row][col]) {
-        room->tiles[row][col] = create_tile(TILE_TYPE_EMPTY, OBSTACLE_TYPE_NONE);
-      } else {
-        room->tiles[row][col] = create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_FLYABLE);
+  int i;
+  
+  int num_walls;
+  int num_holes;
+  int num_wall_groups;
+  int num_hole_groups;
+  
+  int rand_num;
+  int rand_row;
+  int rand_col;
+  
+  /**
+   * Make sure the options are correct.
+   */
+  check_terrain_options(options);
+  
+  /**
+   * Remove any previous tiles.
+   */
+  clear_terrain(room);
+  
+  /**
+   * Mark the path as "empty" tiles, including the ones that are on the border.
+   */
+  mark_path(room);
+  
+  /**
+   * Create a list of possible places for a tile.
+   */
+  for (row = 1; row < ROWS - 1; row++) {
+    for (col = 1; col < COLS - 1; col++) {
+      if (room->terrain[row][col] == NULL) {
+        list[len] = calc_pos_from_row_and_col(row, col);
+        len++;
       }
     }
   }
-
-  /**
-   * Create a list of the tiles that are not part of the path.
-   */
-
+  
   /**
    * Use the percentage to calculate how many tiles to make into walls.
    */
-
+  num_walls = calc_percentage(len, options->percent_walls);
+  num_holes = calc_percentage(len, options->percent_holes);
+  
   /**
    * Of that number of tiles, use the percentage scattered to calculate
    * how many tiles to initially make into walls.
    */
-
+  num_wall_groups = calc_percentage(num_walls, options->percent_scattered_walls);
+  num_hole_groups = calc_percentage(num_holes, options->percent_scattered_holes);
+  
   /**
-   * Randomly select that number of tiles and mark them as walls.
+   * It doesn't make sense for there to be no groups.
+   * There must be at least one.
    */
-
+  if (num_wall_groups == 0) {
+    num_wall_groups = 1;
+  }
+  
+  if (num_hole_groups == 0) {
+    num_hole_groups = 1;
+  }
+  
+  /**
+   * Randomly create the first wall in a "group" of walls.
+   */
+  for (i = 0; i < num_wall_groups; i++) {
+    
+    /**
+     * Randomly pick a tile
+     */
+    rand_num = random_number(0, len - 1);
+    rand_row = calc_row_from_pos(list[rand_num]);
+    rand_col = calc_col_from_pos(list[rand_num]);
+    
+    /**
+     * Add a wall to the randomly selected location.
+     */
+    room->terrain[rand_row][rand_col] = create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE);
+    
+    num_walls--;
+    
+    /**
+     * Remove the randomly selected tile from the list.
+     */
+    list[rand_num] = list[len - 1];
+    len--;
+  }
+  
   /**
    * For the rest of the number of tiles that need to be marked,
    * randomly select a tile,
    * and if it's not part of the path and it's next to a wall,
    * then mark it as a wall and reset the list of tiles to look through.
    */
-
+  while (num_walls > 0) {
+    randomly_place_adjacent_tile(room, create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE));
+    num_walls--;
+  }
+  
   /**
-   * If you get to the end of the list of tiles and still haven't
-   * selected one for the wall, then go through the list again and
-   * put a wall on the first available randomly selected tile.
+   * Every room will have a border of walls.
    */
-
-  options = options; /* TEMP */
+  add_terrain_border(room);
+  
+  /**
+   * Mark anything that isn't a wall as empty.
+   */
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      if (room->terrain[row][col] == NULL) {
+        room->terrain[row][col] = create_tile(TILE_TYPE_EMPTY, OBSTACLE_TYPE_WALKABLE);
+      }
+    }
+  }
 }
 
 
@@ -462,4 +545,247 @@ int calc_row_from_pos(int pos)
 int calc_col_from_pos(int pos)
 {
   return pos - ((pos / COLS) * COLS);
+}
+
+
+
+
+/**
+ * Make sure the terrain options are sane.
+ */
+void check_terrain_options(TERRAIN_OPTIONS *options)
+{
+  if (options->percent_walls < 0) {
+    options->percent_walls = 0;
+  }
+  
+  if (options->percent_walls > 100) {
+    options->percent_walls = 100;
+  }
+  
+  if (options->percent_holes < 0) {
+    options->percent_holes = 0;
+  }
+  
+  if (options->percent_holes > 100) {
+    options->percent_holes = 100;
+  }
+  
+  if (options->percent_scattered_walls < 0) {
+    options->percent_scattered_walls = 0;
+  }
+  
+  if (options->percent_scattered_walls > 100) {
+    options->percent_scattered_walls = 100;
+  }
+  
+  if (options->percent_scattered_holes < 0) {
+    options->percent_scattered_holes = 0;
+  }
+  
+  if (options->percent_scattered_holes > 100) {
+    options->percent_scattered_holes = 100;
+  }
+  
+  if (options->priority != WALL_PRIORITY && options->priority != HOLE_PRIORITY) {
+    options->priority = WALL_PRIORITY;
+  }
+}
+
+
+
+
+int calc_percentage(int value, int percent)
+{
+  int n;
+  
+  if (percent == 100) {
+    return value;
+  }
+  
+  n = value * percent;
+  
+  if (n == 0) {
+    return 0;
+  }
+  
+  return n / 100;
+}
+
+
+
+
+void clear_terrain(ROOM *room)
+{
+  int row;
+  int col;
+  
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      destroy_tile(room->terrain[row][col]);
+      room->terrain[row][col] = NULL;
+    }
+  }
+}
+
+
+
+
+void mark_path(ROOM *room)
+{
+  int row;
+  int col;
+  
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      if (room->path[row][col]) {
+        destroy_tile(room->terrain[row][col]);
+        room->terrain[row][col] = create_tile(TILE_TYPE_EMPTY, OBSTACLE_TYPE_WALKABLE);
+      }
+    }
+  }
+}
+
+
+
+
+void add_terrain_border(ROOM *room)
+{
+  int row;
+  int col;
+  
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      if (row == 0 || row == ROWS - 1 || col == 0 || col == COLS - 1) {
+        if (room->path[row][col] == OFF) {
+          destroy_tile(room->terrain[row][col]);
+          room->terrain[row][col] = create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE);
+        }
+      }
+    }
+  }
+}
+
+
+
+
+void randomly_place_tile(ROOM *room, TILE *tile)
+{
+  int list[ROWS * COLS];
+  int len = 0;
+  
+  int row;
+  int col;
+  
+  int rand_num;
+  int rand_row;
+  int rand_col;
+  
+  /**
+   * Create a list of possible places for a tile.
+   */
+  for (row = 1; row < ROWS - 1; row++) {
+    for (col = 1; col < COLS - 1; col++) {
+      if (room->terrain[row][col] == NULL) {
+        list[len] = calc_pos_from_row_and_col(row, col);
+        len++;
+      }
+    }
+  }
+  
+  if (len > 0) {
+    
+    /**
+     * Randomly pick a tile
+     */
+    rand_num = random_number(0, len - 1);
+    rand_row = calc_row_from_pos(list[rand_num]);
+    rand_col = calc_col_from_pos(list[rand_num]);
+    
+    room->terrain[rand_row][rand_col] = tile;
+  }
+}
+
+
+
+
+void randomly_place_adjacent_tile(ROOM *room, TILE *tile)
+{
+  int list[ROWS * COLS];
+  int len = 0;
+  
+  int row;
+  int col;
+  int dir;
+  
+  int rand_num;
+  int rand_row;
+  int rand_col;
+  
+  TILE *temp_tile;
+  
+  int found = OFF;
+  
+  /**
+   * Create a list of possible places for a tile.
+   */
+  for (row = 1; row < ROWS - 1; row++) {
+    for (col = 1; col < COLS - 1; col++) {
+      if (room->terrain[row][col] == NULL) {
+        list[len] = calc_pos_from_row_and_col(row, col);
+        len++;
+      }
+    }
+  }
+  
+  while (len > 0 && found == OFF) {
+    
+    /**
+     * Randomly pick a tile
+     */
+    rand_num = random_number(0, len - 1);
+    rand_row = calc_row_from_pos(list[rand_num]);
+    rand_col = calc_col_from_pos(list[rand_num]);
+    
+    /**
+     * If this randomly selected tile is next to another wall
+     * then add it to the "group".
+     */
+    for (dir = NORTH; dir <= WEST; dir++) {
+      
+      row = rand_row + cardinals[dir].v_offset;
+      col = rand_col + cardinals[dir].h_offset;
+      
+      temp_tile = room->terrain[row][col];
+      
+      if (temp_tile != NULL && temp_tile->type == tile->type) {
+        
+        /**
+         * Found one!
+         * This randomly selected tile is next to a tile of the same type.
+         * Go ahead and mark it.
+         */
+        room->terrain[rand_row][rand_col] = tile;
+        
+        /**
+         * Stop looking!
+         */
+        found = ON;
+      }
+    }
+    
+    /**
+     * Remove the selected tile from the list.
+     */
+    list[rand_num] = list[len - 1];
+    len--;
+  }
+  
+  /**
+   * If you've come all this way and still haven't found a tile,
+   * then just select any open space.
+   */
+  if (!found) {
+    randomly_place_tile(room, tile);
+  }
 }

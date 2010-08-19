@@ -77,14 +77,14 @@ struct ROOM
   FLAG path[ROWS][COLS];
   
   /**
-   * A map of the tiles in the room.
+   * A map of the terrain in the room.
    */
-  struct TILE *tiles[ROWS][COLS];
+  struct TILE *terrain[ROWS][COLS];
   
   /**
-   * The different types of appearances of tiles.
+   * Appearance of different types of terrain.
    */
-  struct ANIM *tile_anims[MAX_TILE_TYPES];
+  struct ANIM *terrain_anims[MAX_TILE_TYPES];
   
   /**
    * A map of the help tiles in the room.
@@ -99,7 +99,7 @@ struct ROOM
 
 
 /**
- * The different types of tiles
+ * The different types of terrain
  */
 typedef enum
 {

@@ -303,6 +303,9 @@ void paint_game_menu(GAME *game, BITMAP *canvas)
 
   /* The pointer to the current selection */
   paint_anim(game->pointer_anim, canvas, x - 4, y + vTextOffset + (lineSpacing * game->selection) - 1);
+  
+  /* TEMP */
+  blit(game->title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);
 }
 
 
@@ -346,7 +349,7 @@ void activate_game_menu_selection(GAME *game)
 void change_game_state(GAME *game, int state)
 {
   ROOM *room;
-  TERRAIN_OPTIONS terrain = {50, 0, 25, 100, WALL_PRIORITY, OFF};
+  TERRAIN_OPTIONS terrain = {40, 0, 50, 100, WALL_PRIORITY, OFF};
 
   game->state = state;
 
