@@ -62,16 +62,18 @@ typedef struct
   int percent_scattered_holes;
 
   /**
+   * Use this to remove the areas of the room that are inaccessable.
+   */
+  FLAG remove_wall_gaps;
+  FLAG remove_hole_gaps;
+  
+  /**
    * Whether you want the holes or the walls generated first.
    * There probably won't be that much of a difference, but
    * could give a little different effect.
    */
   TERRAIN_PRIORITY priority;
 
-  /**
-   * Use this to remove the areas of the room that are inaccessable.
-   */
-  FLAG remove_gaps;
 } TERRAIN_OPTIONS;
 
 

@@ -349,7 +349,8 @@ void activate_game_menu_selection(GAME *game)
 void change_game_state(GAME *game, int state)
 {
   ROOM *room;
-  TERRAIN_OPTIONS terrain = {40, 0, 50, 100, WALL_PRIORITY, OFF};
+  /*TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};*/ /* Nice trees*/
+  TERRAIN_OPTIONS terrain = {10, 90, 100, 0, OFF, OFF, WALL_PRIORITY};
 
   game->state = state;
 

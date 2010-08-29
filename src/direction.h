@@ -13,6 +13,15 @@ enum
 
 enum
 {
+  NE = 0,
+  NW,
+  SE,
+  SW
+};
+
+
+enum
+{
   UP = 0,
   DOWN,
   RIGHT,
@@ -36,6 +45,7 @@ struct DIRECTION
 
 
 extern const DIRECTION cardinals[4];
+extern const DIRECTION intercardinals[4];
 
 extern const DIRECTION directions[4];
 

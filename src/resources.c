@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "colors.h"
 #include "resources.h"
 #include "utilities.h"
 
@@ -239,9 +240,10 @@ SAMPLE *get_sound(int sound)
 
 void load_formatted_image(int image, int format)
 {
-  BITMAP *normal;
+  BITMAP *orig = images[image][NORMAL];
+  BITMAP *temp;
   
-  if (images[image][NORMAL] == NULL) {
+  if (orig == NULL) {
     return;
   }
   
@@ -249,38 +251,46 @@ void load_formatted_image(int image, int format)
     return;
   }
   
-  normal = images[image][NORMAL];
+  images[image][format] = create_bitmap(orig->w, orig->h);
+  clear_to_color(images[image][format], MAGICPINK);
   
-  images[image][format] = create_bitmap(normal->w, normal->h);
+  /**
+   * For some silly reason, Allegro won't rotate a sprite properly
+   * unless I blit it to a temporary bitmap first.
+   */
+  temp = create_bitmap(orig->w, orig->h);
+  blit(orig, temp, 0, 0, 0, 0, temp->w, temp->h);
   
   switch (format) {
   
   case H_FLIP:
-    draw_sprite_h_flip(images[image][format], normal, 0, 0);
+    draw_sprite_h_flip(images[image][format], temp, 0, 0);
     break;
     
   case V_FLIP:
-    draw_sprite_v_flip(images[image][format], normal, 0, 0);
+    draw_sprite_v_flip(images[image][format], temp, 0, 0);
     break;
     
   case H_V_FLIP:
-    rotate_sprite(images[image][format], normal, 0, 0, itofix(128));
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(128));
     break;
     
   case ROTATE:
-    rotate_sprite(images[image][format], normal, 0, 0, itofix(64));
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(64));
     break;
     
   case ROTATE_H_FLIP:
-    rotate_sprite_v_flip(images[image][format], normal, 0, 0, itofix(192));
+    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(192));
     break;
     
   case ROTATE_V_FLIP:
-    rotate_sprite_v_flip(images[image][format], normal, 0, 0, itofix(64));
+    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(64));
     break;
     
   case ROTATE_H_V_FLIP:
-    rotate_sprite(images[image][format], normal, 0, 0, itofix(192));
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(192));
     break;
   }
+  
+  destroy_bitmap(temp);
 }

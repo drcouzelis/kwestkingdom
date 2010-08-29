@@ -1,5 +1,6 @@
 #include "anim.h"
 #include "direction.h"
+#include "kwestkingdom.h"
 #include "resources.h"
 #include "room.h"
 #include "room_gen.h"
@@ -78,6 +79,16 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   add_frame(room->terrain_anims[TILE_TYPE_NW_INSIDE], get_image(inside, H_FLIP));
   add_frame(room->terrain_anims[TILE_TYPE_SE_INSIDE], get_image(inside, V_FLIP));
   add_frame(room->terrain_anims[TILE_TYPE_SW_INSIDE], get_image(inside, H_V_FLIP));
+  
+  add_frame(room->terrain_anims[TILE_TYPE_NE_OUTSIDE], get_image(outside, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_NW_OUTSIDE], get_image(outside, H_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], get_image(outside, V_FLIP));
+  add_frame(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], get_image(outside, H_V_FLIP));
+  
+  set_visual_offset(room->terrain_anims[TILE_TYPE_NE_OUTSIDE], -get_tile_size(), -get_tile_size());
+  set_visual_offset(room->terrain_anims[TILE_TYPE_NW_OUTSIDE], -get_tile_size(), -get_tile_size());
+  set_visual_offset(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], -get_tile_size(), -get_tile_size());
+  set_visual_offset(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], -get_tile_size(), -get_tile_size());
 }
 
 
@@ -306,10 +317,10 @@ void add_to_path(struct ROOM *room, int row, int col)
 
 void check_terrain_options(TERRAIN_OPTIONS *options);
 void clear_terrain(ROOM *room);
-void add_terrain_border(ROOM *room);
-void mark_path(ROOM *room);
 int calc_percentage(int value, int percent);
-void randomly_place_adjacent_tile(ROOM *room, TILE *tile);
+void generate_terrain_of_type(ROOM *room, TILE_TYPE type, OBSTACLE_TYPE obstacle, int total, int groups);
+void mark_path(ROOM *room);
+void add_terrain_border(ROOM *room);
 
 
 
@@ -321,16 +332,12 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
   
   int row;
   int col;
-  int i;
   
   int num_walls;
   int num_holes;
+  
   int num_wall_groups;
   int num_hole_groups;
-  
-  int rand_num;
-  int rand_row;
-  int rand_col;
   
   /**
    * Make sure the options are correct.
@@ -385,48 +392,25 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
   }
   
   /**
-   * Randomly create the first wall in a "group" of walls.
+   * Add a set of terrain.
    */
-  for (i = 0; i < num_wall_groups; i++) {
-    
-    /**
-     * Randomly pick a tile
-     */
-    rand_num = random_number(0, len - 1);
-    rand_row = calc_row_from_pos(list[rand_num]);
-    rand_col = calc_col_from_pos(list[rand_num]);
-    
-    /**
-     * Add a wall to the randomly selected location.
-     */
-    room->terrain[rand_row][rand_col] = create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE);
-    
-    num_walls--;
-    
-    /**
-     * Remove the randomly selected tile from the list.
-     */
-    list[rand_num] = list[len - 1];
-    len--;
+  if (options->priority == WALL_PRIORITY) {
+    generate_terrain_of_type(room, TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE, num_walls, num_wall_groups);
+  } else {
+    generate_terrain_of_type(room, TILE_TYPE_HOLE, OBSTACLE_TYPE_JUMPABLE, num_holes, num_hole_groups);
   }
   
   /**
-   * For the rest of the number of tiles that need to be marked,
-   * randomly select a tile,
-   * and if it's not part of the path and it's next to a wall,
-   * then mark it as a wall and reset the list of tiles to look through.
+   * Add a second set of terrain.
    */
-  while (num_walls > 0) {
-    randomly_place_adjacent_tile(room, create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE));
-    num_walls--;
+  if (options->priority == WALL_PRIORITY) {
+    generate_terrain_of_type(room, TILE_TYPE_HOLE, OBSTACLE_TYPE_JUMPABLE, num_holes, num_hole_groups);
+  } else {
+    generate_terrain_of_type(room, TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE, num_walls, num_wall_groups);
   }
   
   /**
-   * Every room will have a border of walls.
-   */
-  add_terrain_border(room);
-  
-  /**
+   * Fill in the gaps.
    * Mark anything that isn't a wall as empty.
    */
   for (row = 0; row < ROWS; row++) {
@@ -436,6 +420,11 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
       }
     }
   }
+  
+  /**
+   * Every room will have a border.
+   */
+  add_terrain_border(room);
 }
 
 
@@ -446,6 +435,9 @@ void generate_enemies(ROOM *room, int types)
   room = room; /* TEMP */
   types = types; /* TEMP */
 }
+
+
+
 
 /**
  * Internal functions
@@ -571,6 +563,17 @@ void check_terrain_options(TERRAIN_OPTIONS *options)
     options->percent_holes = 100;
   }
   
+  /**
+   * Make sure the two percentages add up to 100.
+   */
+  if (options->percent_walls + options->percent_holes > 100) {
+    if (options->priority == WALL_PRIORITY) {
+      options->percent_holes = 100 - options->percent_walls;
+    } else {
+      options->percent_walls = 100 - options->percent_holes;
+    }
+  }
+  
   if (options->percent_scattered_walls < 0) {
     options->percent_scattered_walls = 0;
   }
@@ -649,21 +652,81 @@ void mark_path(ROOM *room)
 
 
 
+void add_terrain_corner(ROOM *room, int row, int col, int dir)
+{
+  TILE_TYPE type1;
+  TILE_TYPE type2;
+  
+  TILE_TYPE type = TILE_TYPE_WALL;
+  
+  type1 = room->terrain[row + intercardinals[dir].v_offset][col]->type;
+  type2 = room->terrain[row][col + intercardinals[dir].h_offset]->type;
+  
+  if (type1 == TILE_TYPE_HOLE && type2 == TILE_TYPE_HOLE) {
+    type = TILE_TYPE_HOLE;
+  }
+  
+  destroy_tile(room->terrain[row][col]);
+  room->terrain[row][col] = create_tile(type, OBSTACLE_TYPE_SOARABLE);
+}
+
+
+
+
 void add_terrain_border(ROOM *room)
 {
   int row;
   int col;
+  TILE_TYPE type;
   
+  /**
+   * Add a hole if it is next to a hole,
+   * otherwise the border will be a wall.
+   */
   for (row = 0; row < ROWS; row++) {
     for (col = 0; col < COLS; col++) {
       if (row == 0 || row == ROWS - 1 || col == 0 || col == COLS - 1) {
         if (room->path[row][col] == OFF) {
+          
+          type = TILE_TYPE_WALL;
+          
+          if (
+            (row == 0 && col == 0) ||
+            (row == 0 && col == COLS - 1) ||
+            (row == ROWS - 1 && col == 0) ||
+            (row == ROWS - 1 && col == COLS - 1)
+          ) {
+            /* Skip it! It's a corner. */
+          } else if (row == 0 && room->terrain[row + 1][col]->type == TILE_TYPE_HOLE) {
+            type = TILE_TYPE_HOLE;
+          } else if (row == ROWS - 1 && room->terrain[row - 1][col]->type == TILE_TYPE_HOLE) {
+            type = TILE_TYPE_HOLE;
+          } else if (col == 0 && room->terrain[row][col + 1]->type == TILE_TYPE_HOLE) {
+            type = TILE_TYPE_HOLE;
+          } else if (col == COLS - 1 && room->terrain[row][col - 1]->type == TILE_TYPE_HOLE) {
+            type = TILE_TYPE_HOLE;
+          }
+          
+          /**
+           * Even if it's a hole, mark it as "soarable".
+           * Nobody's allowed to leave the room anyway.
+           */
           destroy_tile(room->terrain[row][col]);
-          room->terrain[row][col] = create_tile(TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE);
+          room->terrain[row][col] = create_tile(type, OBSTACLE_TYPE_SOARABLE);
         }
       }
     }
   }
+  
+  /**
+   * Mark the four corners.
+   * We do it here, because we don't know what they should be until
+   * the rest of the border is created.
+   */
+  add_terrain_corner(room, 0, 0, SE);
+  add_terrain_corner(room, 0, COLS - 1, SW);
+  add_terrain_corner(room, ROWS - 1, 0, NE);
+  add_terrain_corner(room, ROWS - 1, COLS - 1, NW);
 }
 
 
@@ -787,5 +850,71 @@ void randomly_place_adjacent_tile(ROOM *room, TILE *tile)
    */
   if (!found) {
     randomly_place_tile(room, tile);
+  }
+}
+
+
+
+
+void generate_terrain_of_type(ROOM *room, TILE_TYPE type, OBSTACLE_TYPE obstacle, int total, int groups)
+{
+  int list[ROWS * COLS];
+  int len = 0;
+  
+  int row;
+  int col;
+  
+  int rand_num;
+  int rand_row;
+  int rand_col;
+  
+  /**
+   * Create a list of possible places for a tile.
+   */
+  for (row = 1; row < ROWS - 1; row++) {
+    for (col = 1; col < COLS - 1; col++) {
+      if (room->terrain[row][col] == NULL) {
+        list[len] = calc_pos_from_row_and_col(row, col);
+        len++;
+      }
+    }
+  }
+  
+  /**
+   * Randomly create the first wall in a "group" of walls.
+   */
+  while (groups > 0 && total > 0) {
+    
+    /**
+     * Randomly pick a tile
+     */
+    rand_num = random_number(0, len - 1);
+    rand_row = calc_row_from_pos(list[rand_num]);
+    rand_col = calc_col_from_pos(list[rand_num]);
+    
+    /**
+     * Add a wall to the randomly selected location.
+     */
+    room->terrain[rand_row][rand_col] = create_tile(type, obstacle);
+    
+    groups--;
+    total--;
+    
+    /**
+     * Remove the randomly selected tile from the list.
+     */
+    list[rand_num] = list[len - 1];
+    len--;
+  }
+  
+  /**
+   * For the rest of the number of tiles that need to be marked,
+   * randomly select a tile,
+   * and if it's not part of the path and it's next to a wall,
+   * then mark it as a wall and reset the list of tiles to look through.
+   */
+  while (total > 0) {
+    randomly_place_adjacent_tile(room, create_tile(type, obstacle));
+    total--;
   }
 }
