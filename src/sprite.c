@@ -48,8 +48,6 @@ void destroy_sprite(SPRITE *sprite)
     destroy_anim(sprite->anims[i]);
   }
   
-  free(sprite->anims);
-  
   free(sprite);
 }
 
