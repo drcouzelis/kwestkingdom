@@ -15,6 +15,7 @@ DOOR *create_door(int new_room_num, int new_row, int new_col)
   door->new_room_num = new_room_num;
   door->new_row = new_row;
   door->new_col = new_col;
+  door->transition = JUMP;
 
   return door;
 }
@@ -215,45 +216,88 @@ void destroy_tile(TILE *tile)
   if (tile == NULL) {
     return;
   }
+  
   free(tile);
 }
 
 
 
 
-void paint_edge(ROOM *room, BITMAP *canvas, int row, int col, int direction, TILE_TYPE type)
+FLAG row_out_of_bounds(int row)
 {
-  FLAG paint_it = OFF;
+  if (row < 0 || row > ROWS - 1) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+FLAG col_out_of_bounds(int col)
+{
+  if (col < 0 || col > COLS - 1) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+TILE_TYPE find_tile_type(ROOM *room, int row, int col)
+{
+  if (row_out_of_bounds(row) && col_out_of_bounds(col)) {
+    return TILE_TYPE_HOLE;
+  }
+  
+  if (row_out_of_bounds(row) || col_out_of_bounds(col)) {
+    
+    /**
+     * YOU LEFT OFF HERE!!
+     * This is a special case.
+     *
+     * If there is a door with a scrolling transition... {
+     *   Use the tiles from the connecting room
+     * } else {
+     *   return TILE_TYPE_HOLE;
+     * }
+     */
+    return TILE_TYPE_HOLE;
+  }
+  
+  return room->terrain[row][col]->type;
+}
+
+
+
+
+void paint_edge(ROOM *room, BITMAP *canvas, int row, int col, int direction, TILE_TYPE edge_type)
+{
+  TILE_TYPE adjacent_type;
   
   int x;
   int y;
   
   x = col * get_tile_size();
   y = row * get_tile_size();
-  
-  if (row == 0 && direction == NORTH) {
-  }
   
   row = row + cardinals[direction].v_offset;
   col = col + cardinals[direction].h_offset;
   
-  if (row < 0 || row >= ROWS || col < 0 || col >= COLS) {
-    return;
-  }
+  adjacent_type = find_tile_type(room, row, col);
   
-  if (room->terrain[row][col]->type != TILE_TYPE_HOLE) {
-    paint_it = ON;
-  }
-  
-  if (paint_it) {
-    paint_anim(room->terrain_anims[type], canvas, x, y);
+  if (adjacent_type != TILE_TYPE_HOLE) {
+    paint_anim(room->terrain_anims[edge_type], canvas, x, y);
   }
 }
 
 
 
 
-void paint_inside_corner(ROOM *room, BITMAP *canvas, int row, int col, int direction, TILE_TYPE type)
+void paint_inside_corner_edge(ROOM *room, BITMAP *canvas, int row, int col, int direction, TILE_TYPE edge_type)
 {
   int x;
   int y;
@@ -264,73 +308,66 @@ void paint_inside_corner(ROOM *room, BITMAP *canvas, int row, int col, int direc
   int r2;
   int c2;
   
-  /*
-  FLAG tile_1_hole = ON;
-  FLAG tile_2_hole = ON;
-  */
+  TILE_TYPE adjacent_type1;
+  TILE_TYPE adjacent_type2;
   
   x = col * get_tile_size();
   y = row * get_tile_size();
   
-  r1 = row + cardinals[direction].v_offset;
+  r1 = row + intercardinals[direction].v_offset;
   c1 = col;
   
   r2 = row;
-  c2 = col + cardinals[direction].h_offset;
+  c2 = col + intercardinals[direction].h_offset;
   
-  /*
-  if (r1 < 0 || r1 >= ROWS || c1 < 0 || c1 >= COLS) {
-    tile_1_hole = OFF;
+  adjacent_type1 = find_tile_type(room, r1, c1);
+  adjacent_type2 = find_tile_type(room, r2, c2);
+  
+  if (adjacent_type1 != TILE_TYPE_HOLE && adjacent_type2 != TILE_TYPE_HOLE) {
+    paint_anim(room->terrain_anims[edge_type], canvas, x, y);
   }
-  
-  if (
-    room->terrain[row - 1][col]->type != TILE_TYPE_HOLE &&
-    room->terrain[row][col + 1]->type != TILE_TYPE_HOLE
-  ) {
-    paint_anim(room->terrain_anims[TILE_TYPE_NE_INSIDE], canvas, x, y);
-  }
-  
-  if (room->terrain[row][col]->type != TILE_TYPE_HOLE) {
-    paint_anim(room->terrain_anims[type], canvas, x, y);
-  }
-  */
-  
-  room = room; /* TEMP */
-  canvas = canvas; /* TEMP */
-  type = type; /* TEMP */
 }
 
 
 
 
-FLAG is_path_on_border(ROOM *room, int row, int col)
+void paint_outside_corner_edge(ROOM *room, BITMAP *canvas, int row, int col, int direction, TILE_TYPE edge_type)
 {
-  /*
+  int x;
+  int y;
+  
   int r1;
   int c1;
   
   int r2;
   int c2;
   
-  int i;
-  */
+  int r3;
+  int c3;
   
-  FLAG path_exists = OFF;
+  TILE_TYPE adjacent_type1;
+  TILE_TYPE adjacent_type2;
+  TILE_TYPE corner_type;
   
-  /**
-   * Check if this is a border tile.
-   */
-  if (row != 0 || row != ROWS - 1 || col != 0 || col != COLS - 1) {
-    return OFF;
+  x = col * get_tile_size();
+  y = row * get_tile_size();
+  
+  r1 = row + intercardinals[direction].v_offset;
+  c1 = col;
+  
+  r2 = row;
+  c2 = col + intercardinals[direction].h_offset;
+  
+  r3 = row + intercardinals[direction].v_offset;
+  c3 = col + intercardinals[direction].h_offset;
+  
+  adjacent_type1 = find_tile_type(room, r1, c1);
+  adjacent_type2 = find_tile_type(room, r2, c2);
+  corner_type = find_tile_type(room, r3, c3);
+  
+  if (adjacent_type1 == TILE_TYPE_HOLE && adjacent_type2 == TILE_TYPE_HOLE && corner_type != TILE_TYPE_HOLE) {
+    paint_anim(room->terrain_anims[edge_type], canvas, x, y);
   }
-  
-  /*
-  if (row == 0
-  */
-  
-  room = room; /* TEMP */
-  
-  return path_exists;
 }
 
 
@@ -346,14 +383,15 @@ void paint_edges(ROOM *room, BITMAP *canvas, int row, int col)
   paint_edge(room, canvas, row, col, EAST, TILE_TYPE_E_EDGE);
   paint_edge(room, canvas, row, col, WEST, TILE_TYPE_W_EDGE);
   
+  paint_inside_corner_edge(room, canvas, row, col, NE, TILE_TYPE_NE_INSIDE);
+  paint_inside_corner_edge(room, canvas, row, col, NW, TILE_TYPE_NW_INSIDE);
+  paint_inside_corner_edge(room, canvas, row, col, SE, TILE_TYPE_SE_INSIDE);
+  paint_inside_corner_edge(room, canvas, row, col, SW, TILE_TYPE_SW_INSIDE);
   
-  
-  /*
-  paint_inside_corner(room, canvas, row, col, NE, TILE_TYPE_NE_INSIDE);
-  paint_inside_corner(room, canvas, row, col, NW, TILE_TYPE_NW_INSIDE);
-  paint_inside_corner(room, canvas, row, col, SE, TILE_TYPE_SE_INSIDE);
-  paint_inside_corner(room, canvas, row, col, SW, TILE_TYPE_SW_INSIDE);
-  */
+  paint_outside_corner_edge(room, canvas, row, col, NE, TILE_TYPE_NE_OUTSIDE);
+  paint_outside_corner_edge(room, canvas, row, col, NW, TILE_TYPE_NW_OUTSIDE);
+  paint_outside_corner_edge(room, canvas, row, col, SE, TILE_TYPE_SE_OUTSIDE);
+  paint_outside_corner_edge(room, canvas, row, col, SW, TILE_TYPE_SW_OUTSIDE);
 }
 
 
@@ -385,108 +423,4 @@ void paint_room_terrain(ROOM *room, BITMAP *canvas)
       }
     }
   }
-}
-
-
-
-
-void paint_room_terrain_OLD(ROOM *room, BITMAP *canvas)
-{
-  int row;
-  int col;
-  int x;
-  int y;
-  
-  /**
-   * Add the shore corners
-   */
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-
-      if (room->terrain[row][col]->type == TILE_TYPE_HOLE) {
-
-        x = col * get_tile_size();
-        y = row * get_tile_size();
-
-        /**
-         * Add the shore inside corners
-         */
-
-        /* North East */
-        if (
-          room->terrain[row - 1][col]->type != TILE_TYPE_HOLE &&
-          room->terrain[row][col + 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_NE_INSIDE], canvas, x, y);
-        }
-
-        /* South East */
-        if (
-          room->terrain[row + 1][col]->type != TILE_TYPE_HOLE &&
-          room->terrain[row][col + 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_SE_INSIDE], canvas, x, y);
-        }
-
-        /* North West */
-        if (
-          room->terrain[row - 1][col]->type != TILE_TYPE_HOLE &&
-          room->terrain[row][col - 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_NW_INSIDE], canvas, x, y);
-        }
-
-        /* South West */
-        if (
-          room->terrain[row + 1][col]->type != TILE_TYPE_HOLE &&
-          room->terrain[row][col - 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_SW_INSIDE], canvas, x, y);
-        }
-
-        /**
-         * Add the shore outside corners
-         */
-
-        /* North East */
-        if (
-          room->terrain[row - 1][col]->type == TILE_TYPE_HOLE &&
-          room->terrain[row][col + 1]->type == TILE_TYPE_HOLE &&
-          room->terrain[row - 1][col + 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_NE_OUTSIDE], canvas, x, y);
-        }
-
-        /* South East */
-        if (
-          room->terrain[row + 1][col]->type == TILE_TYPE_HOLE &&
-          room->terrain[row][col + 1]->type == TILE_TYPE_HOLE &&
-          room->terrain[row + 1][col + 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], canvas, x, y);
-        }
-
-        /* North West */
-        if (
-          room->terrain[row - 1][col]->type == TILE_TYPE_HOLE &&
-          room->terrain[row][col - 1]->type == TILE_TYPE_HOLE &&
-          room->terrain[row - 1][col - 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_NW_OUTSIDE], canvas, x, y);
-        }
-
-        /* South West */
-        if (
-          room->terrain[row + 1][col]->type == TILE_TYPE_HOLE &&
-          room->terrain[row][col - 1]->type == TILE_TYPE_HOLE &&
-          room->terrain[row + 1][col - 1]->type != TILE_TYPE_HOLE
-        ) {
-          paint_anim(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], canvas, x, y);
-        }
-
-      }
-
-    }
-  }
-
 }

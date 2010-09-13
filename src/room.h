@@ -22,11 +22,22 @@ struct HELP;
 struct TILE;
 
 
+typedef enum
+{
+  SCROLL_N = 0,
+  SCROLL_S,
+  SCROLL_E,
+  SCROLL_W,
+  JUMP
+} TRANSITION;
+
+
 struct DOOR
 {
   int new_room_num;
   int new_row;
   int new_col;
+  TRANSITION transition;
 };
 
 

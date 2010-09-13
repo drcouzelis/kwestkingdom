@@ -53,7 +53,7 @@ struct PLAYER
 
 
 PLAYER *create_player();
-PLAYER *destroy_player(PLAYER *player);
+void destroy_player(PLAYER *player);
 
 void update_player(PLAYER *player, struct WORLD *world);
 

@@ -43,11 +43,17 @@ void change_game_state(GAME *game, int state);
 GAME *create_game()
 {
   GAME *game;
+  ROOM *room;
+  
+  TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
 
   game = malloc(sizeof(GAME));
 
-  game->world = NULL;
+  game->world = create_world();
 
+  /**
+   * Initialize menu data
+   */
   game->title_anim = create_anim(0, OFF);
   add_frame(game->title_anim, get_image(IMG_TITLE, NORMAL));
 
@@ -64,7 +70,18 @@ GAME *create_game()
 
   game->selection = 0;
 
-  change_game_state(game, GAME_MENU_STATE);
+  /**
+   * Initialize game play data
+   */
+  room = create_room();
+  set_room_theme(room, ROOM_THEME_FOREST);
+  create_path(room, ROWS - 3, COLS / 2, 0, COLS / 2);
+  generate_terrain(room, &terrain);
+  
+  add_room(game->world, room);
+  
+  /*change_game_state(game, GAME_MENU_STATE);*/
+  change_game_state(game, GAME_PLAY_STATE);
 
   return game;
 }
@@ -204,6 +221,7 @@ void paint_game(GAME *game, BITMAP *canvas)
 
   case GAME_PLAY_STATE:
     /* Paint the game */
+    paint_world(game->world, canvas);
     break;
   }
 }

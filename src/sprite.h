@@ -4,6 +4,8 @@
 
 #include <allegro.h>
 
+#include "utilities.h"
+
 
 #define MAX_ANIMS 20
 
@@ -18,7 +20,7 @@ struct SPRITE
    * A collection of animations that represent the
    * sprite on screen.
    */
-  ANIM *anims[MAX_ANIMS];
+  struct ANIM *anims[MAX_ANIMS];
   int num_anims;
   int anim_idx;
   
@@ -44,8 +46,14 @@ struct SPRITE
    * How fast the sprite moves on the screen.
    */
   int speed;
+  int fudge;
 };
 
+
+SPRITE *create_sprite();
+void destroy_sprite(SPRITE *sprite);
+
+void add_animation(SPRITE *sprite, struct ANIM *anim);
 
 /**
  * Animate and move the sprite.
@@ -66,6 +74,11 @@ void move_sprite(SPRITE *sprite, int row, int col);
  * Place the sprite instantly at a new position in the room.
  */
 void warp_sprite(SPRITE *sprite, int row, int col);
+
+/**
+ * Returns true if the sprite is currently moving.
+ */
+FLAG is_moving(SPRITE *sprite);
 
 
 #endif

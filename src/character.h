@@ -8,6 +8,7 @@
 typedef struct CHARACTER CHARACTER;
 struct INVENTORY;
 struct SPRITE;
+struct WORLD;
 
 
 struct CHARACTER
@@ -44,9 +45,9 @@ struct CHARACTER
 
 
 CHARACTER *create_character(struct SPRITE *sprite, int health);
-CHARACTER *destroy_character(CHARACTER *chara);
+void destroy_character(CHARACTER *character);
 
-void update_character(CHARACTER *chara, struct WORLD *world);
+void update_character(CHARACTER *character, struct WORLD *world);
 
 
 #endif
