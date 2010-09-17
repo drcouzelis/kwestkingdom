@@ -1,6 +1,8 @@
 #include "anim.h"
+#include "character.h"
 #include "colors.h"
 #include "game.h"
+#include "player.h"
 #include "resources.h"
 #include "room.h"
 #include "room_gen.h"
@@ -15,7 +17,8 @@
 enum
 {
   GAME_MENU_STATE = 0,
-  GAME_PLAY_STATE
+  GAME_PLAY_STATE,
+  GAME_OVER_STATE
   /*GAME_HIGH_SCORES_STATE,*/
   /*GAME_QUIT_STATE,*/
   /*GAME_ENTER_INITIALS_STATE*/
@@ -81,7 +84,7 @@ GAME *create_game()
   add_room(game->world, room);
   
   /*change_game_state(game, GAME_MENU_STATE);*/
-  change_game_state(game, GAME_PLAY_STATE);
+  change_game_state(game, GAME_PLAY_STATE); /* TEMP */
 
   return game;
 }
@@ -102,6 +105,32 @@ void destroy_game(GAME *game)
   destroy_bitmap(game->title_background);
 
   free(game);
+}
+
+
+
+
+FLAG is_game_over(GAME *game)
+{
+  if (game && game->world && game->world->player->character->health == 0) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+FLAG is_game_won(GAME *game)
+{
+  if (game->world->type == ENDLESS_WORLD) {
+    /* No end to endless */
+    return OFF;
+  }
+  
+  /* Check if the story has ended */
+  return OFF; /* TEMP */
 }
 
 
@@ -158,6 +187,11 @@ void update_game(GAME *game)
     }
     */
     update_world(game->world);
+    
+    if (is_game_over(game)) {
+      change_game_state(game, GAME_OVER_STATE);
+    }
+    
     break;
 
   /*

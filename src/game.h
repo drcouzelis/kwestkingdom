@@ -4,6 +4,8 @@
 
 #include <allegro.h>
 
+#include "utilities.h"
+
 
 typedef struct GAME GAME;
 struct ANIM;
@@ -45,6 +47,9 @@ struct GAME
 
 GAME *create_game();
 void destroy_game(GAME *game);
+
+FLAG is_game_over(GAME *game);
+FLAG is_game_won(GAME *game);
 
 void update_game(GAME *game);
 void paint_game(GAME *game, BITMAP *canvas);

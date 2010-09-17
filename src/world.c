@@ -13,6 +13,8 @@ WORLD *create_world()
 
   world = malloc(sizeof(WORLD));
 
+  world->type = STORY_WORLD;
+  
   world->player = create_player();
   warp_sprite(world->player->character->sprite, ROWS - 3, COLS / 2);
 
@@ -22,6 +24,8 @@ WORLD *create_world()
 
   world->num_rooms = 0;
   world->room_idx = 0;
+  
+  world->room_num = 0;
 
   return world;
 }

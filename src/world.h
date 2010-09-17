@@ -13,8 +13,20 @@ struct PLAYER;
 struct ROOM;
 
 
+typedef enum
+{
+  STORY_WORLD = 0,
+  ENDLESS_WORLD
+} WORLD_TYPE;
+
+
 struct WORLD
 {
+  /**
+   * What type of world this is.
+   */
+  WORLD_TYPE type;
+  
   /**
    * Represents the player, aka the hero!
    */
@@ -26,6 +38,13 @@ struct WORLD
   struct ROOM *rooms[MAX_ROOMS];
   int num_rooms;
   int room_idx;
+  
+  /**
+   * The room number that is currently occupied.
+   * This may be greater than the number of rooms that
+   * are currently in the world.
+   */
+  int room_num;
 };
 
 
