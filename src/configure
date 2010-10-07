@@ -5,16 +5,13 @@ echo Generating `pwd`/Makefile
 rm -f Makefile
 
 echo 'CC = gcc' >> Makefile
-echo 'OUTPUT = ../Linux/share/kwestkingdom/kwestkingdom' >> Makefile
-echo 'DEBUG = -g -O2 -Wall -Wextra -ansi -pedantic' >> Makefile # -g
+echo 'OUTPUT = ../share/kwestkingdom/kwestkingdom' >> Makefile
+echo 'DEBUG = -O2 -Wall -Wextra -ansi -pedantic' >> Makefile # -g for debug
 echo 'LINKING_OPTIONS = ' >> Makefile
 echo 'CFLAGS = $(shell allegro-config --cflags)' >> Makefile
 echo 'LDFLAGS = $(shell allegro-config --libs)' >> Makefile
 echo >> Makefile
 
-echo 'WIN_CC = wine c:\\MinGW\\bin\\gcc.exe' >> Makefile
-echo 'WIN_OUTPUT = ../Windows/kwestkingdom' >> Makefile
-echo >> Makefile
 
 echo HEADERS = `ls *.h` >> Makefile
 echo >> Makefile
@@ -24,7 +21,7 @@ echo >> Makefile
 
 
 echo 'kwestkingdom: $(OBJECTS)' >> Makefile
-echo $'\t mkdir -p ../Linux/share/kwestkingdom' >> Makefile
+echo $'\t mkdir -p ../share/kwestkingdom' >> Makefile
 echo $'\t $(CC) $(DEBUG) $(LINKING_OPTIONS) -o $(OUTPUT) $(OBJECTS) $(LDFLAGS)' >> Makefile
 echo >> Makefile
 
@@ -39,12 +36,3 @@ done;
 echo 'clean:' >> Makefile
 echo $'\t rm -f $(OBJECTS)' >> Makefile
 echo >> Makefile
-
-
-# Redo the Windows section
-echo 'win:' >> Makefile
-#echo $'\t $(WIN_CC) $(DEBUG) *.c -o $(WIN_OUTPUT) -lobjc -lalleg' >> Makefile
-echo $'\t mkdir -p ../Windows' >> Makefile
-echo $'\t echo Pretending to build the Windows version...' >> Makefile
-echo >> Makefile
-

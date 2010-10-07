@@ -5,40 +5,11 @@ echo Generating `pwd`/Makefile
 rm -f Makefile
 
 echo 'all:' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/img' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/snd' >> Makefile
-#echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
-echo $'\t mkdir -p Linux/share/kwestkingdom' >> Makefile
-echo $'\t cp -r res/img Linux/share/kwestkingdom/img' >> Makefile
-echo $'\t cp -r res/snd Linux/share/kwestkingdom/snd' >> Makefile
-#echo $'\t cp -r res/bgm Linux/share/kwestkingdom/bgm' >> Makefile
 echo $'\t make -C src' >> Makefile
 echo >> Makefile
 
-echo 'backup:' >> Makefile
-echo $'\t cp -rf . /tmp/kwestkingdom' >> Makefile
-echo $'\t cd /tmp/kwestkingdom && make clean' >> Makefile
-echo $'\t cd /tmp && tar -zcf kwestkingdom-`date "+%Y.%m.%d.%H.%M.%S"`.tar.gz kwestkingdom' >> Makefile
-echo $'\t cd /tmp && rm -rf kwestkingdom' >> Makefile
-echo $'\t mv /tmp/kwestkingdom*.gz ../backup' >> Makefile
-echo >> Makefile
-
 echo 'clean:' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/img' >> Makefile
-echo $'\t rm -rf Linux/share/kwestkingdom/snd' >> Makefile
-#echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
 echo $'\t make -C src clean' >> Makefile
-echo >> Makefile
-
-echo 'win:' >> Makefile
-echo $'\t rm -rf Windows/img' >> Makefile
-echo $'\t rm -rf Windows/snd' >> Makefile
-#echo $'\t rm -rf Windows/bgm' >> Makefile
-echo $'\t mkdir -p Windows' >> Makefile
-echo $'\t cp -rp res/img Windows/img' >> Makefile
-echo $'\t cp -rp res/snd Windows/snd' >> Makefile
-#echo $'\t cp -rp res/bgm Windows/res' >> Makefile
-echo $'\t make -C src win' >> Makefile
 echo >> Makefile
 
 cd src
