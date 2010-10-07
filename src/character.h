@@ -4,6 +4,8 @@
 
 #include <allegro.h>
 
+#include "utilities.h"
+
 
 typedef struct CHARACTER CHARACTER;
 struct INVENTORY;
@@ -48,6 +50,13 @@ CHARACTER *create_character(struct SPRITE *sprite, int health);
 void destroy_character(CHARACTER *character);
 
 void update_character(CHARACTER *character, struct WORLD *world);
+
+/**
+ * For taking turns
+ */
+FLAG is_waiting(CHARACTER *character);
+void take_turn(CHARACTER *character);
+void wait_turn(CHARACTER *character);
 
 
 #endif

@@ -65,11 +65,110 @@ void destroy_player(PLAYER *player)
 
 void update_player(PLAYER *player, WORLD *world)
 {
-  if (player == NULL) {
+  /*
+  [shield update];
+  [sword update];
+  [bow update];
+  */
+  
+  if (is_waiting(player->character) {
     return;
   }
   
-  world = world; /* TEMP */
+  if (is_key_pressed(player->keys[PLAYER_KEY_WAIT]) {
+    wait_turn(player->character);
+  }
+  
+  /* YOU LEFT OFF HERE!! */
+  switch (state) {
+  
+  case HERO_STAND_STATE:
+    [self updateStandState];
+    break;
+    
+  case HERO_MOVE_STATE:
+    if (![self moving]) {
+      [self toStandState];
+    }
+    break;
+    
+  case HERO_ATTACK_STATE:
+    if ([sword held]) {
+      [self toPushSwordState];
+    } else if ([bow held]) {
+      [self toDrawBowState];
+      [self wait];
+    }else {
+      [self toStandState];
+    }
+    break;
+  
+  case HERO_HURT_STATE:
+    if ([animation finished]) {
+      if (health == 0) {
+        [shield toAwayState];
+        [sword toAwayState];
+        [bow toAwayState];
+        [self toDeadState];
+      } else {
+        [self toStandState];
+      }
+    }
+    break;
+  
+  case HERO_DEAD_STATE:
+    // You are not going to do anything once you enter
+    // the state of being dead.
+    break;
+      
+  case HERO_PUSH_SWORD_STATE:
+    if ([animation finished]) {
+      switch (direction) {
+      case UP:
+        [world attackFromTeam: team atX: x andY: y - 1];
+        break;
+      case DOWN:
+        [world attackFromTeam: team atX: x andY: y + 1];
+        break;
+      case LEFT:
+        [world attackFromTeam: team atX: x - 1 andY: y ];
+        break;
+      case RIGHT:
+        [world attackFromTeam: team atX: x + 1 andY: y];
+        break;
+      }
+      [self toPullSwordState];
+    }
+    break;
+    
+  case HERO_PULL_SWORD_STATE:
+    if ([animation finished]) {
+      [self toStandState];
+      [sword toHoldState];
+      [self wait];
+    }
+    break;
+    
+  case HERO_DRAW_BOW_STATE:
+    if ([animation finished]) {
+      [self toShootArrowState];
+    }
+    break;
+    
+  case HERO_SHOOT_ARROW_STATE:
+    if ([animation finished]) {
+      animation = standAnimation;
+      [bow toHoldState];
+    }
+    if ([[bow getArrow] stopped]) {
+      [[bow getArrow] free];
+      [bow setArrow: nil];
+      [self toStandState];
+      [self wait];
+    }
+    break;
+    
+  }
   
   update_character(player->character, world);
 }

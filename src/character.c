@@ -50,3 +50,35 @@ void update_character(CHARACTER *character, struct WORLD *world)
   
   update_sprite(character->sprite);
 }
+
+
+
+
+FLAG is_waiting(CHARACTER *character)
+{
+  if (character->turns > 0) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+void take_turn(CHARACTER *character)
+{
+  character->turns--;
+  
+  if (character->turns < 0) {
+    character->turns = 0;
+  }
+}
+
+
+
+
+void wait_turn(CHARACTER *character)
+{
+  character->turns++;
+}
