@@ -17,7 +17,6 @@ SPRITE *create_sprite()
     sprite->anims[i] = NULL;
   }
   
-  sprite->num_anims = 0;
   sprite->anim_idx = 0;
   
   sprite->row = 0;
@@ -44,7 +43,7 @@ void destroy_sprite(SPRITE *sprite)
     return;
   }
   
-  for (i = 0; i < sprite->num_anims; i++) {
+  for (i = 0; i < MAX_ANIMS; i++) {
     destroy_anim(sprite->anims[i]);
   }
   
@@ -54,10 +53,67 @@ void destroy_sprite(SPRITE *sprite)
 
 
 
-void add_animation(SPRITE *sprite, struct ANIM *anim)
+void add_animation(SPRITE *sprite, ANIM *anim, int index)
 {
-  sprite->anims[sprite->num_anims] = anim;
-  sprite->num_anims++;
+  int i;
+  
+  /**
+   * Find the next available empty space.
+   */
+  for (i = 0; index < 0 && i < MAX_ANIMS; i++) {
+    if (sprite->anims[i] != NULL) {
+      index = i;
+    }
+  }
+  
+  if (index < 0) {
+    
+    /**
+     * No available empty spaces.
+     */
+    return;
+  }
+  
+  /**
+   * Clear any previous animation.
+   */
+  destroy_anim(sprite->anims[index]);
+  
+  sprite->anims[index] = anim;
+  
+  /**
+   * Set the current animation to the one that was
+   * just added.
+   */
+  sprite->anim_idx = index;
+}
+
+
+
+
+void change_animation(SPRITE *sprite, int index)
+{
+  if (sprite == NULL) {
+    return;
+  }
+  
+  if (index < 0 || index >= MAX_ANIMS) {
+    return;
+  }
+  
+  sprite->anim_idx = index;
+}
+
+
+
+
+ANIM *retrieve_animation(SPRITE *sprite, int index)
+{
+  if (index < 0 || index >= MAX_ANIMS) {
+    return sprite->anims[sprite->anim_idx];
+  }
+  
+  return sprite->anims[index];
 }
 
 

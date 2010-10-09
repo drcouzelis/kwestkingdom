@@ -21,7 +21,6 @@ struct SPRITE
    * sprite on screen.
    */
   struct ANIM *anims[MAX_ANIMS];
-  int num_anims;
   int anim_idx;
   
   /**
@@ -53,7 +52,26 @@ struct SPRITE
 SPRITE *create_sprite();
 void destroy_sprite(SPRITE *sprite);
 
-void add_animation(SPRITE *sprite, struct ANIM *anim);
+/**
+ * Add animation at "index", which could be a named enum.
+ * If index is -1, then the animation will be added in the
+ * next available empty space.
+ */
+void add_animation(SPRITE *sprite, struct ANIM *anim, int index);
+
+/**
+ * Set the current animation to the one at the index.
+ */
+void change_animation(SPRITE *sprite, int index);
+
+/**
+ * Retrieve the animation at the index.
+ * Use the special index of "CURRENT_ANIM" to get
+ * the current animation.
+ */
+#define CURRENT_ANIM -1
+
+struct ANIM *retrieve_animation(SPRITE *sprite, int index);
 
 /**
  * Animate and move the sprite.

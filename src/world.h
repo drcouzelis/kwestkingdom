@@ -45,6 +45,19 @@ struct WORLD
    * are currently in the world.
    */
   int room_num;
+  
+  /**
+   * When it comes times to create a new set of rooms,
+   * this many rooms will be created at a time.
+   */
+  int num_cached_rooms;
+  
+  /**
+   * When the max number of cached rooms is met,
+   * one room will be deleted for every new cached
+   * room that is created. See num_cached_rooms.
+   */
+  int max_cached_rooms;
 };
 
 

@@ -37,6 +37,7 @@ WORLD *create_endless_world()
 
 void generate_endless_rooms(WORLD *world)
 {
+  world = world; /* TEMP */
 }
 
 
@@ -44,4 +45,5 @@ void generate_endless_rooms(WORLD *world)
 
 void generate_forest_rooms(WORLD *world)
 {
+  world = world; /* TEMP */
 }

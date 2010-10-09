@@ -2,6 +2,20 @@
 #define PLAYER_HEADER
 
 
+typedef enum
+{
+  PLAYER_STATE_STANDING = 0,
+  PLAYER_STATE_MOVING,
+  PLAYER_STATE_ATTACKING,
+  PLAYER_STATE_HURT,
+  PLAYER_STATE_DEAD,
+  PLAYER_STATE_PUSHING_SWORD,
+  PLAYER_STATE_PULLING_SWORD,
+  PLAYER_STATE_DRAWING_BOW,
+  PLAYER_STATE_SHOOTING_ARROW
+} PLAYER_STATE;
+
+
 /**
  * All of the different types of keys needed for input for
  * the player.
@@ -41,6 +55,11 @@ struct WORLD;
 struct PLAYER
 {
   /**
+   * Represents what the player is currently doing.
+   */
+  PLAYER_STATE state;
+  
+  /**
    * Represents the player in the game.
    */
   struct CHARACTER *character;
@@ -56,6 +75,8 @@ PLAYER *create_player();
 void destroy_player(PLAYER *player);
 
 void update_player(PLAYER *player, struct WORLD *world);
+
+void change_player_state(PLAYER *player, PLAYER_STATE state);
 
 
 #endif
