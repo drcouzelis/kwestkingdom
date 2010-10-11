@@ -82,6 +82,16 @@ void update_world(WORLD *world)
 {
   update_player(world->player, world);
   update_room(world->rooms[world->room_idx]);
+  
+  /**
+   * If using door
+   *   Draw current room to canvas
+   *   If next room doesn't exist
+   *     Create a new set of cached rooms (amount is num_cached_rooms)
+   *     When adding a room, check max_cached_rooms and delete as needed
+   *     For every door-reference to the deleted room, mark the door as a wall
+   *   Move to the next room
+   */
 }
 
 

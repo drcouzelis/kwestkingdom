@@ -50,14 +50,17 @@ struct WORLD
    * When it comes times to create a new set of rooms,
    * this many rooms will be created at a time.
    */
-  int num_cached_rooms;
+  int num_cached_rooms; /* Try 10 */
   
   /**
    * When the max number of cached rooms is met,
    * one room will be deleted for every new cached
-   * room that is created. See num_cached_rooms.
+   * room that is created.
+   * The max number of cached rooms must be equal
+   * to or greater than the number of cached rooms.
+   * (It doesn't make sense otherwise)
    */
-  int max_cached_rooms;
+  int max_cached_rooms; /* Try 10 */
 };
 
 

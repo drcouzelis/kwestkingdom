@@ -140,6 +140,106 @@ void destroy_player(PLAYER *player)
 
 
 
+/*
+void update_player_state_standing(PLAYER *player, WORLD *world)
+{
+  int toX;
+  int toY;
+  
+  // Handle item key input.
+  // Update the items.
+  if ([shieldKey isPressed]) {
+    [shield toHoldState];
+    [sword toAwayState];
+    [bow toAwayState];
+  } else if ([swordKey isPressed]) {
+    [shield toAwayState];
+    [sword toHoldState];
+    [bow toAwayState];
+  } else if ([bowKey isPressed]) {
+    [shield toAwayState];
+    [sword toAwayState];
+    [bow toHoldState];
+  } else if ([handKey isPressed]) {
+    [shield toAwayState];
+    [sword toAwayState];
+    [bow toAwayState];
+  }
+  
+  if ([attackKey isPressed]) {
+    
+    if ([upKey isPressed]) {
+      direction = UP;
+      [self toAttackState];
+    } else if ([downKey isPressed]) {
+      direction = DOWN;
+      [self toAttackState];
+    } else if ([leftKey isPressed]) {
+      direction = LEFT;
+      [self toAttackState];
+    } else if ([rightKey isPressed]) {
+      direction = RIGHT;
+      [self toAttackState];
+    }
+    
+  } else {
+    
+    // If you're not attacking with the attack key,
+    // then maybe you are trying to walk...
+    
+    toX = x;
+    toY = y;
+    
+    if ([upKey isPressed]) {
+      toY--;
+      if ([sword held] && [world isAttackableFromTeam: team atX: x andY: y - 1]) {
+        direction = UP;
+        [self toAttackState];
+      }
+    } else if ([downKey isPressed]) {
+      toY++;
+      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+        direction = DOWN;
+        [self toAttackState];
+      }
+    } else if ([leftKey isPressed]) {
+      toX--;
+      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+        direction = LEFT;
+        [self toAttackState];
+      }
+    } else if ([rightKey isPressed]) {
+      toX++;
+      if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
+        direction = RIGHT;
+        [self toAttackState];
+      }
+    }
+    
+    if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
+      
+      [self moveX: toX];
+      [self moveY: toY];
+      [self toMoveState];
+      [self wait];
+      
+      // If the hero is holding the shield
+      // then make him wait another turn.
+      if ([shield held]) {
+        [self wait];
+      }
+      
+    }
+    
+  }
+  
+  return self;
+}
+*/
+
+
+
+
 void update_player(PLAYER *player, WORLD *world)
 {
   /* YOU LEFT OFF HERE!! */
@@ -270,5 +370,12 @@ void update_player(PLAYER *player, WORLD *world)
 void change_player_state(PLAYER *player, PLAYER_STATE state)
 {
   player->state = state;
+  
+  switch (state) {
+  
+  case PLAYER_STATE_STANDING:
+    change_animation(player->character->sprite, PLAYER_ANIM_WALKING);
+    break;
+  }
 }
 
