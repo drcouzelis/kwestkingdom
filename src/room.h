@@ -156,6 +156,8 @@ void add_door(ROOM *room, DOOR *door, int row, int col);
 void update_room(ROOM *room);
 void paint_room(ROOM *room, BITMAP *canvas);
 
+FLAG is_walkable(ROOM *room, int x, int y);
+
 /**
  * Create and destroy tiles
  */

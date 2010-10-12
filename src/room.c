@@ -120,6 +120,30 @@ void add_door(ROOM *room, DOOR *door, int row, int col)
 
 
 
+FLAG is_walkable(ROOM *room, int row, int col)
+{
+  if (room == NULL) {
+    return OFF;
+  }
+  
+  if (row < 0 || row >= ROWS) {
+    return ON;
+  }
+  
+  if (col < 0 || col >= COLS) {
+    return ON;
+  }
+  
+  if (room->terrain[row][col]->obstacle == OBSTACLE_TYPE_WALKABLE) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
 void update_room(ROOM *room)
 {
   int i;

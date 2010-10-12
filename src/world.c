@@ -78,8 +78,59 @@ void clear_rooms(WORLD *world)
 
 
 
+struct ROOM *current_room(WORLD *world)
+{
+  return world->rooms[world->room_idx];
+}
+
+
+
+
+void update_turn(WORLD *world)
+{
+  /*int index;*/
+  
+  /**
+   * Determine whose turn it is next and tell them to go.
+   */
+  /*
+  if (currentCharacter == nil || [currentCharacter waiting]) {
+    
+    if (currentCharacter == nil) {
+      currentCharacter = hero;
+    } else if (currentCharacter == hero) {
+      currentCharacter = (Character *)[enemies getIndex: 0];
+      if (currentCharacter == nil) {
+        currentCharacter = hero;
+      }
+    } else {
+      index = [enemies findIndex: currentCharacter];
+      if (index >= 0) {
+        currentCharacter = [enemies getIndex: index + 1];
+      } else {
+        currentCharacter = nil;
+      }
+      if (currentCharacter == nil) {
+        currentCharacter = hero;
+      }
+    }
+    
+    [currentCharacter go];
+  }
+  */
+  
+  /* TEMP */
+  if (is_waiting(world->player->character)) {
+    take_turn(world->player->character);
+  }
+}
+
+
+
+
 void update_world(WORLD *world)
 {
+  update_turn(world);
   update_player(world->player, world);
   update_room(world->rooms[world->room_idx]);
   

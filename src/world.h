@@ -69,6 +69,7 @@ void destroy_world(WORLD *world);
 
 void add_room(WORLD *world, struct ROOM *room);
 void clear_rooms(WORLD *world);
+struct ROOM *current_room(WORLD *world);
 
 void update_world(WORLD *world);
 void paint_world(WORLD *world, BITMAP *canvas);

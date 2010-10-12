@@ -26,7 +26,7 @@ SPRITE *create_sprite()
   sprite->w = 1;
   sprite->h = 1;
   
-  sprite->speed = 20;
+  sprite->speed = 60;
   sprite->fudge = 0;
   
   return sprite;
@@ -201,10 +201,10 @@ void warp_sprite(SPRITE *sprite, int row, int col)
 
 FLAG is_moving(SPRITE *sprite)
 {
-  if (sprite->x != sprite->col * get_tile_size() || sprite->y != sprite->row * get_tile_size()) {
-    return ON;
+  if (sprite->x == sprite->col * get_tile_size() && sprite->y == sprite->row * get_tile_size()) {
+    return OFF;
   }
   
-  return OFF;
+  return ON;
 }
 

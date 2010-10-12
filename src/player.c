@@ -4,6 +4,7 @@
 #include "input.h"
 #include "resources.h"
 #include "room.h"
+#include "sound.h"
 #include "sprite.h"
 #include "player.h"
 #include "world.h"
@@ -140,14 +141,18 @@ void destroy_player(PLAYER *player)
 
 
 
-/*
 void update_player_state_standing(PLAYER *player, WORLD *world)
 {
-  int toX;
-  int toY;
+  SPRITE *sprite = player->character->sprite;
   
-  // Handle item key input.
-  // Update the items.
+  int to_row;
+  int to_col;
+  
+  /**
+   * Handle item key input.
+   * Update the items.
+   */
+  /*
   if ([shieldKey isPressed]) {
     [shield toHoldState];
     [sword toAwayState];
@@ -165,9 +170,11 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
     [sword toAwayState];
     [bow toAwayState];
   }
+  */
   
-  if ([attackKey isPressed]) {
+  if (is_key_held(player->keys[PLAYER_KEY_USE])) {
     
+    /*
     if ([upKey isPressed]) {
       direction = UP;
       [self toAttackState];
@@ -181,67 +188,88 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
       direction = RIGHT;
       [self toAttackState];
     }
+    */
     
   } else {
     
-    // If you're not attacking with the attack key,
-    // then maybe you are trying to walk...
+    /**
+     * If you're not attacking with the attack key,
+     * then maybe you are trying to walk...
+     */
     
-    toX = x;
-    toY = y;
+    to_row = sprite->row;
+    to_col = sprite->col;
     
-    if ([upKey isPressed]) {
-      toY--;
+    if (is_key_held(player->keys[PLAYER_KEY_UP])) {
+      to_row--;
+      /*
       if ([sword held] && [world isAttackableFromTeam: team atX: x andY: y - 1]) {
         direction = UP;
         [self toAttackState];
       }
-    } else if ([downKey isPressed]) {
-      toY++;
+      */
+    } else if (is_key_held(player->keys[PLAYER_KEY_DOWN])) {
+      to_row++;
+      /*
       if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
         direction = DOWN;
         [self toAttackState];
       }
-    } else if ([leftKey isPressed]) {
-      toX--;
+      */
+    } else if (is_key_held(player->keys[PLAYER_KEY_LEFT])) {
+      to_col--;
+      /*
       if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
         direction = LEFT;
         [self toAttackState];
       }
-    } else if ([rightKey isPressed]) {
-      toX++;
+      */
+    } else if (is_key_held(player->keys[PLAYER_KEY_RIGHT])) {
+      to_col++;
+      /*
       if ([sword held] && [world isAttackableFromTeam: team atX: toX andY: toY]) {
         direction = RIGHT;
         [self toAttackState];
       }
+      */
     }
     
-    if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
+    if (sprite->row != to_row || sprite->col != to_col) {
       
-      [self moveX: toX];
-      [self moveY: toY];
-      [self toMoveState];
-      [self wait];
+      printf("From %d %d to %d %d \n", sprite->row, sprite->col, to_row, to_col);
       
-      // If the hero is holding the shield
-      // then make him wait another turn.
-      if ([shield held]) {
-        [self wait];
+      if (is_walkable(current_room(world), sprite->row, sprite->col)) {
+      /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/
+        
+        move_sprite(sprite, to_row, to_col);
+        
+        change_player_state(player, PLAYER_STATE_MOVING);
+        
+        wait_turn(player->character);
+        
+        /**
+         * If the hero is holding the shield
+         * then make him wait another turn.
+         */
+        /*
+        if ([shield held]) {
+          [self wait];
+        }
+        */
       }
-      
     }
-    
   }
-  
-  return self;
 }
-*/
 
 
 
 
 void update_player(PLAYER *player, WORLD *world)
 {
+  SPRITE *sprite = player->character->sprite;
+  
+  update_character(player->character, world);
+  
   /* YOU LEFT OFF HERE!! */
 
   /*
@@ -261,11 +289,12 @@ void update_player(PLAYER *player, WORLD *world)
   switch (player->state) {
   
   case PLAYER_STATE_STANDING:
-    /*[self updateStandState];*/
+    update_player_state_standing(player, world);
     break;
     
   case PLAYER_STATE_MOVING:
-    if (is_moving(player->character->sprite)) {
+    printf("%d %d \n", sprite->x, sprite->y);
+    if (is_moving(sprite)) {
       change_player_state(player, PLAYER_STATE_STANDING);
     }
     break;
@@ -360,8 +389,6 @@ void update_player(PLAYER *player, WORLD *world)
     */
     break;
   }
-  
-  update_character(player->character, world);
 }
 
 
@@ -369,12 +396,96 @@ void update_player(PLAYER *player, WORLD *world)
 
 void change_player_state(PLAYER *player, PLAYER_STATE state)
 {
+  SPRITE *sprite = player->character->sprite;
+  
   player->state = state;
   
   switch (state) {
   
   case PLAYER_STATE_STANDING:
-    change_animation(player->character->sprite, PLAYER_ANIM_WALKING);
+    change_animation(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_MOVING:
+    change_animation(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_ATTACKING:
+    change_animation(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_HURT:
+    change_animation(sprite, PLAYER_ANIM_HURT);
+    reset_anim(retrieve_animation(sprite, -1));
+    
+    /*
+    // You can't shoot an arrow if you get
+    // hurt whil trying to do it.
+    [[bow getArrow] free];
+    [bow setArrow: nil];
+    if ([bow held]) {
+      [bow toHoldState];
+    }
+    */
+    
+    play_sound(get_sound(SND_GASP));
+    break;
+  case PLAYER_STATE_DEAD:
+    change_animation(sprite, PLAYER_ANIM_DEAD);
+    reset_anim(retrieve_animation(sprite, -1));
+    break;
+  case PLAYER_STATE_PUSHING_SWORD:
+    change_animation(sprite, PLAYER_ANIM_BEGIN_ATTACK);
+    reset_anim(retrieve_animation(sprite, -1));
+    
+    /*
+    switch (direction) {
+    case UP:
+      [sword toAttackUpState];
+      break;
+    case DOWN:
+      [sword toAttackDownState];
+      break;
+    case LEFT:
+      [sword toAttackLeftState];
+      break;
+    case RIGHT:
+      [sword toAttackRightState];
+      break;
+    }
+    */
+    break;
+  case PLAYER_STATE_PULLING_SWORD:
+    change_animation(sprite, PLAYER_ANIM_END_ATTACK);
+    reset_anim(retrieve_animation(sprite, -1));
+    break;
+  case PLAYER_STATE_DRAWING_BOW:
+    change_animation(sprite, PLAYER_ANIM_BEGIN_ATTACK);
+    reset_anim(retrieve_animation(sprite, -1));
+    
+    /*
+    switch (direction) {
+    case UP:
+      [bow toAttackUpState];
+      break;
+    case DOWN:
+      [bow toAttackDownState];
+      break;
+    case LEFT:
+      [bow toAttackLeftState];
+      break;
+    case RIGHT:
+      [bow toAttackRightState];
+      break;
+    }
+    
+    [bow setArrowWithX: x andY: y andDirection: direction andTeam: team andWorld: world];
+    */
+    break;
+  case PLAYER_STATE_SHOOTING_ARROW:
+    change_animation(sprite, PLAYER_ANIM_END_ATTACK);
+    reset_anim(retrieve_animation(sprite, -1));
+    /*
+    [[bow getArrow] toFlyingState];
+    [bow toHoldState];
+    */
     break;
   }
 }
