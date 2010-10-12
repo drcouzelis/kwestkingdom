@@ -238,7 +238,7 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
       
       printf("From %d %d to %d %d \n", sprite->row, sprite->col, to_row, to_col);
       
-      if (is_walkable(current_room(world), sprite->row, sprite->col)) {
+      if (is_walkable(current_room(world), to_row, to_col)) {
       /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/
         
         move_sprite(sprite, to_row, to_col);
@@ -293,8 +293,7 @@ void update_player(PLAYER *player, WORLD *world)
     break;
     
   case PLAYER_STATE_MOVING:
-    printf("%d %d \n", sprite->x, sprite->y);
-    if (is_moving(sprite)) {
+    if (!is_moving(sprite)) {
       change_player_state(player, PLAYER_STATE_STANDING);
     }
     break;
