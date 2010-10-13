@@ -1,4 +1,5 @@
 #include "character.h"
+#include "memory.h"
 #include "sprite.h"
 
 
@@ -8,7 +9,7 @@ CHARACTER *create_character(SPRITE *sprite, int health)
 {
   CHARACTER *character;
   
-  character = malloc(sizeof(CHARACTER));
+  character = alloc_memory(sizeof(CHARACTER));
   
   character->sprite = sprite;
   
@@ -34,7 +35,7 @@ void destroy_character(CHARACTER *character)
   destroy_sprite(character->sprite);
   /*destroy_inventory(character->inventory);*/
   
-  free(character);
+  free_memory(character);
 }
 
 

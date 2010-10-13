@@ -24,7 +24,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   }
 
   for (i = 0; i < MAX_TILE_TYPES; i++) {
-    free(room->terrain_anims[i]);
+    destroy_anim(room->terrain_anims[i]);
   }
 
   /**

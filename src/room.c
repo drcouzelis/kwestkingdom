@@ -1,5 +1,6 @@
 #include "anim.h"
 #include "direction.h"
+#include "memory.h"
 #include "room.h"
 #include "kwestkingdom.h"
 
@@ -10,7 +11,7 @@ DOOR *create_door(int new_room_num, int new_row, int new_col)
 {
   DOOR *door;
 
-  door = malloc(sizeof(DOOR));
+  door = alloc_memory(sizeof(DOOR));
 
   door->new_room_num = new_room_num;
   door->new_row = new_row;
@@ -28,7 +29,8 @@ void destroy_door(DOOR *door)
   if (door == NULL) {
     return;
   }
-  free(door);
+  
+  free_memory(door);
 }
 
 
@@ -40,7 +42,7 @@ ROOM *create_room()
   int i;
   int j;
 
-  room = malloc(sizeof(ROOM));
+  room = alloc_memory(sizeof(ROOM));
 
   for (i = 0; i < MAX_ENEMIES; i++) {
     room->enemies[i] = NULL;
@@ -60,6 +62,8 @@ ROOM *create_room()
   for (i = 0; i < MAX_TILE_TYPES; i++) {
     room->terrain_anims[i] = NULL;
   }
+  
+  room->num = -1;
 
   return room;
 }
@@ -77,22 +81,22 @@ void destroy_room(ROOM *room)
   }
 
   for (i = 0; i < room->num_enemies; i++) {
-    free(room->enemies[i]);
+    /*destroy_enemy(room->enemies[i]);*/ /* TEMP */
   }
 
   for (i = 0; i < ROWS; i++) {
     for (j = 0; j < COLS; j++) {
       destroy_tile(room->terrain[i][j]);
-      free(room->help[i][j]);
+      /*destroy_help(room->help[i][j]);*/ /* TEMP */
       destroy_door(room->doors[i][j]);
     }
   }
 
   for (i = 0; i < MAX_TILE_TYPES; i++) {
-    free(room->terrain_anims[i]);
+    destroy_anim(room->terrain_anims[i]);
   }
 
-  free(room);
+  free_memory(room);
 }
 
 
@@ -112,7 +116,7 @@ void add_door(ROOM *room, DOOR *door, int row, int col)
     return;
   }
 
-  free(room->doors[row][col]);
+  destroy_door(room->doors[row][col]);
 
   room->doors[row][col] = door;
 }
@@ -215,7 +219,7 @@ TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle)
 {
   TILE *tile;
 
-  tile = malloc(sizeof(TILE));
+  tile = alloc_memory(sizeof(TILE));
 
   if (type < MAX_TILE_TYPES) {
     tile->type = type;
@@ -241,7 +245,7 @@ void destroy_tile(TILE *tile)
     return;
   }
   
-  free(tile);
+  free_memory(tile);
 }
 
 

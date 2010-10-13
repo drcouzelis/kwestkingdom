@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "colors.h"
 #include "resources.h"
-#include "utilities.h"
 
 
 
@@ -28,13 +27,13 @@ void load_formatted_image(int image, int format);
 
 
 
-void init_resources()
+FLAG init_resources()
 {
   int i;
   int j;
 
   if (resources_initialized) {
-    return;
+    return ON;
   }
 
   for (i = 0; i < NUM_IMAGES; i++) {
@@ -154,7 +153,7 @@ void init_resources()
     if (images[i][NORMAL] == NULL) {
       fprintf(stderr, "Failed to load image resource %d. \n", i);
       stop_resources();
-      return;
+      return OFF;
     }
   }
 
@@ -162,9 +161,11 @@ void init_resources()
     if (sounds[i] == NULL) {
       fprintf(stderr, "Failed to load sound resource %d. \n", i);
       stop_resources();
-      return;
+      return OFF;
     }
   }
+  
+  return ON;
 }
 
 

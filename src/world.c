@@ -1,4 +1,5 @@
 #include "character.h"
+#include "memory.h"
 #include "player.h"
 #include "room.h"
 #include "sprite.h"
@@ -11,7 +12,7 @@ WORLD *create_world()
   WORLD *world;
   int i;
 
-  world = malloc(sizeof(WORLD));
+  world = alloc_memory(sizeof(WORLD));
 
   world->type = STORY_WORLD;
   
@@ -26,6 +27,9 @@ WORLD *create_world()
   world->room_idx = 0;
   
   world->room_num = 0;
+  
+  world->num_cached_rooms = 10;
+  world->max_cached_rooms = 10;
 
   return world;
 }
@@ -43,7 +47,28 @@ void destroy_world(WORLD *world)
   
   clear_rooms(world);
 
-  free(world);
+  free_memory(world);
+}
+
+
+
+
+void remove_oldest_room(WORLD *world)
+{
+  int oldest_idx = -1;
+  int i;
+  
+  for (i = 0; i < MAX_ROOMS; i++) {
+    if (world->rooms[i] != NULL) {
+      if (oldest_idx == -1 || world->rooms[i]->num < world->rooms[oldest_idx]->num) {
+        oldest_idx = i;
+      }
+    }
+  }
+  
+  if (oldest_idx != -1) {
+    /* YOU LEFT OFF HERE!! */
+  }
 }
 
 
@@ -57,6 +82,10 @@ void add_room(WORLD *world, ROOM *room)
   
   world->rooms[world->num_rooms] = room;
   world->num_rooms++;
+  
+  if (world->num_rooms > world->max_cached_rooms) {
+    remove_oldest_room(world);
+  }
 }
 
 

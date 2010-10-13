@@ -1,7 +1,7 @@
-#include <malloc.h>
 #include "anim.h"
 #include "character.h"
 #include "input.h"
+#include "memory.h"
 #include "resources.h"
 #include "room.h"
 #include "sound.h"
@@ -33,7 +33,7 @@ PLAYER *create_player()
   SPRITE *sprite;
   ANIM *anim;
   
-  player = malloc(sizeof(PLAYER));
+  player = alloc_memory(sizeof(PLAYER));
   
   /*
   speed = getWalkSpeed(); // In FPS
@@ -135,7 +135,7 @@ void destroy_player(PLAYER *player)
   
   destroy_character(player->character);
   
-  free(player);
+  free_memory(player);
 }
 
 
@@ -235,8 +235,6 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
     }
     
     if (sprite->row != to_row || sprite->col != to_col) {
-      
-      printf("From %d %d to %d %d \n", sprite->row, sprite->col, to_row, to_col);
       
       if (is_walkable(current_room(world), to_row, to_col)) {
       /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/

@@ -74,6 +74,11 @@ typedef enum
 struct ROOM
 {
   /**
+   * What room number this is.
+   */
+  int num;
+  
+  /**
    * A list of the enemies currently in the room.
    */
   struct ENEMY *enemies[MAX_ENEMIES];

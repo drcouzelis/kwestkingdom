@@ -139,16 +139,6 @@ int canvas_height()
 
 void refresh_screen()
 {
-  if (!screen) {
-    fprintf(stderr, "Failed to find a screen to show.\n");
-    return;
-  }
-
-  if (!canvas) {
-    fprintf(stderr, "Failed to find a canvas to draw.\n");
-    return;
-  }
-  
   /**
    * Scale the window onto the screen.
    */

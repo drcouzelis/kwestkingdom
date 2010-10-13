@@ -4,6 +4,8 @@
 
 #include <allegro.h>
 
+#include "utilities.h"
+
 
 enum
 {
@@ -129,7 +131,7 @@ enum
  * This may take some time, but is better than
  * "pauses" in the game to load them on the fly.
  */
-void init_resources();
+FLAG init_resources();
 void stop_resources();
 
 BITMAP *get_image(int image, int format);

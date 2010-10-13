@@ -2,6 +2,7 @@
 #include "character.h"
 #include "colors.h"
 #include "game.h"
+#include "memory.h"
 #include "player.h"
 #include "resources.h"
 #include "room.h"
@@ -9,6 +10,7 @@
 #include "screen.h"
 #include "sound.h"
 #include "world.h"
+#include "world_gen.h"
 #include "kwestkingdom.h"
 
 
@@ -46,17 +48,18 @@ void change_game_state(GAME *game, int state);
 GAME *create_game()
 {
   GAME *game;
-  ROOM *room;
+  /*ROOM *room;*/
   
-  TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
+  /*TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};*/
 
-  game = malloc(sizeof(GAME));
+  game = alloc_memory(sizeof(GAME));
 
-  game->world = create_world();
+  /*game->world = create_world();*/
 
   /**
    * Initialize menu data
    */
+  /*
   game->title_anim = create_anim(0, OFF);
   add_frame(game->title_anim, get_image(IMG_TITLE, NORMAL));
 
@@ -72,18 +75,10 @@ GAME *create_game()
   game->title_background = create_bitmap(canvas_width(), canvas_height());
 
   game->selection = 0;
+  */
 
-  /**
-   * Initialize game play data
-   */
-  room = create_room();
-  set_room_theme(room, ROOM_THEME_FOREST);
-  create_path(room, ROWS - 3, COLS / 2, 0, COLS / 2);
-  generate_terrain(room, &terrain);
-  
-  add_room(game->world, room);
-  
   /*change_game_state(game, GAME_MENU_STATE);*/
+  game->world = create_story_world(); /* TEMP */
   change_game_state(game, GAME_PLAY_STATE); /* TEMP */
 
   return game;
@@ -104,7 +99,7 @@ void destroy_game(GAME *game)
   destroy_anim(game->pointer_anim);
   destroy_bitmap(game->title_background);
 
-  free(game);
+  free_memory(game);
 }
 
 

@@ -1,4 +1,5 @@
 #include "anim.h"
+#include "memory.h"
 #include "timer.h"
 
 
@@ -55,7 +56,7 @@ ANIM *create_anim(int speed, FLAG loop)
   ANIM *anim;
   int i;
 
-  anim = malloc(sizeof(ANIM));
+  anim = alloc_memory(sizeof(ANIM));
 
   for (i = 0; i < MAX_FRAMES; i++) {
     anim->frames[i] = NULL;
@@ -78,7 +79,7 @@ ANIM *create_anim(int speed, FLAG loop)
 
 void destroy_anim(ANIM *anim)
 {
-  free(anim);
+  free_memory(anim);
 }
 
 

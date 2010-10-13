@@ -1,10 +1,9 @@
 #include <allegro.h>
-#include <stdio.h>
 
-#include <allegro.h>
 #include "colors.h"
 #include "game.h"
 #include "input.h"
+#include "memory.h"
 #include "resources.h"
 #include "room.h"
 #include "screen.h"
@@ -12,6 +11,8 @@
 #include "timer.h"
 #include "utilities.h"
 #include "kwestkingdom.h"
+
+
 
 
 #define TILE_SIZE 20
@@ -22,10 +23,14 @@
 #define DEFAULT_SCREEN_RATIO 2
 
 
+
+
 int get_tile_size()
 {
   return TILE_SIZE;
 }
+
+
 
 
 int get_walk_speed()
@@ -34,7 +39,11 @@ int get_walk_speed()
 }
 
 
+
+
 static FLAG quitting = OFF;
+
+
 
 
 void quit_kwestkingdom()
@@ -43,7 +52,9 @@ void quit_kwestkingdom()
 }
 
 
-void init_kwestkingdom()
+
+
+FLAG init_kwestkingdom()
 {
   FLAG screen_init;
 
@@ -51,16 +62,19 @@ void init_kwestkingdom()
   init_timer();
   install_keyboard();
   init_input();
-  init_resources(); /* Load images */
+  
+  if (!init_resources()) { /* Load images */
+    return OFF;
+  }
 
   screen_init = init_screen(
     CANVAS_WIDTH * DEFAULT_SCREEN_RATIO,
     CANVAS_HEIGHT * DEFAULT_SCREEN_RATIO,
-    OFF /* fullscreen */
+    OFF /* fullscreen on or off */
   );
 
   if (!screen_init) {
-    exit(0);
+    return OFF;
   }
 
   set_colors(get_color_palette());
@@ -68,7 +82,11 @@ void init_kwestkingdom()
 
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggle_sound(); /* Turn off sound */
+  
+  return ON;
 }
+
+
 
 
 int main(int argc, char *argv[])
@@ -94,6 +112,9 @@ int main(int argc, char *argv[])
    */
   reset_timer();
 
+  /**
+   * BEGIN MAIN LOOP
+   */
   while (!quitting) {
 
     while (get_ticks() == 0) {
@@ -126,7 +147,7 @@ int main(int argc, char *argv[])
      */
     paint_game(game, get_canvas());
 
-    /*
+    /**
      * Show FPS
      */
     textprintf_ex(
@@ -162,6 +183,9 @@ int main(int argc, char *argv[])
 
     mark_frame_complete();
   }
+  /**
+   * END MAIN LOOP
+   */
 
   /**
    * Cleanup
@@ -169,7 +193,9 @@ int main(int argc, char *argv[])
   destroy_game(game);
   stop_screen();
   stop_resources();
-
+  
+  check_memory();
+  
   return 0;
 }
 END_OF_MAIN()
