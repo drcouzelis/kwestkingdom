@@ -54,6 +54,14 @@ GAME *create_game()
 
   game = alloc_memory(sizeof(GAME));
 
+  game->world = NULL;
+  game->title_anim = NULL;
+  game->gameover_anim = NULL;
+  game->pointer_anim = NULL;
+  game->title_background = NULL;
+  game->selection = 0;
+  game->state = 0;
+  
   /*game->world = create_world();*/
 
   /**

@@ -39,13 +39,20 @@ WORLD *create_world()
 
 void destroy_world(WORLD *world)
 {
+  int i;
+  
   if (world == NULL) {
     return;
   }
 
   destroy_player(world->player);
   
-  clear_rooms(world);
+  /**
+   * Destroy all rooms
+   */
+  for (i = 0; i < MAX_ROOMS; i++) {
+    destroy_room(world->rooms[i]);
+  }
 
   free_memory(world);
 }
@@ -67,7 +74,9 @@ void remove_oldest_room(WORLD *world)
   }
   
   if (oldest_idx != -1) {
-    /* YOU LEFT OFF HERE!! */
+    destroy_room(world->rooms[oldest_idx]);
+    world->rooms[oldest_idx] = NULL;
+    world->num_rooms--;
   }
 }
 
@@ -85,22 +94,6 @@ void add_room(WORLD *world, ROOM *room)
   
   if (world->num_rooms > world->max_cached_rooms) {
     remove_oldest_room(world);
-  }
-}
-
-
-
-
-void clear_rooms(WORLD *world)
-{
-  int i;
-  
-  if (world == NULL) {
-    return;
-  }
-  
-  for (i = 0; i < MAX_ROOMS; i++) {
-    destroy_room(world->rooms[i]);
   }
 }
 
