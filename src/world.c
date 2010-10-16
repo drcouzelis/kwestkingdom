@@ -171,8 +171,27 @@ void update_turn(WORLD *world)
 
 
 
+DOOR *find_door(ROOM *room, int row, int col)
+{
+  int i;
+  
+  for (i = 0; i < MAX_DOORS; i++) {
+    if (room->doors[i] != NULL && room->doors[i]->row == row && room->doors[i]->col == col) {
+      return room->doors[i];
+    }
+  }
+  
+  return NULL;
+}
+
+
+
+
 void update_world(WORLD *world)
 {
+  PLAYER *player;
+  DOOR *door;
+  
   update_turn(world);
   update_player(world->player, world);
   update_room(world->rooms[world->room_idx]);
@@ -186,6 +205,16 @@ void update_world(WORLD *world)
    *     For every door-reference to the deleted room, mark the door as a wall
    *   Move to the next room
    */
+  player = world->player;
+  
+  if (!is_moving(player->character->sprite)) {
+    
+    door = find_door(current_room(world), player->character->sprite->row, player->character->sprite->col);
+    
+    if (door != NULL) {
+      printf("Standing on door %d %d, to %d at %d %d \n", door->row, door->col, door->new_room_num, door->new_row, door->new_col);
+    }
+  }
 }
 
 

@@ -8,12 +8,14 @@
 
 
 
-DOOR *create_door(int new_room_num, int new_row, int new_col)
+DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col)
 {
   DOOR *door;
 
   door = alloc_memory(sizeof(DOOR));
 
+  door->row = row;
+  door->col = col;
   door->new_room_num = new_room_num;
   door->new_row = new_row;
   door->new_col = new_col;
@@ -56,12 +58,15 @@ ROOM *create_room()
       room->path[i][j] = OFF;
       room->terrain[i][j] = NULL;
       room->help[i][j] = NULL;
-      room->doors[i][j] = NULL;
     }
   }
 
   for (i = 0; i < MAX_TILE_TYPES; i++) {
     room->terrain_anims[i] = NULL;
+  }
+  
+  for (i = 0; i < MAX_DOORS; i++) {
+    room->doors[i] = NULL;
   }
   
   room->num = -1;
@@ -89,12 +94,15 @@ void destroy_room(ROOM *room)
     for (j = 0; j < COLS; j++) {
       destroy_tile(room->terrain[i][j]);
       /*destroy_help(room->help[i][j]);*/ /* TEMP */
-      destroy_door(room->doors[i][j]);
     }
   }
 
   for (i = 0; i < MAX_TILE_TYPES; i++) {
     destroy_anim(room->terrain_anims[i]);
+  }
+
+  for (i = 0; i < MAX_DOORS; i++) {
+    destroy_door(room->doors[i]);
   }
 
   free_memory(room);
@@ -103,23 +111,19 @@ void destroy_room(ROOM *room)
 
 
 
-void add_door(ROOM *room, DOOR *door, int row, int col)
+void add_door(ROOM *room, DOOR *door)
 {
-  if (room == NULL || door == NULL) {
-    return;
+  FLAG done;
+  int i;
+  
+  done = OFF;
+  
+  for (i = 0; !done && i < MAX_DOORS; i++) {
+    if (room->doors[i] == NULL) {
+      room->doors[i] = door;
+      done = ON;
+    }
   }
-
-  if (row < 0 || row >= ROWS) {
-    return;
-  }
-
-  if (col < 0 || col >= COLS) {
-    return;
-  }
-
-  destroy_door(room->doors[row][col]);
-
-  room->doors[row][col] = door;
 }
 
 

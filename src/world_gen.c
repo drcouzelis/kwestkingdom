@@ -10,37 +10,10 @@
 
 
 
-/**
- * Create a new set of cached rooms.
- * If the number of rooms in the world exceeds the
- * max number of cached rooms, then some rooms will
- * be removed.
- */
-void cache_rooms(WORLD *world)
-{
-  ROOM *room;
-  
-  int i;
-  
-  for (i = 0; i < world->num_cached_rooms; i++) {
-    
-    room = world->create_room(world, find_highest_room_number(world) + 1);
-    
-    add_room(world, room);
-  }
-}
-
-
-
-
-FLAG completed_final_room(WORLD *world)
-{
-  if (current_room(world)->num == 40) {
-    return ON;
-  }
-  
-  return OFF;
-}
+ROOM *create_story_world_room(WORLD *world, int num);
+ROOM *create_endless_world_room(WORLD *world, int num);
+void cache_rooms(WORLD *world);
+FLAG completed_final_room(WORLD *world);
 
 
 
@@ -90,6 +63,41 @@ WORLD *create_endless_world()
 
 
 
+FLAG completed_final_room(WORLD *world)
+{
+  if (current_room(world)->num == 40) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+/**
+ * Create a new set of cached rooms.
+ * If the number of rooms in the world exceeds the
+ * max number of cached rooms, then some rooms will
+ * be removed.
+ */
+void cache_rooms(WORLD *world)
+{
+  ROOM *room;
+  
+  int i;
+  
+  for (i = 0; i < world->num_cached_rooms; i++) {
+    
+    room = world->create_room(world, find_highest_room_number(world) + 1);
+    
+    add_room(world, room);
+  }
+}
+
+
+
+
 void generate_exit_on_border(int *row, int *col, int exclude_dir)
 {
   /**
@@ -134,9 +142,75 @@ void generate_exit_on_border(int *row, int *col, int exclude_dir)
 
 
 
+int flip_door_row(int row)
+{
+  if (row == ROWS - 1) {
+    return 0;
+  }
+  
+  if (row == 0) {
+    return ROWS - 1;
+  }
+  
+  return row;
+}
+
+
+
+
+int flip_door_col(int col)
+{
+  if (col == COLS - 1) {
+    return 0;
+  }
+  
+  if (col == 0) {
+    return COLS - 1;
+  }
+  
+  return col;
+}
+
+
+
+
+int shift_door_row(int row)
+{
+  if (row == ROWS - 1) {
+    return row + 1;
+  }
+  
+  if (row == 0) {
+    return row - 1;
+  }
+  
+  return row;
+}
+
+
+
+
+int shift_door_col(int col)
+{
+  if (col == COLS - 1) {
+    return col + 1;
+  }
+  
+  if (col == 0) {
+    return col - 1;
+  }
+  
+  return col;
+}
+
+
+
+
 ROOM *create_story_world_room(WORLD *world, int num)
 {
   ROOM *room;
+  
+  DOOR *door;
   
   int entr_row;
   int entr_col;
@@ -155,6 +229,16 @@ ROOM *create_story_world_room(WORLD *world, int num)
     entr_col = world->player->character->sprite->col;
     
     generate_exit_on_border(&exit_row, &exit_col, SOUTH);
+    
+    door = create_door(
+      shift_door_row(exit_row),
+      shift_door_col(exit_col),
+      num + 1,
+      flip_door_row(exit_row),
+      flip_door_col(exit_col)
+    );
+    
+    add_door(room, door);
     
     set_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, entr_row, entr_col, exit_row, exit_col);

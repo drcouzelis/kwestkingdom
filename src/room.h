@@ -10,6 +10,7 @@
 #define ROWS 12
 
 #define MAX_ENEMIES 100
+#define MAX_DOORS 4
 
 
 typedef struct DOOR DOOR;
@@ -35,6 +36,8 @@ typedef enum
 
 struct DOOR
 {
+  int row;
+  int col;
   int new_room_num;
   int new_row;
   int new_col;
@@ -109,9 +112,9 @@ struct ROOM
   struct HELP *help[ROWS][COLS];
   
   /**
-   * A map of the doors in the room.
+   * A list of doors in the room.
    */
-  struct DOOR *doors[ROWS][COLS];
+  struct DOOR *doors[MAX_DOORS];
 };
 
 
@@ -148,7 +151,7 @@ struct TILE
 /**
  * Create and destroy doors
  */
-DOOR *create_door(int new_room_num, int new_row, int new_col);
+DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col);
 void destroy_door(DOOR *door);
 
 /**
@@ -157,7 +160,7 @@ void destroy_door(DOOR *door);
 ROOM *create_room();
 void destroy_room(ROOM *room);
 
-void add_door(ROOM *room, DOOR *door, int row, int col);
+void add_door(ROOM *room, DOOR *door);
 
 void update_room(ROOM *room);
 void paint_room(ROOM *room, BITMAP *canvas);
