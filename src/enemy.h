@@ -5,27 +5,49 @@
 #include "direction.h"
 
 
-typedef struct ENEMY ENEMY;
-struct CHARACTER;
+/**
+ * A list of the different types of enemies.
+ */
+typedef enum
+{
+  ENEMY_TYPE_CHOMPER = 0,
+  ENEMY_TYPE_ARCHER,
+  ENEMY_TYPE_NINJA,
+  ENEMY_TYPE_GIANT,
+  
+  NUM_ENEMY_TYPES
+} ENEMY_TYPE;
+
+
+typedef union ENEMY ENEMY;
 struct WORLD;
 
+/**
+ * The different enemy structs
+ */
+struct CHOMPER;
+struct ARCHER;
+struct NINJA;
+struct GIANT;
 
-struct ENEMY
+
+union ENEMY
 {
-  struct CHARACTER *character;
-  
-  DIRECTION prev_dir;
-  
   /**
-   * This command allows different character to behave differently
-   * from each other.
+   * NOTE: Every enemy type must have "int type" as
+   * the first entry in its struct.
    */
-  void (*command)(ENEMY *enemy, struct WORLD *world);
+  int type;
+  
+  struct CHOMPER *chomper;
+  struct ARCHER *archer;
+  struct NINJA *ninja;
+  struct GIANT *giant;
 };
 
 
 ENEMY *create_enemy();
-ENEMY *destroy_enemy();
+void destroy_enemy(ENEMY *enemy);
 
 void update_enemy(ENEMY *enemy, struct WORLD *world);
 

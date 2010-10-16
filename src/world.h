@@ -13,20 +13,8 @@ struct PLAYER;
 struct ROOM;
 
 
-typedef enum
-{
-  STORY_WORLD = 0,
-  ENDLESS_WORLD
-} WORLD_TYPE;
-
-
 struct WORLD
 {
-  /**
-   * What type of world this is.
-   */
-  WORLD_TYPE type;
-  
   /**
    * Represents the player, aka the hero!
    */
@@ -44,7 +32,7 @@ struct WORLD
    * This may be greater than the number of rooms that
    * are currently in the world.
    */
-  int room_num;
+  /*int room_num;*/
   
   /**
    * When it comes times to create a new set of rooms,
@@ -61,6 +49,21 @@ struct WORLD
    * (It doesn't make sense otherwise)
    */
   int max_cached_rooms; /* Try 10 */
+  
+  /**
+   * This function is used to create new rooms.
+   * Different types of rooms need to be made for
+   * different types of world.
+   */
+  ROOM *(*create_room)(WORLD *world, int num);
+  
+  /**
+   * This function is used to see if the game
+   * has been won.
+   * Different types of worlds have different
+   * win conditions.
+   */
+  FLAG (*is_game_won)(WORLD *world);
 };
 
 
@@ -70,6 +73,7 @@ void destroy_world(WORLD *world);
 void add_room(WORLD *world, struct ROOM *room);
 void clear_rooms(WORLD *world);
 struct ROOM *current_room(WORLD *world);
+int find_highest_room_number(WORLD *world);
 
 void update_world(WORLD *world);
 void paint_world(WORLD *world, BITMAP *canvas);

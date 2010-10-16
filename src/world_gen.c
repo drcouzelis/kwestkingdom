@@ -16,16 +16,18 @@ void cache_rooms(WORLD *world)
 {
   ROOM *room;
   
-  TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
+  /*TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};*/
   
   int i;
   
   for (i = 0; i < world->num_cached_rooms; i++) {
     
-    room = create_room();
+    room = world->create_room(world, find_highest_room_number(world));
+    /*
     set_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, ROWS - 3, COLS / 2, 0, COLS / 2);
     generate_terrain(room, &terrain);
+    */
     
     add_room(world, room);
   }
@@ -39,6 +41,11 @@ WORLD *create_story_world()
   WORLD *world;
   
   world = create_world();
+  
+  /**
+   * Set "story world" settings here
+   */
+  /* YOU LEFT OFF HERE!! */
   
   cache_rooms(world);
   
@@ -69,6 +76,14 @@ WORLD *create_endless_world()
 
 ROOM *create_story_world_room(WORLD *world, int num)
 {
+  /*ROOM *room;*/
+  
+  switch (num) {
+  
+  case 1:
+    break;
+  }
+  
   world = world; /* TEMP */
   num = num;
   

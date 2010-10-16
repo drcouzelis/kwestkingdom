@@ -2,6 +2,10 @@
 #define KWESTKINGDOM_HEADER
 
 
+#define PLAYER_START_ROW (ROWS - 3)
+#define PLAYER_START_COL (COLS / 2)
+
+
 int get_tile_size();
 int get_walk_speed();
 

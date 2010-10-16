@@ -1,9 +1,11 @@
 #include "character.h"
+#include "kwestkingdom.h"
 #include "memory.h"
 #include "player.h"
 #include "room.h"
 #include "sprite.h"
 #include "world.h"
+
 
 
 
@@ -14,10 +16,8 @@ WORLD *create_world()
 
   world = alloc_memory(sizeof(WORLD));
 
-  world->type = STORY_WORLD;
-  
   world->player = create_player();
-  warp_sprite(world->player->character->sprite, ROWS - 3, COLS / 2);
+  warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
 
   for (i = 0; i < MAX_ROOMS; i++) {
     world->rooms[i] = NULL;
@@ -26,10 +26,14 @@ WORLD *create_world()
   world->num_rooms = 0;
   world->room_idx = 0;
   
-  world->room_num = 0;
+  world->num_cached_rooms = 0;
+  world->max_cached_rooms = 0;
   
-  world->num_cached_rooms = 10;
-  world->max_cached_rooms = 10;
+  /**
+   * Initialize function pointers
+   */
+  world->create_room = NULL;
+  world->is_game_won = NULL;
 
   return world;
 }
@@ -103,6 +107,23 @@ void add_room(WORLD *world, ROOM *room)
 struct ROOM *current_room(WORLD *world)
 {
   return world->rooms[world->room_idx];
+}
+
+
+
+
+int find_highest_room_number(WORLD *world)
+{
+  int highest = 0;
+  int i;
+  
+  for (i = 0; i < MAX_ROOMS; i++) {
+    if (world->rooms[i] != NULL && world->rooms[i]->num > highest) {
+      highest = world->rooms[i]->num;
+    }
+  }
+  
+  return highest;
 }
 
 

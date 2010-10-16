@@ -1,5 +1,6 @@
 #include "anim.h"
 #include "direction.h"
+#include "enemy.h"
 #include "memory.h"
 #include "room.h"
 #include "kwestkingdom.h"

@@ -17,9 +17,10 @@ typedef struct ROOM ROOM;
 typedef struct TILE TILE;
 struct ANIM;
 struct DOOR;
-struct ENEMY;
 struct HELP;
 struct TILE;
+
+union ENEMY;
 
 
 typedef enum
@@ -81,7 +82,7 @@ struct ROOM
   /**
    * A list of the enemies currently in the room.
    */
-  struct ENEMY *enemies[MAX_ENEMIES];
+  union ENEMY *enemies[MAX_ENEMIES];
   int num_enemies;
   
   /**

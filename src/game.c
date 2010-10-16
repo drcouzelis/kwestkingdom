@@ -125,20 +125,6 @@ FLAG is_game_over(GAME *game)
 
 
 
-FLAG is_game_won(GAME *game)
-{
-  if (game->world->type == ENDLESS_WORLD) {
-    /* No end to endless */
-    return OFF;
-  }
-  
-  /* Check if the story has ended */
-  return OFF; /* TEMP */
-}
-
-
-
-
 void update_game(GAME *game)
 {
   /*
