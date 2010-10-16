@@ -1,6 +1,6 @@
 CC = gcc
 OUTPUT = ../share/kwestkingdom/kwestkingdom
-DEBUG = -O2 -Wall -Wextra -ansi -pedantic
+DEBUG = -g -O2 -Wall -Wextra -ansi -pedantic
 LINKING_OPTIONS = 
 CFLAGS = $(shell allegro-config --cflags)
 LDFLAGS = $(shell allegro-config --libs)
