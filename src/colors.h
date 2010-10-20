@@ -2,6 +2,9 @@
 #define COLORS_HEADER
 
 
+#include <allegro.h>
+
+
 #define WHITE (makecol(255, 255, 255))
 #define BLACK (makecol(0, 0, 0))
 #define GREEN (makecol(0, 100, 0))

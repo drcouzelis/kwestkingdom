@@ -4,7 +4,21 @@
 
 
 
+/**
+ * Private
+ */
+
+
+
+
 static char key_held[KEY_MAX];
+
+
+
+
+/**
+ * Public
+ */
 
 
 

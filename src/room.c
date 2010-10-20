@@ -192,8 +192,8 @@ void paint_room(ROOM *room, BITMAP *canvas)
   for (row = 0; row < ROWS; row++) {
     for (col = 0; col < COLS; col++) {
       type = room->terrain[row][col]->type;
-      x = col * get_tile_size();
-      y = row * get_tile_size();
+      x = col * grab_tile_size();
+      y = row * grab_tile_size();
       paint_anim(room->terrain_anims[type], canvas, x, y);
     }
   }
@@ -305,8 +305,8 @@ void paint_edge(ROOM *room, BITMAP *canvas, int row, int col, int direction, TIL
   int x;
   int y;
   
-  x = col * get_tile_size();
-  y = row * get_tile_size();
+  x = col * grab_tile_size();
+  y = row * grab_tile_size();
   
   row = row + cardinals[direction].v_offset;
   col = col + cardinals[direction].h_offset;
@@ -335,8 +335,8 @@ void paint_inside_corner_edge(ROOM *room, BITMAP *canvas, int row, int col, int 
   TILE_TYPE adjacent_type1;
   TILE_TYPE adjacent_type2;
   
-  x = col * get_tile_size();
-  y = row * get_tile_size();
+  x = col * grab_tile_size();
+  y = row * grab_tile_size();
   
   r1 = row + intercardinals[direction].v_offset;
   c1 = col;
@@ -373,8 +373,8 @@ void paint_outside_corner_edge(ROOM *room, BITMAP *canvas, int row, int col, int
   TILE_TYPE adjacent_type2;
   TILE_TYPE corner_type;
   
-  x = col * get_tile_size();
-  y = row * get_tile_size();
+  x = col * grab_tile_size();
+  y = row * grab_tile_size();
   
   r1 = row + intercardinals[direction].v_offset;
   c1 = col;
@@ -434,8 +434,8 @@ void paint_room_terrain(ROOM *room, BITMAP *canvas)
       
       /* Paint the tile */
       type = room->terrain[row][col]->type;
-      x = col * get_tile_size();
-      y = row * get_tile_size();
+      x = col * grab_tile_size();
+      y = row * grab_tile_size();
       paint_anim(room->terrain_anims[type], canvas, x, y);
       
       /**

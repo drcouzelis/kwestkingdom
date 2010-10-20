@@ -90,10 +90,10 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   add_frame(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], get_image(outside, V_FLIP));
   add_frame(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], get_image(outside, H_V_FLIP));
   
-  set_visual_offset(room->terrain_anims[TILE_TYPE_NE_OUTSIDE], -get_tile_size(), -get_tile_size());
-  set_visual_offset(room->terrain_anims[TILE_TYPE_NW_OUTSIDE], -get_tile_size(), -get_tile_size());
-  set_visual_offset(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], -get_tile_size(), -get_tile_size());
-  set_visual_offset(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], -get_tile_size(), -get_tile_size());
+  change_visual_offset(room->terrain_anims[TILE_TYPE_NE_OUTSIDE], -grab_tile_size(), -grab_tile_size());
+  change_visual_offset(room->terrain_anims[TILE_TYPE_NW_OUTSIDE], -grab_tile_size(), -grab_tile_size());
+  change_visual_offset(room->terrain_anims[TILE_TYPE_SE_OUTSIDE], -grab_tile_size(), -grab_tile_size());
+  change_visual_offset(room->terrain_anims[TILE_TYPE_SW_OUTSIDE], -grab_tile_size(), -grab_tile_size());
 }
 
 

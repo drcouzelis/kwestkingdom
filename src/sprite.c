@@ -27,7 +27,7 @@ SPRITE *create_sprite()
   sprite->w = 1;
   sprite->h = 1;
   
-  sprite->speed = 60;
+  sprite->speed = grab_walk_speed();
   sprite->fudge = 0;
   
   return sprite;
@@ -136,16 +136,16 @@ void update_sprite(SPRITE *sprite)
       
       while (sprite->fudge >= GAME_TICKER) {
         
-        if (sprite->x != sprite->col * get_tile_size()) {
-          if (sprite->x < sprite->col * get_tile_size()) {
+        if (sprite->x != sprite->col * grab_tile_size()) {
+          if (sprite->x < sprite->col * grab_tile_size()) {
             sprite->x++;
           } else {
             sprite->x--;
           }
         }
         
-        if (sprite->y != sprite->row * get_tile_size()) {
-          if (sprite->y < sprite->row * get_tile_size()) {
+        if (sprite->y != sprite->row * grab_tile_size()) {
+          if (sprite->y < sprite->row * grab_tile_size()) {
             sprite->y++;
           } else {
             sprite->y--;
@@ -156,8 +156,8 @@ void update_sprite(SPRITE *sprite)
       }
       
     } else {
-      sprite->x = sprite->col * get_tile_size();
-      sprite->y = sprite->row * get_tile_size();
+      sprite->x = sprite->col * grab_tile_size();
+      sprite->y = sprite->row * grab_tile_size();
     }
     
     /**
@@ -193,8 +193,8 @@ void warp_sprite(SPRITE *sprite, int row, int col)
 {
   sprite->row = row;
   sprite->col = col;
-  sprite->x = col * get_tile_size();
-  sprite->y = row * get_tile_size();
+  sprite->x = col * grab_tile_size();
+  sprite->y = row * grab_tile_size();
 }
 
 
@@ -202,7 +202,7 @@ void warp_sprite(SPRITE *sprite, int row, int col)
 
 FLAG is_moving(SPRITE *sprite)
 {
-  if (sprite->x == sprite->col * get_tile_size() && sprite->y == sprite->row * get_tile_size()) {
+  if (sprite->x == sprite->col * grab_tile_size() && sprite->y == sprite->row * grab_tile_size()) {
     return OFF;
   }
   

@@ -266,7 +266,7 @@ void update_player(PLAYER *player, WORLD *world)
 {
   SPRITE *sprite = player->character->sprite;
   
-  update_character(player->character, world);
+  update_sprite(sprite);
   
   /* YOU LEFT OFF HERE!! */
 

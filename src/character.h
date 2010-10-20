@@ -21,11 +21,6 @@ struct CHARACTER
   struct SPRITE *sprite;
   
   /**
-   * The equipment that the character can use.
-   */
-  struct INVENTORY *inventory;
-  
-  /**
    * The character health.
    * When health becomes zeno, the character is dead.
    */
@@ -48,8 +43,6 @@ struct CHARACTER
 
 CHARACTER *create_character(struct SPRITE *sprite, int health);
 void destroy_character(CHARACTER *character);
-
-void update_character(CHARACTER *character, struct WORLD *world);
 
 /**
  * For taking turns

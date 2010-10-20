@@ -5,6 +5,13 @@
 
 
 
+/**
+ * Private
+ */
+
+
+
+
 #define MAX_FRAMES 20
 
 
@@ -47,6 +54,13 @@ struct ANIM
   int x_offset;
   int y_offset;
 };
+
+
+
+
+/**
+ * Public
+ */
 
 
 
@@ -99,7 +113,7 @@ void add_frame(ANIM *anim, BITMAP *image)
 
 
 
-void set_visual_offset(ANIM *anim, int x_offset, int y_offset)
+void change_visual_offset(ANIM *anim, int x_offset, int y_offset)
 {
   if (anim == NULL) {
     return;
@@ -158,7 +172,7 @@ FLAG is_done_animating(ANIM *anim)
 
 
 
-int anim_width(ANIM *anim)
+int grab_anim_width(ANIM *anim)
 {
   if (anim == NULL) {
     return 0;
@@ -169,7 +183,7 @@ int anim_width(ANIM *anim)
 
 
 
-int anim_height(ANIM *anim)
+int grab_anim_height(ANIM *anim)
 {
   if (anim == NULL) {
     return 0;
@@ -188,29 +202,6 @@ void reset_anim(ANIM *anim)
   anim->pos = 0;
   anim->finished = OFF;
   anim->fudge = 0;
-}
-
-
-
-
-ANIM *copy_anim(ANIM *anim)
-{
-  ANIM *new_anim;
-  int i;
-
-  if (anim == NULL) {
-    return NULL;
-  }
-
-  new_anim = create_anim(anim->speed, anim->loop);
-
-  for (i = 0; i < anim->length; i++) {
-    add_frame(new_anim, anim->frames[i]);
-  }
-
-  reset_anim(new_anim);
-
-  return new_anim;
 }
 
 

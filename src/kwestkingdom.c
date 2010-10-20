@@ -15,6 +15,13 @@
 
 
 
+/**
+ * Private
+ */
+
+
+
+
 #define TILE_SIZE 20
 
 #define CANVAS_WIDTH (COLS * TILE_SIZE)
@@ -25,31 +32,7 @@
 
 
 
-int get_tile_size()
-{
-  return TILE_SIZE;
-}
-
-
-
-
-int get_walk_speed()
-{
-  return 60;
-}
-
-
-
-
 static FLAG quitting = OFF;
-
-
-
-
-void quit_kwestkingdom()
-{
-  quitting = ON;
-}
 
 
 
@@ -84,6 +67,37 @@ FLAG init_kwestkingdom()
   toggle_sound(); /* Turn off sound */
   
   return ON;
+}
+
+
+
+
+/**
+ * Public
+ */
+
+
+
+
+int grab_tile_size()
+{
+  return TILE_SIZE;
+}
+
+
+
+
+int grab_walk_speed()
+{
+  return 60;
+}
+
+
+
+
+void quit_kwestkingdom()
+{
+  quitting = ON;
 }
 
 
@@ -169,8 +183,8 @@ int main(int argc, char *argv[])
     textprintf_ex(
       get_canvas(),
       font,
-      get_tile_size() / 5, /* x */
-      canvas_height() - (get_tile_size() / 2), /* y */
+      grab_tile_size() / 5, /* x */
+      canvas_height() - (grab_tile_size() / 2), /* y */
       WHITE,
       -1,
       method

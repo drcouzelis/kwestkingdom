@@ -357,8 +357,8 @@ void paint_world(WORLD *world, BITMAP *canvas)
   textprintf_ex(
     canvas,
     font,
-    canvas->w - (get_tile_size() * 3) - (get_tile_size() / 2), /* x */
-    canvas->h - (get_tile_size() / 2), /* y */
+    canvas->w - (grab_tile_size() * 3) - (grab_tile_size() / 2), /* x */
+    canvas->h - (grab_tile_size() / 2), /* y */
     WHITE,
     -1,
     room_num_text

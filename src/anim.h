@@ -20,7 +20,7 @@ void add_frame(ANIM *anim, BITMAP *frame);
 /**
  * Set the visual offset of an animation.
  */
-void set_visual_offset(ANIM *anim, int x_offset, int y_offset);
+void change_visual_offset(ANIM *anim, int x_offset, int y_offset);
 
 /**
  * Animate an animation.
@@ -36,19 +36,13 @@ void animate(ANIM *anim);
  */
 FLAG is_done_animating(ANIM *anim);
 
-int anim_width(ANIM *anim);
-int anim_height(ANIM *anim);
+int grab_anim_width(ANIM *anim);
+int grab_anim_height(ANIM *anim);
 
 /**
  * Reset an animation to its first frame.
  */
 void reset_anim(ANIM *anim);
-
-/**
- * Copy an animation.
- * Returns a pointer to a new animation.
- */
-ANIM *copy_anim(ANIM *anim);
 
 /**
  * Draw an animation.

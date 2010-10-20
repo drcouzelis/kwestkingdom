@@ -1,0 +1,15 @@
+<ret> create()      /* Allocate memory and set initial values, returns something */
+      destroy(...)  /* Free memory */
+<ret> generate(...) /* Create a special version of something, returns something */
+
+      paint(...)  /* Draw to a bitmap */
+      update(...) /* Update something */
+
+      add(...)    /* Add one of multiple things to something */
+      change(...) /* Change something, has args */
+<ret> grab        /* Getter, no args, returns something */
+<ret> find(...)   /* Find a specific something, has args, returns something */
+<ret> is(...)     /* Returns a FLAG */
+
+<ret> init(...) /* Initialize a system */
+      stop(...) /* Stop a system */
