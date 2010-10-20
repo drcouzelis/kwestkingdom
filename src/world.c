@@ -1,4 +1,5 @@
 #include "character.h"
+#include "colors.h"
 #include "kwestkingdom.h"
 #include "memory.h"
 #include "player.h"
@@ -9,56 +10,58 @@
 
 
 
-WORLD *create_world()
+/**
+ * Private functions
+ */
+
+
+
+
+void sort_rooms(WORLD *world)
 {
-  WORLD *world;
+  ROOM *room;
   int i;
-
-  world = alloc_memory(sizeof(WORLD));
-
-  world->player = create_player();
-  warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
-
+  int j;
+  FLAG done;
+  
+  for (i = 1; i < MAX_ROOMS; i++) {
+    
+    room = world->rooms[i];
+    j = i - 1;
+    done = OFF;
+    
+    while (!done) {
+      
+      if (
+        (world->rooms[j] == NULL && room != NULL) ||
+        (room != NULL && world->rooms[j]->num > room->num)
+      ) {
+        
+        world->rooms[j + 1] = world->rooms[j];
+        j--;
+        
+        if (j < 0) {
+          done = ON;
+        }
+        
+      } else {
+        
+        done = ON;
+      }
+    }
+    
+    world->rooms[j + 1] = room;
+  }
+  
+  printf("Finished sorting rooms: \n");
   for (i = 0; i < MAX_ROOMS; i++) {
-    world->rooms[i] = NULL;
+    if (world->rooms[i] != NULL) {
+      printf("%d ", world->rooms[i]->num);
+    } else {
+      printf(".");
+    }
   }
-
-  world->num_rooms = 0;
-  world->room_idx = 0;
-  
-  world->num_cached_rooms = 0;
-  world->max_cached_rooms = 0;
-  
-  /**
-   * Initialize function pointers
-   */
-  world->create_room = NULL;
-  world->is_game_won = NULL;
-
-  return world;
-}
-
-
-
-
-void destroy_world(WORLD *world)
-{
-  int i;
-  
-  if (world == NULL) {
-    return;
-  }
-
-  destroy_player(world->player);
-  
-  /**
-   * Destroy all rooms
-   */
-  for (i = 0; i < MAX_ROOMS; i++) {
-    destroy_room(world->rooms[i]);
-  }
-
-  free_memory(world);
+  printf("\n");
 }
 
 
@@ -66,47 +69,27 @@ void destroy_world(WORLD *world)
 
 void remove_oldest_room(WORLD *world)
 {
-  int oldest_idx = -1;
+  destroy_room(world->rooms[0]);
+  world->rooms[0] = NULL;
+  
+  sort_rooms(world);
+}
+
+
+
+
+int count_num_rooms(WORLD *world)
+{
+  int count = 0;
   int i;
   
   for (i = 0; i < MAX_ROOMS; i++) {
     if (world->rooms[i] != NULL) {
-      if (oldest_idx == -1 || world->rooms[i]->num < world->rooms[oldest_idx]->num) {
-        oldest_idx = i;
-      }
+      count++;
     }
   }
   
-  if (oldest_idx != -1) {
-    destroy_room(world->rooms[oldest_idx]);
-    world->rooms[oldest_idx] = NULL;
-    world->num_rooms--;
-  }
-}
-
-
-
-
-void add_room(WORLD *world, ROOM *room)
-{
-  if (world == NULL || room == NULL) {
-    return;
-  }
-  
-  world->rooms[world->num_rooms] = room;
-  world->num_rooms++;
-  
-  if (world->num_rooms > world->max_cached_rooms) {
-    remove_oldest_room(world);
-  }
-}
-
-
-
-
-struct ROOM *current_room(WORLD *world)
-{
-  return world->rooms[world->room_idx];
+  return count;
 }
 
 
@@ -114,21 +97,17 @@ struct ROOM *current_room(WORLD *world)
 
 int find_highest_room_number(WORLD *world)
 {
-  int highest = 0;
-  int i;
-  
-  for (i = 0; i < MAX_ROOMS; i++) {
-    if (world->rooms[i] != NULL && world->rooms[i]->num > highest) {
-      highest = world->rooms[i]->num;
-    }
-  }
-  
-  return highest;
+  return world->rooms[count_num_rooms(world) - 1]->num;
 }
 
 
 
 
+/**
+ * See if the last character is done taking their turn.
+ * Find out whose turn it is next.
+ * Tell them to take a turn.
+ */
 void update_turn(WORLD *world)
 {
   /*int index;*/
@@ -171,6 +150,9 @@ void update_turn(WORLD *world)
 
 
 
+/**
+ * Find the door that corresponds to the given row and col.
+ */
 DOOR *find_door(ROOM *room, int row, int col)
 {
   int i;
@@ -187,9 +169,148 @@ DOOR *find_door(ROOM *room, int row, int col)
 
 
 
+void set_current_room(WORLD *world, int new_room_num)
+{
+  int i;
+  
+  /**
+   * Continue caching rooms until
+   * the right room number is found.
+   */
+  while (ON) {
+    
+    for (i = 0; i < MAX_ROOMS; i++) {
+      if (world->rooms[i] != NULL && world->rooms[i]->num == new_room_num) {
+        world->room_idx = i;
+        return;
+      }
+    }
+    
+    cache_rooms(world);
+  }
+}
+
+
+
+
+void change_room(WORLD *world, DOOR *door)
+{
+  set_current_room(world, door->new_room_num);
+  warp_sprite(world->player->character->sprite, door->new_row, door->new_col);
+}
+
+
+
+
+/**
+ * Public functions
+ */
+
+
+
+
+WORLD *create_world()
+{
+  WORLD *world;
+  int i;
+
+  world = alloc_memory(sizeof(WORLD));
+
+  world->player = create_player();
+  warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
+
+  for (i = 0; i < MAX_ROOMS; i++) {
+    world->rooms[i] = NULL;
+  }
+
+  world->room_idx = 0;
+  
+  world->num_cached_rooms = 0;
+  world->max_cached_rooms = 0;
+  
+  /**
+   * Initialize function pointers
+   */
+  world->create_room = NULL;
+  world->is_game_won = NULL;
+
+  return world;
+}
+
+
+
+
+void destroy_world(WORLD *world)
+{
+  int i;
+  
+  if (world == NULL) {
+    return;
+  }
+
+  destroy_player(world->player);
+  
+  /**
+   * Destroy all rooms
+   */
+  for (i = 0; i < MAX_ROOMS; i++) {
+    destroy_room(world->rooms[i]);
+  }
+
+  free_memory(world);
+}
+
+
+
+
+void add_room(WORLD *world, ROOM *room)
+{
+  int num_rooms;
+  
+  printf("Adding a new room \n");
+  
+  num_rooms = count_num_rooms(world);
+  
+  if (num_rooms < MAX_ROOMS) {
+    world->rooms[num_rooms] = room;
+    sort_rooms(world);
+  }
+  
+  num_rooms++;
+  
+  if (num_rooms > world->max_cached_rooms) {
+    remove_oldest_room(world);
+  }
+}
+
+
+
+
+void cache_rooms(WORLD *world)
+{
+  ROOM *room;
+  int i;
+  
+  for (i = 0; i < world->num_cached_rooms; i++) {
+    room = world->create_room(world, find_highest_room_number(world) + 1);
+    add_room(world, room);
+  }
+}
+
+
+
+
+struct ROOM *get_current_room(WORLD *world)
+{
+  return world->rooms[world->room_idx];
+}
+
+
+
+
 void update_world(WORLD *world)
 {
-  PLAYER *player;
+  SPRITE *sprite;
   DOOR *door;
   
   update_turn(world);
@@ -205,14 +326,15 @@ void update_world(WORLD *world)
    *     For every door-reference to the deleted room, mark the door as a wall
    *   Move to the next room
    */
-  player = world->player;
+  sprite = world->player->character->sprite;
   
-  if (!is_moving(player->character->sprite)) {
+  if (!is_moving(sprite)) {
     
-    door = find_door(current_room(world), player->character->sprite->row, player->character->sprite->col);
+    door = find_door(get_current_room(world), sprite->row, sprite->col);
     
     if (door != NULL) {
       printf("Standing on door %d %d, to %d at %d %d \n", door->row, door->col, door->new_room_num, door->new_row, door->new_col);
+      change_room(world, door);
     }
   }
 }
@@ -222,6 +344,24 @@ void update_world(WORLD *world)
 
 void paint_world(WORLD *world, BITMAP *canvas)
 {
+  char room_num_text[16];
+  
   paint_room(world->rooms[world->room_idx], canvas);
   paint_sprite(world->player->character->sprite, canvas);
+  
+  /**
+   * Show the current room number
+   */
+  sprintf(room_num_text, "Room %d", get_current_room(world)->num);
+  
+  textprintf_ex(
+    canvas,
+    font,
+    canvas->w - (get_tile_size() * 3) - (get_tile_size() / 2), /* x */
+    canvas->h - (get_tile_size() / 2), /* y */
+    WHITE,
+    -1,
+    room_num_text
+  );
+  
 }

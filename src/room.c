@@ -226,17 +226,8 @@ TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle)
 
   tile = alloc_memory(sizeof(TILE));
 
-  if (type < MAX_TILE_TYPES) {
-    tile->type = type;
-  } else {
-    tile->type = TILE_TYPE_EMPTY;
-  }
-
-  if (obstacle < MAX_OBSTACLE_TYPES) {
-    tile->obstacle = obstacle;
-  } else {
-    tile->obstacle = OBSTACLE_TYPE_NONE;
-  }
+  tile->type = type;
+  tile->obstacle = obstacle;
 
   return tile;
 }

@@ -236,7 +236,7 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
     
     if (sprite->row != to_row || sprite->col != to_col) {
       
-      if (is_walkable(current_room(world), to_row, to_col)) {
+      if (is_walkable(get_current_room(world), to_row, to_col)) {
       /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/
         
         move_sprite(sprite, to_row, to_col);

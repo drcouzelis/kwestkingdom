@@ -10,62 +10,19 @@
 
 
 
-ROOM *create_story_world_room(WORLD *world, int num);
-ROOM *create_endless_world_room(WORLD *world, int num);
-void cache_rooms(WORLD *world);
-FLAG completed_final_room(WORLD *world);
-
-
-
-
-WORLD *create_story_world()
-{
-  WORLD *world;
-  
-  world = create_world();
-  
-  world->num_cached_rooms = 10;
-  world->max_cached_rooms = 10;
-  world->create_room = create_story_world_room;
-  world->is_game_won = completed_final_room;
-  
-  cache_rooms(world);
-  
-  return world;
-}
-
-
-
-
-WORLD *create_endless_world()
-{
-  WORLD *world;
-  
-  world = create_world();
-  
-  world->num_cached_rooms = 10;
-  world->max_cached_rooms = 10;
-  world->create_room = create_endless_world_room;
-  world->is_game_won = NULL;
-  
-  cache_rooms(world);
-  
-  return world;
-}
-
-
-
-
 /**
- * Internal functions
+ * Private functions
  */
 
 
 
 
+/**
+ * This function can be used to see if the game has been won.
+ */
 FLAG completed_final_room(WORLD *world)
 {
-  if (current_room(world)->num == 40) {
+  if (get_current_room(world)->num == 40) {
     return ON;
   }
   
@@ -76,28 +33,11 @@ FLAG completed_final_room(WORLD *world)
 
 
 /**
- * Create a new set of cached rooms.
- * If the number of rooms in the world exceeds the
- * max number of cached rooms, then some rooms will
- * be removed.
+ * Randomly generate a row and col point that is
+ * on the edge of the screen.
+ * Tell it the direction to exclude to prevent creating
+ * an exit on the same side as the entrance.
  */
-void cache_rooms(WORLD *world)
-{
-  ROOM *room;
-  
-  int i;
-  
-  for (i = 0; i < world->num_cached_rooms; i++) {
-    
-    room = world->create_room(world, find_highest_room_number(world) + 1);
-    
-    add_room(world, room);
-  }
-}
-
-
-
-
 void generate_exit_on_border(int *row, int *col, int exclude_dir)
 {
   /**
@@ -206,11 +146,39 @@ int shift_door_col(int col)
 
 
 
+int calc_edge_dir(int row, int col)
+{
+  if (row == 0) {
+    return NORTH;
+  }
+  
+  if (row == ROWS - 1) {
+    return SOUTH;
+  }
+  
+  if (col == 0) {
+    return WEST;
+  }
+  
+  if (col == COLS - 1) {
+    return EAST;
+  }
+  
+  return -1;
+}
+
+
+
+
 ROOM *create_story_world_room(WORLD *world, int num)
 {
   ROOM *room;
   
   DOOR *door;
+  
+  ROOM *prev_room = NULL;
+  DOOR *prev_door = NULL;
+  int i;
   
   int entr_row;
   int entr_col;
@@ -219,6 +187,7 @@ ROOM *create_story_world_room(WORLD *world, int num)
   int exit_col;
   
   TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
+  int terrain_percent;
   
   room = create_room();
   room->num = num;
@@ -245,9 +214,74 @@ ROOM *create_story_world_room(WORLD *world, int num)
     generate_terrain(room, &terrain);
   }
   
-  add_room(world, room);
+  if (num >= 2) {
+    
+    /**
+     * Get a pointer to the previous room
+     */
+    for (i = 0; prev_room == NULL && i < MAX_ROOMS; i++) {
+      if (world->rooms[i]->num == num - 1) {
+        prev_room = world->rooms[i];
+      }
+    }
+    
+    /**
+     * Get a pointer to the previous door
+     */
+    for (i = 0; prev_door == NULL && i < MAX_DOORS; i++) {
+      if (prev_room->doors[i]->new_room_num == num) {
+        prev_door = prev_room->doors[i];
+      }
+    }
+    
+    entr_row = prev_door->new_row;
+    entr_col = prev_door->new_col;
+    
+    generate_exit_on_border(&exit_row, &exit_col, calc_edge_dir(entr_row, entr_col));
+    
+    /**
+     * Add the exit
+     */
+    door = create_door(
+      shift_door_row(exit_row),
+      shift_door_col(exit_col),
+      num + 1,
+      flip_door_row(exit_row),
+      flip_door_col(exit_col)
+    );
+    
+    add_door(room, door);
+    
+    /**
+     * Add the entrance
+     */
+    door = create_door(
+      shift_door_row(entr_row),
+      shift_door_col(entr_col),
+      num - 1,
+      flip_door_row(entr_row),
+      flip_door_col(entr_col)
+    );
+    
+    add_door(room, door);
+    
+    set_room_theme(room, ROOM_THEME_FOREST);
+    create_path(room, entr_row, entr_col, exit_row, exit_col);
+    
+    /**
+     * Randomly generate some crazy terrain
+     */
+    terrain_percent = random_number(0, 80);
+    terrain.percent_walls = random_number(0, terrain_percent);
+    terrain.percent_holes = terrain_percent - terrain.percent_walls;
+    terrain.percent_scattered_walls = random_number(0, 100);
+    terrain.percent_scattered_holes = random_number(0, 100);
+    terrain.priority = random_number(0, 1);
+    
+    generate_terrain(room, &terrain);
+  }
   
-  return NULL;
+  return room;
 }
 
 
@@ -260,3 +294,49 @@ ROOM *create_endless_world_room(WORLD *world, int num)
   
   return NULL;
 }
+
+
+
+
+/**
+ * Public functions
+ */
+
+
+
+
+WORLD *create_story_world()
+{
+  WORLD *world;
+  
+  world = create_world();
+  
+  world->num_cached_rooms = 10;
+  world->max_cached_rooms = 10;
+  world->create_room = create_story_world_room;
+  world->is_game_won = completed_final_room;
+  
+  cache_rooms(world);
+  
+  return world;
+}
+
+
+
+
+WORLD *create_endless_world()
+{
+  WORLD *world;
+  
+  world = create_world();
+  
+  world->num_cached_rooms = 10;
+  world->max_cached_rooms = 10;
+  world->create_room = create_endless_world_room;
+  world->is_game_won = NULL;
+  
+  cache_rooms(world);
+  
+  return world;
+}
+

@@ -15,6 +15,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   int empty;
   int hole;
   int wall;
+  int path;
   int edge;
   int inside;
   int outside;
@@ -41,6 +42,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
     empty = IMG_TERRAIN_GRASS;
     hole = IMG_TERRAIN_WATER;
     wall = IMG_TERRAIN_OAK;
+    path = IMG_TERRAIN_PATH;
     edge = IMG_SHORE_GRASS_SHORE;
     inside = IMG_SHORE_GRASS_INSIDECORNER;
     outside = IMG_SHORE_GRASS_OUTSIDECORNER;
@@ -50,6 +52,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
     empty = IMG_TERRAIN_SNOW;
     hole = IMG_TERRAIN_ICE;
     wall = IMG_TERRAIN_EVERGREEN;
+    path = IMG_TERRAIN_SNOW; /* NOT USED */
     edge = IMG_SHORE_SNOW_SHORE;
     inside = IMG_SHORE_SNOW_INSIDECORNER;
     outside = IMG_SHORE_SNOW_OUTSIDECORNER;
@@ -59,6 +62,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
     empty = IMG_TERRAIN_DIRT;
     hole = IMG_TERRAIN_WATER; /* NOT USED */
     wall = IMG_TERRAIN_SPIRE;
+    path = IMG_TERRAIN_DIRT; /* NOT USED */
     edge = IMG_SHORE_GRASS_SHORE; /* NOT USED */
     inside = IMG_SHORE_GRASS_INSIDECORNER; /* NOT USED */
     outside = IMG_SHORE_GRASS_OUTSIDECORNER; /* NOT USED */
@@ -71,6 +75,7 @@ void set_room_theme(ROOM *room, ROOM_THEME theme)
   add_frame(room->terrain_anims[TILE_TYPE_EMPTY], get_image(empty, NORMAL));
   add_frame(room->terrain_anims[TILE_TYPE_HOLE], get_image(hole, NORMAL));
   add_frame(room->terrain_anims[TILE_TYPE_WALL], get_image(wall, NORMAL));
+  add_frame(room->terrain_anims[TILE_TYPE_PATH], get_image(path, NORMAL));
   add_frame(room->terrain_anims[TILE_TYPE_N_EDGE], get_image(edge, NORMAL));
   add_frame(room->terrain_anims[TILE_TYPE_S_EDGE], get_image(edge, V_FLIP));
   add_frame(room->terrain_anims[TILE_TYPE_E_EDGE], get_image(edge, ROTATE));
@@ -425,6 +430,17 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
    * Every room will have a border.
    */
   add_terrain_border(room);
+  
+  /**
+   * Optional: mark the path.
+   */
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      if (room->path[row][col] == ON) {
+        room->terrain[row][col]->type = TILE_TYPE_PATH;
+      }
+    }
+  }
 }
 
 

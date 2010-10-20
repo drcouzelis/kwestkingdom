@@ -21,18 +21,11 @@ struct WORLD
   struct PLAYER *player;
   
   /**
-   * A list of the rooms in this world.
+   * A list of rooms in this world.
+   * Rooms will always be in order based on their number.
    */
   struct ROOM *rooms[MAX_ROOMS];
-  int num_rooms;
   int room_idx;
-  
-  /**
-   * The room number that is currently occupied.
-   * This may be greater than the number of rooms that
-   * are currently in the world.
-   */
-  /*int room_num;*/
   
   /**
    * When it comes times to create a new set of rooms,
@@ -70,10 +63,27 @@ struct WORLD
 WORLD *create_world();
 void destroy_world(WORLD *world);
 
+/**
+ * Add a room to the world.
+ * Rooms will always be in order based on their number.
+ * It will be added to the end of the list of rooms.
+ * If there are too many cached rooms, delete some of the old ones.
+ */
 void add_room(WORLD *world, struct ROOM *room);
-void clear_rooms(WORLD *world);
-struct ROOM *current_room(WORLD *world);
-int find_highest_room_number(WORLD *world);
+
+/**
+ * The room that the player is currently in.
+ */
+struct ROOM *get_current_room(WORLD *world);
+
+
+/**
+ * Create a new set of cached rooms.
+ * If the number of rooms in the world exceeds the
+ * max number of cached rooms, then some rooms will
+ * be removed.
+ */
+void cache_rooms(WORLD *world);
 
 void update_world(WORLD *world);
 void paint_world(WORLD *world, BITMAP *canvas);

@@ -50,6 +50,7 @@ typedef enum
   TILE_TYPE_EMPTY = 0,
   TILE_TYPE_HOLE,
   TILE_TYPE_WALL,
+  TILE_TYPE_PATH,
   
   /**
    * An edge appears between a hole and an empty tile.
