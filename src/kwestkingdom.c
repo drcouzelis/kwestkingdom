@@ -46,7 +46,7 @@ FLAG init_kwestkingdom()
   install_keyboard();
   init_input();
   
-  if (!init_resources()) { /* Load images */
+  if (!init_resources()) { /* Load images and sounds */
     return OFF;
   }
 
@@ -60,8 +60,8 @@ FLAG init_kwestkingdom()
     return OFF;
   }
 
-  set_colors(get_color_palette());
-  set_canvas_size(CANVAS_WIDTH, CANVAS_HEIGHT);
+  change_colors(grab_color_palette());
+  change_canvas_size(CANVAS_WIDTH, CANVAS_HEIGHT);
 
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggle_sound(); /* Turn off sound */
@@ -117,7 +117,9 @@ int main(int argc, char *argv[])
     }
   }
 
-  init_kwestkingdom();
+  if (!init_kwestkingdom()) {
+    return 1;
+  }
 
   game = create_game();
 
@@ -159,13 +161,13 @@ int main(int argc, char *argv[])
     /**
      * DRAW
      */
-    paint_game(game, get_canvas());
+    paint_game(game, grab_canvas());
 
     /**
      * Show FPS
      */
     textprintf_ex(
-      get_canvas(),
+      grab_canvas(),
       font,
       10,
       10,
@@ -178,13 +180,13 @@ int main(int argc, char *argv[])
     /**
      * Show the method of screen updating.
      */
-    get_screen_update_method(method);
+    find_screen_update_method(method);
 
     textprintf_ex(
-      get_canvas(),
+      grab_canvas(),
       font,
       grab_tile_size() / 5, /* x */
-      canvas_height() - (grab_tile_size() / 2), /* y */
+      grab_canvas_height() - (grab_tile_size() / 2), /* y */
       WHITE,
       -1,
       method

@@ -11,7 +11,7 @@
 
 
 /**
- * Private functions
+ * Private
  */
 
 
@@ -20,9 +20,9 @@
 /**
  * This function can be used to see if the game has been won.
  */
-FLAG completed_final_room(WORLD *world)
+FLAG is_in_final_room(WORLD *world)
 {
-  if (get_current_room(world)->num == 40) {
+  if (grab_room(world)->num == 40) {
     return ON;
   }
   
@@ -209,7 +209,7 @@ ROOM *create_story_world_room(WORLD *world, int num)
     
     add_door(room, door);
     
-    set_room_theme(room, ROOM_THEME_FOREST);
+    change_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, entr_row, entr_col, exit_row, exit_col);
     generate_terrain(room, &terrain);
   }
@@ -265,7 +265,7 @@ ROOM *create_story_world_room(WORLD *world, int num)
     
     add_door(room, door);
     
-    set_room_theme(room, ROOM_THEME_FOREST);
+    change_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, entr_row, entr_col, exit_row, exit_col);
     
     /**
@@ -299,7 +299,7 @@ ROOM *create_endless_world_room(WORLD *world, int num)
 
 
 /**
- * Public functions
+ * Public
  */
 
 
@@ -314,7 +314,7 @@ WORLD *create_story_world()
   world->num_cached_rooms = 10;
   world->max_cached_rooms = 10;
   world->create_room = create_story_world_room;
-  world->is_game_won = completed_final_room;
+  world->is_end_of_world = is_in_final_room;
   
   cache_rooms(world);
   
@@ -333,7 +333,7 @@ WORLD *create_endless_world()
   world->num_cached_rooms = 10;
   world->max_cached_rooms = 10;
   world->create_room = create_endless_world_room;
-  world->is_game_won = NULL;
+  world->is_end_of_world = NULL;
   
   cache_rooms(world);
   

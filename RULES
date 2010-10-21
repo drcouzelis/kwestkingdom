@@ -1,6 +1,6 @@
 <ret> create()      /* Allocate memory and set initial values, returns something */
       destroy(...)  /* Free memory */
-<ret> generate(...) /* Create a special version of something, returns something */
+      generate(...) /* Create a special version of something */
 
       paint(...)  /* Draw to a bitmap */
       update(...) /* Update something */
@@ -13,3 +13,19 @@
 
 <ret> init(...) /* Initialize a system */
       stop(...) /* Stop a system */
+
+enum is array index
+. no type
+. MAX_* exists
+
+enum is a data type
+. typed
+. MAX_* does not exist
+
+anim = animation
+idx = index
+max = maximum
+num = number
+
+hot = currently used
+paint = draw

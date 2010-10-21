@@ -9,11 +9,11 @@
 #define MESSAGE_LEN 256
 
 
-typedef struct HELP HELP;
+typedef struct MESSENGER MESSENGER;
 struct ANIM;
 
 
-struct HELP
+struct MESSENGER
 {
   char message[MESSAGE_LEN];
 

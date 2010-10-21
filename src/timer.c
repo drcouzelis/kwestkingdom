@@ -2,8 +2,25 @@
 #include "timer.h"
 
 
+
+/**
+ * Private
+ */
+
+
+
+
+static int fps = 0;
+static int frames_done = 0;
+static int prev_time = 0;
+
+
+
+
 static volatile int timer = 0;
 static volatile int fps_timer = 0;
+
+
 
 
 /**
@@ -15,14 +32,52 @@ void increase_timer()
 } END_OF_FUNCTION(increase_timer)
 
 
+
+
 /**
  * To display the current frames per second
  */
-void increase_fps_ticker()
+void increase_fps_timer()
 {
   fps_timer++;
 }
-END_OF_FUNCTION(increase_fps_ticker)
+END_OF_FUNCTION(increase_fps_timer)
+
+
+
+
+/**
+ * Public
+ */
+
+
+
+
+void init_timer()
+{
+  install_timer();
+  
+  LOCK_VARIABLE(timer);
+  LOCK_FUNCTION(increase_timer);
+  install_int_ex(increase_timer, BPS_TO_TIMER(GAME_TICKER));
+  
+  LOCK_VARIABLE(fps_timer);
+  LOCK_FUNCTION(increase_fps_timer);
+  install_int_ex(increase_fps_timer, BPS_TO_TIMER(10));
+  
+  reset_timer();
+}
+
+
+
+
+void reset_timer()
+{
+  timer = 0;
+  fps_timer = 0;
+}
+
+
 
 
 int get_ticks()
@@ -31,15 +86,14 @@ int get_ticks()
 }
 
 
+
+
 void decrease_timer()
 {
   timer--;
 }
 
 
-static int fps = 0;
-static int frames_done = 0;
-static int prev_time = 0;
 
 
 int get_fps()
@@ -60,30 +114,9 @@ int get_fps()
 }
 
 
+
+
 void mark_frame_complete()
 {
   frames_done++;
-}
-
-
-void init_timer()
-{
-  install_timer();
-  
-  LOCK_VARIABLE(timer);
-  LOCK_FUNCTION(increase_timer);
-  install_int_ex(increase_timer, BPS_TO_TIMER(GAME_TICKER));
-  
-  LOCK_VARIABLE(fps_timer);
-  LOCK_FUNCTION(increase_fps_ticker);
-  install_int_ex(increase_fps_ticker, BPS_TO_TIMER(10));
-  
-  reset_timer();
-}
-
-
-void reset_timer()
-{
-  timer = 0;
-  fps_timer = 0;
 }

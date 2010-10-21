@@ -56,7 +56,7 @@ struct WORLD
    * Different types of worlds have different
    * win conditions.
    */
-  FLAG (*is_game_won)(WORLD *world);
+  FLAG (*is_end_of_world)(WORLD *world);
 };
 
 
@@ -74,7 +74,7 @@ void add_room(WORLD *world, struct ROOM *room);
 /**
  * The room that the player is currently in.
  */
-struct ROOM *get_current_room(WORLD *world);
+struct ROOM *grab_room(WORLD *world);
 
 
 /**

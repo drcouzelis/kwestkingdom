@@ -94,6 +94,7 @@ enum
   IMG_NINJA_2,
   IMG_NINJA_3,
   IMG_NINJA_1,
+  
   NUM_IMAGES
 };
 
@@ -108,6 +109,7 @@ enum
   SND_SWORD,
   SND_HAMMER,
   SND_CHOMP,
+  
   NUM_SOUNDS
 };
 
@@ -122,6 +124,7 @@ enum
   ROTATE_H_FLIP,
   ROTATE_V_FLIP,
   ROTATE_H_V_FLIP,
+  
   NUM_IMAGE_FORMATS
 };
 
@@ -134,14 +137,14 @@ enum
 FLAG init_resources();
 void stop_resources();
 
-BITMAP *get_image(int image, int format);
-SAMPLE *get_sound(int sound);
+BITMAP *grab_image(int image, int format);
+SAMPLE *grab_sound(int sound);
 
 /**
  * It only makes sense to do this after you have
  * initialized the resources.
  */
-PALETTE *get_color_palette();
+PALETTE *grab_color_palette();
 
 
 #endif

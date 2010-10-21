@@ -8,241 +8,9 @@
 
 
 
-DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col)
-{
-  DOOR *door;
-
-  door = alloc_memory(sizeof(DOOR));
-
-  door->row = row;
-  door->col = col;
-  door->new_room_num = new_room_num;
-  door->new_row = new_row;
-  door->new_col = new_col;
-  door->transition = JUMP;
-
-  return door;
-}
-
-
-
-
-void destroy_door(DOOR *door)
-{
-  if (door == NULL) {
-    return;
-  }
-  
-  free_memory(door);
-}
-
-
-
-
-ROOM *create_room()
-{
-  ROOM *room;
-  int i;
-  int j;
-
-  room = alloc_memory(sizeof(ROOM));
-
-  for (i = 0; i < MAX_ENEMIES; i++) {
-    room->enemies[i] = NULL;
-  }
-
-  room->num_enemies = 0;
-
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      room->path[i][j] = OFF;
-      room->terrain[i][j] = NULL;
-      room->help[i][j] = NULL;
-    }
-  }
-
-  for (i = 0; i < MAX_TILE_TYPES; i++) {
-    room->terrain_anims[i] = NULL;
-  }
-  
-  for (i = 0; i < MAX_DOORS; i++) {
-    room->doors[i] = NULL;
-  }
-  
-  room->num = -1;
-
-  return room;
-}
-
-
-
-
-void destroy_room(ROOM *room)
-{
-  int i;
-  int j;
-
-  if (room == NULL) {
-    return;
-  }
-
-  for (i = 0; i < room->num_enemies; i++) {
-    /*destroy_enemy(room->enemies[i]);*/ /* TEMP */
-  }
-
-  for (i = 0; i < ROWS; i++) {
-    for (j = 0; j < COLS; j++) {
-      destroy_tile(room->terrain[i][j]);
-      /*destroy_help(room->help[i][j]);*/ /* TEMP */
-    }
-  }
-
-  for (i = 0; i < MAX_TILE_TYPES; i++) {
-    destroy_anim(room->terrain_anims[i]);
-  }
-
-  for (i = 0; i < MAX_DOORS; i++) {
-    destroy_door(room->doors[i]);
-  }
-
-  free_memory(room);
-}
-
-
-
-
-void add_door(ROOM *room, DOOR *door)
-{
-  FLAG done;
-  int i;
-  
-  done = OFF;
-  
-  for (i = 0; !done && i < MAX_DOORS; i++) {
-    if (room->doors[i] == NULL) {
-      room->doors[i] = door;
-      done = ON;
-    }
-  }
-}
-
-
-
-
-FLAG is_walkable(ROOM *room, int row, int col)
-{
-  if (room == NULL) {
-    return OFF;
-  }
-  
-  if (row < 0 || row >= ROWS) {
-    return ON;
-  }
-  
-  if (col < 0 || col >= COLS) {
-    return ON;
-  }
-  
-  if (room->terrain[row][col]->obstacle == OBSTACLE_TYPE_WALKABLE) {
-    return ON;
-  }
-  
-  return OFF;
-}
-
-
-
-
-void update_room(ROOM *room)
-{
-  int i;
-
-  for (i = 0; i < MAX_TILE_TYPES; i++) {
-    animate(room->terrain_anims[i]);
-  }
-}
-
-
-
-
-void paint_room_terrain(ROOM *room, BITMAP *canvas);
-
-
-
-
-void paint_room(ROOM *room, BITMAP *canvas)
-{
-  /*
-  int row;
-  int col;
-  int x;
-  int y;
-  int type;
-  */
-
-  if (room == NULL || canvas == NULL) {
-    return;
-  }
-
-  /**
-   * Paint the terrain
-   */
-  paint_room_terrain(room, canvas);
-  /*
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-      type = room->terrain[row][col]->type;
-      x = col * grab_tile_size();
-      y = row * grab_tile_size();
-      paint_anim(room->terrain_anims[type], canvas, x, y);
-    }
-  }
-  */
-
-  /*
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-      room->door[row][col];
-    }
-  }
-  */
-
-  /*
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-      room->hel[row][col];
-    }
-  }
-  */
-
-}
-
-
-
-
-TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle)
-{
-  TILE *tile;
-
-  tile = alloc_memory(sizeof(TILE));
-
-  tile->type = type;
-  tile->obstacle = obstacle;
-
-  return tile;
-}
-
-
-
-
-void destroy_tile(TILE *tile)
-{
-  if (tile == NULL) {
-    return;
-  }
-  
-  free_memory(tile);
-}
+/**
+ * Private
+ */
 
 
 
@@ -447,4 +215,241 @@ void paint_room_terrain(ROOM *room, BITMAP *canvas)
       }
     }
   }
+}
+
+
+
+
+/**
+ * Public
+ */
+
+
+
+
+ROOM *create_room()
+{
+  ROOM *room;
+  int i;
+  int j;
+
+  room = alloc_memory(sizeof(ROOM));
+
+  for (i = 0; i < MAX_ENEMIES; i++) {
+    room->enemies[i] = NULL;
+  }
+
+  room->num_enemies = 0;
+
+  for (i = 0; i < ROWS; i++) {
+    for (j = 0; j < COLS; j++) {
+      room->path[i][j] = OFF;
+      room->terrain[i][j] = NULL;
+      room->messengers[i][j] = NULL;
+    }
+  }
+
+  for (i = 0; i < MAX_TILE_TYPES; i++) {
+    room->terrain_anims[i] = NULL;
+  }
+  
+  for (i = 0; i < MAX_DOORS; i++) {
+    room->doors[i] = NULL;
+  }
+  
+  room->num = -1;
+
+  return room;
+}
+
+
+
+
+void destroy_room(ROOM *room)
+{
+  int i;
+  int j;
+
+  if (room == NULL) {
+    return;
+  }
+
+  for (i = 0; i < room->num_enemies; i++) {
+    /*destroy_enemy(room->enemies[i]);*/ /* TEMP */
+  }
+
+  for (i = 0; i < ROWS; i++) {
+    for (j = 0; j < COLS; j++) {
+      destroy_tile(room->terrain[i][j]);
+      /*destroy_help(room->help[i][j]);*/ /* TEMP */
+    }
+  }
+
+  for (i = 0; i < MAX_TILE_TYPES; i++) {
+    destroy_anim(room->terrain_anims[i]);
+  }
+
+  for (i = 0; i < MAX_DOORS; i++) {
+    destroy_door(room->doors[i]);
+  }
+
+  free_memory(room);
+}
+
+
+
+
+void add_door(ROOM *room, DOOR *door)
+{
+  FLAG done;
+  int i;
+  
+  done = OFF;
+  
+  for (i = 0; !done && i < MAX_DOORS; i++) {
+    if (room->doors[i] == NULL) {
+      room->doors[i] = door;
+      done = ON;
+    }
+  }
+}
+
+
+
+
+void update_room(ROOM *room)
+{
+  int i;
+
+  for (i = 0; i < MAX_TILE_TYPES; i++) {
+    animate(room->terrain_anims[i]);
+  }
+}
+
+
+
+
+void paint_room(ROOM *room, BITMAP *canvas)
+{
+  /*
+  int row;
+  int col;
+  int x;
+  int y;
+  int type;
+  */
+
+  if (room == NULL || canvas == NULL) {
+    return;
+  }
+
+  /**
+   * Paint the terrain
+   */
+  paint_room_terrain(room, canvas);
+  /*
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      type = room->terrain[row][col]->type;
+      x = col * grab_tile_size();
+      y = row * grab_tile_size();
+      paint_anim(room->terrain_anims[type], canvas, x, y);
+    }
+  }
+  */
+
+  /*
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      room->door[row][col];
+    }
+  }
+  */
+
+  /*
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      room->hel[row][col];
+    }
+  }
+  */
+
+}
+
+
+
+
+FLAG is_walkable(ROOM *room, int row, int col)
+{
+  if (row < 0 || row >= ROWS) {
+    return ON;
+  }
+  
+  if (col < 0 || col >= COLS) {
+    return ON;
+  }
+  
+  if (room->terrain[row][col]->obstacle == OBSTACLE_TYPE_WALKABLE) {
+    return ON;
+  }
+  
+  return OFF;
+}
+
+
+
+
+TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle)
+{
+  TILE *tile;
+
+  tile = alloc_memory(sizeof(TILE));
+
+  tile->type = type;
+  tile->obstacle = obstacle;
+
+  return tile;
+}
+
+
+
+
+void destroy_tile(TILE *tile)
+{
+  if (tile == NULL) {
+    return;
+  }
+  
+  free_memory(tile);
+}
+
+
+
+
+DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col)
+{
+  DOOR *door;
+
+  door = alloc_memory(sizeof(DOOR));
+
+  door->row = row;
+  door->col = col;
+  door->new_room_num = new_room_num;
+  door->new_row = new_row;
+  door->new_col = new_col;
+  door->transition = TRANS_JUMP;
+
+  return door;
+}
+
+
+
+
+void destroy_door(DOOR *door)
+{
+  if (door == NULL) {
+    return;
+  }
+  
+  free_memory(door);
 }

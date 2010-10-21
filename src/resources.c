@@ -6,6 +6,13 @@
 
 
 /**
+ * Private
+ */
+
+
+
+
+/**
  * A list of all the images used in the game.
  * This speeds up the game by only loading each image once.
  * The "formats" are the different ways an image can be
@@ -22,7 +29,61 @@ static FLAG resources_initialized = OFF;
 
 
 
-void load_formatted_image(int image, int format);
+void load_formatted_image(int image, int format)
+{
+  BITMAP *orig = images[image][NORMAL];
+  BITMAP *temp;
+  
+  images[image][format] = create_bitmap(orig->w, orig->h);
+  clear_to_color(images[image][format], MAGICPINK);
+  
+  /**
+   * For some silly reason, Allegro won't rotate a sprite properly
+   * unless I blit it to a temporary bitmap first.
+   */
+  temp = create_bitmap(orig->w, orig->h);
+  blit(orig, temp, 0, 0, 0, 0, temp->w, temp->h);
+  
+  switch (format) {
+  
+  case H_FLIP:
+    draw_sprite_h_flip(images[image][format], temp, 0, 0);
+    break;
+    
+  case V_FLIP:
+    draw_sprite_v_flip(images[image][format], temp, 0, 0);
+    break;
+    
+  case H_V_FLIP:
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(128));
+    break;
+    
+  case ROTATE:
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(64));
+    break;
+    
+  case ROTATE_H_FLIP:
+    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(192));
+    break;
+    
+  case ROTATE_V_FLIP:
+    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(64));
+    break;
+    
+  case ROTATE_H_V_FLIP:
+    rotate_sprite(images[image][format], temp, 0, 0, itofix(192));
+    break;
+  }
+  
+  destroy_bitmap(temp);
+}
+
+
+
+
+/**
+ * Public
+ */
 
 
 
@@ -196,16 +257,8 @@ void stop_resources()
 
 
 
-BITMAP *get_image(int image, int format)
+BITMAP *grab_image(int image, int format)
 {
-  if (image < 0 || image >= NUM_IMAGES) {
-    return NULL;
-  }
-  
-  if (format < 0 || format >= NUM_IMAGE_FORMATS) {
-    return NULL;
-  }
-  
   if (images[image][format] == NULL) {
     load_formatted_image(image, format);
   }
@@ -216,15 +269,7 @@ BITMAP *get_image(int image, int format)
 
 
 
-PALETTE *get_color_palette()
-{
-  return &palette;
-}
-
-
-
-
-SAMPLE *get_sound(int sound)
+SAMPLE *grab_sound(int sound)
 {
   return sounds[sound];
 }
@@ -232,66 +277,7 @@ SAMPLE *get_sound(int sound)
 
 
 
-/**
- * Internal functions
- */
-
-
-
-
-void load_formatted_image(int image, int format)
+PALETTE *grab_color_palette()
 {
-  BITMAP *orig = images[image][NORMAL];
-  BITMAP *temp;
-  
-  if (orig == NULL) {
-    return;
-  }
-  
-  if (format == NORMAL || format < 0 || format >= NUM_IMAGE_FORMATS) {
-    return;
-  }
-  
-  images[image][format] = create_bitmap(orig->w, orig->h);
-  clear_to_color(images[image][format], MAGICPINK);
-  
-  /**
-   * For some silly reason, Allegro won't rotate a sprite properly
-   * unless I blit it to a temporary bitmap first.
-   */
-  temp = create_bitmap(orig->w, orig->h);
-  blit(orig, temp, 0, 0, 0, 0, temp->w, temp->h);
-  
-  switch (format) {
-  
-  case H_FLIP:
-    draw_sprite_h_flip(images[image][format], temp, 0, 0);
-    break;
-    
-  case V_FLIP:
-    draw_sprite_v_flip(images[image][format], temp, 0, 0);
-    break;
-    
-  case H_V_FLIP:
-    rotate_sprite(images[image][format], temp, 0, 0, itofix(128));
-    break;
-    
-  case ROTATE:
-    rotate_sprite(images[image][format], temp, 0, 0, itofix(64));
-    break;
-    
-  case ROTATE_H_FLIP:
-    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(192));
-    break;
-    
-  case ROTATE_V_FLIP:
-    rotate_sprite_v_flip(images[image][format], temp, 0, 0, itofix(64));
-    break;
-    
-  case ROTATE_H_V_FLIP:
-    rotate_sprite(images[image][format], temp, 0, 0, itofix(192));
-    break;
-  }
-  
-  destroy_bitmap(temp);
+  return &palette;
 }

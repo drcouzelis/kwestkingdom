@@ -76,7 +76,5 @@ void destroy_player(PLAYER *player);
 
 void update_player(PLAYER *player, struct WORLD *world);
 
-void change_player_state(PLAYER *player, PLAYER_STATE state);
-
 
 #endif

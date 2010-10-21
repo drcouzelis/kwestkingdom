@@ -9,7 +9,7 @@
 #define COLS 16
 #define ROWS 12
 
-#define MAX_ENEMIES 100
+#define MAX_ENEMIES (COLS * ROWS)
 #define MAX_DOORS 4
 
 
@@ -26,23 +26,12 @@ union ENEMY;
 
 typedef enum
 {
-  SCROLL_N = 0,
-  SCROLL_S,
-  SCROLL_E,
-  SCROLL_W,
-  JUMP
+  TRANS_SCROLL_N = 0,
+  THRANS_SCROLL_S,
+  TRANS_SCROLL_E,
+  TRANS_SCROLL_W,
+  TRANS_JUMP
 } TRANSITION;
-
-
-struct DOOR
-{
-  int row;
-  int col;
-  int new_room_num;
-  int new_row;
-  int new_col;
-  TRANSITION transition;
-};
 
 
 typedef enum
@@ -74,6 +63,21 @@ typedef enum
   
   MAX_TILE_TYPES
 } TILE_TYPE;
+
+
+/**
+ * The different types of terrain
+ */
+typedef enum
+{
+  OBSTACLE_TYPE_NONE = 0,
+  OBSTACLE_TYPE_WALKABLE,
+  OBSTACLE_TYPE_JUMPABLE,
+  OBSTACLE_TYPE_FLYABLE,
+  OBSTACLE_TYPE_SOARABLE,
+  
+  MAX_OBSTACLE_TYPES
+} OBSTACLE_TYPE;
 
 
 struct ROOM
@@ -110,27 +114,13 @@ struct ROOM
   /**
    * A map of the help tiles in the room.
    */
-  struct HELP *help[ROWS][COLS];
+  struct MESSENGER *messengers[ROWS][COLS];
   
   /**
    * A list of doors in the room.
    */
   struct DOOR *doors[MAX_DOORS];
 };
-
-
-/**
- * The different types of terrain
- */
-typedef enum
-{
-  OBSTACLE_TYPE_NONE = 0,
-  OBSTACLE_TYPE_WALKABLE,
-  OBSTACLE_TYPE_JUMPABLE,
-  OBSTACLE_TYPE_FLYABLE,
-  OBSTACLE_TYPE_SOARABLE,
-  MAX_OBSTACLE_TYPES
-} OBSTACLE_TYPE;
 
 
 struct TILE
@@ -149,11 +139,16 @@ struct TILE
 };
 
 
-/**
- * Create and destroy doors
- */
-DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col);
-void destroy_door(DOOR *door);
+struct DOOR
+{
+  int row;
+  int col;
+  int new_room_num;
+  int new_row;
+  int new_col;
+  TRANSITION transition;
+};
+
 
 /**
  * Room controls
@@ -166,13 +161,23 @@ void add_door(ROOM *room, DOOR *door);
 void update_room(ROOM *room);
 void paint_room(ROOM *room, BITMAP *canvas);
 
-FLAG is_walkable(ROOM *room, int x, int y);
+/**
+ * Returns true if a sprite can walk on the given location.
+ * This function considers only terrain.
+ */
+FLAG is_walkable(ROOM *room, int row, int col);
 
 /**
  * Create and destroy tiles
  */
 TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle);
 void destroy_tile(TILE *tile);
+
+/**
+ * Create and destroy doors
+ */
+DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col);
+void destroy_door(DOOR *door);
 
 
 #endif

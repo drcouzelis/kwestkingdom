@@ -57,8 +57,8 @@ void paint_game_menu(GAME *game, BITMAP *canvas)
   int x_text_pos;
   int y_text_pos;
 
-  x = (canvas_width() / 2) - (grab_tile_size() * 4);
-  y = (canvas_height() / 2) - (grab_tile_size() / 2);
+  x = (grab_canvas_width() / 2) - (grab_tile_size() * 4);
+  y = (grab_canvas_height() / 2) - (grab_tile_size() / 2);
   lineSpacing = grab_tile_size() / 2;
   hTextOffset = grab_tile_size();
   vTextOffset = lineSpacing;
@@ -83,8 +83,8 @@ void paint_game_menu(GAME *game, BITMAP *canvas)
   paint_anim(
     game->title_anim,
     canvas,
-    (canvas_width() / 2) - (grab_anim_width(game->title_anim) / 2),
-    (canvas_width() - grab_anim_width(game->title_anim)) / 2
+    (grab_canvas_width() / 2) - (grab_anim_width(game->title_anim) / 2),
+    (grab_canvas_width() - grab_anim_width(game->title_anim)) / 2
   );
 
   x_text_pos = x + hTextOffset;
@@ -152,7 +152,7 @@ void change_game_state(GAME *game, int state)
 
   case GAME_MENU_STATE:
     room = create_room();
-    set_room_theme(room, ROOM_THEME_FOREST);
+    change_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, ROWS - 1, COLS / 2, 0, (COLS / 2) - 1);
     add_to_path(room, ROWS - 2, 1);
     generate_terrain(room, &terrain);
@@ -268,16 +268,16 @@ GAME *create_game()
    */
   /*
   game->title_anim = create_anim(0, OFF);
-  add_frame(game->title_anim, get_image(IMG_TITLE, NORMAL));
+  add_frame(game->title_anim, grab_image(IMG_TITLE, NORMAL));
 
   game->gameover_anim = create_anim(0, OFF);
-  add_frame(game->gameover_anim, get_image(IMG_GAMEOVER, NORMAL));
+  add_frame(game->gameover_anim, grab_image(IMG_GAMEOVER, NORMAL));
 
   game->pointer_anim = create_anim(6, ON);
-  add_frame(game->pointer_anim, get_image(IMG_SWORD_HOLD_1, ROTATE));
-  add_frame(game->pointer_anim, get_image(IMG_SWORD_HOLD_2, ROTATE));
-  add_frame(game->pointer_anim, get_image(IMG_SWORD_HOLD_3, ROTATE));
-  add_frame(game->pointer_anim, get_image(IMG_SWORD_HOLD_4, ROTATE));
+  add_frame(game->pointer_anim, grab_image(IMG_SWORD_HOLD_1, ROTATE));
+  add_frame(game->pointer_anim, grab_image(IMG_SWORD_HOLD_2, ROTATE));
+  add_frame(game->pointer_anim, grab_image(IMG_SWORD_HOLD_3, ROTATE));
+  add_frame(game->pointer_anim, grab_image(IMG_SWORD_HOLD_4, ROTATE));
 
   game->title_background = create_bitmap(canvas_width(), canvas_height());
 
@@ -326,11 +326,11 @@ FLAG is_game_over(GAME *game)
 
 FLAG is_game_won(GAME *game)
 {
-  if (game->world->is_game_won == NULL) {
+  if (game->world->is_end_of_world == NULL) {
     return OFF;
   }
   
-  return game->world->is_game_won(game->world);
+  return game->world->is_end_of_world(game->world);
 }
 
 

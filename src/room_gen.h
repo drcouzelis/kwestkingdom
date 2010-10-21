@@ -16,27 +16,6 @@ typedef enum
 } ROOM_THEME;
 
 
-/**
- * Set the appearance of a room.
- */
-void set_room_theme(struct ROOM *room, ROOM_THEME theme);
-
-
-/**
- * Create a path between two points.
- * A path guarantees that a character will be able
- * to move between the two points.
- */
-void create_path(struct ROOM *room, int start_row, int start_col, int end_row, int end_col);
-
-/**
- * Create a path between the existing path and another point.
- * This guarantees that a character will be able to move
- * to the point.
- * If there's no existing path, then only the point will be added.
- */
-void add_to_path(struct ROOM *room, int row, int col);
-
 typedef enum
 {
   WALL_PRIORITY = 0,
@@ -75,6 +54,31 @@ typedef struct
   TERRAIN_PRIORITY priority;
 
 } TERRAIN_OPTIONS;
+
+
+/**
+ * Change the appearance of a room.
+ */
+void change_room_theme(struct ROOM *room, ROOM_THEME theme);
+
+
+/**
+ * Create a path between two points.
+ * A path guarantees that a character will be able
+ * to move between the two points.
+ * A room can only have one path.
+ * If you try to add a new path, it will erase the old one.
+ * See "add_to_path".
+ */
+void create_path(struct ROOM *room, int start_row, int start_col, int end_row, int end_col);
+
+/**
+ * Create a path between the existing path and another point.
+ * This guarantees that a character will be able to move
+ * to the point.
+ * If there's no existing path, then only the point will be added.
+ */
+void add_to_path(struct ROOM *room, int row, int col);
 
 
 /**

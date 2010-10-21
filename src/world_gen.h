@@ -7,7 +7,6 @@ struct ROOM;
 
 
 struct WORLD *create_story_world();
-
 struct WORLD *create_endless_world();
 
 

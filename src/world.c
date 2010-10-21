@@ -11,7 +11,7 @@
 
 
 /**
- * Private functions
+ * Private
  */
 
 
@@ -52,16 +52,6 @@ void sort_rooms(WORLD *world)
     
     world->rooms[j + 1] = room;
   }
-  
-  printf("Finished sorting rooms: \n");
-  for (i = 0; i < MAX_ROOMS; i++) {
-    if (world->rooms[i] != NULL) {
-      printf("%d ", world->rooms[i]->num);
-    } else {
-      printf(".");
-    }
-  }
-  printf("\n");
 }
 
 
@@ -169,7 +159,7 @@ DOOR *find_door(ROOM *room, int row, int col)
 
 
 
-void set_current_room(WORLD *world, int new_room_num)
+void change_room(WORLD *world, int new_room_num)
 {
   int i;
   
@@ -193,9 +183,12 @@ void set_current_room(WORLD *world, int new_room_num)
 
 
 
-void change_room(WORLD *world, DOOR *door)
+/**
+ * Used when walking through a door.
+ */
+void use_door(WORLD *world, DOOR *door)
 {
-  set_current_room(world, door->new_room_num);
+  change_room(world, door->new_room_num);
   warp_sprite(world->player->character->sprite, door->new_row, door->new_col);
 }
 
@@ -203,7 +196,7 @@ void change_room(WORLD *world, DOOR *door)
 
 
 /**
- * Public functions
+ * Public
  */
 
 
@@ -232,7 +225,7 @@ WORLD *create_world()
    * Initialize function pointers
    */
   world->create_room = NULL;
-  world->is_game_won = NULL;
+  world->is_end_of_world = NULL;
 
   return world;
 }
@@ -267,8 +260,6 @@ void add_room(WORLD *world, ROOM *room)
 {
   int num_rooms;
   
-  printf("Adding a new room \n");
-  
   num_rooms = count_num_rooms(world);
   
   if (num_rooms < MAX_ROOMS) {
@@ -286,6 +277,14 @@ void add_room(WORLD *world, ROOM *room)
 
 
 
+struct ROOM *grab_room(WORLD *world)
+{
+  return world->rooms[world->room_idx];
+}
+
+
+
+
 void cache_rooms(WORLD *world)
 {
   ROOM *room;
@@ -295,14 +294,6 @@ void cache_rooms(WORLD *world)
     room = world->create_room(world, find_highest_room_number(world) + 1);
     add_room(world, room);
   }
-}
-
-
-
-
-struct ROOM *get_current_room(WORLD *world)
-{
-  return world->rooms[world->room_idx];
 }
 
 
@@ -330,11 +321,10 @@ void update_world(WORLD *world)
   
   if (!is_moving(sprite)) {
     
-    door = find_door(get_current_room(world), sprite->row, sprite->col);
+    door = find_door(grab_room(world), sprite->row, sprite->col);
     
     if (door != NULL) {
-      printf("Standing on door %d %d, to %d at %d %d \n", door->row, door->col, door->new_room_num, door->new_row, door->new_col);
-      change_room(world, door);
+      use_door(world, door);
     }
   }
 }
@@ -352,7 +342,7 @@ void paint_world(WORLD *world, BITMAP *canvas)
   /**
    * Show the current room number
    */
-  sprintf(room_num_text, "Room %d", get_current_room(world)->num);
+  sprintf(room_num_text, "Room %d", grab_room(world)->num);
   
   textprintf_ex(
     canvas,

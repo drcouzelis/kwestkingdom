@@ -54,12 +54,12 @@ void destroy_sprite(SPRITE *sprite)
 
 
 
-void add_animation(SPRITE *sprite, ANIM *anim, int index)
+void add_anim(SPRITE *sprite, ANIM *anim, int index)
 {
   int i;
   
   /**
-   * Find the next available empty space.
+   * If the index is -1, find the next available empty space.
    */
   for (i = 0; index < 0 && i < MAX_ANIMS; i++) {
     if (sprite->anims[i] != NULL) {
@@ -92,12 +92,8 @@ void add_animation(SPRITE *sprite, ANIM *anim, int index)
 
 
 
-void change_animation(SPRITE *sprite, int index)
+void change_anim(SPRITE *sprite, int index)
 {
-  if (sprite == NULL) {
-    return;
-  }
-  
   if (index < 0 || index >= MAX_ANIMS) {
     return;
   }
@@ -108,7 +104,7 @@ void change_animation(SPRITE *sprite, int index)
 
 
 
-ANIM *retrieve_animation(SPRITE *sprite, int index)
+ANIM *grab_anim(SPRITE *sprite, int index)
 {
   if (index < 0 || index >= MAX_ANIMS) {
     return sprite->anims[sprite->anim_idx];

@@ -13,6 +13,13 @@
 
 
 /**
+ * Private
+ */
+
+
+
+
+/**
  * The different animations
  */
 enum
@@ -21,121 +28,108 @@ enum
   PLAYER_ANIM_BEGIN_ATTACK,
   PLAYER_ANIM_END_ATTACK,
   PLAYER_ANIM_HURT,
-  PLAYER_ANIM_DEAD
+  PLAYER_ANIM_DEAD,
+  
+  MAX_PLAYER_ANIMS
 };
 
 
 
 
-PLAYER *create_player()
+void change_player_state(PLAYER *player, PLAYER_STATE state)
 {
-  PLAYER *player;
-  SPRITE *sprite;
-  ANIM *anim;
+  SPRITE *sprite = player->character->sprite;
   
-  player = alloc_memory(sizeof(PLAYER));
+  player->state = state;
   
-  /*
-  speed = getWalkSpeed(); // In FPS
-  team = HERO_TEAM;
+  switch (state) {
   
-  shield = [[Shield alloc] init];
-  sword = [[Sword alloc] init];
-  bow = [[Bow alloc] init];
-  
-  [shield setSpeed: speed];
-  [sword setSpeed: speed];
-  [bow setSpeed: speed];
-  */
-  
-  sprite = create_sprite();
-  
-  /* Walking animation */
-  anim = create_anim(6, ON);
-  add_frame(anim, get_image(IMG_HERO_STAND_1, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_STAND_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_STAND_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_STAND_2, NORMAL));
-  add_animation(sprite, anim, PLAYER_ANIM_WALKING);
-  
-  /* Begin attack animation */
-  anim = create_anim(12, OFF);
-  add_frame(anim, get_image(IMG_HERO_ATTACK_1, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_ATTACK_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_ATTACK_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_ATTACK_4, NORMAL));
-  add_animation(sprite, anim, PLAYER_ANIM_BEGIN_ATTACK);
-  
-  /* End attack animation */
-  anim = create_anim(12, OFF);
-  add_frame(anim, get_image(IMG_HERO_ATTACK_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_ATTACK_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_ATTACK_1, NORMAL));
-  add_animation(sprite, anim, PLAYER_ANIM_END_ATTACK);
-  
-  /* Hurt animation */
-  anim = create_anim(12, OFF);
-  add_frame(anim, get_image(IMG_HERO_HURT_1, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_4, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_HURT_1, NORMAL));
-  add_animation(sprite, anim, PLAYER_ANIM_HURT);
-  
-  /* Dead animation */
-  anim = create_anim(6, OFF);
-  add_frame(anim, get_image(IMG_HERO_DIE_1, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_DIE_2, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_DIE_3, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_DIE_4, NORMAL));
-  add_frame(anim, get_image(IMG_HERO_DIE_5, NORMAL));
-  add_animation(sprite, anim, PLAYER_ANIM_DEAD);
-  
-  /* Setup character */
-  player->character = create_character(sprite, 3);
-  
-  player->character->max_health = 3;
-  player->character->health = 3;
-  
-  /* Setup keys */
-  player->keys[PLAYER_KEY_UP] = KEY_UP;
-  player->keys[PLAYER_KEY_DOWN] = KEY_DOWN;
-  player->keys[PLAYER_KEY_LEFT] = KEY_LEFT;
-  player->keys[PLAYER_KEY_RIGHT] = KEY_RIGHT;
-  player->keys[PLAYER_KEY_WAIT] = KEY_SPACE;
-  player->keys[PLAYER_KEY_USE] = KEY_LCONTROL;
-  player->keys[PLAYER_KEY_SHIELD] = KEY_1;
-  player->keys[PLAYER_KEY_SWORD] = KEY_2;
-  player->keys[PLAYER_KEY_BOW] = KEY_3;
-  
-  /**
-   * Finally, change the state of the player.
-   */
-  change_player_state(player, PLAYER_STATE_STANDING);
-  /*[sword toHoldState];*/
-  
-  /**
-   * The player gets to move first.
-   */
-  take_turn(player->character);
-  
-  return player;
-}
-
-
-
-
-void destroy_player(PLAYER *player)
-{
-  if (player == NULL) {
-    return;
+  case PLAYER_STATE_STANDING:
+    change_anim(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_MOVING:
+    change_anim(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_ATTACKING:
+    change_anim(sprite, PLAYER_ANIM_WALKING);
+    break;
+  case PLAYER_STATE_HURT:
+    change_anim(sprite, PLAYER_ANIM_HURT);
+    reset_anim(grab_anim(sprite, -1));
+    
+    /*
+    // You can't shoot an arrow if you get
+    // hurt whil trying to do it.
+    [[bow getArrow] free];
+    [bow setArrow: nil];
+    if ([bow held]) {
+      [bow toHoldState];
+    }
+    */
+    
+    play_sound(grab_sound(SND_GASP));
+    break;
+  case PLAYER_STATE_DEAD:
+    change_anim(sprite, PLAYER_ANIM_DEAD);
+    reset_anim(grab_anim(sprite, -1));
+    break;
+  case PLAYER_STATE_PUSHING_SWORD:
+    change_anim(sprite, PLAYER_ANIM_BEGIN_ATTACK);
+    reset_anim(grab_anim(sprite, -1));
+    
+    /*
+    switch (direction) {
+    case UP:
+      [sword toAttackUpState];
+      break;
+    case DOWN:
+      [sword toAttackDownState];
+      break;
+    case LEFT:
+      [sword toAttackLeftState];
+      break;
+    case RIGHT:
+      [sword toAttackRightState];
+      break;
+    }
+    */
+    break;
+  case PLAYER_STATE_PULLING_SWORD:
+    change_anim(sprite, PLAYER_ANIM_END_ATTACK);
+    reset_anim(grab_anim(sprite, -1));
+    break;
+  case PLAYER_STATE_DRAWING_BOW:
+    change_anim(sprite, PLAYER_ANIM_BEGIN_ATTACK);
+    reset_anim(grab_anim(sprite, -1));
+    
+    /*
+    switch (direction) {
+    case UP:
+      [bow toAttackUpState];
+      break;
+    case DOWN:
+      [bow toAttackDownState];
+      break;
+    case LEFT:
+      [bow toAttackLeftState];
+      break;
+    case RIGHT:
+      [bow toAttackRightState];
+      break;
+    }
+    
+    [bow setArrowWithX: x andY: y andDirection: direction andTeam: team andWorld: world];
+    */
+    break;
+  case PLAYER_STATE_SHOOTING_ARROW:
+    change_anim(sprite, PLAYER_ANIM_END_ATTACK);
+    reset_anim(grab_anim(sprite, -1));
+    /*
+    [[bow getArrow] toFlyingState];
+    [bow toHoldState];
+    */
+    break;
   }
-  
-  destroy_character(player->character);
-  
-  free_memory(player);
 }
 
 
@@ -236,7 +230,7 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
     
     if (sprite->row != to_row || sprite->col != to_col) {
       
-      if (is_walkable(get_current_room(world), to_row, to_col)) {
+      if (is_walkable(grab_room(world), to_row, to_col)) {
       /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/
         
         move_sprite(sprite, to_row, to_col);
@@ -257,6 +251,127 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
       }
     }
   }
+}
+
+
+
+
+/**
+ * Public
+ */
+
+
+
+
+PLAYER *create_player()
+{
+  PLAYER *player;
+  SPRITE *sprite;
+  ANIM *anim;
+  
+  player = alloc_memory(sizeof(PLAYER));
+  
+  /*
+  speed = getWalkSpeed(); // In FPS
+  team = HERO_TEAM;
+  
+  shield = [[Shield alloc] init];
+  sword = [[Sword alloc] init];
+  bow = [[Bow alloc] init];
+  
+  [shield setSpeed: speed];
+  [sword setSpeed: speed];
+  [bow setSpeed: speed];
+  */
+  
+  sprite = create_sprite();
+  
+  /* Walking animation */
+  anim = create_anim(6, ON);
+  add_frame(anim, grab_image(IMG_HERO_STAND_1, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_STAND_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_STAND_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_STAND_2, NORMAL));
+  add_anim(sprite, anim, PLAYER_ANIM_WALKING);
+  
+  /* Begin attack animation */
+  anim = create_anim(12, OFF);
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_1, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_4, NORMAL));
+  add_anim(sprite, anim, PLAYER_ANIM_BEGIN_ATTACK);
+  
+  /* End attack animation */
+  anim = create_anim(12, OFF);
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_ATTACK_1, NORMAL));
+  add_anim(sprite, anim, PLAYER_ANIM_END_ATTACK);
+  
+  /* Hurt animation */
+  anim = create_anim(12, OFF);
+  add_frame(anim, grab_image(IMG_HERO_HURT_1, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_4, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_HURT_1, NORMAL));
+  add_anim(sprite, anim, PLAYER_ANIM_HURT);
+  
+  /* Dead animation */
+  anim = create_anim(6, OFF);
+  add_frame(anim, grab_image(IMG_HERO_DIE_1, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_DIE_2, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_DIE_3, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_DIE_4, NORMAL));
+  add_frame(anim, grab_image(IMG_HERO_DIE_5, NORMAL));
+  add_anim(sprite, anim, PLAYER_ANIM_DEAD);
+  
+  /* Setup character */
+  player->character = create_character(sprite, 3);
+  
+  player->character->max_health = 3;
+  player->character->health = 3;
+  
+  /* Setup keys */
+  player->keys[PLAYER_KEY_UP] = KEY_UP;
+  player->keys[PLAYER_KEY_DOWN] = KEY_DOWN;
+  player->keys[PLAYER_KEY_LEFT] = KEY_LEFT;
+  player->keys[PLAYER_KEY_RIGHT] = KEY_RIGHT;
+  player->keys[PLAYER_KEY_WAIT] = KEY_SPACE;
+  player->keys[PLAYER_KEY_USE] = KEY_LCONTROL;
+  player->keys[PLAYER_KEY_SHIELD] = KEY_1;
+  player->keys[PLAYER_KEY_SWORD] = KEY_2;
+  player->keys[PLAYER_KEY_BOW] = KEY_3;
+  
+  /**
+   * Finally, change the state of the player.
+   */
+  change_player_state(player, PLAYER_STATE_STANDING);
+  /*[sword toHoldState];*/
+  
+  /**
+   * The player gets to move first.
+   */
+  take_turn(player->character);
+  
+  return player;
+}
+
+
+
+
+void destroy_player(PLAYER *player)
+{
+  if (player == NULL) {
+    return;
+  }
+  
+  destroy_character(player->character);
+  
+  free_memory(player);
 }
 
 
@@ -387,103 +502,3 @@ void update_player(PLAYER *player, WORLD *world)
     break;
   }
 }
-
-
-
-
-void change_player_state(PLAYER *player, PLAYER_STATE state)
-{
-  SPRITE *sprite = player->character->sprite;
-  
-  player->state = state;
-  
-  switch (state) {
-  
-  case PLAYER_STATE_STANDING:
-    change_animation(sprite, PLAYER_ANIM_WALKING);
-    break;
-  case PLAYER_STATE_MOVING:
-    change_animation(sprite, PLAYER_ANIM_WALKING);
-    break;
-  case PLAYER_STATE_ATTACKING:
-    change_animation(sprite, PLAYER_ANIM_WALKING);
-    break;
-  case PLAYER_STATE_HURT:
-    change_animation(sprite, PLAYER_ANIM_HURT);
-    reset_anim(retrieve_animation(sprite, -1));
-    
-    /*
-    // You can't shoot an arrow if you get
-    // hurt whil trying to do it.
-    [[bow getArrow] free];
-    [bow setArrow: nil];
-    if ([bow held]) {
-      [bow toHoldState];
-    }
-    */
-    
-    play_sound(get_sound(SND_GASP));
-    break;
-  case PLAYER_STATE_DEAD:
-    change_animation(sprite, PLAYER_ANIM_DEAD);
-    reset_anim(retrieve_animation(sprite, -1));
-    break;
-  case PLAYER_STATE_PUSHING_SWORD:
-    change_animation(sprite, PLAYER_ANIM_BEGIN_ATTACK);
-    reset_anim(retrieve_animation(sprite, -1));
-    
-    /*
-    switch (direction) {
-    case UP:
-      [sword toAttackUpState];
-      break;
-    case DOWN:
-      [sword toAttackDownState];
-      break;
-    case LEFT:
-      [sword toAttackLeftState];
-      break;
-    case RIGHT:
-      [sword toAttackRightState];
-      break;
-    }
-    */
-    break;
-  case PLAYER_STATE_PULLING_SWORD:
-    change_animation(sprite, PLAYER_ANIM_END_ATTACK);
-    reset_anim(retrieve_animation(sprite, -1));
-    break;
-  case PLAYER_STATE_DRAWING_BOW:
-    change_animation(sprite, PLAYER_ANIM_BEGIN_ATTACK);
-    reset_anim(retrieve_animation(sprite, -1));
-    
-    /*
-    switch (direction) {
-    case UP:
-      [bow toAttackUpState];
-      break;
-    case DOWN:
-      [bow toAttackDownState];
-      break;
-    case LEFT:
-      [bow toAttackLeftState];
-      break;
-    case RIGHT:
-      [bow toAttackRightState];
-      break;
-    }
-    
-    [bow setArrowWithX: x andY: y andDirection: direction andTeam: team andWorld: world];
-    */
-    break;
-  case PLAYER_STATE_SHOOTING_ARROW:
-    change_animation(sprite, PLAYER_ANIM_END_ATTACK);
-    reset_anim(retrieve_animation(sprite, -1));
-    /*
-    [[bow getArrow] toFlyingState];
-    [bow toHoldState];
-    */
-    break;
-  }
-}
-

@@ -57,12 +57,12 @@ void destroy_sprite(SPRITE *sprite);
  * If index is -1, then the animation will be added in the
  * next available empty space.
  */
-void add_animation(SPRITE *sprite, struct ANIM *anim, int index);
+void add_anim(SPRITE *sprite, struct ANIM *anim, int index);
 
 /**
- * Set the current animation to the one at the index.
+ * Change the current animation to the one at the index.
  */
-void change_animation(SPRITE *sprite, int index);
+void change_anim(SPRITE *sprite, int index);
 
 /**
  * Retrieve the animation at the index.
@@ -71,7 +71,7 @@ void change_animation(SPRITE *sprite, int index);
  */
 #define CURRENT_ANIM -1
 
-struct ANIM *retrieve_animation(SPRITE *sprite, int index);
+struct ANIM *grab_anim(SPRITE *sprite, int index);
 
 /**
  * Animate and move the sprite.

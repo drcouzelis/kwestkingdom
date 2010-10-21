@@ -16,26 +16,26 @@ void stop_screen();
  * After you initialize the screen and load your resources,
  * use this function to set the color palette.
  */
-void set_colors(PALETTE *palette);
+void change_colors(PALETTE *palette);
 
 /**
  * Get the name of the current screen updating method.
  */
-void get_screen_update_method(char *empty_string);
+void find_screen_update_method(char *method);
 
-int screen_width();
-int screen_height();
+int grab_screen_width();
+int grab_screen_height();
 
-void set_canvas_size(int width, int height);
+void change_canvas_size(int width, int height);
 
 /**
  * The canvas is the important part.
  * This is what you'll be drawing to.
  */
-int canvas_width();
-int canvas_height();
+int grab_canvas_width();
+int grab_canvas_height();
 
-BITMAP *get_canvas();
+BITMAP *grab_canvas();
 
 /**
  * Draw the contents of the the canvas to the screen.

@@ -12,5 +12,6 @@ int random_number(int low, int high)
     srand(time(NULL));
     init_random_numbers = ON;
   }
+  
   return (rand() % (high - low + 1)) + low;
 }
