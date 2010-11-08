@@ -283,7 +283,12 @@ GAME *create_game()
 
   game->selection = 0;
   */
-
+  
+  game->full_heart_anim = create_anim(0, OFF);
+  add_frame(game->full_heart_anim, grab_image(IMG_ITEMS_HEART, NORMAL));
+  game->empty_heart_anim = create_anim(0, OFF);
+  add_frame(game->empty_heart_anim, grab_image(IMG_ITEMS_EMPTYHEART, NORMAL));
+  
   /*change_game_state(game, GAME_MENU_STATE);*/
   game->world = create_story_world(); /* TEMP */
   change_game_state(game, GAME_PLAY_STATE); /* TEMP */
@@ -305,6 +310,8 @@ void destroy_game(GAME *game)
   destroy_anim(game->gameover_anim);
   destroy_anim(game->pointer_anim);
   destroy_bitmap(game->title_background);
+  destroy_anim(game->full_heart_anim);
+  destroy_anim(game->empty_heart_anim);
 
   free_memory(game);
 }
@@ -438,6 +445,10 @@ void update_game(GAME *game)
 
 void paint_game(GAME *game, BITMAP *canvas)
 {
+  int max_health;
+  int health;
+  int i;
+  
   if (game == NULL || canvas == NULL) {
     return;
   }
@@ -451,6 +462,19 @@ void paint_game(GAME *game, BITMAP *canvas)
   case GAME_PLAY_STATE:
     /* Paint the game */
     paint_world(game->world, canvas);
+    
+    /* Put the player's health on the screen. */
+    max_health = game->world->player->character->max_health;
+    health = game->world->player->character->health;
+    
+    for (i = 0; i < max_health; i++) {
+      if (i < health) {
+        paint_anim(game->full_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
+      } else {
+        paint_anim(game->empty_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
+      }
+    }
+    
     break;
   }
 }

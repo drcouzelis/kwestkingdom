@@ -1,5 +1,5 @@
 #!/bin/bash
 curr_dir=`dirname "$0"`
 cd "$curr_dir"
-cd ../share/kwestkingdom && ./kwestkingdom
+cd ../share/kwestkingdom && ./kwestkingdom "$@"
 

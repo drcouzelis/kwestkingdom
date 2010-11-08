@@ -37,6 +37,12 @@ struct GAME
   BITMAP *title_background;
   
   /**
+   * Player health icons
+   */
+  struct ANIM *full_heart_anim;
+  struct ANIM *empty_heart_anim;
+  
+  /**
    * Which line the menu pointer is on
    */
   int selection;
