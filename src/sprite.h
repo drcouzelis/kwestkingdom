@@ -98,5 +98,10 @@ void warp_sprite(SPRITE *sprite, int row, int col);
  */
 FLAG is_moving(SPRITE *sprite);
 
+/**
+ * The default movement speed for all sprites
+ */
+int grab_walk_speed();
+
 
 #endif

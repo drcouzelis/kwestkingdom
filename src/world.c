@@ -1,8 +1,8 @@
 #include "character.h"
 #include "colors.h"
-#include "kwestkingdom.h"
 #include "memory.h"
 #include "player.h"
+#include "resources.h"
 #include "room.h"
 #include "sprite.h"
 #include "world.h"
@@ -13,6 +13,12 @@
 /**
  * Private
  */
+
+
+
+
+#define PLAYER_START_ROW (ROWS - 3)
+#define PLAYER_START_COL (COLS / 2)
 
 
 

@@ -12,6 +12,11 @@
 
 
 
+#define TILE_SIZE 20
+
+
+
+
 /**
  * A list of all the images used in the game.
  * This speeds up the game by only loading each image once.
@@ -280,4 +285,12 @@ SAMPLE *grab_sound(int sound)
 PALETTE *grab_color_palette()
 {
   return &palette;
+}
+
+
+
+
+int grab_tile_size()
+{
+  return TILE_SIZE;
 }

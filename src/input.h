@@ -8,7 +8,7 @@
 /**
  * See the Allegro documentation for a list of key codes.
  *
- * http://www.allegro.cc/manual/api/keyboard-routines/key
+ * http://www.allegro.cc/manual/4/api/keyboard-routines/key
  */
 
 

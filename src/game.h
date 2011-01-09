@@ -9,6 +9,7 @@
 
 typedef struct GAME GAME;
 struct ANIM;
+struct ENGINE;
 struct WORLD;
 
 
@@ -17,24 +18,9 @@ struct GAME
   struct WORLD *world;
   
   /**
-   * The title screen image
-   */
-  struct ANIM *title_anim;
-  
-  /**
    * The game over image
    */
   struct ANIM *gameover_anim;
-  
-  /**
-   * The selection icon
-   */
-  struct ANIM *pointer_anim;
-  
-  /**
-   * The title screen background
-   */
-  BITMAP *title_background;
   
   /**
    * Player health icons
@@ -42,22 +28,18 @@ struct GAME
   struct ANIM *full_heart_anim;
   struct ANIM *empty_heart_anim;
   
-  /**
-   * Which line the menu pointer is on
-   */
-  int selection;
-  
   int state;
 };
 
 
-GAME *create_game();
+GAME *create_story_game();
+GAME *create_endless_game();
 void destroy_game(GAME *game);
 
 FLAG is_game_over(GAME *game);
 FLAG is_game_won(GAME *game);
 
-void update_game(GAME *game);
+void update_game(GAME *game, struct ENGINE *engine);
 void paint_game(GAME *game, BITMAP *canvas);
 
 

@@ -85,7 +85,7 @@ void add_to_path(struct ROOM *room, int row, int col);
  * Randomly generate the layout of a specified style for a room.
  * It will not generate anything on part of the path.
  */
-void generate_terrain(struct ROOM *room, TERRAIN_OPTIONS *options);
+void generate_terrain(struct ROOM *room, TERRAIN_OPTIONS *options, FLAG show_path);
 
 /**
  * Randomly generate enemies in a room.

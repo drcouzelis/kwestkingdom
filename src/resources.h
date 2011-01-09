@@ -146,5 +146,10 @@ SAMPLE *grab_sound(int sound);
  */
 PALETTE *grab_color_palette();
 
+/**
+ * The size of a square tile, before being stretched
+ */
+int grab_tile_size();
+
 
 #endif

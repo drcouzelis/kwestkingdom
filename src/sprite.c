@@ -1,6 +1,6 @@
 #include "anim.h"
-#include "kwestkingdom.h"
 #include "memory.h"
+#include "resources.h"
 #include "sprite.h"
 #include "timer.h"
 

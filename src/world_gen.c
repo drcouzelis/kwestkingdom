@@ -211,7 +211,7 @@ ROOM *create_story_world_room(WORLD *world, int num)
     
     change_room_theme(room, ROOM_THEME_FOREST);
     create_path(room, entr_row, entr_col, exit_row, exit_col);
-    generate_terrain(room, &terrain);
+    generate_terrain(room, &terrain, ON);
   }
   
   if (num >= 2) {
@@ -278,7 +278,7 @@ ROOM *create_story_world_room(WORLD *world, int num)
     terrain.percent_scattered_holes = random_number(0, 100);
     terrain.priority = random_number(0, 1);
     
-    generate_terrain(room, &terrain);
+    generate_terrain(room, &terrain, ON);
   }
   
   return room;

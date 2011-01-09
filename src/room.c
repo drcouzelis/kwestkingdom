@@ -2,8 +2,8 @@
 #include "direction.h"
 #include "enemy.h"
 #include "memory.h"
+#include "resources.h"
 #include "room.h"
-#include "kwestkingdom.h"
 
 
 
@@ -334,9 +334,6 @@ void paint_room(ROOM *room, BITMAP *canvas)
   /*
   int row;
   int col;
-  int x;
-  int y;
-  int type;
   */
 
   if (room == NULL || canvas == NULL) {
@@ -347,16 +344,6 @@ void paint_room(ROOM *room, BITMAP *canvas)
    * Paint the terrain
    */
   paint_room_terrain(room, canvas);
-  /*
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-      type = room->terrain[row][col]->type;
-      x = col * grab_tile_size();
-      y = row * grab_tile_size();
-      paint_anim(room->terrain_anims[type], canvas, x, y);
-    }
-  }
-  */
 
   /*
   for (row = 0; row < ROWS; row++) {
@@ -369,7 +356,7 @@ void paint_room(ROOM *room, BITMAP *canvas)
   /*
   for (row = 0; row < ROWS; row++) {
     for (col = 0; col < COLS; col++) {
-      room->hel[row][col];
+      room->help[row][col];
     }
   }
   */

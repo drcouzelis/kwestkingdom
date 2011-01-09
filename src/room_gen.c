@@ -803,7 +803,7 @@ void add_to_path(struct ROOM *room, int row, int col)
 
 
 
-void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
+void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options, FLAG show_path)
 {
   int list[ROWS * COLS];
   int len = 0;
@@ -907,10 +907,12 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options)
   /**
    * Optional: mark the path.
    */
-  for (row = 0; row < ROWS; row++) {
-    for (col = 0; col < COLS; col++) {
-      if (room->path[row][col] == ON) {
-        room->terrain[row][col]->type = TILE_TYPE_PATH;
+  if (show_path) {
+    for (row = 0; row < ROWS; row++) {
+      for (col = 0; col < COLS; col++) {
+        if (room->path[row][col] == ON) {
+          room->terrain[row][col]->type = TILE_TYPE_PATH;
+        }
       }
     }
   }

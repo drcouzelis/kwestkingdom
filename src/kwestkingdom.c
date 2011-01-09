@@ -1,6 +1,7 @@
 #include <allegro.h>
 
 #include "colors.h"
+#include "engine.h"
 #include "game.h"
 #include "input.h"
 #include "memory.h"
@@ -22,10 +23,8 @@
 
 
 
-#define TILE_SIZE 20
-
-#define CANVAS_WIDTH (COLS * TILE_SIZE)
-#define CANVAS_HEIGHT (ROWS * TILE_SIZE)
+#define CANVAS_WIDTH (COLS * grab_tile_size())
+#define CANVAS_HEIGHT (ROWS * grab_tile_size())
 
 #define DEFAULT_SCREEN_RATIO 2
 
@@ -79,14 +78,6 @@ FLAG init_kwestkingdom()
 
 
 
-int grab_tile_size()
-{
-  return TILE_SIZE;
-}
-
-
-
-
 int grab_walk_speed()
 {
   return 60;
@@ -105,8 +96,7 @@ void quit_kwestkingdom()
 
 int main(int argc, char *argv[])
 {
-  GAME *game;
-  char quit_key = KEY_ESC;
+  ENGINE *engine;
 
   int time;
   char method[SCREEN_UPDATE_STR_LEN];
@@ -122,7 +112,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  game = create_game();
+  engine = create_engine();
 
   /**
    * Reset the timers just before the game begins.
@@ -142,14 +132,10 @@ int main(int argc, char *argv[])
 
       time = get_ticks();
 
-      if (is_key_pressed(quit_key)) {
-        quit_kwestkingdom();
-      }
-      
       /**
        * UPDATE
        */
-      update_game(game);
+      update_engine(engine);
 
       decrease_timer();
 
@@ -162,7 +148,7 @@ int main(int argc, char *argv[])
     /**
      * DRAW
      */
-    paint_game(game, grab_canvas());
+    paint_engine(engine, grab_canvas());
 
     /**
      * Show FPS
@@ -207,7 +193,7 @@ int main(int argc, char *argv[])
   /**
    * Cleanup
    */
-  destroy_game(game);
+  destroy_engine(engine);
   stop_screen();
   stop_resources();
   
