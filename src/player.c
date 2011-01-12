@@ -135,7 +135,7 @@ void change_player_state(PLAYER *player, PLAYER_STATE state)
 
 
 
-void update_player_state_standing(PLAYER *player, WORLD *world)
+void update_player_state_standing(PLAYER *player)
 {
   SPRITE *sprite = player->character->sprite;
   
@@ -230,7 +230,7 @@ void update_player_state_standing(PLAYER *player, WORLD *world)
     
     if (sprite->row != to_row || sprite->col != to_col) {
       
-      if (is_walkable(grab_room(world), to_row, to_col)) {
+      if (is_walkable(grab_hot_room(), to_row, to_col)) {
       /*if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {*/
         
         move_sprite(sprite, to_row, to_col);
@@ -377,7 +377,7 @@ void destroy_player(PLAYER *player)
 
 
 
-void update_player(PLAYER *player, WORLD *world)
+void update_player(PLAYER *player)
 {
   SPRITE *sprite = player->character->sprite;
   
@@ -402,7 +402,7 @@ void update_player(PLAYER *player, WORLD *world)
   switch (player->state) {
   
   case PLAYER_STATE_STANDING:
-    update_player_state_standing(player, world);
+    update_player_state_standing(player);
     break;
     
   case PLAYER_STATE_MOVING:

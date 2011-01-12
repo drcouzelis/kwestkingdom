@@ -16,54 +16,44 @@ enum
 
 
 
-ENGINE * create_engine()
+int engine_state = ENGINE_MAINMENU_STATE;
+
+
+
+
+void init_engine()
 {
-  ENGINE *engine;
-  
-  engine = alloc_memory(sizeof(ENGINE));
-  
-  /*engine->intro = NULL;*/
-  engine->game = NULL;
-  engine->menu = create_mainmenu();
-  
-  show_mainmenu(engine);
-  
-  return engine;
+  init_mainmenu();
+  show_mainmenu();
 }
 
 
 
 
-void destroy_engine(ENGINE *engine)
+void stop_engine()
 {
-  if (engine == NULL) {
-    return;
-  }
-  
   /*destroy_intro(engine->intro);*/
-  destroy_game(engine->game);
-  destroy_mainmenu(engine->menu);
-  
-  free_memory(engine);
+  stop_game();
+  stop_mainmenu();
 }
 
 
 
 
-void update_engine(ENGINE *engine)
+void update_engine()
 {
-  switch (engine->state) {
+  switch (engine_state) {
     
   case ENGINE_INTRO_STATE:
     /*update_intro(engine->intro);*/
     break;
     
   case ENGINE_MAINMENU_STATE:
-    update_mainmenu(engine->menu, engine);
+    update_mainmenu();
     break;
     
   case ENGINE_GAME_STATE:
-    update_game(engine->game, engine);
+    update_game();
     break;
     
   }
@@ -72,20 +62,20 @@ void update_engine(ENGINE *engine)
 
 
 
-void paint_engine(ENGINE *engine, BITMAP *canvas)
+void paint_engine(BITMAP *canvas)
 {
-  switch (engine->state) {
+  switch (engine_state) {
     
   case ENGINE_INTRO_STATE:
     /*paint_intro(engine->intro, canvas);*/
     break;
     
   case ENGINE_MAINMENU_STATE:
-    paint_mainmenu(engine->menu, canvas);
+    paint_mainmenu(canvas);
     break;
     
   case ENGINE_GAME_STATE:
-    paint_game(engine->game, canvas);
+    paint_game(canvas);
     break;
     
   }
@@ -94,39 +84,35 @@ void paint_engine(ENGINE *engine, BITMAP *canvas)
 
 
 
-void show_mainmenu(ENGINE *engine)
+void show_mainmenu()
 {
-  generate_mainmenu_background(engine->menu);
-  engine->state = ENGINE_MAINMENU_STATE;
+  generate_mainmenu_background();
+  engine_state = ENGINE_MAINMENU_STATE;
 }
 
 
 
 
-void start_story_game(ENGINE *engine)
+void start_story_game()
 {
-  destroy_game(engine->game);
-  engine->game = create_story_game();
-  
-  engine->state = ENGINE_GAME_STATE;
+  init_story_game();
+  engine_state = ENGINE_GAME_STATE;
 }
 
 
 
 
-void start_endless_game(ENGINE *engine)
+void start_endless_game()
 {
   printf("Pretending to start endless game. \n");
-  destroy_game(engine->game);
-  engine->game = NULL; /*create_story_game();*/
-  
-  engine->state = ENGINE_GAME_STATE;
+  init_story_game();
+  engine_state = ENGINE_GAME_STATE;
 }
 
 
 
 
-void resume_game(ENGINE *engine)
+void resume_game()
 {
-  engine->state = ENGINE_GAME_STATE;
+  engine_state = ENGINE_GAME_STATE;
 }

@@ -2,6 +2,9 @@
 #define ENGINE_HEADER
 
 
+#include "utilities.h"
+
+
 typedef struct ENGINE ENGINE;
 struct GAME;
 /*struct INTRO;*/
@@ -20,18 +23,19 @@ struct ENGINE
 };
 
 
-ENGINE *create_engine();
-void destroy_engine();
+void init_engine();
+void stop_engine();
 
-void update_engine(ENGINE *engine);
-void paint_engine(ENGINE *engine, BITMAP *canvas);
+void update_engine();
+void paint_engine(BITMAP *canvas);
 
-void show_mainmenu(ENGINE *engine);
+void show_mainmenu();
 
-void start_story_game(ENGINE *engine);
-void start_endless_game(ENGINE *engine);
+void start_story_game();
+void start_endless_game();
 
-void resume_game(ENGINE *engine);
+FLAG can_resume_game();
+void resume_game();
 
 
 #endif

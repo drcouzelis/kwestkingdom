@@ -96,8 +96,6 @@ void quit_kwestkingdom()
 
 int main(int argc, char *argv[])
 {
-  ENGINE *engine;
-
   int time;
   char method[SCREEN_UPDATE_STR_LEN];
   
@@ -112,7 +110,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  engine = create_engine();
+  init_engine();
 
   /**
    * Reset the timers just before the game begins.
@@ -135,7 +133,7 @@ int main(int argc, char *argv[])
       /**
        * UPDATE
        */
-      update_engine(engine);
+      update_engine();
 
       decrease_timer();
 
@@ -148,7 +146,7 @@ int main(int argc, char *argv[])
     /**
      * DRAW
      */
-    paint_engine(engine, grab_canvas());
+    paint_engine(grab_canvas());
 
     /**
      * Show FPS
@@ -193,7 +191,7 @@ int main(int argc, char *argv[])
   /**
    * Cleanup
    */
-  destroy_engine(engine);
+  stop_engine();
   stop_screen();
   stop_resources();
   
