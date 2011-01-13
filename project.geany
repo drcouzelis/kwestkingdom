@@ -16,7 +16,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=10
+current_page=33
 FILE_NAME_0=0;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/al_screen.c;0;2
 FILE_NAME_1=0;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/al_screen.h;0;2
 FILE_NAME_2=2467;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/anim.c;0;2
@@ -27,7 +27,7 @@ FILE_NAME_6=163;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/
 FILE_NAME_7=0;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/direction.h;0;2
 FILE_NAME_8=713;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/enemy.h;0;2
 FILE_NAME_9=51;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/equipment.h;0;2
-FILE_NAME_10=1974;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/game.c;0;2
+FILE_NAME_10=1642;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/game.c;0;2
 FILE_NAME_11=277;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/game.h;0;2
 FILE_NAME_12=232;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/input.c;0;2
 FILE_NAME_13=168;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/input.h;0;2
@@ -61,10 +61,10 @@ FILE_NAME_40=8699;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdo
 FILE_NAME_41=19;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/memory.c;0;2
 FILE_NAME_42=739;None;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/RULES;0;2
 FILE_NAME_43=2105;None;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/objc/World.m;0;2
-FILE_NAME_44=327;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/engine.h;0;2
-FILE_NAME_45=1288;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/engine.c;0;2
+FILE_NAME_44=440;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/engine.h;0;2
+FILE_NAME_45=1089;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/engine.c;0;2
 FILE_NAME_46=84;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/mainmenu.h;0;2
-FILE_NAME_47=3456;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/mainmenu.c;0;2
+FILE_NAME_47=38;C;0;16;0;1;0;/home/couzelis/Projects/Kwest Kingdom/kwestkingdom/src/mainmenu.c;0;2
 
 [build-menu]
 CFT_00_LB=_Compile

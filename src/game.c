@@ -273,10 +273,6 @@ void paint_game(BITMAP *canvas)
 
 FLAG can_resume_game()
 {
-  if (game_running) {
-    return ON;
-  }
-  
-  return OFF;
+  return game_running;
 }
 

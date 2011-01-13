@@ -1,6 +1,7 @@
 #include "anim.h"
 #include "colors.h"
 #include "engine.h"
+#include "game.h"
 #include "input.h"
 #include "kwestkingdom.h"
 #include "mainmenu.h"

@@ -30,11 +30,8 @@ void update_engine();
 void paint_engine(BITMAP *canvas);
 
 void show_mainmenu();
-
 void start_story_game();
 void start_endless_game();
-
-FLAG can_resume_game();
 void resume_game();
 
 
