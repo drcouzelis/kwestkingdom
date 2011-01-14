@@ -51,12 +51,12 @@ struct WORLD
   ROOM *(*create_room)(WORLD *world, int num);
   
   /**
-   * This function is used to see if the game
+   * This is used to see if the game
    * has been won.
-   * Different types of worlds have different
-   * win conditions.
+   * Either set it to the room number of the
+   * final room, or to -1 for no end.
    */
-  FLAG (*is_end_of_world)(WORLD *world);
+  int final_room;
 };
 
 
@@ -70,12 +70,6 @@ void destroy_world(WORLD *world);
  * If there are too many cached rooms, delete some of the old ones.
  */
 void add_room(WORLD *world, struct ROOM *room);
-
-/**
- * The room that the player is currently in.
- */
-struct ROOM *grab_room(WORLD *world);
-
 
 /**
  * Create a new set of cached rooms.

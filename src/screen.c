@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "al_screen.h"
 #include "screen.h"
 

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "game.h"
 #include "engine.h"
 #include "memory.h"
@@ -144,3 +146,12 @@ void resume_game()
 {
   engine_state = ENGINE_GAME_STATE;
 }
+
+
+
+
+GAME *grab_game()
+{
+  return game;
+}
+

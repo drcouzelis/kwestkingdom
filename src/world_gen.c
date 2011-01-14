@@ -1,5 +1,6 @@
 #include "character.h"
 #include "direction.h"
+#include "game.h"
 #include "player.h"
 #include "room.h"
 #include "room_gen.h"
@@ -13,21 +14,6 @@
 /**
  * Private
  */
-
-
-
-
-/**
- * This function can be used to see if the game has been won.
- */
-FLAG is_in_final_room(WORLD *world)
-{
-  if (grab_room(world)->num == 40) {
-    return ON;
-  }
-  
-  return OFF;
-}
 
 
 
@@ -314,7 +300,7 @@ WORLD *create_story_world()
   world->num_cached_rooms = 10;
   world->max_cached_rooms = 10;
   world->create_room = create_story_world_room;
-  world->is_end_of_world = is_in_final_room;
+  world->final_room = 40;
   
   cache_rooms(world);
   
@@ -333,7 +319,7 @@ WORLD *create_endless_world()
   world->num_cached_rooms = 10;
   world->max_cached_rooms = 10;
   world->create_room = create_endless_world_room;
-  world->is_end_of_world = NULL;
+  world->final_room = -1;
   
   cache_rooms(world);
   

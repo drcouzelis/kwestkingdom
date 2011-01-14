@@ -1,4 +1,5 @@
 #include <allegro.h>
+#include <stdio.h>
 
 #include "colors.h"
 #include "engine.h"

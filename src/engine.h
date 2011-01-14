@@ -23,5 +23,7 @@ void play_endless_game();
 FLAG can_resume_game();
 void resume_game();
 
+struct GAME *grab_game();
+
 
 #endif

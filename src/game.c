@@ -154,11 +154,11 @@ FLAG is_game_over(GAME *game)
 
 FLAG is_game_won(GAME *game)
 {
-  if (game->world->is_end_of_world == NULL) {
-    return OFF;
+  if (game->world->final_room == grab_room()->num) {
+    return ON;
   }
   
-  return game->world->is_end_of_world(game->world);
+  return OFF;
 }
 
 
@@ -267,3 +267,42 @@ void paint_game(GAME *game, BITMAP *canvas)
   }
 }
 
+
+
+
+struct WORLD *grab_world()
+{
+  if (grab_game() != NULL) {
+    return grab_game()->world;
+  }
+  
+  return NULL;
+}
+
+
+
+
+struct ROOM *grab_room()
+{
+  WORLD *world = grab_world();
+  
+  if (world != NULL) {
+    return world->rooms[world->room_idx];
+  }
+  
+  return NULL;
+}
+
+
+
+
+struct PLAYER *grab_player()
+{
+  WORLD *world = grab_world();
+  
+  if (world != NULL) {
+    return world->player;
+  }
+  
+  return NULL;
+}

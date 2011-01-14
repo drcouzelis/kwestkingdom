@@ -1,5 +1,6 @@
 #include "anim.h"
 #include "character.h"
+#include "game.h"
 #include "input.h"
 #include "memory.h"
 #include "resources.h"

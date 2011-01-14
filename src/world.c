@@ -1,5 +1,8 @@
+#include <stdio.h>
+
 #include "character.h"
 #include "colors.h"
+#include "game.h"
 #include "memory.h"
 #include "player.h"
 #include "resources.h"
@@ -227,11 +230,12 @@ WORLD *create_world()
   world->num_cached_rooms = 0;
   world->max_cached_rooms = 0;
   
+  world->final_room = -1;
+  
   /**
-   * Initialize function pointers
+   * Initialize function pointer
    */
   world->create_room = NULL;
-  world->is_end_of_world = NULL;
 
   return world;
 }
@@ -278,14 +282,6 @@ void add_room(WORLD *world, ROOM *room)
   if (num_rooms > world->max_cached_rooms) {
     remove_oldest_room(world);
   }
-}
-
-
-
-
-struct ROOM *grab_room(WORLD *world)
-{
-  return world->rooms[world->room_idx];
 }
 
 
