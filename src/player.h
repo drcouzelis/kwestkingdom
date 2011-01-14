@@ -49,6 +49,7 @@ enum
 
 typedef struct PLAYER PLAYER;
 struct CHARACTER;
+struct WORLD;
 
 
 struct PLAYER
@@ -73,7 +74,7 @@ struct PLAYER
 PLAYER *create_player();
 void destroy_player(PLAYER *player);
 
-void update_player(PLAYER *player);
+void update_player(PLAYER *player, struct WORLD *world);
 
 
 #endif

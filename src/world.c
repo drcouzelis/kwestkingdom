@@ -6,7 +6,13 @@
 #include "room.h"
 #include "sprite.h"
 #include "world.h"
-#include "world_gen.h"
+
+
+
+
+/**
+ * Private
+ */
 
 
 
@@ -17,94 +23,27 @@
 
 
 
-FLAG world_exists = OFF;
-
-
-
-
-/**
- * Represents the player, aka the hero!
- */
-PLAYER *player = NULL;
-
-
-
-
-/**
- * A list of rooms in this world.
- * Rooms will always be in order based on their number.
- */
-ROOM *rooms[MAX_ROOMS];
-int room_idx = 0;
-
-/**
- * When it comes times to create a new set of rooms,
- * this many rooms will be created at a time.
- */
-int num_cached_rooms = 10; /* Try 10 */
-
-
-
-
-/**
- * When the max number of cached rooms is met,
- * one room will be deleted for every new cached
- * room that is created.
- * The max number of cached rooms must be equal
- * to or greater than the number of cached rooms.
- * (It doesn't make sense otherwise)
- */
-int max_cached_rooms = 10; /* Try 10 */
-
-
-
-
-/**
- * This function is used to create new rooms.
- * Different types of rooms need to be made for
- * different types of world.
- */
-/*ROOM *(*create_room)(int num) = NULL;*/
-
-
-
-
-/**
- * This function is used to see if the game
- * has been won.
- * Different types of worlds have different
- * win conditions.
- */
-/*FLAG (*is_end_of_world)() = NULL;*/
-
-
-
-
-void sort_rooms()
+void sort_rooms(WORLD *world)
 {
   ROOM *room;
   int i;
   int j;
   FLAG done;
   
-  if (!world_exists) {
-    return;
-  }
-  
   for (i = 1; i < MAX_ROOMS; i++) {
     
-    room = rooms[i];
+    room = world->rooms[i];
     j = i - 1;
     done = OFF;
     
     while (!done) {
       
       if (
-        (rooms[j] == NULL && room != NULL) ||
-        (room != NULL && rooms[j]->num > room->num)
+        (world->rooms[j] == NULL && room != NULL) ||
+        (room != NULL && world->rooms[j]->num > room->num)
       ) {
         
-        rooms[j + 1] = rooms[j];
+        world->rooms[j + 1] = world->rooms[j];
         j--;
         
         if (j < 0) {
@@ -117,39 +56,31 @@ void sort_rooms()
       }
     }
     
-    rooms[j + 1] = room;
+    world->rooms[j + 1] = room;
   }
 }
 
 
 
 
-void remove_oldest_room()
+void remove_oldest_room(WORLD *world)
 {
-  if (!world_exists) {
-    return;
-  }
+  destroy_room(world->rooms[0]);
+  world->rooms[0] = NULL;
   
-  destroy_room(rooms[0]);
-  rooms[0] = NULL;
-  
-  sort_rooms();
+  sort_rooms(world);
 }
 
 
 
 
-int count_num_rooms()
+int count_num_rooms(WORLD *world)
 {
   int count = 0;
   int i;
   
-  if (!world_exists) {
-    return 0;
-  }
-  
   for (i = 0; i < MAX_ROOMS; i++) {
-    if (rooms[i] != NULL) {
+    if (world->rooms[i] != NULL) {
       count++;
     }
   }
@@ -160,17 +91,9 @@ int count_num_rooms()
 
 
 
-int find_highest_room_number()
+int find_highest_room_number(WORLD *world)
 {
-  if (!world_exists) {
-    return 0;
-  }
-  
-  if (count_num_rooms() > 0) {
-    return rooms[count_num_rooms() - 1]->num;
-  }
-  
-  return 0;
+  return world->rooms[count_num_rooms(world) - 1]->num;
 }
 
 
@@ -181,13 +104,9 @@ int find_highest_room_number()
  * Find out whose turn it is next.
  * Tell them to take a turn.
  */
-void update_turn()
+void update_turn(WORLD *world)
 {
   /*int index;*/
-  
-  if (!world_exists) {
-    return;
-  }
   
   /**
    * Determine whose turn it is next and tell them to go.
@@ -219,8 +138,8 @@ void update_turn()
   */
   
   /* TEMP */
-  if (is_waiting(player->character)) {
-    take_turn(player->character);
+  if (is_waiting(world->player->character)) {
+    take_turn(world->player->character);
   }
 }
 
@@ -234,10 +153,6 @@ DOOR *find_door(ROOM *room, int row, int col)
 {
   int i;
   
-  if (!world_exists) {
-    return NULL;
-  }
-  
   for (i = 0; i < MAX_DOORS; i++) {
     if (room->doors[i] != NULL && room->doors[i]->row == row && room->doors[i]->col == col) {
       return room->doors[i];
@@ -250,13 +165,9 @@ DOOR *find_door(ROOM *room, int row, int col)
 
 
 
-void change_room(int new_room_num)
+void change_room(WORLD *world, int new_room_num)
 {
   int i;
-  
-  if (!world_exists) {
-    return;
-  }
   
   /**
    * Continue caching rooms until
@@ -265,13 +176,13 @@ void change_room(int new_room_num)
   while (ON) {
     
     for (i = 0; i < MAX_ROOMS; i++) {
-      if (rooms[i] != NULL && rooms[i]->num == new_room_num) {
-        room_idx = i;
+      if (world->rooms[i] != NULL && world->rooms[i]->num == new_room_num) {
+        world->room_idx = i;
         return;
       }
     }
     
-    cache_rooms();
+    cache_rooms(world);
   }
 }
 
@@ -281,14 +192,10 @@ void change_room(int new_room_num)
 /**
  * Used when walking through a door.
  */
-void use_door(DOOR *door)
+void use_door(WORLD *world, DOOR *door)
 {
-  if (!world_exists) {
-    return;
-  }
-  
-  change_room(door->new_room_num);
-  warp_sprite(player->character->sprite, door->new_row, door->new_col);
+  change_room(world, door->new_room_num);
+  warp_sprite(world->player->character->sprite, door->new_row, door->new_col);
 }
 
 
@@ -301,125 +208,111 @@ void use_door(DOOR *door)
 
 
 
-void init_world()
+WORLD *create_world()
 {
+  WORLD *world;
   int i;
 
-  if (world_exists) {
-    stop_world();
-  }
-  
-  player = create_player();
-  warp_sprite(player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
+  world = alloc_memory(sizeof(WORLD));
+
+  world->player = create_player();
+  warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
 
   for (i = 0; i < MAX_ROOMS; i++) {
-    rooms[i] = NULL;
+    world->rooms[i] = NULL;
   }
+
+  world->room_idx = 0;
   
-  world_exists = ON;
+  world->num_cached_rooms = 0;
+  world->max_cached_rooms = 0;
+  
+  /**
+   * Initialize function pointers
+   */
+  world->create_room = NULL;
+  world->is_end_of_world = NULL;
+
+  return world;
 }
 
 
 
 
-void stop_world()
+void destroy_world(WORLD *world)
 {
   int i;
   
-  if (!world_exists) {
+  if (world == NULL) {
     return;
   }
-  
-  destroy_player(player);
+
+  destroy_player(world->player);
   
   /**
    * Destroy all rooms
    */
   for (i = 0; i < MAX_ROOMS; i++) {
-    destroy_room(rooms[i]);
+    destroy_room(world->rooms[i]);
   }
-  
-  world_exists = OFF;
+
+  free_memory(world);
 }
 
 
 
 
-PLAYER *grab_hot_player()
-{
-  return player;
-}
-
-
-
-
-void add_room(ROOM *room)
+void add_room(WORLD *world, ROOM *room)
 {
   int num_rooms;
   
-  if (!world_exists) {
-    return;
-  }
-  
-  num_rooms = count_num_rooms();
+  num_rooms = count_num_rooms(world);
   
   if (num_rooms < MAX_ROOMS) {
-    rooms[num_rooms] = room;
-    sort_rooms();
+    world->rooms[num_rooms] = room;
+    sort_rooms(world);
   }
   
   num_rooms++;
   
-  if (num_rooms > max_cached_rooms) {
-    remove_oldest_room();
+  if (num_rooms > world->max_cached_rooms) {
+    remove_oldest_room(world);
   }
 }
 
 
 
 
-ROOM *grab_hot_room()
+struct ROOM *grab_room(WORLD *world)
 {
-  if (!world_exists) {
-    return NULL;
-  }
-  
-  return rooms[room_idx];
+  return world->rooms[world->room_idx];
 }
 
 
 
 
-void cache_rooms()
+void cache_rooms(WORLD *world)
 {
   ROOM *room;
   int i;
   
-  if (!world_exists) {
-    return;
-  }
-  
-  for (i = 0; i < num_cached_rooms; i++) {
-    room = create_story_world_room(find_highest_room_number() + 1);
-    add_room(room);
+  for (i = 0; i < world->num_cached_rooms; i++) {
+    room = world->create_room(world, find_highest_room_number(world) + 1);
+    add_room(world, room);
   }
 }
 
 
 
 
-void update_world()
+void update_world(WORLD *world)
 {
   SPRITE *sprite;
   DOOR *door;
   
-  if (!world_exists) {
-    return;
-  }
-  
-  update_turn();
-  update_player(player);
-  update_room(rooms[room_idx]);
+  update_turn(world);
+  update_player(world->player, world);
+  update_room(world->rooms[world->room_idx]);
   
   /**
    * If using door
@@ -430,14 +323,14 @@ void update_world()
    *     For every door-reference to the deleted room, mark the door as a wall
    *   Move to the next room
    */
-  sprite = player->character->sprite;
+  sprite = world->player->character->sprite;
   
   if (!is_moving(sprite)) {
     
-    door = find_door(grab_hot_room(), sprite->row, sprite->col);
+    door = find_door(grab_room(world), sprite->row, sprite->col);
     
     if (door != NULL) {
-      use_door(door);
+      use_door(world, door);
     }
   }
 }
@@ -445,21 +338,17 @@ void update_world()
 
 
 
-void paint_world(BITMAP *canvas)
+void paint_world(WORLD *world, BITMAP *canvas)
 {
   char room_num_text[16];
   
-  if (!world_exists) {
-    return;
-  }
-  
-  paint_room(rooms[room_idx], canvas);
-  paint_sprite(player->character->sprite, canvas);
+  paint_room(world->rooms[world->room_idx], canvas);
+  paint_sprite(world->player->character->sprite, canvas);
   
   /**
    * Show the current room number
    */
-  sprintf(room_num_text, "Room %d", grab_hot_room()->num);
+  sprintf(room_num_text, "Room %d", grab_room(world)->num);
   
   textprintf_ex(
     canvas,

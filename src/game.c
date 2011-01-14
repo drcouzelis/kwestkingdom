@@ -18,14 +18,16 @@
 
 
 
-FLAG game_running = OFF;
+/**
+ * Private
+ */
 
 
 
 
 enum
 {
-  GAME_PLAY_STATE = 0,
+  GAME_PLAY_STATE,
   GAME_OVER_STATE
   /*GAME_QUIT_STATE,*/
   /*GAME_ENTER_INITIALS_STATE*/
@@ -34,25 +36,9 @@ enum
 
 
 
-/**
- * The game over image
- */
-ANIM *gameover_anim = NULL;
-
-/**
- * Player health icons
- */
-ANIM *full_heart_anim = NULL;
-ANIM *empty_heart_anim = NULL;
-
-int game_state = GAME_PLAY_STATE;
-
-
-
-
-void change_game_state(int state)
+void change_game_state(GAME *game, int state)
 {
-  game_state = state;
+  game->state = state;
 
   switch (state) {
 
@@ -73,34 +59,32 @@ void change_game_state(int state)
 
 
 
-void init_game()
+GAME *create_game()
 {
-  init_world();
+  GAME *game;
+
+  game = alloc_memory(sizeof(GAME));
+
+  game->world = NULL;
   
   /**
    * Load the game over image
    */
-  if (gameover_anim == NULL) {
-    gameover_anim = create_anim(0, OFF);
-    add_frame(gameover_anim, grab_image(IMG_GAMEOVER, NORMAL));
-  }
+  game->gameover_anim = create_anim(0, OFF);
+  add_frame(game->gameover_anim, grab_image(IMG_GAMEOVER, NORMAL));
   
   /**
    * Load images for the user interface
    */
-  if (full_heart_anim == NULL) {
-    full_heart_anim = create_anim(0, OFF);
-    add_frame(full_heart_anim, grab_image(IMG_ITEMS_HEART, NORMAL));
-  }
+  game->full_heart_anim = create_anim(0, OFF);
+  add_frame(game->full_heart_anim, grab_image(IMG_ITEMS_HEART, NORMAL));
   
-  if (empty_heart_anim == NULL) {
-    empty_heart_anim = create_anim(0, OFF);
-    add_frame(empty_heart_anim, grab_image(IMG_ITEMS_EMPTYHEART, NORMAL));
-  }
+  game->empty_heart_anim = create_anim(0, OFF);
+  add_frame(game->empty_heart_anim, grab_image(IMG_ITEMS_EMPTYHEART, NORMAL));
   
-  change_game_state(GAME_PLAY_STATE);
-  
-  game_running = ON;
+  change_game_state(game, GAME_PLAY_STATE);
+
+  return game;
 }
 
 
@@ -113,40 +97,52 @@ void init_game()
 
 
 
-void init_story_game()
+GAME *create_story_game()
 {
-  init_game();
-  init_story_world();
-}
-
-
-
-
-void init_endless_game()
-{
-  init_game();
-  init_endless_world();
-}
-
-
-
-
-void stop_game()
-{
-  stop_world();
-  destroy_anim(gameover_anim);
-  destroy_anim(full_heart_anim);
-  destroy_anim(empty_heart_anim);
+  GAME *game;
   
-  game_running = OFF;
+  game = create_game();
+  game->world = create_story_world();
+  
+  return game;
 }
 
 
 
 
-FLAG is_game_over()
+GAME *create_endless_game()
 {
-  if (grab_hot_player()->character->health == 0) {
+  GAME *game;
+  
+  game = create_game();
+  game->world = create_endless_world();
+  
+  return game;
+}
+
+
+
+
+void destroy_game(GAME *game)
+{
+  if (game == NULL) {
+    return;
+  }
+
+  destroy_world(game->world);
+  destroy_anim(game->gameover_anim);
+  destroy_anim(game->full_heart_anim);
+  destroy_anim(game->empty_heart_anim);
+
+  free_memory(game);
+}
+
+
+
+
+FLAG is_game_over(GAME *game)
+{
+  if (game->world->player->character->health == 0) {
     return ON;
   }
   
@@ -156,7 +152,6 @@ FLAG is_game_over()
 
 
 
-/*
 FLAG is_game_won(GAME *game)
 {
   if (game->world->is_end_of_world == NULL) {
@@ -165,12 +160,11 @@ FLAG is_game_won(GAME *game)
   
   return game->world->is_end_of_world(game->world);
 }
-*/
 
 
 
 
-void update_game()
+void update_game(GAME *game)
 {
   if (is_key_pressed(KEY_ESC)) {
     show_mainmenu();
@@ -189,7 +183,7 @@ void update_game()
   }
   */
 
-  switch (game_state) {
+  switch (game->state) {
 
   case GAME_PLAY_STATE:
     /*
@@ -197,10 +191,10 @@ void update_game()
       [self setState: GAME_MENU_STATE];
     }
     */
-    update_world();
+    update_world(game->world);
     
-    if (is_game_over()) {
-      change_game_state(GAME_OVER_STATE);
+    if (is_game_over(game)) {
+      change_game_state(game, GAME_OVER_STATE);
     }
     
     break;
@@ -241,38 +235,35 @@ void update_game()
 
 
 
-void paint_game(BITMAP *canvas)
+void paint_game(GAME *game, BITMAP *canvas)
 {
   int max_health;
   int health;
   int i;
   
-  switch (game_state) {
+  if (game == NULL || canvas == NULL) {
+    return;
+  }
+
+  switch (game->state) {
 
   case GAME_PLAY_STATE:
     /* Paint the game */
-    paint_world(canvas);
+    paint_world(game->world, canvas);
     
     /* Put the player's health on the screen. */
-    max_health = grab_hot_player()->character->max_health;
-    health = grab_hot_player()->character->health;
+    max_health = game->world->player->character->max_health;
+    health = game->world->player->character->health;
     
     for (i = 0; i < max_health; i++) {
       if (i < health) {
-        paint_anim(full_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
+        paint_anim(game->full_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
       } else {
-        paint_anim(empty_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
+        paint_anim(game->empty_heart_anim, canvas, grab_canvas_width() - (max_health + 1) * (grab_tile_size() / 2) + (i * (grab_tile_size() / 2)), 0);
       }
     }
     
     break;
   }
-}
-
-
-
-FLAG can_resume_game()
-{
-  return game_running;
 }
 

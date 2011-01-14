@@ -1,7 +1,7 @@
 #include "anim.h"
 #include "colors.h"
-#include "engine.h"
 #include "game.h"
+#include "engine.h"
 #include "input.h"
 #include "kwestkingdom.h"
 #include "mainmenu.h"
@@ -35,35 +35,7 @@ enum {
 
 
 
-/**
- * The title screen image
- */
-ANIM *title_anim = NULL;
-
-/**
- * The selection icon
- */
-ANIM *pointer_anim = NULL;
-
-/**
- * The title screen background
- */
-BITMAP *title_background = NULL;
-
-/**
- * Which line the menu pointer is on
- */
-int menu_selection = NEW_GAME_SELECTION;
-
-/**
- * Intro, menu, or gameplay.
- */
-int menu_state = MAINMENU_TITLE_STATE;
-
-
-
-
-void paint_title_menu(BITMAP *canvas)
+void paint_title_menu(MAINMENU *menu, BITMAP *canvas)
 {
   int x;
   int y;
@@ -79,7 +51,7 @@ void paint_title_menu(BITMAP *canvas)
   hTextOffset = grab_tile_size();
   vTextOffset = lineSpacing;
 
-  blit(title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+  blit(menu->title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);
 
   /**
    * Add a background "box" to the main menu.
@@ -97,10 +69,10 @@ void paint_title_menu(BITMAP *canvas)
    * Paint the title of the game
    */
   paint_anim(
-    title_anim,
+    menu->title_anim,
     canvas,
-    (grab_canvas_width() / 2) - (grab_anim_width(title_anim) / 2),
-    (grab_canvas_width() - grab_anim_width(title_anim)) / 2
+    (grab_canvas_width() / 2) - (grab_anim_width(menu->title_anim) / 2),
+    (grab_canvas_width() - grab_anim_width(menu->title_anim)) / 2
   );
 
   x_text_pos = x + hTextOffset;
@@ -147,28 +119,28 @@ void paint_title_menu(BITMAP *canvas)
   }
 
   /* The pointer to the current selection */
-  paint_anim(pointer_anim, canvas, x - 4, y + vTextOffset + (lineSpacing * menu_selection) - 1);
+  paint_anim(menu->pointer_anim, canvas, x - 4, y + vTextOffset + (lineSpacing * menu->selection) - 1);
   
   /* TEMP */
   /* Uncomment to see only the background image */
-  /*blit(title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);*/
+  /*blit(menu->title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);*/
 }
 
 
 
 
-void activate_mainmenu_selection()
+void activate_mainmenu_selection(MAINMENU *menu)
 {
-  switch (menu_selection) {
+  switch (menu->selection) {
 
   case NEW_GAME_SELECTION:
-    menu_selection = RESUME_GAME_SELECTION;
-    start_story_game();
+    menu->selection = RESUME_GAME_SELECTION;
+    play_story_game();
     break;
 
   case SURVIVAL_MODE_SELECTION:
-    menu_selection = RESUME_GAME_SELECTION;
-    start_endless_game();
+    menu->selection = RESUME_GAME_SELECTION;
+    play_endless_game();
     break;
 
   case RESUME_GAME_SELECTION:
@@ -215,45 +187,61 @@ void paint_random_room_image(int room_theme, BITMAP *canvas)
 
 
 
-void init_mainmenu()
+MAINMENU *create_mainmenu()
 {
+  MAINMENU *menu;
+  
+  menu = alloc_memory(sizeof(MAINMENU));;
+  
   /**
    * Load the game title
    */
-  title_anim = create_anim(0, OFF);
-  add_frame(title_anim, grab_image(IMG_TITLE, NORMAL));
+  menu->title_anim = create_anim(0, OFF);
+  add_frame(menu->title_anim, grab_image(IMG_TITLE, NORMAL));
   
   /**
    * Load the menu pointer
    */
-  pointer_anim = create_anim(6, ON);
-  add_frame(pointer_anim, grab_image(IMG_SWORD_HOLD_1, ROTATE));
-  add_frame(pointer_anim, grab_image(IMG_SWORD_HOLD_2, ROTATE));
-  add_frame(pointer_anim, grab_image(IMG_SWORD_HOLD_3, ROTATE));
-  add_frame(pointer_anim, grab_image(IMG_SWORD_HOLD_4, ROTATE));
+  menu->pointer_anim = create_anim(6, ON);
+  add_frame(menu->pointer_anim, grab_image(IMG_SWORD_HOLD_1, ROTATE));
+  add_frame(menu->pointer_anim, grab_image(IMG_SWORD_HOLD_2, ROTATE));
+  add_frame(menu->pointer_anim, grab_image(IMG_SWORD_HOLD_3, ROTATE));
+  add_frame(menu->pointer_anim, grab_image(IMG_SWORD_HOLD_4, ROTATE));
 
   /**
    * Used to draw the image behind the main menu
    */
-  title_background = create_bitmap(grab_canvas_width(), grab_canvas_height());
+  menu->title_background = create_bitmap(grab_canvas_width(), grab_canvas_height());
+
+  menu->selection = 0;
+  
+  reload_mainmenu(menu);
+  
+  return menu;
 }
 
 
 
 
-void stop_mainmenu()
+void destroy_mainmenu(MAINMENU *menu)
 {
-  destroy_anim(title_anim);
-  destroy_anim(pointer_anim);
-  destroy_bitmap(title_background);
+  if (menu == NULL) {
+    return;
+  }
+  
+  destroy_anim(menu->title_anim);
+  destroy_anim(menu->pointer_anim);
+  destroy_bitmap(menu->title_background);
+  
+  free_memory(menu);
 }
 
 
 
 
-void update_mainmenu()
+void update_mainmenu(MAINMENU *menu)
 {
-  switch (menu_state) {
+  switch (menu->state) {
   
   case MAINMENU_TITLE_STATE:
     
@@ -263,35 +251,35 @@ void update_mainmenu()
       
     } else if (is_key_pressed(KEY_UP)) {
       
-      menu_selection--;
+      menu->selection--;
       
-      if (menu_selection == RESUME_GAME_SELECTION && can_resume_game() == OFF) {
-        menu_selection--;
+      if (menu->selection == RESUME_GAME_SELECTION && !can_resume_game()) {
+        menu->selection--;
       }
       
-      if (menu_selection < 0) {
-        menu_selection++;
+      if (menu->selection < 0) {
+        menu->selection++;
       }
       
     } else if (is_key_pressed(KEY_DOWN)) {
       
-      menu_selection++;
+      menu->selection++;
       
-      if (menu_selection == RESUME_GAME_SELECTION && can_resume_game() == OFF) {
-        menu_selection++;
+      if (menu->selection == RESUME_GAME_SELECTION && !can_resume_game()) {
+        menu->selection++;
       }
       
-      if (menu_selection == NUM_MENU_SELECTIONS) {
-        menu_selection--;
+      if (menu->selection == NUM_MENU_SELECTIONS) {
+        menu->selection--;
       }
       
     } else if (is_key_pressed(KEY_ENTER)) {
       
-      activate_mainmenu_selection();
+      activate_mainmenu_selection(menu);
       
     }
     
-    animate(pointer_anim);
+    animate(menu->pointer_anim);
 
     /**
      * Load the fullscreen and sound keys.
@@ -323,12 +311,12 @@ void update_mainmenu()
 
 
 
-void paint_mainmenu(BITMAP *canvas)
+void paint_mainmenu(MAINMENU *menu, BITMAP *canvas)
 {
-  switch (menu_state) {
+  switch (menu->state) {
 
   case MAINMENU_TITLE_STATE:
-    paint_title_menu(canvas);
+    paint_title_menu(menu, canvas);
     break;
 
   }
@@ -337,8 +325,15 @@ void paint_mainmenu(BITMAP *canvas)
 
 
 
-void generate_mainmenu_background()
+void reload_mainmenu(MAINMENU *menu)
 {
-  paint_random_room_image(ROOM_THEME_FOREST, title_background);
+  reset_anim(menu->title_anim);
+  reset_anim(menu->pointer_anim);
+  
+  menu->state = MAINMENU_TITLE_STATE;
+  
+  /**
+   * Create a new random background image.
+   */
+  paint_random_room_image(ROOM_THEME_FOREST, menu->title_background);
 }
-

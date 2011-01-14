@@ -10,11 +10,9 @@
 
 
 
-extern PLAYER *player;
-extern ROOM *rooms[MAX_ROOMS];
-extern int room_idx;
-extern int num_cached_rooms;
-extern int max_cached_rooms;
+/**
+ * Private
+ */
 
 
 
@@ -22,9 +20,9 @@ extern int max_cached_rooms;
 /**
  * This function can be used to see if the game has been won.
  */
-FLAG is_in_final_room()
+FLAG is_in_final_room(WORLD *world)
 {
-  if (grab_hot_room()->num == 40) {
+  if (grab_room(world)->num == 40) {
     return ON;
   }
   
@@ -172,7 +170,7 @@ int calc_edge_dir(int row, int col)
 
 
 
-ROOM *create_story_world_room(int num)
+ROOM *create_story_world_room(WORLD *world, int num)
 {
   ROOM *room;
   
@@ -196,8 +194,8 @@ ROOM *create_story_world_room(int num)
   
   if (num == 1) {
     
-    entr_row = player->character->sprite->row;
-    entr_col = player->character->sprite->col;
+    entr_row = world->player->character->sprite->row;
+    entr_col = world->player->character->sprite->col;
     
     generate_exit_on_border(&exit_row, &exit_col, SOUTH);
     
@@ -222,8 +220,8 @@ ROOM *create_story_world_room(int num)
      * Get a pointer to the previous room
      */
     for (i = 0; prev_room == NULL && i < MAX_ROOMS; i++) {
-      if (rooms[i]->num == num - 1) {
-        prev_room = rooms[i];
+      if (world->rooms[i]->num == num - 1) {
+        prev_room = world->rooms[i];
       }
     }
     
@@ -289,9 +287,10 @@ ROOM *create_story_world_room(int num)
 
 
 
-ROOM *create_endless_world_room(int num)
+ROOM *create_endless_world_room(WORLD *world, int num)
 {
-  num = num; /* TEMP */
+  world = world; /* TEMP */
+  num = num;
   
   return NULL;
 }
@@ -306,25 +305,38 @@ ROOM *create_endless_world_room(int num)
 
 
 
-void init_story_world()
+WORLD *create_story_world()
 {
-  num_cached_rooms = 10;
-  max_cached_rooms = 10;
-  /*create_room = create_story_world_room;*/
-  /*is_end_of_world = is_in_final_room;*/
+  WORLD *world;
   
-  cache_rooms();
+  world = create_world();
+  
+  world->num_cached_rooms = 10;
+  world->max_cached_rooms = 10;
+  world->create_room = create_story_world_room;
+  world->is_end_of_world = is_in_final_room;
+  
+  cache_rooms(world);
+  
+  return world;
 }
 
 
 
 
-void init_endless_world()
+WORLD *create_endless_world()
 {
-  num_cached_rooms = 10;
-  max_cached_rooms = 10;
-  /*create_room = create_endless_world_room;*/
-  /*is_end_of_world = NULL;*/
+  WORLD *world;
   
-  cache_rooms();
+  world = create_world();
+  
+  world->num_cached_rooms = 10;
+  world->max_cached_rooms = 10;
+  world->create_room = create_endless_world_room;
+  world->is_end_of_world = NULL;
+  
+  cache_rooms(world);
+  
+  return world;
 }
+

@@ -2,10 +2,12 @@
 #define WORLD_GEN_HEADER
 
 
-void init_story_world();
-void init_endless_world();
+struct WORLD;
+struct ROOM;
 
-ROOM *create_story_world_room(int num);
+
+struct WORLD *create_story_world();
+struct WORLD *create_endless_world();
 
 
 #endif
