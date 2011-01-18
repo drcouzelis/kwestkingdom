@@ -272,5 +272,9 @@ void refresh_screen()
     grab_canvas_height() * scale
   );
   
+  acquire_screen();
+  
   update_screen();
+  
+  release_screen();
 }

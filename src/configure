@@ -6,7 +6,7 @@ rm -f Makefile
 
 echo 'CC = gcc' >> Makefile
 echo 'OUTPUT = ../share/kwestkingdom/kwestkingdom' >> Makefile
-echo 'DEBUG = -g -O2 -Wall -Wextra -ansi -pedantic' >> Makefile # -g for debug
+echo 'DEBUG = -g -O2 -Wall -ansi -pedantic' >> Makefile # -g for debug # -Wextra 
 echo 'LINKING_OPTIONS = ' >> Makefile
 echo 'CFLAGS = $(shell allegro-config --cflags)' >> Makefile
 echo 'LDFLAGS = $(shell allegro-config --libs)' >> Makefile
