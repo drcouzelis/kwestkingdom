@@ -272,9 +272,11 @@ void refresh_screen()
     grab_canvas_height() * scale
   );
   
-  acquire_screen();
+  /* Needed for Haiku */
+  /*acquire_screen();*/
   
   update_screen();
   
-  release_screen();
+  /* Needed for Haiku */
+  /*release_screen();*/
 }

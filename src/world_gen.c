@@ -18,51 +18,144 @@
 
 
 
+#define NUM_BORDER_TILES 24
+
+
+
+
 /**
  * Randomly generate a row and col point that is
  * on the edge of the screen.
  * Tell it the direction to exclude to prevent creating
  * an exit on the same side as the entrance.
  */
-void generate_exit_on_border(int *row, int *col, int exclude_dir)
+void generate_exit_on_border(int *row, int *col, int from_dir)
 {
-  /**
-   * I think this algorithm is kind of stupid.
-   * Try making a better one sometime.
-   */
+  int pos;
+  int num;
   
-  int n;
-  int s;
-  int e;
-  int w;
+  int border_for_n[NUM_BORDER_TILES] = {
+    ROWCOL2POS(11, 1),
+    ROWCOL2POS(11, 2),
+    ROWCOL2POS(11, 3),
+    ROWCOL2POS(11, 4),
+    ROWCOL2POS(11, 5),
+    ROWCOL2POS(11, 6),
+    ROWCOL2POS(11, 7),
+    ROWCOL2POS(11, 8),
+    ROWCOL2POS(11, 9),
+    ROWCOL2POS(11, 10),
+    ROWCOL2POS(11, 11),
+    ROWCOL2POS(11, 12),
+    ROWCOL2POS(11, 13),
+    ROWCOL2POS(11, 14),
+    ROWCOL2POS(6, 0),
+    ROWCOL2POS(7, 0),
+    ROWCOL2POS(8, 0),
+    ROWCOL2POS(9, 0),
+    ROWCOL2POS(10, 0),
+    ROWCOL2POS(6, 15),
+    ROWCOL2POS(7, 15),
+    ROWCOL2POS(8, 15),
+    ROWCOL2POS(9, 15),
+    ROWCOL2POS(10, 15)
+  };
   
-  int dir;
+  int border_for_s[NUM_BORDER_TILES] = {
+    ROWCOL2POS(0, 1),
+    ROWCOL2POS(0, 2),
+    ROWCOL2POS(0, 3),
+    ROWCOL2POS(0, 4),
+    ROWCOL2POS(0, 5),
+    ROWCOL2POS(0, 6),
+    ROWCOL2POS(0, 7),
+    ROWCOL2POS(0, 8),
+    ROWCOL2POS(0, 9),
+    ROWCOL2POS(0, 10),
+    ROWCOL2POS(0, 11),
+    ROWCOL2POS(0, 12),
+    ROWCOL2POS(0, 13),
+    ROWCOL2POS(0, 14),
+    ROWCOL2POS(1, 0),
+    ROWCOL2POS(2, 0),
+    ROWCOL2POS(3, 0),
+    ROWCOL2POS(4, 0),
+    ROWCOL2POS(5, 0),
+    ROWCOL2POS(1, 15),
+    ROWCOL2POS(2, 15),
+    ROWCOL2POS(3, 15),
+    ROWCOL2POS(4, 15),
+    ROWCOL2POS(5, 15)
+  };
   
-  n = random_number(1, COLS - 2);
-  s = random_number(1, COLS - 2);
-  e = random_number(1, ROWS - 2);
-  w = random_number(1, ROWS - 2);
+  int border_for_e[NUM_BORDER_TILES] = {
+    ROWCOL2POS(1, 0),
+    ROWCOL2POS(2, 0),
+    ROWCOL2POS(3, 0),
+    ROWCOL2POS(4, 0),
+    ROWCOL2POS(5, 0),
+    ROWCOL2POS(6, 0),
+    ROWCOL2POS(7, 0),
+    ROWCOL2POS(8, 0),
+    ROWCOL2POS(9, 0),
+    ROWCOL2POS(10, 0),
+    ROWCOL2POS(0, 1),
+    ROWCOL2POS(0, 2),
+    ROWCOL2POS(0, 3),
+    ROWCOL2POS(0, 4),
+    ROWCOL2POS(0, 5),
+    ROWCOL2POS(0, 6),
+    ROWCOL2POS(0, 7),
+    ROWCOL2POS(11, 1),
+    ROWCOL2POS(11, 2),
+    ROWCOL2POS(11, 3),
+    ROWCOL2POS(11, 4),
+    ROWCOL2POS(11, 5),
+    ROWCOL2POS(11, 6),
+    ROWCOL2POS(11, 7)
+  };
   
-  dir = random_number(NORTH, WEST);
+  int border_for_w[NUM_BORDER_TILES] = {
+    ROWCOL2POS(1, 15),
+    ROWCOL2POS(2, 15),
+    ROWCOL2POS(3, 15),
+    ROWCOL2POS(4, 15),
+    ROWCOL2POS(5, 15),
+    ROWCOL2POS(6, 15),
+    ROWCOL2POS(7, 15),
+    ROWCOL2POS(8, 15),
+    ROWCOL2POS(9, 15),
+    ROWCOL2POS(10, 15),
+    ROWCOL2POS(0, 8),
+    ROWCOL2POS(0, 9),
+    ROWCOL2POS(0, 10),
+    ROWCOL2POS(0, 11),
+    ROWCOL2POS(0, 12),
+    ROWCOL2POS(0, 13),
+    ROWCOL2POS(0, 14),
+    ROWCOL2POS(11, 8),
+    ROWCOL2POS(11, 9),
+    ROWCOL2POS(11, 10),
+    ROWCOL2POS(11, 11),
+    ROWCOL2POS(11, 12),
+    ROWCOL2POS(11, 13),
+    ROWCOL2POS(11, 14)
+  };
   
-  if (dir == exclude_dir) {
-    dir++;
-    dir %= 4;
-  }
+  num = random_number(0, NUM_BORDER_TILES - 1);
   
-  if (dir == NORTH) {
-    *row = 0;
-    *col = n;
-  } else if (dir == SOUTH) {
-    *row = ROWS -1;
-    *col = s;
-  } else if (dir == EAST) {
-    *row = e;
-    *col = COLS - 1;
+  if (from_dir == NORTH) {
+    pos = border_for_n[num];
+  } else if (from_dir == SOUTH) {
+    pos = border_for_s[num];
+  } else if (from_dir == EAST) {
+    pos = border_for_e[num];
   } else {
-    *row = w;
-    *col = 0;
+    pos = border_for_w[num];
   }
+  
+  *row = POS2ROW(pos);
+  *col = POS2COL(pos);
 }
 
 
@@ -134,23 +227,22 @@ int shift_door_col(int col)
 
 int calc_edge_dir(int row, int col)
 {
-  if (row == 0) {
-    return NORTH;
-  }
+  int map[ROWS][COLS] = {
+    {NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH},
+    { WEST,  WEST, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH, NORTH,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST, NORTH, NORTH, NORTH, NORTH,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST, NORTH, NORTH,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  WEST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST, SOUTH, SOUTH,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST,  WEST,  WEST, SOUTH, SOUTH, SOUTH, SOUTH,  EAST,  EAST,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST,  WEST,  WEST, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH,  EAST,  EAST,  EAST,  EAST},
+    { WEST,  WEST, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH,  EAST,  EAST},
+    {SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH, SOUTH}
+  };
   
-  if (row == ROWS - 1) {
-    return SOUTH;
-  }
-  
-  if (col == 0) {
-    return WEST;
-  }
-  
-  if (col == COLS - 1) {
-    return EAST;
-  }
-  
-  return -1;
+  return map[row][col];
 }
 
 

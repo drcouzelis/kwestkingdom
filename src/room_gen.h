@@ -93,5 +93,12 @@ void generate_terrain(struct ROOM *room, TERRAIN_OPTIONS *options, FLAG show_pat
  */
 void generate_enemies(struct ROOM *room, int types);
 
+/**
+ * Convert between position and rows and columns.
+ */
+#define ROWCOL2POS(r, c) (((r) * (COLS)) + (c))
+#define POS2ROW(p) ((p) / (COLS))
+#define POS2COL(p) ((p) - (((p) / (COLS)) * (COLS)))
+
 
 #endif
