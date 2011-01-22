@@ -4,6 +4,8 @@
 #include "engine.h"
 #include "game.h"
 #include "input.h"
+#include "kwestkingdom.h"
+#include "level.h"
 #include "memory.h"
 #include "player.h"
 #include "resources.h"
@@ -12,8 +14,6 @@
 #include "screen.h"
 #include "sound.h"
 #include "world.h"
-#include "world_gen.h"
-#include "kwestkingdom.h"
 
 
 
@@ -102,7 +102,7 @@ GAME *create_story_game()
   GAME *game;
   
   game = create_game();
-  game->world = create_story_world();
+  game->world = create_world();
   
   return game;
 }
@@ -112,12 +112,7 @@ GAME *create_story_game()
 
 GAME *create_endless_game()
 {
-  GAME *game;
-  
-  game = create_game();
-  game->world = create_endless_world();
-  
-  return game;
+  return create_story_game();
 }
 
 
@@ -154,7 +149,11 @@ FLAG is_game_over(GAME *game)
 
 FLAG is_game_won(GAME *game)
 {
-  if (game->world->final_room == grab_room()->num) {
+  WORLD *world;
+  
+  world = game->world;
+  
+  if (world->final_level == world->level->num) {
     return ON;
   }
   
@@ -265,44 +264,4 @@ void paint_game(GAME *game, BITMAP *canvas)
     
     break;
   }
-}
-
-
-
-
-struct WORLD *grab_world()
-{
-  if (grab_game() != NULL) {
-    return grab_game()->world;
-  }
-  
-  return NULL;
-}
-
-
-
-
-struct ROOM *grab_room()
-{
-  WORLD *world = grab_world();
-  
-  if (world != NULL) {
-    return world->rooms[world->room_idx];
-  }
-  
-  return NULL;
-}
-
-
-
-
-struct PLAYER *grab_player()
-{
-  WORLD *world = grab_world();
-  
-  if (world != NULL) {
-    return world->player;
-  }
-  
-  return NULL;
 }

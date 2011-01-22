@@ -11,6 +11,7 @@
 #include "room_gen.h"
 #include "screen.h"
 #include "sound.h"
+#include "utilities.h"
 
 
 
@@ -56,6 +57,7 @@ void paint_title_menu(MAINMENU *menu, BITMAP *canvas)
   /**
    * Add a background "box" to the main menu.
    */
+  /*
   rectfill(
     canvas,
     x,
@@ -64,6 +66,7 @@ void paint_title_menu(MAINMENU *menu, BITMAP *canvas)
     y + (grab_tile_size() * 5),
     RED
   );
+  */
 
   /**
    * Paint the title of the game
@@ -79,51 +82,47 @@ void paint_title_menu(MAINMENU *menu, BITMAP *canvas)
   y_text_pos = y + vTextOffset;
 
   /* New Game */
-  textout_ex(canvas, font, "New Game", x_text_pos, y_text_pos, WHITE, -1);
+  show_text(canvas, "New Game", x_text_pos, y_text_pos, WHITE, BLACK);
 
   /* Survival Mode */
   y_text_pos += lineSpacing;
-  textout_ex(canvas, font, "Survival Mode", x_text_pos, y_text_pos, WHITE, -1);
+  show_text(canvas, "Survival Mode", x_text_pos, y_text_pos, WHITE, BLACK);
 
   /* Resume Game */
   y_text_pos += lineSpacing;
   if (can_resume_game()) {
-    textout_ex(canvas, font, "Resume Game", x_text_pos, y_text_pos, WHITE, -1);
+    show_text(canvas, "Resume Game", x_text_pos, y_text_pos, WHITE, BLACK);
   } else {
-    textout_ex(canvas, font, "Resume Game", x_text_pos, y_text_pos, GRAY, -1);
+    show_text(canvas, "Resume Game", x_text_pos, y_text_pos, LITE_GRAY, DARK_GRAY);
   }
 
   /* High Scores */
   y_text_pos += lineSpacing;
-  textout_ex(canvas, font, "High Scores", x_text_pos, y_text_pos, WHITE, -1);
+  show_text(canvas, "High Scores", x_text_pos, y_text_pos, WHITE, BLACK);
 
   /* Quit */
   x_text_pos = x + hTextOffset - lineSpacing;
   y_text_pos += lineSpacing * 2;
-  textout_ex(canvas, font, "Press ESC To Quit", x_text_pos, y_text_pos, WHITE, -1);
+  show_text(canvas, "Press ESC To Quit", x_text_pos, y_text_pos, WHITE, BLACK);
 
   /* Fullscreen */
   y_text_pos += lineSpacing;
   if (is_windowed_mode()) {
-    textout_ex(canvas, font, "F for Fullscreen", x_text_pos, y_text_pos, WHITE, -1);
+    show_text(canvas, "F for Fullscreen", x_text_pos, y_text_pos, WHITE, BLACK);
   } else {
-    textout_ex(canvas, font, "F for Windowed", x_text_pos, y_text_pos, WHITE, -1);
+    show_text(canvas, "F for Windowed", x_text_pos, y_text_pos, WHITE, BLACK);
   }
 
   /* Sound */
   y_text_pos += lineSpacing;
   if (is_sound_enabled()) {
-    textout_ex(canvas, font, "S for Sound (On)", x_text_pos, y_text_pos, WHITE, -1);
+    show_text(canvas, "S for Sound (On)", x_text_pos, y_text_pos, WHITE, BLACK);
   } else {
-    textout_ex(canvas, font, "S for Sound (Off)", x_text_pos, y_text_pos, WHITE, -1);
+    show_text(canvas, "S for Sound (Off)", x_text_pos, y_text_pos, WHITE, BLACK);
   }
 
   /* The pointer to the current selection */
   paint_anim(menu->pointer_anim, canvas, x - 4, y + vTextOffset + (lineSpacing * menu->selection) - 1);
-  
-  /* TEMP */
-  /* Uncomment to see only the background image */
-  /*blit(menu->title_background, canvas, 0, 0, 0, 0, canvas->w, canvas->h);*/
 }
 
 

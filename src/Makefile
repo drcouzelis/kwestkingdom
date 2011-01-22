@@ -5,9 +5,9 @@ LINKING_OPTIONS =
 CFLAGS = $(shell allegro-config --cflags)
 LDFLAGS = $(shell allegro-config --libs)
 
-HEADERS = al_screen.h anim.h character.h colors.h direction.h enemy.h engine.h equipment.h game.h input.h kwestkingdom.h mainmenu.h memory.h messenger.h player.h resources.h room.h room_gen.h screen.h sound.h sprite.h timer.h utilities.h world.h world_gen.h
+HEADERS = al_screen.h anim.h character.h colors.h direction.h enemy.h engine.h equipment.h game.h input.h kwestkingdom.h level.h mainmenu.h memory.h messenger.h player.h resources.h room_gen.h room.h screen.h sound.h sprite.h timer.h utilities.h world.h
 
-OBJECTS = al_screen.o anim.o character.o direction.o engine.o game.o input.o kwestkingdom.o mainmenu.o memory.o player.o resources.o room.o room_gen.o screen.o sound.o sprite.o timer.o utilities.o world.o world_gen.o
+OBJECTS = al_screen.o anim.o character.o direction.o engine.o game.o input.o kwestkingdom.o level.o mainmenu.o memory.o player.o resources.o room.o room_gen.o screen.o sound.o sprite.o timer.o utilities.o world.o
 
 kwestkingdom: $(OBJECTS)
 	 mkdir -p ../share/kwestkingdom
@@ -36,6 +36,9 @@ input.o: input.c $(HEADERS)
 
 kwestkingdom.o: kwestkingdom.c $(HEADERS)
 	 $(CC) $(DEBUG) -c kwestkingdom.c $(CFLAGS)
+
+level.o: level.c $(HEADERS)
+	 $(CC) $(DEBUG) -c level.c $(CFLAGS)
 
 mainmenu.o: mainmenu.c $(HEADERS)
 	 $(CC) $(DEBUG) -c mainmenu.c $(CFLAGS)
@@ -72,9 +75,6 @@ utilities.o: utilities.c $(HEADERS)
 
 world.o: world.c $(HEADERS)
 	 $(CC) $(DEBUG) -c world.c $(CFLAGS)
-
-world_gen.o: world_gen.c $(HEADERS)
-	 $(CC) $(DEBUG) -c world_gen.c $(CFLAGS)
 
 clean:
 	 rm -f $(OBJECTS)

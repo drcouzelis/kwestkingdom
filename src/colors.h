@@ -12,6 +12,8 @@
 #define LIGHT_BLUE (makecol(130, 229, 255))
 #define RED (makecol(109, 4, 4))
 #define GRAY (makecol(109, 109, 109))
+#define DARK_GRAY (makecol(49, 49, 49))
+#define LITE_GRAY (makecol(159, 159, 159))
 #define MAGICPINK (makecol(255, 0, 255))
 
 

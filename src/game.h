@@ -41,13 +41,5 @@ FLAG is_game_won(GAME *game);
 void update_game(GAME *game);
 void paint_game(GAME *game, BITMAP *canvas);
 
-struct WORLD *grab_world();
-
-/**
- * The room that the player is currently in.
- */
-struct ROOM *grab_room();
-
-struct PLAYER *grab_player();
 
 #endif

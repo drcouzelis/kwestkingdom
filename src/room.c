@@ -257,8 +257,6 @@ ROOM *create_room()
     room->doors[i] = NULL;
   }
   
-  room->num = -1;
-
   return room;
 }
 
@@ -413,7 +411,7 @@ void destroy_tile(TILE *tile)
 
 
 
-DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col)
+DOOR *create_door(int row, int col, DESTINATION dest, int new_row, int new_col, TRANSITION trans)
 {
   DOOR *door;
 
@@ -421,10 +419,10 @@ DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col)
 
   door->row = row;
   door->col = col;
-  door->new_room_num = new_room_num;
+  door->dest = dest;
   door->new_row = new_row;
   door->new_col = new_col;
-  door->transition = TRANS_JUMP;
+  door->transition = trans;
 
   return door;
 }

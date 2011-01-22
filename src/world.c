@@ -3,6 +3,7 @@
 #include "character.h"
 #include "colors.h"
 #include "game.h"
+#include "level.h"
 #include "memory.h"
 #include "player.h"
 #include "resources.h"
@@ -22,82 +23,6 @@
 
 #define PLAYER_START_ROW (ROWS - 3)
 #define PLAYER_START_COL (COLS / 2)
-
-
-
-
-void sort_rooms(WORLD *world)
-{
-  ROOM *room;
-  int i;
-  int j;
-  FLAG done;
-  
-  for (i = 1; i < MAX_ROOMS; i++) {
-    
-    room = world->rooms[i];
-    j = i - 1;
-    done = OFF;
-    
-    while (!done) {
-      
-      if (
-        (world->rooms[j] == NULL && room != NULL) ||
-        (room != NULL && world->rooms[j]->num > room->num)
-      ) {
-        
-        world->rooms[j + 1] = world->rooms[j];
-        j--;
-        
-        if (j < 0) {
-          done = ON;
-        }
-        
-      } else {
-        
-        done = ON;
-      }
-    }
-    
-    world->rooms[j + 1] = room;
-  }
-}
-
-
-
-
-void remove_oldest_room(WORLD *world)
-{
-  destroy_room(world->rooms[0]);
-  world->rooms[0] = NULL;
-  
-  sort_rooms(world);
-}
-
-
-
-
-int count_num_rooms(WORLD *world)
-{
-  int count = 0;
-  int i;
-  
-  for (i = 0; i < MAX_ROOMS; i++) {
-    if (world->rooms[i] != NULL) {
-      count++;
-    }
-  }
-  
-  return count;
-}
-
-
-
-
-int find_highest_room_number(WORLD *world)
-{
-  return world->rooms[count_num_rooms(world) - 1]->num;
-}
 
 
 
@@ -168,25 +93,32 @@ DOOR *find_door(ROOM *room, int row, int col)
 
 
 
-void change_room(WORLD *world, int new_room_num)
+void transition_to_new_room(WORLD *world, TRANSITION transition)
 {
-  int i;
-  
-  /**
-   * Continue caching rooms until
-   * the right room number is found.
-   */
-  while (ON) {
-    
-    for (i = 0; i < MAX_ROOMS; i++) {
-      if (world->rooms[i] != NULL && world->rooms[i]->num == new_room_num) {
-        world->room_idx = i;
-        return;
-      }
-    }
-    
-    cache_rooms(world);
+  if (transition == TRANS_SCROLL_N) {
   }
+  
+  
+  world->state = WORLD_SCROLLING_STATE;
+}
+
+
+
+
+void play_in_world(WORLD *world)
+{
+  destroy_sprite(world->prev_snapshot);
+  destroy_sprite(world->next_snapshot);
+  
+  world->state = WORLD_NORMAL_STATE;
+}
+
+
+
+
+SPRITE *take_snapshot(ROOM *room)
+{
+  return NULL;
 }
 
 
@@ -197,8 +129,76 @@ void change_room(WORLD *world, int new_room_num)
  */
 void use_door(WORLD *world, DOOR *door)
 {
-  change_room(world, door->new_room_num);
-  warp_sprite(world->player->character->sprite, door->new_row, door->new_col);
+  int entr_row;
+  int entr_col;
+  int next_num;
+  TRANSITION transition;
+  
+  entr_row = door->new_row;
+  entr_col = door->new_col;
+  
+  transition = door->transition;
+  
+  /**
+   * Create a snapshot of the current room.
+   */
+  world->prev_snapshot = take_snapshot(grab_room(world));
+  
+  if (door->dest == NEXT_ROOM) {
+    
+    /**
+     * Use the next room.
+     */
+    world->level->room_idx++;
+    
+  } else if (door->dest == PREV_ROOM) {
+    
+    /**
+     * Use the previous room.
+     */
+    world->level->room_idx--;
+    
+  } else if (door->dest == NEXT_LEVEL) {
+    
+    /**
+     * Create the next level.
+     */
+    next_num = world->level->num + 1;
+    destroy_level(world->level);
+    world->level = create_level(next_num, entr_row, entr_col);
+  }
+  
+  /**
+   * Now that we are using the new room,
+   * put the player where he's supposed to be.
+   */
+  warp_sprite(world->player->character->sprite, entr_row, entr_col);
+  
+  /**
+   * Take a snapshot of the new room.
+   */
+  world->next_snapshot = take_snapshot(grab_room(world));
+  
+  /**
+   * Make the world scroll to the next room.
+   */
+  transition_to_new_room(world, transition);
+}
+
+
+
+
+int find_room_num(WORLD *world)
+{
+  int level_num;
+  int room_num;
+  
+  /* The level number starts at 1 */
+  level_num = world->level->num - 1;
+  
+  room_num = world->level->room_idx;
+  
+  return (level_num * ROOMS_PER_LEVEL) + room_num + 1;
 }
 
 
@@ -214,29 +214,25 @@ void use_door(WORLD *world, DOOR *door)
 WORLD *create_world()
 {
   WORLD *world;
-  int i;
 
   world = alloc_memory(sizeof(WORLD));
 
   world->player = create_player();
   warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
-
-  for (i = 0; i < MAX_ROOMS; i++) {
-    world->rooms[i] = NULL;
-  }
-
-  world->room_idx = 0;
-  
-  world->num_cached_rooms = 0;
-  world->max_cached_rooms = 0;
-  
-  world->final_room = -1;
   
   /**
-   * Initialize function pointer
+   * Create the first level
+   * with the path starting under the player.
    */
-  world->create_room = NULL;
-
+  world->level = create_level(1, PLAYER_START_ROW, PLAYER_START_COL);
+  
+  world->final_level = -1;
+  
+  world->prev_snapshot = NULL;
+  world->next_snapshot = NULL;
+  
+  play_in_world(world);
+  
   return world;
 }
 
@@ -245,57 +241,17 @@ WORLD *create_world()
 
 void destroy_world(WORLD *world)
 {
-  int i;
-  
   if (world == NULL) {
     return;
   }
 
   destroy_player(world->player);
+  destroy_level(world->level);
   
-  /**
-   * Destroy all rooms
-   */
-  for (i = 0; i < MAX_ROOMS; i++) {
-    destroy_room(world->rooms[i]);
-  }
+  destroy_sprite(world->prev_snapshot);
+  destroy_sprite(world->next_snapshot);
 
   free_memory(world);
-}
-
-
-
-
-void add_room(WORLD *world, ROOM *room)
-{
-  int num_rooms;
-  
-  num_rooms = count_num_rooms(world);
-  
-  if (num_rooms < MAX_ROOMS) {
-    world->rooms[num_rooms] = room;
-    sort_rooms(world);
-  }
-  
-  num_rooms++;
-  
-  if (num_rooms > world->max_cached_rooms) {
-    remove_oldest_room(world);
-  }
-}
-
-
-
-
-void cache_rooms(WORLD *world)
-{
-  ROOM *room;
-  int i;
-  
-  for (i = 0; i < world->num_cached_rooms; i++) {
-    room = world->create_room(world, find_highest_room_number(world) + 1);
-    add_room(world, room);
-  }
 }
 
 
@@ -308,7 +264,7 @@ void update_world(WORLD *world)
   
   update_turn(world);
   update_player(world->player, world);
-  update_room(world->rooms[world->room_idx]);
+  update_room(grab_room(world));
   
   /**
    * If using door
@@ -338,22 +294,28 @@ void paint_world(WORLD *world, BITMAP *canvas)
 {
   char room_num_text[16];
   
-  paint_room(world->rooms[world->room_idx], canvas);
+  paint_room(grab_room(world), canvas);
   paint_sprite(world->player->character->sprite, canvas);
   
   /**
    * Show the current room number
    */
-  sprintf(room_num_text, "Room %d", grab_room(world)->num);
+  sprintf(room_num_text, "Room %d", find_room_num(world));
   
-  textprintf_ex(
+  show_text(
     canvas,
-    font,
+    room_num_text,
     canvas->w - (grab_tile_size() * 3) - (grab_tile_size() / 2), /* x */
     canvas->h - (grab_tile_size() / 2), /* y */
     WHITE,
-    -1,
-    room_num_text
+    BLACK
   );
-  
+}
+
+
+
+
+ROOM *grab_room(WORLD *world)
+{
+  return world->level->rooms[world->level->room_idx];
 }

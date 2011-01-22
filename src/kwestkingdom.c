@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
 {
   int time;
   char method[SCREEN_UPDATE_STR_LEN];
+  char fps_text[16];
   
   if (argc > 1) {
     if (strstr(argv[1], "help")) {
@@ -152,30 +153,21 @@ int main(int argc, char *argv[])
     /**
      * Show FPS
      */
-    textprintf_ex(
-      grab_canvas(),
-      font,
-      10,
-      10,
-      WHITE,
-      -1,
-      "FPS %d",
-      get_fps()
-    );
+    sprintf(fps_text, "FPS %d", get_fps());
+    show_text(grab_canvas(), fps_text, 10, 10, WHITE, BLACK);
 
     /**
      * Show the method of screen updating.
      */
     find_screen_update_method(method);
 
-    textprintf_ex(
+    show_text(
       grab_canvas(),
-      font,
+      method,
       grab_tile_size() / 5, /* x */
       grab_canvas_height() - (grab_tile_size() / 2), /* y */
       WHITE,
-      -1,
-      method
+      BLACK
     );
 
     /**

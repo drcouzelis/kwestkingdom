@@ -1,12 +1,13 @@
 #include "character.h"
 #include "direction.h"
 #include "game.h"
+#include "level.h"
+#include "memory.h"
 #include "player.h"
 #include "room.h"
 #include "room_gen.h"
 #include "sprite.h"
 #include "world.h"
-#include "world_gen.h"
 
 
 
@@ -248,129 +249,80 @@ int calc_edge_dir(int row, int col)
 
 
 
-ROOM *create_story_world_room(WORLD *world, int num)
+void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, FLAG use_cave)
 {
   ROOM *room;
-  
   DOOR *door;
-  
-  ROOM *prev_room = NULL;
-  DOOR *prev_door = NULL;
   int i;
-  
-  int entr_row;
-  int entr_col;
   
   int exit_row;
   int exit_col;
   
+  /* A nice, generic forest terrain */
   TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
   int terrain_percent;
   
-  room = create_room();
-  room->num = num;
-  
-  if (num == 1) {
+  for (i = 0; i < ROOMS_PER_LEVEL; i++) {
     
-    entr_row = world->player->character->sprite->row;
-    entr_col = world->player->character->sprite->col;
-    
-    generate_exit_on_border(&exit_row, &exit_col, SOUTH);
-    
-    door = create_door(
-      shift_door_row(exit_row),
-      shift_door_col(exit_col),
-      num + 1,
-      flip_door_row(exit_row),
-      flip_door_col(exit_col)
-    );
-    
-    add_door(room, door);
-    
-    change_room_theme(room, ROOM_THEME_FOREST);
-    create_path(room, entr_row, entr_col, exit_row, exit_col);
-    generate_terrain(room, &terrain, ON);
-  }
-  
-  if (num >= 2) {
+    room = create_room();
     
     /**
-     * Get a pointer to the previous room
+     * Randomly create and add an exit from the room.
      */
-    for (i = 0; prev_room == NULL && i < MAX_ROOMS; i++) {
-      if (world->rooms[i]->num == num - 1) {
-        prev_room = world->rooms[i];
-      }
-    }
-    
-    /**
-     * Get a pointer to the previous door
-     */
-    for (i = 0; prev_door == NULL && i < MAX_DOORS; i++) {
-      if (prev_room->doors[i]->new_room_num == num) {
-        prev_door = prev_room->doors[i];
-      }
-    }
-    
-    entr_row = prev_door->new_row;
-    entr_col = prev_door->new_col;
-    
     generate_exit_on_border(&exit_row, &exit_col, calc_edge_dir(entr_row, entr_col));
     
-    /**
-     * Add the exit
-     */
     door = create_door(
       shift_door_row(exit_row),
       shift_door_col(exit_col),
-      num + 1,
+      NEXT_ROOM,
       flip_door_row(exit_row),
-      flip_door_col(exit_col)
+      flip_door_col(exit_col),
+      TRANS_JUMP
     );
     
     add_door(room, door);
     
     /**
-     * Add the entrance
+     * Add the entrance,
+     * but only if it's not the first room in the level.
      */
-    door = create_door(
-      shift_door_row(entr_row),
-      shift_door_col(entr_col),
-      num - 1,
-      flip_door_row(entr_row),
-      flip_door_col(entr_col)
-    );
+    if (i != 0) {
+      
+      door = create_door(
+        shift_door_row(entr_row),
+        shift_door_col(entr_col),
+        PREV_ROOM,
+        flip_door_row(entr_row),
+        flip_door_col(entr_col),
+        TRANS_JUMP
+      );
+      
+      add_door(room, door);
+    }
     
-    add_door(room, door);
-    
-    change_room_theme(room, ROOM_THEME_FOREST);
+    change_room_theme(room, theme);
     create_path(room, entr_row, entr_col, exit_row, exit_col);
     
     /**
      * Randomly generate some crazy terrain
      */
-    terrain_percent = random_number(0, 80);
-    terrain.percent_walls = random_number(0, terrain_percent);
-    terrain.percent_holes = terrain_percent - terrain.percent_walls;
-    terrain.percent_scattered_walls = random_number(0, 100);
-    terrain.percent_scattered_holes = random_number(0, 100);
-    terrain.priority = random_number(0, 1);
+    if (OFF) {
+      terrain_percent = random_number(0, 80);
+      terrain.percent_walls = random_number(0, terrain_percent);
+      terrain.percent_holes = terrain_percent - terrain.percent_walls;
+      terrain.percent_scattered_walls = random_number(0, 100);
+      terrain.percent_scattered_holes = random_number(0, 100);
+      terrain.priority = random_number(0, 1);
+    }
     
     generate_terrain(room, &terrain, ON);
+    
+    /**
+     * Add this room to the level.
+     */
+    level->rooms[i] = room;
   }
   
-  return room;
-}
-
-
-
-
-ROOM *create_endless_world_room(WORLD *world, int num)
-{
-  world = world; /* TEMP */
-  num = num;
-  
-  return NULL;
 }
 
 
@@ -383,38 +335,39 @@ ROOM *create_endless_world_room(WORLD *world, int num)
 
 
 
-WORLD *create_story_world()
+LEVEL *create_level(int num, int entr_row, int entr_col)
 {
-  WORLD *world;
+  LEVEL *level;
+  int i;
   
-  world = create_world();
+  level = alloc_memory(sizeof(LEVEL));
   
-  world->num_cached_rooms = 10;
-  world->max_cached_rooms = 10;
-  world->create_room = create_story_world_room;
-  world->final_room = 40;
+  for (i = 0; i < ROOMS_PER_LEVEL; i++) {
+    level->rooms[i] = NULL;
+  }
   
-  cache_rooms(world);
+  level->room_idx = 0;
+  level->num = num;
   
-  return world;
+  generate_level(level, ROOM_THEME_FOREST, entr_row, entr_col, OFF);
+  
+  return level;
 }
 
 
 
 
-WORLD *create_endless_world()
+void destroy_level(LEVEL *level)
 {
-  WORLD *world;
+  int i;
   
-  world = create_world();
+  if (level == NULL) {
+    return;
+  }
   
-  world->num_cached_rooms = 10;
-  world->max_cached_rooms = 10;
-  world->create_room = create_endless_world_room;
-  world->final_room = -1;
+  for (i = 0; i < ROOMS_PER_LEVEL; i++) {
+    free_memory(level->rooms[i]);
+  }
   
-  cache_rooms(world);
-  
-  return world;
+  free_memory(level);
 }
-

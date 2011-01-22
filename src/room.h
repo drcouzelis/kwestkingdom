@@ -27,11 +27,20 @@ union ENEMY;
 typedef enum
 {
   TRANS_SCROLL_N = 0,
-  THRANS_SCROLL_S,
+  TRANS_SCROLL_S,
   TRANS_SCROLL_E,
   TRANS_SCROLL_W,
+  TRANS_WIPE_N,
   TRANS_JUMP
 } TRANSITION;
+
+
+typedef enum
+{
+  NEXT_ROOM = 0,
+  PREV_ROOM,
+  NEXT_LEVEL
+} DESTINATION;
 
 
 typedef enum
@@ -82,11 +91,6 @@ typedef enum
 
 struct ROOM
 {
-  /**
-   * What room number this is.
-   */
-  int num;
-  
   /**
    * A list of the enemies currently in the room.
    */
@@ -143,10 +147,15 @@ struct DOOR
 {
   int row;
   int col;
+  
   int new_room_num;
+  
   int new_row;
   int new_col;
+  
   TRANSITION transition;
+  
+  DESTINATION dest;
 };
 
 
@@ -176,7 +185,7 @@ void destroy_tile(TILE *tile);
 /**
  * Create and destroy doors
  */
-DOOR *create_door(int row, int col, int new_room_num, int new_row, int new_col);
+DOOR *create_door(int row, int col, DESTINATION dest, int new_row, int new_col, TRANSITION trans);
 void destroy_door(DOOR *door);
 
 
