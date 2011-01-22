@@ -257,6 +257,7 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
   
   int exit_row;
   int exit_col;
+  DESTINATION dest;
   
   /* A nice, generic forest terrain */
   TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
@@ -271,10 +272,16 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
      */
     generate_exit_on_border(&exit_row, &exit_col, calc_edge_dir(entr_row, entr_col));
     
+    if (i == ROOMS_PER_LEVEL - 1) {
+      dest = NEXT_LEVEL;
+    } else {
+      dest = NEXT_ROOM;
+    }
+    
     door = create_door(
       shift_door_row(exit_row),
       shift_door_col(exit_col),
-      NEXT_ROOM,
+      dest,
       flip_door_row(exit_row),
       flip_door_col(exit_col),
       TRANS_JUMP
@@ -321,6 +328,12 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
      * Add this room to the level.
      */
     level->rooms[i] = room;
+    
+    /**
+     * In the next room, the exit will be the entrance!
+     */
+    entr_row = flip_door_row(exit_row);
+    entr_col = flip_door_col(exit_col);
   }
   
 }

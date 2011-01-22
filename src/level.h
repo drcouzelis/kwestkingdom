@@ -2,7 +2,7 @@
 #define LEVEL_HEADER
 
 
-#define ROOMS_PER_LEVEL 10
+#define ROOMS_PER_LEVEL 3 /*10*/
 
 
 typedef struct LEVEL LEVEL;
