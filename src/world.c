@@ -215,7 +215,7 @@ WORLD *create_world()
 {
   WORLD *world;
 
-  world = alloc_memory(sizeof(WORLD));
+  world = alloc_memory("WORLD", sizeof(WORLD));
 
   world->player = create_player();
   warp_sprite(world->player->character->sprite, PLAYER_START_ROW, PLAYER_START_COL);
@@ -251,7 +251,7 @@ void destroy_world(WORLD *world)
   destroy_sprite(world->prev_snapshot);
   destroy_sprite(world->next_snapshot);
 
-  free_memory(world);
+  free_memory("WORLD", world);
 }
 
 

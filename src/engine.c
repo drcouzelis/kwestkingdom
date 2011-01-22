@@ -110,7 +110,7 @@ void show_mainmenu()
 void play_story_game()
 {
   destroy_game(game);
-  game = create_story_game();
+  game = create_game();
   
   engine_state = ENGINE_GAME_STATE;
 }
@@ -121,10 +121,7 @@ void play_story_game()
 void play_endless_game()
 {
   printf("Pretending to start endless game. \n");
-  destroy_game(game);
-  game = NULL; /*create_story_game();*/
-  
-  engine_state = ENGINE_GAME_STATE;
+  play_story_game();
 }
 
 

@@ -70,7 +70,7 @@ ANIM *create_anim(int speed, FLAG loop)
   ANIM *anim;
   int i;
 
-  anim = alloc_memory(sizeof(ANIM));
+  anim = alloc_memory("ANIM", sizeof(ANIM));
 
   for (i = 0; i < MAX_FRAMES; i++) {
     anim->frames[i] = NULL;
@@ -93,7 +93,7 @@ ANIM *create_anim(int speed, FLAG loop)
 
 void destroy_anim(ANIM *anim)
 {
-  free_memory(anim);
+  free_memory("ANIM", anim);
 }
 
 

@@ -190,7 +190,7 @@ MAINMENU *create_mainmenu()
 {
   MAINMENU *menu;
   
-  menu = alloc_memory(sizeof(MAINMENU));;
+  menu = alloc_memory("MAINMENU", sizeof(MAINMENU));;
   
   /**
    * Load the game title
@@ -232,7 +232,7 @@ void destroy_mainmenu(MAINMENU *menu)
   destroy_anim(menu->pointer_anim);
   destroy_bitmap(menu->title_background);
   
-  free_memory(menu);
+  free_memory("MAINMENU", menu);
 }
 
 

@@ -270,7 +270,7 @@ PLAYER *create_player()
   SPRITE *sprite;
   ANIM *anim;
   
-  player = alloc_memory(sizeof(PLAYER));
+  player = alloc_memory("PLAYER", sizeof(PLAYER));
   
   /*
   speed = getWalkSpeed(); // In FPS
@@ -372,7 +372,7 @@ void destroy_player(PLAYER *player)
   
   destroy_character(player->character);
   
-  free_memory(player);
+  free_memory("PLAYER", player);
 }
 
 

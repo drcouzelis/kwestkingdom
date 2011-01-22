@@ -233,7 +233,7 @@ ROOM *create_room()
   int i;
   int j;
 
-  room = alloc_memory(sizeof(ROOM));
+  room = alloc_memory("ROOM", sizeof(ROOM));
 
   for (i = 0; i < MAX_ENEMIES; i++) {
     room->enemies[i] = NULL;
@@ -291,7 +291,7 @@ void destroy_room(ROOM *room)
     destroy_door(room->doors[i]);
   }
 
-  free_memory(room);
+  free_memory("ROOM", room);
 }
 
 
@@ -388,7 +388,7 @@ TILE *create_tile(TILE_TYPE type, OBSTACLE_TYPE obstacle)
 {
   TILE *tile;
 
-  tile = alloc_memory(sizeof(TILE));
+  tile = alloc_memory("TILE", sizeof(TILE));
 
   tile->type = type;
   tile->obstacle = obstacle;
@@ -405,7 +405,7 @@ void destroy_tile(TILE *tile)
     return;
   }
   
-  free_memory(tile);
+  free_memory("TILE", tile);
 }
 
 
@@ -415,7 +415,7 @@ DOOR *create_door(int row, int col, DESTINATION dest, int new_row, int new_col, 
 {
   DOOR *door;
 
-  door = alloc_memory(sizeof(DOOR));
+  door = alloc_memory("DOOR", sizeof(DOOR));
 
   door->row = row;
   door->col = col;
@@ -436,5 +436,5 @@ void destroy_door(DOOR *door)
     return;
   }
   
-  free_memory(door);
+  free_memory("DOOR", door);
 }

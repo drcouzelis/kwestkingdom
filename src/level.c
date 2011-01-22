@@ -340,7 +340,7 @@ LEVEL *create_level(int num, int entr_row, int entr_col)
   LEVEL *level;
   int i;
   
-  level = alloc_memory(sizeof(LEVEL));
+  level = alloc_memory("LEVEL", sizeof(LEVEL));
   
   for (i = 0; i < ROOMS_PER_LEVEL; i++) {
     level->rooms[i] = NULL;
@@ -366,8 +366,8 @@ void destroy_level(LEVEL *level)
   }
   
   for (i = 0; i < ROOMS_PER_LEVEL; i++) {
-    free_memory(level->rooms[i]);
+    destroy_room(level->rooms[i]);
   }
   
-  free_memory(level);
+  free_memory("LEVEL", level);
 }

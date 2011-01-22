@@ -63,8 +63,8 @@ FLAG init_kwestkingdom()
   change_colors(grab_color_palette());
   change_canvas_size(CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
-  toggle_sound(); /* Turn off sound */
+  /*install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);*/
+  /*toggle_sound();*/ /* Turn off sound */
   
   return ON;
 }

@@ -16,7 +16,7 @@ CHARACTER *create_character(SPRITE *sprite, int health)
 {
   CHARACTER *character;
   
-  character = alloc_memory(sizeof(CHARACTER));
+  character = alloc_memory("CHARACTER", sizeof(CHARACTER));
   
   character->sprite = sprite;
   
@@ -39,7 +39,7 @@ void destroy_character(CHARACTER *character)
   
   destroy_sprite(character->sprite);
   
-  free_memory(character);
+  free_memory("CHARACTER", character);
 }
 
 

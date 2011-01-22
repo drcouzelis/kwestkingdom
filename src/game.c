@@ -59,13 +59,20 @@ void change_game_state(GAME *game, int state)
 
 
 
+/**
+ * Public
+ */
+
+
+
+
 GAME *create_game()
 {
   GAME *game;
 
-  game = alloc_memory(sizeof(GAME));
+  game = alloc_memory("GAME", sizeof(GAME));
 
-  game->world = NULL;
+  game->world = create_world();
   
   /**
    * Load the game over image
@@ -90,34 +97,6 @@ GAME *create_game()
 
 
 
-/**
- * Public
- */
-
-
-
-
-GAME *create_story_game()
-{
-  GAME *game;
-  
-  game = create_game();
-  game->world = create_world();
-  
-  return game;
-}
-
-
-
-
-GAME *create_endless_game()
-{
-  return create_story_game();
-}
-
-
-
-
 void destroy_game(GAME *game)
 {
   if (game == NULL) {
@@ -129,7 +108,7 @@ void destroy_game(GAME *game)
   destroy_anim(game->full_heart_anim);
   destroy_anim(game->empty_heart_anim);
 
-  free_memory(game);
+  free_memory("GAME", game);
 }
 
 

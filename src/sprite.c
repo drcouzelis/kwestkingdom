@@ -12,7 +12,7 @@ SPRITE *create_sprite()
   SPRITE *sprite;
   int i;
   
-  sprite = alloc_memory(sizeof(SPRITE));
+  sprite = alloc_memory("SPRITE", sizeof(SPRITE));
   
   for (i = 0; i < MAX_ANIMS; i++) {
     sprite->anims[i] = NULL;
@@ -48,7 +48,7 @@ void destroy_sprite(SPRITE *sprite)
     destroy_anim(sprite->anims[i]);
   }
   
-  free_memory(sprite);
+  free_memory("SPRITE", sprite);
 }
 
 

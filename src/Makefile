@@ -5,7 +5,7 @@ LINKING_OPTIONS =
 CFLAGS = $(shell allegro-config --cflags)
 LDFLAGS = $(shell allegro-config --libs)
 
-HEADERS = al_screen.h anim.h character.h colors.h direction.h enemy.h engine.h equipment.h game.h input.h kwestkingdom.h level.h mainmenu.h memory.h messenger.h player.h resources.h room_gen.h room.h screen.h sound.h sprite.h timer.h utilities.h world.h
+HEADERS = al_screen.h anim.h character.h colors.h direction.h enemy.h engine.h equipment.h game.h input.h kwestkingdom.h level.h mainmenu.h memory.h messenger.h player.h resources.h room.h room_gen.h screen.h sound.h sprite.h timer.h utilities.h world.h
 
 OBJECTS = al_screen.o anim.o character.o direction.o engine.o game.o input.o kwestkingdom.o level.o mainmenu.o memory.o player.o resources.o room.o room_gen.o screen.o sound.o sprite.o timer.o utilities.o world.o
 

@@ -31,8 +31,7 @@ struct GAME
 };
 
 
-GAME *create_story_game();
-GAME *create_endless_game();
+GAME *create_game();
 void destroy_game(GAME *game);
 
 FLAG is_game_over(GAME *game);

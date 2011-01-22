@@ -5,15 +5,17 @@
 #include <malloc.h>
 
 
+void show_memory_label();
+
 /**
  * Call "malloc" and increase the memory allocation counter.
  */
-void *alloc_memory(size_t size);
+void *alloc_memory(const char *label, size_t size);
 
 /**
  * Call "free" and increase the memory deallocation counter.
  */
-void free_memory(void *ptr);
+void free_memory(const char *label, void *ptr);
 
 /**
  * Check to see if the number of allocations
