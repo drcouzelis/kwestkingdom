@@ -249,14 +249,78 @@ int calc_edge_dir(int row, int col)
 
 
 
+void generate_room(ROOM *room, ROOM_THEME theme, TERRAIN_OPTIONS *terrain, int entr_row, int entr_col, int exit_row, int exit_col, FLAG has_entrance, DESTINATION dest)
+{
+  DOOR *door;
+  
+  door = create_door(
+    shift_door_row(exit_row),
+    shift_door_col(exit_col),
+    dest,
+    flip_door_row(exit_row),
+    flip_door_col(exit_col),
+    TRANS_JUMP
+  );
+  
+  add_door(room, door);
+  
+  /**
+   * Add the entrance,
+   * but only if it's not the first room in the level.
+   */
+  if (has_entrance) {
+    
+    door = create_door(
+      shift_door_row(entr_row),
+      shift_door_col(entr_col),
+      PREV_ROOM,
+      flip_door_row(entr_row),
+      flip_door_col(entr_col),
+      TRANS_JUMP
+    );
+    
+    add_door(room, door);
+  }
+  
+  change_room_theme(room, theme);
+  create_path(room, entr_row, entr_col, exit_row, exit_col);
+  
+  generate_terrain(room, terrain, ON);
+}
+
+
+
+
+void generate_start_room(ROOM *room)
+{
+}
+
+
+
+
+void generate_play_room(ROOM *room, ROOM_THEME theme)
+{
+}
+
+
+
+
+void generate_bridge_room(ROOM *room)
+{
+}
+
+
+
+
 void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, FLAG use_cave)
 {
-  ROOM *room;
-  DOOR *door;
   int i;
   
   int exit_row;
   int exit_col;
+  
+  FLAG has_entrance;
+  
   DESTINATION dest;
   
   /* A nice, generic forest terrain */
@@ -265,50 +329,15 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
   
   for (i = 0; i < ROOMS_PER_LEVEL; i++) {
     
-    room = create_room();
-    
     /**
      * Randomly create and add an exit from the room.
      */
     generate_exit_on_border(&exit_row, &exit_col, calc_edge_dir(entr_row, entr_col));
     
-    if (i == ROOMS_PER_LEVEL - 1) {
-      dest = NEXT_LEVEL;
-    } else {
-      dest = NEXT_ROOM;
-    }
-    
-    door = create_door(
-      shift_door_row(exit_row),
-      shift_door_col(exit_col),
-      dest,
-      flip_door_row(exit_row),
-      flip_door_col(exit_col),
-      TRANS_JUMP
-    );
-    
-    add_door(room, door);
-    
     /**
-     * Add the entrance,
-     * but only if it's not the first room in the level.
+     * Add a new room to the level.
      */
-    if (i != 0) {
-      
-      door = create_door(
-        shift_door_row(entr_row),
-        shift_door_col(entr_col),
-        PREV_ROOM,
-        flip_door_row(entr_row),
-        flip_door_col(entr_col),
-        TRANS_JUMP
-      );
-      
-      add_door(room, door);
-    }
-    
-    change_room_theme(room, theme);
-    create_path(room, entr_row, entr_col, exit_row, exit_col);
+    level->rooms[i] = create_room();
     
     /**
      * Randomly generate some crazy terrain
@@ -322,12 +351,19 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
       terrain.priority = random_number(0, 1);
     }
     
-    generate_terrain(room, &terrain, ON);
+    if (i == 0) {
+      has_entrance = OFF;
+    } else {
+      has_entrance = ON;
+    }
     
-    /**
-     * Add this room to the level.
-     */
-    level->rooms[i] = room;
+    if (i == ROOMS_PER_LEVEL - 1) {
+      dest = NEXT_LEVEL;
+    } else {
+      dest = NEXT_ROOM;
+    }
+    
+    generate_room(level->rooms[i], theme, &terrain, entr_row, entr_col, exit_row, exit_col, has_entrance, dest);
     
     /**
      * In the next room, the exit will be the entrance!
