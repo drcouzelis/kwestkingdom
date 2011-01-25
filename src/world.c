@@ -2,12 +2,14 @@
 
 #include "character.h"
 #include "colors.h"
+#include "direction.h"
 #include "game.h"
 #include "level.h"
 #include "memory.h"
 #include "player.h"
 #include "resources.h"
 #include "room.h"
+#include "screen.h"
 #include "sprite.h"
 #include "world.h"
 
@@ -23,6 +25,37 @@
 
 #define PLAYER_START_ROW (ROWS - 3)
 #define PLAYER_START_COL (COLS / 2)
+
+
+
+
+SNAPSHOT *create_snapshot()
+{
+  SNAPSHOT *shot;
+  
+  shot = alloc_memory("SNAPSHOT", sizeof(SNAPSHOT));
+  
+  shot->film = create_bitmap(grab_canvas_width(), grab_canvas_height());
+  
+  shot->sprite = create_sprite();
+  
+  return shot;
+}
+
+
+
+
+void destroy_snapshot(SNAPSHOT *shot)
+{
+  if (shot == NULL) {
+    return;
+  }
+  
+  destroy_bitmap(shot->film);
+  destroy_sprite(shot->sprite);
+  
+  free_memory("SNAPSHOT", shot);
+}
 
 
 
@@ -93,11 +126,49 @@ DOOR *find_door(ROOM *room, int row, int col)
 
 
 
-void transition_to_new_room(WORLD *world, TRANSITION transition)
+void transition_to_new_room(WORLD *world, int dir)
 {
-  if (transition == TRANS_SCROLL_N) {
-  }
+  SPRITE *prev;
+  SPRITE *next;
   
+  prev = world->prev_snapshot->sprite;
+  next = world->next_snapshot->sprite;
+  
+  /**
+   * Prepare the room transition.
+   */
+  if (dir == EAST) {
+    warp_sprite(prev, 0, 0);
+    move_sprite(prev, 0, COLS);
+    prev->speed = grab_canvas_width();
+    warp_sprite(next, 0, -COLS);
+    move_sprite(next, 0, 0);
+    next->speed = grab_canvas_width();
+  } else if (dir == WEST) {
+    warp_sprite(prev, 0, 0);
+    move_sprite(prev, 0, -COLS);
+    prev->speed = grab_canvas_width();
+    warp_sprite(next, 0, COLS);
+    move_sprite(next, 0, 0);
+    next->speed = grab_canvas_width();
+  } else if (dir == SOUTH) {
+    warp_sprite(prev, 0, 0);
+    move_sprite(prev, ROWS, 0);
+    prev->speed = grab_canvas_height();
+    warp_sprite(next, -ROWS, 0);
+    move_sprite(next, 0, 0);
+    next->speed = grab_canvas_height();
+  } else if (dir == NORTH) {
+    warp_sprite(prev, 0, 0);
+    move_sprite(prev, -ROWS, 0);
+    prev->speed = grab_canvas_height();
+    warp_sprite(next, ROWS, 0);
+    move_sprite(next, 0, 0);
+    next->speed = grab_canvas_height();
+  } else {
+    warp_sprite(prev, 0, 0);
+    warp_sprite(next, 0, 0);
+  }
   
   world->state = WORLD_SCROLLING_STATE;
 }
@@ -107,18 +178,7 @@ void transition_to_new_room(WORLD *world, TRANSITION transition)
 
 void play_in_world(WORLD *world)
 {
-  destroy_sprite(world->prev_snapshot);
-  destroy_sprite(world->next_snapshot);
-  
   world->state = WORLD_NORMAL_STATE;
-}
-
-
-
-
-SPRITE *take_snapshot(ROOM *room)
-{
-  return NULL;
 }
 
 
@@ -142,7 +202,7 @@ void use_door(WORLD *world, DOOR *door)
   /**
    * Create a snapshot of the current room.
    */
-  world->prev_snapshot = take_snapshot(grab_room(world));
+  paint_room(grab_room(world), world->prev_snapshot->film);
   
   if (door->dest == NEXT_ROOM) {
     
@@ -177,12 +237,13 @@ void use_door(WORLD *world, DOOR *door)
   /**
    * Take a snapshot of the new room.
    */
-  world->next_snapshot = take_snapshot(grab_room(world));
+  paint_room(grab_room(world), world->next_snapshot->film);
+  paint_sprite(world->player->character->sprite, world->next_snapshot->film);
   
   /**
    * Make the world scroll to the next room.
    */
-  transition_to_new_room(world, transition);
+  transition_to_new_room(world, calc_edge_dir(entr_row, entr_col));
 }
 
 
@@ -228,8 +289,8 @@ WORLD *create_world()
   
   world->final_level = -1;
   
-  world->prev_snapshot = NULL;
-  world->next_snapshot = NULL;
+  world->prev_snapshot = create_snapshot();
+  world->next_snapshot = create_snapshot();
   
   play_in_world(world);
   
@@ -248,8 +309,8 @@ void destroy_world(WORLD *world)
   destroy_player(world->player);
   destroy_level(world->level);
   
-  destroy_sprite(world->prev_snapshot);
-  destroy_sprite(world->next_snapshot);
+  destroy_snapshot(world->prev_snapshot);
+  destroy_snapshot(world->next_snapshot);
 
   free_memory("WORLD", world);
 }
@@ -262,28 +323,43 @@ void update_world(WORLD *world)
   SPRITE *sprite;
   DOOR *door;
   
-  update_turn(world);
-  update_player(world->player, world);
-  update_room(grab_room(world));
+  switch (world->state) {
   
-  /**
-   * If using door
-   *   Draw current room to canvas
-   *   If next room doesn't exist
-   *     Create a new set of cached rooms (amount is num_cached_rooms)
-   *     When adding a room, check max_cached_rooms and delete as needed
-   *     For every door-reference to the deleted room, mark the door as a wall
-   *   Move to the next room
-   */
-  sprite = world->player->character->sprite;
-  
-  if (!is_moving(sprite)) {
+  case WORLD_NORMAL_STATE:
     
-    door = find_door(grab_room(world), sprite->row, sprite->col);
+    update_turn(world);
+    update_player(world->player, world);
+    update_room(grab_room(world));
     
-    if (door != NULL) {
-      use_door(world, door);
+    /**
+     * If using door
+     *   Draw current room to canvas
+     *   If next room doesn't exist
+     *     Create a new set of cached rooms (amount is num_cached_rooms)
+     *     When adding a room, check max_cached_rooms and delete as needed
+     *     For every door-reference to the deleted room, mark the door as a wall
+     *   Move to the next room
+     */
+    sprite = world->player->character->sprite;
+    
+    if (!is_moving(sprite)) {
+      
+      door = find_door(grab_room(world), sprite->row, sprite->col);
+      
+      if (door != NULL) {
+        use_door(world, door);
+      }
     }
+    
+    break;
+    
+  case WORLD_SCROLLING_STATE:
+    update_sprite(world->prev_snapshot->sprite);
+    update_sprite(world->next_snapshot->sprite);
+    if (!is_moving(world->next_snapshot->sprite)) {
+      play_in_world(world);
+    }
+    break;
   }
 }
 
@@ -294,8 +370,18 @@ void paint_world(WORLD *world, BITMAP *canvas)
 {
   char room_num_text[16];
   
-  paint_room(grab_room(world), canvas);
-  paint_sprite(world->player->character->sprite, canvas);
+  switch (world->state) {
+  
+  case WORLD_NORMAL_STATE:
+    paint_room(grab_room(world), canvas);
+    paint_sprite(world->player->character->sprite, canvas);
+    break;
+    
+  case WORLD_SCROLLING_STATE:
+    blit(world->prev_snapshot->film, canvas, 0, 0, world->prev_snapshot->sprite->x, world->prev_snapshot->sprite->y, grab_canvas_width(), grab_canvas_height());
+    blit(world->next_snapshot->film, canvas, 0, 0, world->next_snapshot->sprite->x, world->next_snapshot->sprite->y, grab_canvas_width(), grab_canvas_height());
+    break;
+  }
   
   /**
    * Show the current room number

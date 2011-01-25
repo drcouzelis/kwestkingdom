@@ -161,15 +161,12 @@ void paint_random_room_image(int room_theme, BITMAP *canvas)
 {
   ROOM *room;
   
-  /*TERRAIN_OPTIONS terrain = {10, 90, 100, 0, OFF, OFF, WALL_PRIORITY};*/
-  TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
-  
   room = create_room();
   
   change_room_theme(room, room_theme);
   create_path(room, ROWS - 1, COLS / 2, 0, (COLS / 2) - 1);
   add_to_path(room, ROWS - 2, 1);
-  generate_terrain(room, &terrain, OFF);
+  generate_terrain(room, grab_terrain(FOREST_TERRAIN), OFF);
   
   paint_room(room, canvas);
   destroy_room(room);

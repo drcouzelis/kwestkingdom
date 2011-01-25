@@ -25,5 +25,7 @@ struct LEVEL
 LEVEL *create_level(int num, int entr_row, int entr_col);
 void destroy_level(LEVEL *level);
 
+int calc_edge_dir(int row, int col);
+
 
 #endif

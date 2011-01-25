@@ -16,9 +16,18 @@ enum
 };
 
 
+typedef struct SNAPSHOT SNAPSHOT;
 typedef struct WORLD WORLD;
 struct PLAYER;
 struct ROOM;
+struct SPRITE;
+
+
+struct SNAPSHOT
+{
+  BITMAP *film;
+  struct SPRITE *sprite;
+};
 
 
 struct WORLD
@@ -49,8 +58,8 @@ struct WORLD
   /**
    * These are used to scroll between rooms.
    */
-  struct SPRITE *prev_snapshot;
-  struct SPRITE *next_snapshot;
+  SNAPSHOT *prev_snapshot;
+  SNAPSHOT *next_snapshot;
 };
 
 

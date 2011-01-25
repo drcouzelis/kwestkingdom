@@ -515,6 +515,65 @@ void generate_terrain_of_type(ROOM *room, TILE_TYPE type, OBSTACLE_TYPE obstacle
 
 
 
+void fill_inaccessable(ROOM *room, TILE_TYPE type, OBSTACLE_TYPE obstacle)
+{
+  PATH_ALG_DATA data;
+  
+  int row;
+  int col;
+  
+  int path_row = -1;
+  int path_col = -1;
+  
+  /**
+   * Create a path algorithm data map from the room.
+   */
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      
+      if (room->terrain[row][col]->type == TILE_TYPE_EMPTY) {
+        data.mask[row][col] = ON;
+      } else {
+        data.mask[row][col] = OFF;
+      }
+      
+      /**
+       * Store one of the locations that are on the path.
+       * I don't care which one, it's all the same path.
+       */
+      if (room->path[row][col] == ON) {
+        path_row = row;
+        path_col = col;
+      }
+    }
+  }
+  
+  /**
+   * No path found.
+   */
+  if (path_row == -1 || path_col == -1) {
+    return;
+  }
+  
+  /**
+   * Find the inaccessable areas and change them.
+   */
+  for (row = 0; row < ROWS; row++) {
+    for (col = 0; col < COLS; col++) {
+      if (data.mask[row][col] == ON) {
+        if (!is_path_between_points(&data, row, col, path_row, path_col)) {
+          destroy_tile(room->terrain[row][col]);
+          room->terrain[row][col] = create_tile(type, obstacle);
+          data.mask[row][col] = OFF;
+        }
+      }
+    }
+  }
+}
+
+
+
+
 /**
  * Public
  */
@@ -734,7 +793,7 @@ void create_path(ROOM *room, int start_row, int start_col, int end_row, int end_
      */
     len--;
   }
-
+  
   /**
    * Finally, save the mask as the new path!
    */
@@ -905,6 +964,17 @@ void generate_terrain(ROOM *room, TERRAIN_OPTIONS *options, FLAG show_path)
   add_terrain_border(room);
   
   /**
+   * Fill in inaccessable areas.
+   */
+  if (options->remove_inaccessable) {
+    if (options->priority == WALL_PRIORITY) {
+      fill_inaccessable(room, TILE_TYPE_WALL, OBSTACLE_TYPE_SOARABLE);
+    } else {
+      fill_inaccessable(room, TILE_TYPE_HOLE, OBSTACLE_TYPE_JUMPABLE);
+    }
+  }
+  
+  /**
    * Optional: mark the path.
    */
   if (show_path) {
@@ -925,4 +995,24 @@ void generate_enemies(ROOM *room, int types)
 {
   room = room; /* TEMP */
   types = types; /* TEMP */
+}
+
+
+
+
+TERRAIN_OPTIONS *grab_terrain(int type)
+{
+  static TERRAIN_OPTIONS terrains[MAX_TERRAINS] = {
+    {40, 0, 50, 0, OFF, WALL_PRIORITY}, /* Forest */
+    {25, 15, 50, 100, OFF, WALL_PRIORITY}, /* Damp Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
+    {40, 0, 50, 0, ON, WALL_PRIORITY} /* Forest */
+  };
+  
+  return &terrains[type];
 }

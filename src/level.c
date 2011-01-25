@@ -312,6 +312,58 @@ void generate_bridge_room(ROOM *room)
 
 
 
+void connect_rooms(ROOM *prev, ROOM *next)
+{
+  int dir = -1;
+  
+  int row;
+  int col;
+  
+  int to_row;
+  int to_col;
+  
+  int i;
+  
+  for (i = 0; i < MAX_DOORS; i++) {
+    if (prev->doors[i] != NULL && prev->doors[i]->dest == NEXT_ROOM) {
+      dir = calc_edge_dir(prev->doors[i]->new_row, prev->doors[i]->new_col);
+    }
+  }
+  
+  if (dir == NORTH) {
+    row = 0;
+    to_row = ROWS - 1;
+    for (col = 0; col < COLS; col++) {
+      next->terrain[row][col]->type = prev->terrain[to_row][col]->type;
+      next->terrain[row][col]->obstacle = prev->terrain[to_row][col]->obstacle;
+    }
+  } else if (dir == SOUTH) {
+    row = ROWS - 1;
+    to_row = 0;
+    for (col = 0; col < COLS; col++) {
+      next->terrain[row][col]->type = prev->terrain[to_row][col]->type;
+      next->terrain[row][col]->obstacle = prev->terrain[to_row][col]->obstacle;
+    }
+  } else if (dir == EAST) {
+    col = COLS - 1;
+    to_col = 0;
+    for (row = 0; row < ROWS; row++) {
+      next->terrain[row][col]->type = prev->terrain[row][to_col]->type;
+      next->terrain[row][col]->obstacle = prev->terrain[row][to_col]->obstacle;
+    }
+  } else if (dir == WEST) {
+    col = 0;
+    to_col = COLS - 1;
+    for (row = 0; row < ROWS; row++) {
+      next->terrain[row][col]->type = prev->terrain[row][to_col]->type;
+      next->terrain[row][col]->obstacle = prev->terrain[row][to_col]->obstacle;
+    }
+  }
+}
+
+
+
+
 void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, FLAG use_cave)
 {
   int i;
@@ -322,10 +374,6 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
   FLAG has_entrance;
   
   DESTINATION dest;
-  
-  /* A nice, generic forest terrain */
-  TERRAIN_OPTIONS terrain = {40, 0, 50, 0, OFF, OFF, WALL_PRIORITY};
-  int terrain_percent;
   
   for (i = 0; i < ROOMS_PER_LEVEL; i++) {
     
@@ -339,18 +387,6 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
      */
     level->rooms[i] = create_room();
     
-    /**
-     * Randomly generate some crazy terrain
-     */
-    if (OFF) {
-      terrain_percent = random_number(0, 80);
-      terrain.percent_walls = random_number(0, terrain_percent);
-      terrain.percent_holes = terrain_percent - terrain.percent_walls;
-      terrain.percent_scattered_walls = random_number(0, 100);
-      terrain.percent_scattered_holes = random_number(0, 100);
-      terrain.priority = random_number(0, 1);
-    }
-    
     if (i == 0) {
       has_entrance = OFF;
     } else {
@@ -363,7 +399,16 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
       dest = NEXT_ROOM;
     }
     
-    generate_room(level->rooms[i], theme, &terrain, entr_row, entr_col, exit_row, exit_col, has_entrance, dest);
+    /*generate_room(level->rooms[i], theme, grab_terrain(random_number(0, MAX_TERRAINS - 1)), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);*/
+    generate_room(level->rooms[i], theme, grab_terrain(DAMP_FOREST_TERRAIN), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);
+    
+    /**
+     * Make sure the border that touches the previous room
+     * matches up with the new room.
+     */
+    if (i > 0) {
+      connect_rooms(level->rooms[i - 1], level->rooms[i]);
+    }
     
     /**
      * In the next room, the exit will be the entrance!

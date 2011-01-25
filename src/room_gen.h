@@ -43,8 +43,7 @@ typedef struct
   /**
    * Use this to remove the areas of the room that are inaccessable.
    */
-  FLAG remove_wall_gaps;
-  FLAG remove_hole_gaps;
+  FLAG remove_inaccessable;
   
   /**
    * Whether you want the holes or the walls generated first.
@@ -54,6 +53,23 @@ typedef struct
   TERRAIN_PRIORITY priority;
 
 } TERRAIN_OPTIONS;
+
+
+enum
+{
+  FOREST_TERRAIN = 0,
+  DAMP_FOREST_TERRAIN,
+  THICK_FOREST_TERRAIN,
+  MEADOW_TERRAIN,
+  DAMP_MEADOW_TERRAIN,
+  FOREST_LAKE_TERRAIN,
+  SWAMP_TERRAIN,
+  SWAMP_FOREST_TERRAIN,
+  ISLAND_TERRAIN,
+  PUDDLES_TERRAIN,
+  
+  MAX_TERRAINS
+};
 
 
 /**
@@ -93,6 +109,7 @@ void generate_terrain(struct ROOM *room, TERRAIN_OPTIONS *options, FLAG show_pat
  */
 void generate_enemies(struct ROOM *room, int types);
 
+TERRAIN_OPTIONS *grab_terrain(int type);
 /**
  * Convert between position and rows and columns.
  */
