@@ -1003,15 +1003,16 @@ void generate_enemies(ROOM *room, int types)
 TERRAIN_OPTIONS *grab_terrain(int type)
 {
   static TERRAIN_OPTIONS terrains[MAX_TERRAINS] = {
-    {40, 0, 50, 0, OFF, WALL_PRIORITY}, /* Forest */
+    {30, 0, 50, 0, OFF, WALL_PRIORITY}, /* Forest */
     {25, 15, 50, 100, OFF, WALL_PRIORITY}, /* Damp Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY}, /* Forest */
-    {40, 0, 50, 0, ON, WALL_PRIORITY} /* Forest */
+    {50, 0, 50, 0, ON, WALL_PRIORITY}, /* Thick Forest */
+    {10, 0, 50, 0, OFF, WALL_PRIORITY}, /* Meadow */
+    {10, 10, 50, 50, OFF, WALL_PRIORITY}, /* Damp Meadow */
+    {20, 20, 100, 0, ON, WALL_PRIORITY}, /* Forest Lake */
+    {10, 40, 100, 50, ON, HOLE_PRIORITY}, /* Swamp */
+    {20, 20, 50, 50, ON, HOLE_PRIORITY}, /* Swamp Forest */
+    {5, 50, 100, 50, ON, HOLE_PRIORITY}, /* Island */
+    {0, 40, 0, 100, OFF, HOLE_PRIORITY} /* Puddles */
   };
   
   return &terrains[type];

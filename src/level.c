@@ -399,8 +399,8 @@ void generate_level(LEVEL *level, ROOM_THEME theme, int entr_row, int entr_col, 
       dest = NEXT_ROOM;
     }
     
-    /*generate_room(level->rooms[i], theme, grab_terrain(random_number(0, MAX_TERRAINS - 1)), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);*/
-    generate_room(level->rooms[i], theme, grab_terrain(DAMP_FOREST_TERRAIN), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);
+    generate_room(level->rooms[i], theme, grab_terrain(random_number(0, MAX_TERRAINS - 1)), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);
+    /*generate_room(level->rooms[i], theme, grab_terrain(PUDDLES_TERRAIN), entr_row, entr_col, exit_row, exit_col, has_entrance, dest);*/
     
     /**
      * Make sure the border that touches the previous room
