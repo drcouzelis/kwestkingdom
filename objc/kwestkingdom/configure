@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo Generating `pwd`/Makefile
+
+rm -f Makefile
+
+echo 'all:' >> Makefile
+echo $'\t rm -rf Linux/share/kwestkingdom/img' >> Makefile
+echo $'\t rm -rf Linux/share/kwestkingdom/snd' >> Makefile
+#echo $'\t rm -rf Linux/share/kwestkingdom/bgm' >> Makefile
+echo $'\t cp -r res/img Linux/share/kwestkingdom/' >> Makefile
+echo $'\t cp -r res/snd Linux/share/kwestkingdom/' >> Makefile
+#echo $'\t cp -r res/bgm Linux/share/kwestkingdom/' >> Makefile
+echo $'\t make -C src' >> Makefile
+echo >> Makefile
+
+echo 'clean:' >> Makefile
+echo $'\t make -C src clean' >> Makefile
+echo >> Makefile
+
+cd src
+./configure
+cd ../
