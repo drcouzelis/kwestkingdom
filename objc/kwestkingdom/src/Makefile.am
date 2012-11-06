@@ -1,3 +1,2 @@
-kwestkingdomdir=../
-kwestkingdom_PROGRAMS=kwestkingdom
-kwestkingdom_SOURCES=al_screen.m Animation.m Archer.m Arrow.m Bow.m Character.m Chomper.m EndlessWorld.m Enemy.m ForestRoom.m Game.m Giant.m Hammer.m Heart.m HelpTile.m Hero.m HighScoreLibrary.m KeyControl.m KwestKingdom.m List.m Map.m MoneyBag.m Ninja.m Resources.m RoomFactory.m Room.m Screen.m Shield.m Snapshot.m SnowRoom.m Sprite.m StoryWorld.m Sword.m Text.m UndergroundRoom.m World.m
+kwestkingdom_PROGRAMS = kwestkingdom
+kwestkingdom_SOURCES = al_screen.m Animation.m Archer.m Arrow.m Bow.m Character.m Chomper.m EndlessWorld.m Enemy.m ForestRoom.m Game.m Giant.m Hammer.m Heart.m HelpTile.m Hero.m HighScoreLibrary.m KeyControl.m KwestKingdom.m List.m Map.m MoneyBag.m Ninja.m Resources.m RoomFactory.m Room.m Screen.m Shield.m Snapshot.m SnowRoom.m Sprite.m StoryWorld.m Sword.m Text.m UndergroundRoom.m World.m
