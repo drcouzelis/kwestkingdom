@@ -7,11 +7,11 @@
 # (images, sounds...) into a format that would be nice to use
 # as a "constant" in your code. For example:
 #
-#   img/hero/stand/1.bmp
+#   images/hero/stand/1.bmp
 #
 # would be converted to:
 #
-#   IMG_HERO_STAND_1
+#   IMAGES_HERO_STAND_1
 
 # Get a list of all of the images and sounds that
 # are in this directory and its sub-directories.
@@ -46,7 +46,7 @@ do
   resource=$(echo $resource | \
     sed 'y|abcdefghijklmnopqrstuvwxyz|ABCDEFGHIJKLMNOPQRSTUVWXYZ|') # To upper case
   
-  echo images\[$resource\] = load_bitmap\(\"$filename\", palette\)\;
+  echo images\[$resource\] = load_bitmap\( PKGDATADIR \"$filename\", palette\)\;
   
 done
 

@@ -36,10 +36,10 @@
     shoreInsideNEAnimation = [[Animation alloc] init];
     shoreOutsideNEAnimation = [[Animation alloc] init];
     
-    [grassAnimation addFrame: getImage(IMG_TERRAIN_DIRT)];
+    [grassAnimation addFrame: getImage(IMAGES_TERRAIN_DIRT)];
     //[pathAnimation addFrame: getImage(SNOW_PATH_01)];
-    [mountainAnimation addFrame: getImage(IMG_TERRAIN_SPIRE)];
-    //[waterAnimation addFrame: getImage(IMG_TERRAIN_WATER)];
+    [mountainAnimation addFrame: getImage(IMAGES_TERRAIN_SPIRE)];
+    //[waterAnimation addFrame: getImage(IMAGES_TERRAIN_WATER)];
     
     //[shoreNorthAnimation addFrame: getImage(SHORE_01)];
     //shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];

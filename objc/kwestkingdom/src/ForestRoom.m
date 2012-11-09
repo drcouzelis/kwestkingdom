@@ -36,22 +36,22 @@
     shoreInsideNEAnimation = [[Animation alloc] init];
     shoreOutsideNEAnimation = [[Animation alloc] init];
     
-    [grassAnimation addFrame: getImage(IMG_TERRAIN_GRASS)];
-    [pathAnimation addFrame: getImage(IMG_TERRAIN_PATH)];
-    [mountainAnimation addFrame: getImage(IMG_TERRAIN_OAK)];
-    [waterAnimation addFrame: getImage(IMG_TERRAIN_WATER)];
+    [grassAnimation addFrame: getImage(IMAGES_TERRAIN_GRASS)];
+    [pathAnimation addFrame: getImage(IMAGES_TERRAIN_PATH)];
+    [mountainAnimation addFrame: getImage(IMAGES_TERRAIN_OAK)];
+    [waterAnimation addFrame: getImage(IMAGES_TERRAIN_WATER)];
     
-    [shoreNorthAnimation addFrame: getImage(IMG_SHORE_GRASS_SHORE)];
+    [shoreNorthAnimation addFrame: getImage(IMAGES_SHORE_GRASS)];
     shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
     shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
     shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
     
-    [shoreInsideNEAnimation addFrame: getImage(IMG_SHORE_GRASS_INSIDECORNER)];
+    [shoreInsideNEAnimation addFrame: getImage(IMAGES_SHORE_GRASS_INSIDECORNER)];
     shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
     shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
     shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
     
-    [shoreOutsideNEAnimation addFrame: getImage(IMG_SHORE_GRASS_OUTSIDECORNER)];
+    [shoreOutsideNEAnimation addFrame: getImage(IMAGES_SHORE_GRASS_OUTSIDECORNER)];
     [shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
     [shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
     shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];

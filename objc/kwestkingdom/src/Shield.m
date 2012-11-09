@@ -35,10 +35,10 @@ typedef enum {
   if (self) {
     
     holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_1)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_2)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_3)];
-    [holdAnimation addFrame: getImage(IMG_SHIELD_4)];
+    [holdAnimation addFrame: getImage(IMAGES_SHIELD_1)];
+    [holdAnimation addFrame: getImage(IMAGES_SHIELD_2)];
+    [holdAnimation addFrame: getImage(IMAGES_SHIELD_3)];
+    [holdAnimation addFrame: getImage(IMAGES_SHIELD_4)];
     [holdAnimation setLoop: YES];
     [holdAnimation setSpeed: 6];
 	

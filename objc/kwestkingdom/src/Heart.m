@@ -28,7 +28,7 @@
   
   if (self) {
     animation = [[Animation alloc] init];
-    [animation addFrame: getImage(IMG_ITEMS_HEART)];
+    [animation addFrame: getImage(IMAGES_HEART)];
   }
   
   return self;
@@ -38,7 +38,7 @@
 
 - collectedBy: (id<Livable, Moneyable>) character {
   [character setHealth: [character getHealth] + 1];
-  playSound(SND_HEART);
+  playSound(SOUNDS_HEART);
   return self;
 }
 

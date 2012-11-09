@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
+#import "config.h"
+
 #import "KwestKingdom.h"
 #import "Game.h"
 #import "Resources.h"
@@ -113,7 +115,7 @@ int main(int argc, char **argv) {
   fps = 0;
   frames_done = 0;
   prevTime = 0;
-  
+
   init_game();
   
   game = [[Game alloc] init];

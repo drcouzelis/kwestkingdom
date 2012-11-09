@@ -47,10 +47,10 @@ typedef enum {
     [sword toHoldState];
     
     standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMG_NINJA_1)];
-    [standAnimation addFrame: getImage(IMG_NINJA_2)];
-    [standAnimation addFrame: getImage(IMG_NINJA_3)];
-    [standAnimation addFrame: getImage(IMG_NINJA_2)];
+    [standAnimation addFrame: getImage(IMAGES_NINJA_1)];
+    [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
+    [standAnimation addFrame: getImage(IMAGES_NINJA_3)];
+    [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 6];
     
@@ -58,13 +58,13 @@ typedef enum {
     [dashAnimation setSpeed: 24];
     
     attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(IMG_NINJA_1)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMG_NINJA_2)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_1)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_3)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_3)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
+    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
     [attackAnimation setLoop: NO];
     [attackAnimation setSpeed: 12];
     

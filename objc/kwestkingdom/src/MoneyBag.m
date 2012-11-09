@@ -29,7 +29,7 @@
   if (self) {
     amount = 1;
     animation = [[Animation alloc] init];
-    [animation addFrame: getImage(IMG_ITEMS_MONEYBAG)];
+    [animation addFrame: getImage(IMAGES_MONEYBAG)];
   }
   
   return self;
@@ -39,7 +39,7 @@
 
 - collectedBy: (id<Livable, Moneyable>) character {
   [character setMoney: [character getMoney] + amount];
-  playSound(SND_MONEY);
+  playSound(SOUNDS_MONEY);
   return self;
 }
 

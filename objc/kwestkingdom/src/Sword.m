@@ -42,21 +42,21 @@ typedef enum {
   if (self) {
     
     holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMG_SWORD_HOLD_4)];
+    [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_1)];
+    [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_2)];
+    [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_3)];
+    [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_4)];
     [holdAnimation setLoop: YES];
     [holdAnimation setSpeed: 6];
     
     attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_1)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_2)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_3)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_4)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_3)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_2)];
-    [attackRightAnimation addFrame: getImage(IMG_SWORD_STAB_1)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_1)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_2)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_3)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_4)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_3)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_2)];
+    [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_1)];
     [attackRightAnimation setOffsetX: -TILE_SIZE];
     [attackRightAnimation setOffsetY: -TILE_SIZE];
     [attackRightAnimation setLoop: NO];
@@ -102,7 +102,7 @@ typedef enum {
 - toAttackUpState {
   animation = attackUpAnimation;
   [animation reset];
-  playSound(SND_SWORD);
+  playSound(SOUNDS_SWORD);
   return self;
 }
 
@@ -110,7 +110,7 @@ typedef enum {
 - toAttackDownState {
   animation = attackDownAnimation;
   [animation reset];
-  playSound(SND_SWORD);
+  playSound(SOUNDS_SWORD);
   return self;
 }
 
@@ -118,7 +118,7 @@ typedef enum {
 - toAttackLeftState {
   animation = attackLeftAnimation;
   [animation reset];
-  playSound(SND_SWORD);
+  playSound(SOUNDS_SWORD);
   return self;
 }
 
@@ -126,7 +126,7 @@ typedef enum {
 - toAttackRightState {
   animation = attackRightAnimation;
   [animation reset];
-  playSound(SND_SWORD);
+  playSound(SOUNDS_SWORD);
   return self;
 }
 

@@ -48,25 +48,25 @@ typedef enum {
     [bow toHoldState];
     
     standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMG_ARCHER_1)];
-    [standAnimation addFrame: getImage(IMG_ARCHER_2)];
-    [standAnimation addFrame: getImage(IMG_ARCHER_3)];
-    [standAnimation addFrame: getImage(IMG_ARCHER_2)];
+    [standAnimation addFrame: getImage(IMAGES_ARCHER_1)];
+    [standAnimation addFrame: getImage(IMAGES_ARCHER_2)];
+    [standAnimation addFrame: getImage(IMAGES_ARCHER_3)];
+    [standAnimation addFrame: getImage(IMAGES_ARCHER_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 3];
     
     beginAttackAnimation = [[Animation alloc] init];
-    [beginAttackAnimation addFrame: getImage(IMG_ARCHER_1)];
-    [beginAttackAnimation addFrame: getImage(IMG_ARCHER_2)];
-    [beginAttackAnimation addFrame: getImage(IMG_ARCHER_2)];
-    [beginAttackAnimation addFrame: getImage(IMG_ARCHER_3)];
+    [beginAttackAnimation addFrame: getImage(IMAGES_ARCHER_1)];
+    [beginAttackAnimation addFrame: getImage(IMAGES_ARCHER_2)];
+    [beginAttackAnimation addFrame: getImage(IMAGES_ARCHER_2)];
+    [beginAttackAnimation addFrame: getImage(IMAGES_ARCHER_3)];
     [beginAttackAnimation setLoop: NO];
     [beginAttackAnimation setSpeed: 12];
     
     endAttackAnimation = [[Animation alloc] init];
-    [endAttackAnimation addFrame: getImage(IMG_ARCHER_3)];
-    [endAttackAnimation addFrame: getImage(IMG_ARCHER_2)];
-    [endAttackAnimation addFrame: getImage(IMG_ARCHER_2)];
+    [endAttackAnimation addFrame: getImage(IMAGES_ARCHER_3)];
+    [endAttackAnimation addFrame: getImage(IMAGES_ARCHER_2)];
+    [endAttackAnimation addFrame: getImage(IMAGES_ARCHER_2)];
     [endAttackAnimation setLoop: NO];
     [endAttackAnimation setSpeed: 12];
     

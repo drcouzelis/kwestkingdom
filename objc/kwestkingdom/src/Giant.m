@@ -51,24 +51,24 @@ typedef enum {
     [hammer setState: HAMMER_HOLD_STATE];
     
     standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMG_GIANT_1)];
-    [standAnimation addFrame: getImage(IMG_GIANT_2)];
-    [standAnimation addFrame: getImage(IMG_GIANT_3)];
-    [standAnimation addFrame: getImage(IMG_GIANT_2)];
+    [standAnimation addFrame: getImage(IMAGES_GIANT_1)];
+    [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
+    [standAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
     [standAnimation setLoop: YES];
     [standAnimation setSpeed: 3];
     
     attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(IMG_GIANT_1)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMG_GIANT_2)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_1)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
+    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
     [attackAnimation setLoop: NO];
     [attackAnimation setSpeed: 24];
     

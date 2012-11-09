@@ -29,25 +29,25 @@
   if (self) {
     
     holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMG_HAMMER_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMG_HAMMER_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMG_HAMMER_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMG_HAMMER_HOLD_4)];
+    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_1)];
+    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_2)];
+    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_3)];
+    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_4)];
     [holdAnimation setOffsetY: TILE_SIZE];
     [holdAnimation setLoop: YES];
     [holdAnimation setSpeed: 6];
     
     attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_1)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_2)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_3)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_3)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_2)];
-    [attackRightAnimation addFrame: getImage(IMG_HAMMER_SWING_1)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_1)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_2)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_3)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_3)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_2)];
+    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_1)];
     [attackRightAnimation setOffsetX: TILE_SIZE];
     [attackRightAnimation setLoop: NO];
     [attackRightAnimation setSpeed: 24];
@@ -136,7 +136,7 @@
     break;
     
   case HAMMER_END_ATTACK_STATE:
-    playSound(SND_HAMMER);
+    playSound(SOUNDS_HAMMER);
     [world shake];
     break;
     
