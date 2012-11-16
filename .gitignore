@@ -1,2 +1,8 @@
 *.o
-.deps
+src/.deps
+Makefile
+config.h
+config.log
+config.status
+src/kwestkingdom
+stamp-h1
