@@ -6,21 +6,19 @@
 #ifndef SCREEN_UPDATE_H
 #define SCREEN_UPDATE_H
 
-#include <allegro.h>
-
 #ifdef __cplusplus
-    extern "C" {
+	extern "C" {
 #endif
 
 enum {
-        UPDATE_NONE = 0,
-        UPDATE_TRIPLE_BUFFER,
-        UPDATE_PAGE_FLIP,
-        UPDATE_SYSTEM_BUFFER,
-        UPDATE_DOUBLE_BUFFER,
-        UPDATE_TRIPLE_WMB,
-        UPDATE_PAGEFLIP_WMB,
-        UPDATE_MAX
+		UPDATE_NONE = 0,
+		UPDATE_TRIPLE_BUFFER,
+		UPDATE_PAGE_FLIP,
+		UPDATE_SYSTEM_BUFFER,
+		UPDATE_DOUBLE_BUFFER,
+		UPDATE_TRIPLE_WMB,
+		UPDATE_PAGEFLIP_WMB,
+		UPDATE_MAX
 };
 
 int     initialize_screen_updating(int i);
@@ -34,7 +32,7 @@ void    toggle_vsync();
 int     vsync_is_enabled();
 
 #ifdef __cplusplus
-    }
+	}
 #endif
 
 #endif
