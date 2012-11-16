@@ -16,7 +16,3 @@ Releases
 Built using GNU autotools and GCC.
 
 Written in Objective-C using the Allegro game programming library.
-
-License
--------
-Released under the GPL as free software.
