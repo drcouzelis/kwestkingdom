@@ -6,3 +6,4 @@ config.log
 config.status
 src/kwestkingdom
 stamp-h1
+autom4te.cache/requests
