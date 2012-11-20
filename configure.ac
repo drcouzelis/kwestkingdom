@@ -17,14 +17,14 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_OBJC
 
 # Check for libraries.
-AC_CHECK_LIB([alleg], [install_allegro], [],
-             [AC_MSG_ERROR([liballeg not found.])])
+AC_CHECK_LIB([objc], [__objc_exec_class], [],
+             [AC_MSG_ERROR([libobjc not found.])])
 
 AC_CHECK_LIB([gnustep-base], [__objc_class_name_NSObject], [],
              [AC_MSG_ERROR([libgnustep-base not found.])])
 
-AC_CHECK_LIB([objc], [__objc_exec_class], [],
-             [AC_MSG_ERROR([libobjc not found.])])
+AC_CHECK_LIB([alleg], [install_allegro], [],
+             [AC_MSG_ERROR([liballeg not found.])])
 
 # A list of the Makefiles that need to be created.
 AC_CONFIG_FILES([Makefile

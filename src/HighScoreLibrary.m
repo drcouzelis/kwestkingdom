@@ -17,11 +17,12 @@
  * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
  */
 #import <stdio.h>
+#import <sys/types.h>
+#import <sys/stat.h>
 #import "HighScoreLibrary.h"
 
 
-#define HIGH_SCORES_FILENAME "highscores.txt"
-
+static char highScoresFilename[FILENAME_MAX];
 
 static HighScoreLibrary *highScoreLibraryInstance = NULL;
 static HighScore highScores[MAX_NUM_OF_HIGH_SCORES];
@@ -33,7 +34,7 @@ void writeHighScores() {
   FILE *file;
   int i;
   
-  file = fopen(HIGH_SCORES_FILENAME, "w");
+  file = fopen(highScoresFilename, "w");
   
   if (file == NULL) {
     return;
@@ -55,7 +56,7 @@ void readHighScores() {
   
   numOfHighScores = 0;
   
-  file = fopen(HIGH_SCORES_FILENAME, "r");
+  file = fopen(highScoresFilename, "r");
   
   if (file == NULL) {
     return;
@@ -75,8 +76,26 @@ void readHighScores() {
 
 
 + initInstance {
+
+  char *path;
   int i;
+
   if (highScoreLibraryInstance == NULL) {
+
+    // Load the high score filename
+    path = getenv("XDG_CONFIG_HOME");
+    if (path && path[0] != '\0') {
+      strcpy(highScoresFilename, path);
+    } else {
+      // If XDG variables aren't set, then just use the home directory
+      strcpy(highScoresFilename, getenv("HOME"));
+      strcat(highScoresFilename, "/.config");
+    }
+    strcat(highScoresFilename, "/kwestkingdom");
+    // Create the config file directory, in case it doesn't exist
+    mkdir(highScoresFilename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    strcat(highScoresFilename, "/highscores.txt");
+
     highScoreLibraryInstance = [[HighScoreLibrary alloc] init];
     for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
       strcpy(highScores[i].initials, "\0");
