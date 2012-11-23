@@ -15,6 +15,7 @@ AC_CONFIG_HEADERS([config.h])
 
 # Check for the Objective-C compiler.
 AC_PROG_OBJC
+AM_PROG_CC_C_O
 
 # Check for libraries.
 AC_CHECK_LIB([objc], [__objc_exec_class], [],
