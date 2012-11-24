@@ -32,7 +32,8 @@ AC_CONFIG_FILES([Makefile
                  data/Makefile
                  data/images/Makefile
                  data/sounds/Makefile
-                 src/Makefile])
+                 src/Makefile
+                 system/Makefile])
 
 # Finish up by writing the new configuration files.
 AC_OUTPUT

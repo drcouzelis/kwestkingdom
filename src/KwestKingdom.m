@@ -96,6 +96,12 @@ void init_game() {
     exit(0);
   }
 
+  set_window_title("Kwest Kingdom");
+
+#ifdef ALLEGRO_UNIX
+  xwin_set_window_name("kwestkingdom", "KwestKingdom");
+#endif
+
   setPalette();
   setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   

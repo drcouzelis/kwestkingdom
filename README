@@ -11,8 +11,27 @@ You goal is to make it through the forest. In the regular game mode, the game en
 
 Different enemies will try to stop your progress. The brown enemies, Chompers, will walk towards you when you get close. The red enemies, Ninjas, will dash at you andpoke you with their sword as soon as they see you. Look out! The green enemies with the beards, Archers, will shoot arrows at you. The enemies can be overbearing, but you have three health points to help you. When your health points reaches zero, it's the end of the game.
 
-Releases
+Building
 --------
-Built using GNU autotools and GCC.
+Kwest Kingdom is written in Objective-C using the Allegro game programming library.
 
-Written in Objective-C using the Allegro game programming library.
+Compile time dependencies:
+
+  gcc-objc:     Objective-C front-end for GCC
+
+Compile time and runtime dependencies:
+
+  allegro4:     Portable library mainly aimed at video game and multimedia programming (legacy version)
+  gnustep-base: The GNUstep base package
+
+The application icon for X is build using the "fix icon" script that comes with Allegro:
+
+  tools/x11/xfixicon.sh
+
+Built using GNU autotools and GCC:
+
+  ./configure
+  make
+  make install
+
+See "INSTALL" for more information.
