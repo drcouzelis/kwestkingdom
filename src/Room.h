@@ -1,13 +1,17 @@
-#import <Foundation/Foundation.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "HelpTile.h"
-#import "List.h"
-#import "Map.h"
-#import "KwestKingdom.h"
-#import "Screen.h"
-#import "Traversable.h"
-#import "Updatable.h"
+#ifndef ROOM_HEADER
+#define ROOM_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "Animation.h"
+#include "Drawable.h"
+#include "HelpTile.h"
+#include "List.h"
+#include "Map.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
+#include "Traversable.h"
+#include "Updatable.h"
 
 
 #define GRASS_TERRAIN 0
@@ -109,3 +113,6 @@
 
 
 @end
+
+
+#endif

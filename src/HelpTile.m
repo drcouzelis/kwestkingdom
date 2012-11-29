@@ -1,4 +1,4 @@
-#import "HelpTile.h"
+#include "HelpTile.h"
 
 
 @implementation HelpTile

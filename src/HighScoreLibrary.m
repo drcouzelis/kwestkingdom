@@ -1,7 +1,7 @@
-#import <stdio.h>
-#import <sys/types.h>
-#import <sys/stat.h>
-#import "HighScoreLibrary.h"
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include "HighScoreLibrary.h"
 
 
 static char highScoresFilename[FILENAME_MAX];

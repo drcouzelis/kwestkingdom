@@ -1,6 +1,10 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
-#import "KwestKingdom.h"
+#ifndef KEYCONTROL_HEADER
+#define KEYCONTROL_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
+#include "KwestKingdom.h"
 
 
 @interface KeyControl : NSObject {
@@ -18,3 +22,6 @@
 
 @end
 
+
+
+#endif

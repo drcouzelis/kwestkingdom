@@ -1,21 +1,25 @@
-#import <Foundation/Foundation.h>
-#import "Inhabitable.h"
-#import "List.h"
-#import "Map.h"
-#import "KwestKingdom.h"
-#import "Targetable.h"
-#import "Traversable.h"
+#ifndef ROOMFACTORY_HEADER
+#define ROOMFACTORY_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "Inhabitable.h"
+#include "List.h"
+#include "Map.h"
+#include "KwestKingdom.h"
+#include "Targetable.h"
+#include "Traversable.h"
 
 // Rooms
-#import "ForestRoom.h"
-#import "SnowRoom.h"
-#import "UndergroundRoom.h"
+#include "ForestRoom.h"
+#include "SnowRoom.h"
+#include "UndergroundRoom.h"
 
 // Enemies
-#import "Archer.h"
-#import "Giant.h"
-#import "Ninja.h"
-#import "Chomper.h"
+#include "Archer.h"
+#include "Giant.h"
+#include "Ninja.h"
+#include "Chomper.h"
 
 
 // Types
@@ -92,3 +96,6 @@
 
 
 @end
+
+
+#endif

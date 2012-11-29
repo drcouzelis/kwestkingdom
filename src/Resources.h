@@ -1,5 +1,9 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
+#ifndef RESOURCES_HEADER
+#define RESOURCES_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
 
 typedef enum {
   IMAGES_HERO_ATTACK_3,
@@ -113,3 +117,6 @@ void toggleSound(void);
 
 BOOL soundEnabled(void);
 
+
+
+#endif

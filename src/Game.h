@@ -1,16 +1,20 @@
-#import <Foundation/Foundation.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "EndlessWorld.h"
-#import "HighScoreLibrary.h"
-#import "KeyControl.h"
-#import "KwestKingdom.h"
-#import "Resources.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "StoryWorld.h"
-#import "Text.h"
-#import "Updatable.h"
+#ifndef GAME_HEADER
+#define GAME_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "Animation.h"
+#include "Drawable.h"
+#include "EndlessWorld.h"
+#include "HighScoreLibrary.h"
+#include "KeyControl.h"
+#include "KwestKingdom.h"
+#include "Resources.h"
+#include "RoomFactory.h"
+#include "Snapshot.h"
+#include "StoryWorld.h"
+#include "Text.h"
+#include "Updatable.h"
 
 
 @interface Game : NSObject <Drawable, Updatable> {
@@ -53,3 +57,6 @@
 
 
 @end
+
+
+#endif

@@ -1,4 +1,4 @@
-#import "RoomFactory.h"
+#include "RoomFactory.h"
 
 
 #define STRAIGHT 0

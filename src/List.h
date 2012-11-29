@@ -1,4 +1,8 @@
-#import <Foundation/Foundation.h>
+#ifndef LIST_HEADER
+#define LIST_HEADER
+
+
+#include <Foundation/Foundation.h>
 
 
 @interface Node : NSObject {
@@ -43,3 +47,6 @@
 
 
 @end
+
+
+#endif

@@ -1,6 +1,10 @@
-#import <Foundation/Foundation.h>
-#import "KwestKingdom.h"
-#import "Screen.h"
+#ifndef MAP_HEADER
+#define MAP_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "KwestKingdom.h"
+#include "Screen.h"
 
 
 @interface Map : NSObject {
@@ -15,3 +19,6 @@
 
 
 @end
+
+
+#endif

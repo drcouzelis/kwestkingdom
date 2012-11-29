@@ -1,4 +1,4 @@
-#import "Animation.h"
+#include "Animation.h"
 
 
 extern int timer;

@@ -1,4 +1,4 @@
-#import "EndlessWorld.h"
+#include "EndlessWorld.h"
 
 
 @implementation EndlessWorld

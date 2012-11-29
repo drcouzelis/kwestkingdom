@@ -1,8 +1,12 @@
-#import <Foundation/Foundation.h>
-#import "Drawable.h"
-#import "KwestKingdom.h"
-#import "Screen.h"
-#import "Text.h"
+#ifndef HELPTILE_HEADER
+#define HELPTILE_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "Drawable.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
+#include "Text.h"
 
 
 typedef enum {
@@ -47,3 +51,6 @@ typedef enum {
 
 
 @end
+
+
+#endif

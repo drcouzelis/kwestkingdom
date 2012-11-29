@@ -1,4 +1,8 @@
-#import "Character.h"
+#ifndef ENEMY_HEADER
+#define ENEMY_HEADER
+
+
+#include "Character.h"
 
 
 #define MAX_ENEMY_HEALTH 3
@@ -12,3 +16,6 @@
 
 
 @end
+
+
+#endif

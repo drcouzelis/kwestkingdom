@@ -1,4 +1,8 @@
-#import <Foundation/Foundation.h>
+#ifndef INHABITABLE_HEADER
+#define INHABITABLE_HEADER
+
+
+#include <Foundation/Foundation.h>
 
 
 @protocol Inhabitable
@@ -14,3 +18,6 @@
 
 @end
 
+
+
+#endif

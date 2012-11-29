@@ -1,5 +1,9 @@
-#import "Enemy.h"
-#import "Hammer.h"
+#ifndef GIANT_HEADER
+#define GIANT_HEADER
+
+
+#include "Enemy.h"
+#include "Hammer.h"
 
 
 @interface Giant : Enemy {
@@ -19,3 +23,6 @@
 
 
 @end
+
+
+#endif

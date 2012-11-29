@@ -1,5 +1,9 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
+#ifndef KWESTKINGDOM_HEADER
+#define KWESTKINGDOM_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
 
 
 #define GAME_TICKER 100
@@ -40,3 +44,6 @@ int getWalkSpeed();
 void game_over();
 
 int random_number(int low, int high);
+
+
+#endif

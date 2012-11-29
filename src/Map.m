@@ -1,4 +1,4 @@
-#import "Map.h"
+#include "Map.h"
 
 
 @implementation Map

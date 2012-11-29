@@ -1,5 +1,9 @@
-#import "Collectable.h"
-#import "Sprite.h"
+#ifndef MONEYBAG_HEADER
+#define MONEYBAG_HEADER
+
+
+#include "Collectable.h"
+#include "Sprite.h"
 
 
 @interface MoneyBag : Sprite <Collectable> {
@@ -12,3 +16,6 @@
 
 
 @end
+
+
+#endif

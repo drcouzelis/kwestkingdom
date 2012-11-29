@@ -1,3 +1,7 @@
+#ifndef DRAWABLE_HEADER
+#define DRAWABLE_HEADER
+
+
 #include <allegro.h>
 
 
@@ -5,3 +9,6 @@
 - (id) draw: (BITMAP *) buffer;
 @end
 
+
+
+#endif

@@ -1,4 +1,8 @@
-#import "Sprite.h"
+#ifndef SNAPSHOT_HEADER
+#define SNAPSHOT_HEADER
+
+
+#include "Sprite.h"
 
 
 @interface Snapshot : Sprite {
@@ -12,3 +16,6 @@
 
 
 @end
+
+
+#endif

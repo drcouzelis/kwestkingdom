@@ -1,9 +1,9 @@
-#import "config.h"
+#include "config.h"
 
-#import "KwestKingdom.h"
-#import "Game.h"
-#import "Resources.h"
-#import "Screen.h"
+#include "KwestKingdom.h"
+#include "Game.h"
+#include "Resources.h"
+#include "Screen.h"
 
 
 volatile int timer = 0;

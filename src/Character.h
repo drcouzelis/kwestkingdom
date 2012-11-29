@@ -1,12 +1,16 @@
-#import "Heart.h"
-#import "Inhabitable.h"
-#import "Livable.h"
-#import "KwestKingdom.h"
-#import "Moneyable.h"
-#import "MoneyBag.h"
-#import "Screen.h"
-#import "Sprite.h"
-#import "Targetable.h"
+#ifndef CHARACTER_HEADER
+#define CHARACTER_HEADER
+
+
+#include "Heart.h"
+#include "Inhabitable.h"
+#include "Livable.h"
+#include "KwestKingdom.h"
+#include "Moneyable.h"
+#include "MoneyBag.h"
+#include "Screen.h"
+#include "Sprite.h"
+#include "Targetable.h"
 
 
 typedef enum {
@@ -37,3 +41,6 @@ typedef enum {
 
 
 @end
+
+
+#endif

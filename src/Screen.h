@@ -1,7 +1,11 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
-#import "al_screen.h"
-#import "KwestKingdom.h"
+#ifndef SCREEN_HEADER
+#define SCREEN_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
+#include "al_screen.h"
+#include "KwestKingdom.h"
 
 
 void setWindowSize(int width, int height);
@@ -15,3 +19,6 @@ int getWindowHeight();
 BITMAP *getWindow();
 BOOL showScreen();
 
+
+
+#endif

@@ -1,4 +1,4 @@
-#import "SnowRoom.h"
+#include "SnowRoom.h"
 
 
 @implementation SnowRoom

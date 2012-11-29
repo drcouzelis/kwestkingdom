@@ -1,4 +1,8 @@
-#import "Sprite.h"
+#ifndef SWORD_HEADER
+#define SWORD_HEADER
+
+
+#include "Sprite.h"
 
 
 @interface Sword : Sprite {
@@ -25,3 +29,6 @@
 
 
 @end
+
+
+#endif

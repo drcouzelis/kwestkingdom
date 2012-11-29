@@ -1,4 +1,8 @@
-#import "Sprite.h"
+#ifndef HAMMER_HEADER
+#define HAMMER_HEADER
+
+
+#include "Sprite.h"
 
 
 typedef enum {
@@ -31,3 +35,6 @@ typedef enum {
 
 
 @end
+
+
+#endif

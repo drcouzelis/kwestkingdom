@@ -1,4 +1,4 @@
-#import "Resources.h"
+#include "Resources.h"
 
 
 BOOL initializedResources = NO;

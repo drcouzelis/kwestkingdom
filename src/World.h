@@ -1,18 +1,22 @@
-#import <Foundation/Foundation.h>
-#import "Collectable.h"
-#import "Drawable.h"
-#import "Enemy.h"
-#import "HelpTile.h"
-#import "Hero.h"
-#import "Inhabitable.h"
-#import "List.h"
-#import "Room.h"
-#import "RoomFactory.h"
-#import "Snapshot.h"
-#import "Targetable.h"
-#import "Traversable.h"
-#import "Updatable.h"
-#import "Text.h"
+#ifndef WORLD_HEADER
+#define WORLD_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include "Collectable.h"
+#include "Drawable.h"
+#include "Enemy.h"
+#include "HelpTile.h"
+#include "Hero.h"
+#include "Inhabitable.h"
+#include "List.h"
+#include "Room.h"
+#include "RoomFactory.h"
+#include "Snapshot.h"
+#include "Targetable.h"
+#include "Traversable.h"
+#include "Updatable.h"
+#include "Text.h"
 
 
 @interface World : NSObject <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
@@ -64,3 +68,6 @@
 
 @end
 
+
+
+#endif

@@ -1,5 +1,9 @@
-#import "Arrow.h"
-#import "Sprite.h"
+#ifndef BOW_HEADER
+#define BOW_HEADER
+
+
+#include "Arrow.h"
+#include "Sprite.h"
 
 
 @interface Bow : Sprite {
@@ -36,3 +40,6 @@
 
 
 @end
+
+
+#endif

@@ -1,4 +1,4 @@
-#import "Sprite.h"
+#include "Sprite.h"
 
 
 @implementation Sprite

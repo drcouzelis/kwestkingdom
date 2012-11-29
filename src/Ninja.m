@@ -1,4 +1,4 @@
-#import "Ninja.h"
+#include "Ninja.h"
 
 
 typedef enum {

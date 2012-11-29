@@ -1,4 +1,4 @@
-#import "Game.h"
+#include "Game.h"
 
 
 typedef enum {

@@ -1,4 +1,8 @@
-#import <Foundation/Foundation.h>
+#ifndef LIVABLE_HEADER
+#define LIVABLE_HEADER
+
+
+#include <Foundation/Foundation.h>
 
 
 @protocol Livable
@@ -10,3 +14,6 @@
 - hurt;
 @end
 
+
+
+#endif

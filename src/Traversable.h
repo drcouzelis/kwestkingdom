@@ -1,4 +1,8 @@
-#import <Foundation/Foundation.h>
+#ifndef TRAVERSABLE_HEADER
+#define TRAVERSABLE_HEADER
+
+
+#include <Foundation/Foundation.h>
 
 
 @protocol Traversable
@@ -9,3 +13,6 @@
 - (BOOL) isSoarableAtX: (int) x andY: (int) y;
 @end
 
+
+
+#endif

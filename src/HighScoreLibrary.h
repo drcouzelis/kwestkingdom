@@ -1,4 +1,8 @@
-#import <Foundation/Foundation.h>
+#ifndef HIGHSCORELIBRARY_HEADER
+#define HIGHSCORELIBRARY_HEADER
+
+
+#include <Foundation/Foundation.h>
 
 
 #define MAX_NUM_OF_HIGH_SCORES 5
@@ -23,3 +27,6 @@ typedef struct {
 
 
 @end
+
+
+#endif

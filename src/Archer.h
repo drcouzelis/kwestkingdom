@@ -1,5 +1,9 @@
-#import "Enemy.h"
-#import "Bow.h"
+#ifndef ARCHER_HEADER
+#define ARCHER_HEADER
+
+
+#include "Enemy.h"
+#include "Bow.h"
 
 
 @interface Archer : Enemy {
@@ -23,3 +27,6 @@
 
 
 @end
+
+
+#endif

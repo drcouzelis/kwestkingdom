@@ -1,15 +1,19 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
-#import "Animation.h"
-#import "Drawable.h"
-#import "Inhabitable.h"
-#import "KwestKingdom.h"
-#import "Positionable.h"
-#import "Resources.h"
-#import "Screen.h"
-#import "Targetable.h"
-#import "Traversable.h"
-#import "Updatable.h"
+#ifndef SPRITE_HEADER
+#define SPRITE_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
+#include "Animation.h"
+#include "Drawable.h"
+#include "Inhabitable.h"
+#include "KwestKingdom.h"
+#include "Positionable.h"
+#include "Resources.h"
+#include "Screen.h"
+#include "Targetable.h"
+#include "Traversable.h"
+#include "Updatable.h"
 
 
 @interface Sprite : NSObject <Drawable, Positionable, Updatable> {
@@ -46,3 +50,6 @@
 
 
 @end
+
+
+#endif

@@ -1,4 +1,4 @@
-#import "Sword.h"
+#include "Sword.h"
 
 
 typedef enum {

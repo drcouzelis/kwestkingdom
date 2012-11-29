@@ -1,4 +1,8 @@
-#import "Enemy.h"
+#ifndef CHOMPER_HEADER
+#define CHOMPER_HEADER
+
+
+#include "Enemy.h"
 
 
 @interface Chomper : Enemy {
@@ -12,3 +16,6 @@
 
 
 @end
+
+
+#endif

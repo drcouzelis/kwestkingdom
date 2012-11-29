@@ -1,5 +1,9 @@
-#import "Character.h"
-#import "Resources.h"
+#ifndef ARROW_HEADER
+#define ARROW_HEADER
+
+
+#include "Character.h"
+#include "Resources.h"
 
 
 @interface Arrow : Character {
@@ -27,3 +31,6 @@
 
 
 @end
+
+
+#endif

@@ -1,4 +1,8 @@
-#import "Sprite.h"
+#ifndef SHIELD_HEADER
+#define SHIELD_HEADER
+
+
+#include "Sprite.h"
 
 
 @interface Shield : Sprite {
@@ -16,3 +20,6 @@
 
 
 @end
+
+
+#endif

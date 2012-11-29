@@ -1,4 +1,4 @@
-#import "Hero.h"
+#include "Hero.h"
 
 
 #define HERO_ATTACK_SPEED 12

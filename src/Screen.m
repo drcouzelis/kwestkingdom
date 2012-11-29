@@ -1,4 +1,4 @@
-#import "Screen.h"
+#include "Screen.h"
 
 
 #define DEFAULT_COLOR_DEPTH 8

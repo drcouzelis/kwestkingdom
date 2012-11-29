@@ -1,4 +1,4 @@
-#import "Hammer.h"
+#include "Hammer.h"
 
 
 @implementation Hammer

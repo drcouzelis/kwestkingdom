@@ -1,4 +1,4 @@
-#import "Snapshot.h"
+#include "Snapshot.h"
 
 
 @implementation Snapshot

@@ -1,7 +1,11 @@
-#import <Foundation/Foundation.h>
-#import <allegro.h>
-#import "KwestKingdom.h"
-#import "Updatable.h"
+#ifndef ANIMATION_HEADER
+#define ANIMATION_HEADER
+
+
+#include <Foundation/Foundation.h>
+#include <allegro.h>
+#include "KwestKingdom.h"
+#include "Updatable.h"
 
 
 #define ANIMATION_MAX_FRAMES 16
@@ -54,3 +58,6 @@
 
 @end
 
+
+
+#endif

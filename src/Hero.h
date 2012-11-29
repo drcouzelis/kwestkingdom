@@ -1,10 +1,14 @@
-#import "Arrow.h"
-#import "Bow.h"
-#import "Character.h"
-#import "KeyControl.h"
-#import "Resources.h"
-#import "Shield.h"
-#import "Sword.h"
+#ifndef HERO_HEADER
+#define HERO_HEADER
+
+
+#include "Arrow.h"
+#include "Bow.h"
+#include "Character.h"
+#include "KeyControl.h"
+#include "Resources.h"
+#include "Shield.h"
+#include "Sword.h"
 
 
 #define MAX_HERO_HEALTH 3
@@ -56,3 +60,6 @@
 
 
 @end
+
+
+#endif

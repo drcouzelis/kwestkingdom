@@ -1,4 +1,4 @@
-#import "StoryWorld.h"
+#include "StoryWorld.h"
 
 
 #define MAX_NUM_OF_ROOMS 40

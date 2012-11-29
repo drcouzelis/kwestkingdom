@@ -1,4 +1,4 @@
-#import "KeyControl.h"
+#include "KeyControl.h"
 
 
 @implementation KeyControl
