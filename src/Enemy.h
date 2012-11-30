@@ -8,14 +8,11 @@
 #define MAX_ENEMY_HEALTH 3
 
 
-@interface Enemy : Character {
-}
+class Enemy : public Character {
 
-
-- dropItem;
-
-
-@end
+public:
+  virtual void dropItem()=0;
+};
 
 
 #endif

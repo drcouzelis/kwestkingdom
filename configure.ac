@@ -13,17 +13,11 @@ AC_CONFIG_SRCDIR([src/KwestKingdom.h])
 # Rebuild these header files.
 AC_CONFIG_HEADERS([config.h])
 
-# Check for the Objective-C compiler.
-AC_PROG_OBJC
-AM_PROG_CC_C_O
+# Check for the compiler.
+AC_PROG_CXX
+#AM_PROG_CC_C_O
 
 # Check for libraries.
-AC_CHECK_LIB([objc], [__objc_exec_class], [],
-             [AC_MSG_ERROR([libobjc not found.])])
-
-AC_CHECK_LIB([gnustep-base], [__objc_class_name_NSObject], [],
-             [AC_MSG_ERROR([libgnustep-base not found.])])
-
 AC_CHECK_LIB([alleg], [install_allegro], [],
              [AC_MSG_ERROR([liballeg not found.])])
 

@@ -2,7 +2,6 @@
 #define KWESTKINGDOM_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include <allegro.h>
 
 

@@ -2,10 +2,9 @@
 #define UPDATABLE_HEADER
 
 
-@protocol Updatable
-- update;
-@end
-
+class Updatable {
+  virtual void update()=0;
+};
 
 
 #endif

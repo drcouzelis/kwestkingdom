@@ -6,7 +6,7 @@
 #include "Bow.h"
 
 
-@interface Archer : Enemy {
+class Archer : public Enemy {
   
   Bow *bow;
   
@@ -16,17 +16,17 @@
   
   int direction;
   
-}
+public:
 
+  Archer();
+  ~Archer();
 
-// State control
-- toStandState;
-- toMoveState;
-- toDrawBowState;
-- toShootArrowState;
-
-
-@end
+  // State control
+  void toStandState();
+  void toMoveState();
+  void toDrawBowState();
+  void toShootArrowState();
+};
 
 
 #endif

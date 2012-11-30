@@ -1,87 +1,79 @@
+#include <stdio.h>
 #include "Animation.h"
 
 
 extern int timer;
 
 
-@implementation Animation
-
-
-- init {
+Animation::Animation() {
   
   int i;
   
-  self = [super init];
-  
-  if (self) {
-
-    for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
-      frames[i] = NULL;
-    }
-    
-    length = 0;
-    pos = 0;
-    loop = YES;
-    finished = NO;
-    speed = 0;
-    fudge = 0;
-    offsetX = 0;
-    offsetY = 0;
-    hFlip = NO;
-    vFlip = NO;
-    rotate = NO;
-
+  for (i = 0; i < ANIMATION_MAX_FRAMES; i++) {
+    frames[i] = NULL;
   }
-    
-  return self;
-
+  
+  length = 0;
+  pos = 0;
+  loop = true;
+  finished = false;
+  speed = 0;
+  fudge = 0;
+  offsetX = 0;
+  offsetY = 0;
+  hFlip = false;
+  vFlip = false;
+  rotate = false;
 }
 
 
-- (Animation *) copy {
+Animation *
+Animation::copy() {
   
   Animation *animation;
   int i;
   
-  animation = [[Animation alloc] init];
+  animation = new Animation();
   
   for (i = 0; i < length; i++) {
-    [animation addFrame: frames[i]];
+    animation->addFrame(frames[i]);
   }
   
-  [animation setOffsetX: offsetX];
-  [animation setOffsetY: offsetY];
-  [animation setLoop: loop];
-  [animation setSpeed: speed];
-  [animation setHorizontalFlip: hFlip];
-  [animation setVerticalFlip: vFlip];
-  [animation setRotate: rotate];
-  [animation reset];
+  animation->setOffsetX(offsetX);
+  animation->setOffsetY(offsetY);
+  animation->setLoop(loop);
+  animation->setSpeed(speed);
+  animation->setHorizontalFlip(hFlip);
+  animation->setVerticalFlip(vFlip);
+  animation->setRotate(rotate);
+  animation->reset();
   
   return animation;
-  
 }
 
 
-- reset {
+void
+Animation::reset() {
   pos = 0;
-  finished = NO;
+  finished = false;
   fudge = 0;
-  return self;
 }
 
 
-- (int) currentFrameNumber {
+int
+Animation::currentFrameNumber() {
   return pos;
 }
 
 
-- (BOOL) finished {
+bool
+Animation::isFinished() {
   return finished;
 }
 
 
-- (BITMAP *) getImage {
+BITMAP *
+Animation::getImage() {
   if (length == 0) {
     return NULL;
   }
@@ -89,24 +81,24 @@ extern int timer;
 }
 
 
-- addFrame: (BITMAP *) bitmap {
+void
+Animation::addFrame(BITMAP *bitmap) {
   if (bitmap) {
     frames[length] = bitmap;
     length++;
   }
-  return self;
 }
 
 
-- setSpeed: (int) newSpeed {
+void
+Animation::setSpeed(int newSpeed) {
   speed = newSpeed;
-  return self;
 }
 
 
-- setLoop: (BOOL) loopOn {
+void
+Animation::setLoop(bool loopOn) {
   loop = loopOn;
-  return self;
 }
 
 
@@ -118,7 +110,7 @@ BITMAP *canvasTripleSize = NULL;
  * This silly little function provides a fix for transparency
  * when using the rotate sprite and flip sprite functions.
  */
-BITMAP * getCanvas(int width, int height) {
+BITMAP *getCanvas(int width, int height) {
   
   if (width == getTileSize() && height == getTileSize()) {
     if (canvasStandardSize == NULL) {
@@ -137,32 +129,32 @@ BITMAP * getCanvas(int width, int height) {
   fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
   
   return NULL;
-  
 }
 
 
-- drawTo: (BITMAP *) buffer atX: (int) x andY: (int) y {
+void
+Animation::drawTo(BITMAP *buffer, int x, int y) {
   
   BITMAP *canvas;
   
-  if ([self getImage] == NULL) {
-    return self;
+  if (this->getImage() == NULL) {
+    return;
   }
   
   // Write to a temporary canvas to get transparency
   // to work correctly.
   // Only necessary when rotating and flipping sprites.
   if (rotate || hFlip || vFlip) {
-    canvas = getCanvas([self getImage]->w, [self getImage]->h);
+    canvas = getCanvas(this->getImage()->w, this->getImage()->h);
     if (canvas) {
-      blit([self getImage], canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+      blit(this->getImage(), canvas, 0, 0, 0, 0, canvas->w, canvas->h);
     }
   } else {
-    canvas = [self getImage];
+    canvas = this->getImage();
   }
   
   if (canvas == NULL) {
-    return self;
+    return;
   }
   
   if (rotate && hFlip && vFlip) {
@@ -182,14 +174,12 @@ BITMAP * getCanvas(int width, int height) {
   } else {
     draw_sprite(buffer, canvas, x + offsetX, y + offsetY);
   }
-  
-  return self;
-  
 }
 
 
 // Animate the animation.
-- update {
+void
+Animation::update() {
   
   if (length > 1 && speed != 0) {
     
@@ -204,7 +194,7 @@ BITMAP * getCanvas(int width, int height) {
           pos = 0;
         } else {
           pos--;
-          finished = YES;
+          finished = true;
         }
       }
             
@@ -214,60 +204,56 @@ BITMAP * getCanvas(int width, int height) {
     
   } else {
     
-    finished = YES;
+    finished = true;
     
   }
-  
-  return self;
-
 }
 
 
-- setOffsetX: (int) newOffsetX {
+void
+Animation::setOffsetX(int newOffsetX) {
   offsetX = newOffsetX;
-  return self;
 }
 
 
-- setOffsetY: (int) newOffsetY {
+void
+Animation::setOffsetY(int newOffsetY) {
   offsetY = newOffsetY;
-  return self;
 }
 
 
-- (int) width {
-  if ([self getImage] != NULL) {
-    return [self getImage]->w;
+int
+Animation::width() {
+  if (this->getImage() != NULL) {
+    return this->getImage()->w;
   }
   return 0;
 }
 
 
-- (int) height {
-  if ([self getImage] != NULL) {
-    return [self getImage]->h;
+int
+Animation::height() {
+  if (this->getImage() != NULL) {
+    return this->getImage()->h;
   }
   return 0;
 }
 
 
-- setRotate: (BOOL) rotateOn {
+void
+Animation::setRotate(bool rotateOn) {
   rotate = rotateOn;
-  return self;
 }
 
 
-- setHorizontalFlip: (BOOL) hFlipOn {
+void
+Animation::setHorizontalFlip(bool hFlipOn) {
   hFlip = hFlipOn;
-  return self;
 }
 
 
-- setVerticalFlip: (BOOL) vFlipOn {
+void
+Animation::setVerticalFlip(bool vFlipOn) {
   vFlip = vFlipOn;
-  return self;
 }
-
-
-@end
 

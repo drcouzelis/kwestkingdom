@@ -7,87 +7,87 @@ bin_PROGRAMS = kwestkingdom
 # The "SOURCES" suffix marks it as source code.
 kwestkingdom_SOURCES = \
   al_screen.h \
-  al_screen.c \
-  allegro_icon.c \
+  al_screen.cpp \
+  allegro_icon.cpp \
   Animation.h \
-  Animation.m \
+  Animation.cpp \
   Archer.h \
-  Archer.m \
+  Archer.cpp \
   Arrow.h \
-  Arrow.m \
+  Arrow.cpp \
   Bow.h \
-  Bow.m \
+  Bow.cpp \
   Character.h \
-  Character.m \
+  Character.cpp \
   Chomper.h \
-  Chomper.m \
+  Chomper.cpp \
   Collectable.h \
   Drawable.h \
   EndlessWorld.h \
-  EndlessWorld.m \
+  EndlessWorld.cpp \
   Enemy.h \
-  Enemy.m \
+  Enemy.cpp \
   ForestRoom.h \
-  ForestRoom.m \
+  ForestRoom.cpp \
   Game.h \
-  Game.m \
+  Game.cpp \
   Giant.h \
-  Giant.m \
+  Giant.cpp \
   Hammer.h \
-  Hammer.m \
+  Hammer.cpp \
   Heart.h \
-  Heart.m \
+  Heart.cpp \
   HelpTile.h \
-  HelpTile.m \
+  HelpTile.cpp \
   Hero.h \
-  Hero.m \
+  Hero.cpp \
   HighScoreLibrary.h \
-  HighScoreLibrary.m \
+  HighScoreLibrary.cpp \
   Inhabitable.h \
   KeyControl.h \
-  KeyControl.m \
+  KeyControl.cpp \
   KwestKingdom.h \
-  KwestKingdom.m \
+  KwestKingdom.cpp \
   List.h \
-  List.m \
+  List.cpp \
   Livable.h \
   Map.h \
-  Map.m \
+  Map.cpp \
   Moneyable.h \
   MoneyBag.h \
-  MoneyBag.m \
+  MoneyBag.cpp \
   Ninja.h \
-  Ninja.m \
+  Ninja.cpp \
   Positionable.h \
   Resources.h \
-  Resources.m \
+  Resources.cpp \
   RoomFactory.h \
-  RoomFactory.m \
+  RoomFactory.cpp \
   Room.h \
-  Room.m \
+  Room.cpp \
   Screen.h \
-  Screen.m \
+  Screen.cpp \
   Shield.h \
-  Shield.m \
+  Shield.cpp \
   Snapshot.h \
-  Snapshot.m \
+  Snapshot.cpp \
   SnowRoom.h \
-  SnowRoom.m \
+  SnowRoom.cpp \
   Sprite.h \
-  Sprite.m \
+  Sprite.cpp \
   StoryWorld.h \
-  StoryWorld.m \
+  StoryWorld.cpp \
   Sword.h \
-  Sword.m \
+  Sword.cpp \
   Targetable.h \
   Text.h \
-  Text.m \
+  Text.cpp \
   Traversable.h \
   UndergroundRoom.h \
-  UndergroundRoom.m \
+  UndergroundRoom.cpp \
   Updatable.h \
   World.h \
-  World.m
+  World.cpp
 
 # This provides the compiler with a variable that points to the
 # location of the data files.
