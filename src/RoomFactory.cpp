@@ -151,7 +151,7 @@ int roomNumber;
 }
 
 
-- (BOOL) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h {
+- (bool) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h {
   
   Character *character;
   int i, j;
@@ -165,7 +165,7 @@ int roomNumber;
         for (m = 0; m < [character getWidth]; m++) {
           for (n = 0; n < [character getHeight]; n++) {
             if (x + i == [character getX] + m && y + j == [character getY] + n) {
-              return YES;
+              return true;
             }
           }
         }
@@ -174,7 +174,7 @@ int roomNumber;
     }
   }
   
-  return NO;
+  return false;
   
 }
 
@@ -317,7 +317,7 @@ int roomNumber;
     
     for (y = 1; heart == nil && y < ROWS - 1; y++) {
       for (x = 1; heart == nil && x < COLS - 1; x++) {
-        if ([pathMap getValueAtX: x andY: y] == YES) {
+        if ([pathMap getValueAtX: x andY: y] == true) {
           backupX = x;
           backupY = y;
           if (random_number(1, 5) == 1) {

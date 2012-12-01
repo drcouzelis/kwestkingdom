@@ -115,7 +115,7 @@ void setPalette(void);
 void playSound(int sound);
 void toggleSound(void);
 
-BOOL soundEnabled(void);
+bool soundEnabled(void);
 
 
 

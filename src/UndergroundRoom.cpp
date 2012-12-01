@@ -24,21 +24,21 @@
     //[waterAnimation addFrame: getImage(IMAGES_TERRAIN_WATER)];
     
     //[shoreNorthAnimation addFrame: getImage(SHORE_01)];
-    //shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: YES];
-    //shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: YES];
-    //shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: YES] setRotate: YES];
+    //shoreSouthAnimation = [[shoreNorthAnimation copy] setVerticalFlip: true];
+    //shoreEastAnimation = [[shoreNorthAnimation copy] setRotate: true];
+    //shoreWestAnimation = [[[shoreNorthAnimation copy] setVerticalFlip: true] setRotate: true];
     
     //[shoreInsideNEAnimation addFrame: getImage(SHORE_INSIDE_CORNER_01)];
-    //shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: YES];
-    //shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: YES];
-    //shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
+    //shoreInsideNWAnimation = [[shoreInsideNEAnimation copy] setHorizontalFlip: true];
+    //shoreInsideSEAnimation = [[shoreInsideNEAnimation copy] setVerticalFlip: true];
+    //shoreInsideSWAnimation = [[[shoreInsideNEAnimation copy] setVerticalFlip: true] setHorizontalFlip: true];
     
     //[shoreOutsideNEAnimation addFrame: getImage(SHORE_OUTSIDE_CORNER_01)];
     //[shoreOutsideNEAnimation setOffsetX: -TILE_SIZE];
     //[shoreOutsideNEAnimation setOffsetY: -TILE_SIZE];
-    //shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: YES];
-    //shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] setVerticalFlip: YES];
-    //shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] setVerticalFlip: YES] setHorizontalFlip: YES];
+    //shoreOutsideNWAnimation = [[shoreOutsideNEAnimation copy] setHorizontalFlip: true];
+    //shoreOutsideSEAnimation = [[shoreOutsideNEAnimation copy] setVerticalFlip: true];
+    //shoreOutsideSWAnimation = [[[shoreOutsideNEAnimation copy] setVerticalFlip: true] setHorizontalFlip: true];
     
   }
   

@@ -6,7 +6,7 @@
 #include "Resources.h"
 
 
-@interface Arrow : Character {
+class Arrow : public Character {
   
   Animation *flyUpAnimation;
   Animation *flyDownAnimation;
@@ -15,22 +15,18 @@
   
   int direction;
   
-}
+public:
+  bool isInsideScreen();
+  void findTarget();
+  void setDirection(int aDirection);
+ 
+  bool stopped();
 
-
-- (BOOL) isInsideScreen;
-- findTarget;
-- setDirection: (int) aDirection;
-
-- (BOOL) stopped;
-
-// Deprecated
-- toHoldState;
-- toFlyingState;
-- toStoppedState;
-
-
-@end
+  // Deprecated
+  void toHoldState();
+  void toFlyingState();
+  void toStoppedState();
+};
 
 
 #endif

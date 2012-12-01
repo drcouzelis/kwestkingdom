@@ -33,7 +33,7 @@ typedef enum {
     [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
     [standAnimation addFrame: getImage(IMAGES_NINJA_3)];
     [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [standAnimation setLoop: YES];
+    [standAnimation setLoop: true];
     [standAnimation setSpeed: 6];
     
     dashAnimation = [standAnimation copy];
@@ -47,7 +47,7 @@ typedef enum {
     [attackAnimation addFrame: getImage(IMAGES_NINJA_3)];
     [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
     [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [attackAnimation setLoop: NO];
+    [attackAnimation setLoop: false];
     [attackAnimation setSpeed: 12];
     
     animation = standAnimation;

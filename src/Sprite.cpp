@@ -92,11 +92,11 @@
 }
 
 
-- (BOOL) moving {
+- (bool) moving {
   if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

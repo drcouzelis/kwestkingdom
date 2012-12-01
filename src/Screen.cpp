@@ -12,7 +12,7 @@ static BITMAP *window = NULL;
 static int scale = DEFAULT_SCREEN_RATIO;
 
 
-BOOL selectBestScreen() {
+bool selectBestScreen() {
   
   enable_vsync();
   
@@ -26,15 +26,15 @@ BOOL selectBestScreen() {
     // Using double buffer.
   } else {
     printf("Failed to initialize screen updating. \n");
-    return NO;
+    return false;
   }
   
-  return YES;
+  return true;
   
 }
 
 
-BOOL setScale() {
+bool setScale() {
   
   int xScale;
   int yScale;
@@ -50,11 +50,11 @@ BOOL setScale() {
       scale = yScale;
     }
 
-    return YES;
+    return true;
 
   }
   
-  return NO;
+  return false;
   
 }
 
@@ -72,7 +72,7 @@ void setWindowSize(int width, int height) {
 }
 
 
-BOOL initializeScreen(int width, int height, BOOL fullscreen) {
+bool initializeScreen(int width, int height, bool fullscreen) {
 
   int colorDepth;
 
@@ -100,25 +100,25 @@ BOOL initializeScreen(int width, int height, BOOL fullscreen) {
     
     if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, width, height, 0, 0)) {
       printf("Failed to set graphics mode to fullscreen %dx%d. \n", width, height);
-      return NO;
+      return false;
     }
     
   } else {
   
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0)) {
       printf("Failed to set graphics mode to windowed %dx%d. \n", width, height);
-      return NO;
+      return false;
     }
 
   }
   
   if (selectBestScreen() == NO) {
-    return NO;
+    return false;
   }
 
   setScale();
   
-  return YES;
+  return true;
 
 }
  
@@ -148,19 +148,19 @@ int getWindowHeight() {
 }
 
 
-BOOL showScreen() {
+bool showScreen() {
   
   int x;
   int y;
 
   if (screen == NULL) {
     printf("Failed to find a screen to show. \n");
-    return NO;
+    return false;
   }
 
   if (window == NULL) {
     printf("Failed to find a window to draw. \n");
-    return NO;
+    return false;
   }
 
   x = getTileSize() / 5;
@@ -197,7 +197,7 @@ BOOL showScreen() {
   
   update_screen();
 
-  return YES;
+  return true;
 
 }
  

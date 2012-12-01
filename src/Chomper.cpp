@@ -24,7 +24,7 @@ typedef enum {
     [standAnimation addFrame: getImage(IMAGES_CHOMPER_STAND_2)];
     [standAnimation addFrame: getImage(IMAGES_CHOMPER_STAND_3)];
     [standAnimation addFrame: getImage(IMAGES_CHOMPER_STAND_2)];
-    [standAnimation setLoop: YES];
+    [standAnimation setLoop: true];
     [standAnimation setSpeed: 6];
     
     attackAnimation = [[Animation alloc] init];
@@ -37,7 +37,7 @@ typedef enum {
     [attackAnimation addFrame: getImage(IMAGES_CHOMPER_BITE_3)];
     [attackAnimation addFrame: getImage(IMAGES_CHOMPER_BITE_2)];
     [attackAnimation addFrame: getImage(IMAGES_CHOMPER_BITE_1)];
-    [attackAnimation setLoop: NO];
+    [attackAnimation setLoop: false];
     [attackAnimation setSpeed: 20];
     
     animation = standAnimation;

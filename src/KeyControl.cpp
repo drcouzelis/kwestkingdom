@@ -8,7 +8,7 @@
   self = [super init];
   if (self) {
     keyCode = aKey;
-    released = YES;
+    released = true;
     timer = 0;
     delay = 0; //GAME_TICKER / 4;
   }
@@ -16,32 +16,32 @@
 }
 
 
-- (BOOL) isPressed {
+- (bool) isPressed {
   
-  BOOL ret = NO;
+  bool ret = false;
   
   if (delay == 0 && key[keyCode]) {
-    return YES;
+    return true;
   }
   
   if (key[keyCode]) {
     if (released) {
       
-      ret = YES;
+      ret = true;
       timer = 0;
       
     } else {
       timer++;
     }
     
-    released = NO;
+    released = false;
     
     if (timer >= delay) {
-      released = YES;
+      released = true;
     }
     
   } else {
-    released = YES;
+    released = true;
   }
   
   return ret;
@@ -49,7 +49,7 @@
 }
 
 
-- setDelay: (BOOL) theDelay {
+- setDelay: (bool) theDelay {
   delay = theDelay;
   return self;
 }

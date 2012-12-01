@@ -16,10 +16,10 @@
 }
 
 
-- (BOOL) target: (id<Positionable>) target isInRange: (int) range;
+- (bool) target: (id<Positionable>) target isInRange: (int) range;
 - (int) directionToTarget: (id<Positionable>) target;
-- (BOOL) isMeAtX: (int) atX andY: (int) atY;
-- (BOOL) canWalkToX: (int) toX andY: (int) toY;
+- (bool) isMeAtX: (int) atX andY: (int) atY;
+- (bool) canWalkToX: (int) toX andY: (int) toY;
 
 
 @end

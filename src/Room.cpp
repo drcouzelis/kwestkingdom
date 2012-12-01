@@ -118,7 +118,7 @@
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
       
-      //if ([pathMap getValueAtX: x andY: y] == YES) { // Draw the path
+      //if ([pathMap getValueAtX: x andY: y] == true) { // Draw the path
         //[pathAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
       //} else
       if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
@@ -321,41 +321,41 @@
 }
 
 
-- (BOOL) isSwimmableAtX: (int) x andY: (int) y {
+- (bool) isSwimmableAtX: (int) x andY: (int) y {
   if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
-- (BOOL) isWalkableAtX: (int) x andY: (int) y {
+- (bool) isWalkableAtX: (int) x andY: (int) y {
   if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
-- (BOOL) isJumpableAtX: (int) x andY: (int) y {
+- (bool) isJumpableAtX: (int) x andY: (int) y {
   if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 
-- (BOOL) isFlyableAtX: (int) x andY: (int) y {
+- (bool) isFlyableAtX: (int) x andY: (int) y {
   if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 
-- (BOOL) isSoarableAtX: (int) x andY: (int) y {
+- (bool) isSoarableAtX: (int) x andY: (int) y {
   // You can soar above any type of terrain.
-  return YES;
+  return true;
 }
 
 

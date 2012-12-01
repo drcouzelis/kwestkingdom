@@ -64,8 +64,8 @@ typedef enum {
     [menuPointer addFrame: getImage(IMAGES_SWORD_HOLD_2)];
     [menuPointer addFrame: getImage(IMAGES_SWORD_HOLD_3)];
     [menuPointer addFrame: getImage(IMAGES_SWORD_HOLD_4)];
-    [menuPointer setRotate: YES];
-    [menuPointer setLoop: YES];
+    [menuPointer setRotate: true];
+    [menuPointer setLoop: true];
     [menuPointer setSpeed: 6];
     
     [self setState: GAME_MENU_STATE];
@@ -311,7 +311,7 @@ typedef enum {
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
-    if ([HighScoreLibrary getHighScoreNumber: i returnInitials: initials andRoom: &room andCoins: &coins] == YES) {
+    if ([HighScoreLibrary getHighScoreNumber: i returnInitials: initials andRoom: &room andCoins: &coins] == true) {
       sprintf(line, "#%d %3s %4d %6d", i + 1, initials, room, coins);
     } else {
       sprintf(line, "#%d", i + 1);
@@ -481,11 +481,11 @@ typedef enum {
 }
 
 
-- (BOOL) continuePlaying {
+- (bool) continuePlaying {
   if (state == GAME_QUIT_STATE) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 

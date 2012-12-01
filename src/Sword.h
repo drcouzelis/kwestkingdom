@@ -16,7 +16,7 @@
 }
 
 
-- (BOOL) held;
+- (bool) held;
 
 - toHoldState;
 - toAwayState;

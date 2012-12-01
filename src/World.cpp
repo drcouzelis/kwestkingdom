@@ -315,7 +315,7 @@ typedef enum {
 }
 
 
-- (BOOL) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
+- (bool) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
   
   Enemy *enemy;
   int i, j;
@@ -333,7 +333,7 @@ typedef enum {
         for (n = 0; n < [hero getHeight]; n++) {
           
           if (team != [hero getTeam] && x + i == [hero getX] + m && y + j == [hero getY] + n) {
-            return YES;
+            return true;
           }
           
         }
@@ -344,7 +344,7 @@ typedef enum {
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
-              return YES;
+              return true;
             }
           }
         }
@@ -353,7 +353,7 @@ typedef enum {
     }
   }
   
-  return NO;
+  return false;
   
 }
 
@@ -387,32 +387,32 @@ typedef enum {
 }
 
 
-- (BOOL) isSwimmableAtX: (int) x andY: (int) y {
+- (bool) isSwimmableAtX: (int) x andY: (int) y {
   return [room isSwimmableAtX: x andY: y];
 }
 
 
-- (BOOL) isWalkableAtX: (int) x andY: (int) y {
+- (bool) isWalkableAtX: (int) x andY: (int) y {
   return [room isWalkableAtX: x andY: y];
 }
 
 
-- (BOOL) isJumpableAtX: (int) x andY: (int) y {
+- (bool) isJumpableAtX: (int) x andY: (int) y {
   return [room isJumpableAtX: x andY: y];
 }
 
 
-- (BOOL) isFlyableAtX: (int) x andY: (int) y {
+- (bool) isFlyableAtX: (int) x andY: (int) y {
   return [room isFlyableAtX: x andY: y];
 }
 
 
-- (BOOL) isSoarableAtX: (int) x andY: (int) y {
+- (bool) isSoarableAtX: (int) x andY: (int) y {
   return [room isSoarableAtX: x andY: y];
 }
 
 
-- (BOOL) isInhabitedAtX: (int) x andY: (int) y {
+- (bool) isInhabitedAtX: (int) x andY: (int) y {
   
   Enemy *enemy;
   int i, j;
@@ -430,7 +430,7 @@ typedef enum {
         for (n = 0; n < [hero getHeight]; n++) {
           
           if (x + i == [hero getX] + m && y + j == [hero getY] + n) {
-            return YES;
+            return true;
           }
           
         }
@@ -441,7 +441,7 @@ typedef enum {
         for (m = 0; m < [enemy getWidth]; m++) {
           for (n = 0; n < [enemy getHeight]; n++) {
             if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
-              return YES;
+              return true;
             }
           }
         }
@@ -450,7 +450,7 @@ typedef enum {
     }
   }
   
-  return NO;
+  return false;
   
 }
 

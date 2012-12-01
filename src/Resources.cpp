@@ -1,7 +1,7 @@
 #include "Resources.h"
 
 
-BOOL initializedResources = NO;
+bool initializedResources = false;
 
 BITMAP *images[NUMBER_OF_IMAGES];
 SAMPLE *sounds[NUMBER_OF_SOUNDS];
@@ -114,11 +114,11 @@ void initializeResources() {
   sounds[SOUNDS_HEART] = load_sample( PKGDATADIR "/sounds/heart.wav");
   sounds[SOUNDS_HAMMER] = load_sample( PKGDATADIR "/sounds/hammer.wav");
 
-  initializedResources = YES;
+  initializedResources = true;
 
   for (i = 0; i < NUMBER_OF_IMAGES; i++) {
     if (images[i] == NULL) {
-      initializedResources = NO;
+      initializedResources = false;
       destroyResources();
       return;
     }
@@ -126,7 +126,7 @@ void initializeResources() {
   
   for (i = 0; i < NUMBER_OF_SOUNDS; i++) {
     if (sounds[i] == NULL) {
-      initializedResources = NO;
+      initializedResources = false;
       destroyResources();
       return;
     }
@@ -151,7 +151,7 @@ void destroyResources() {
     destroy_sample(sounds[i]);
   }
 
-  initializedResources = NO;
+  initializedResources = false;
 
 }
 
@@ -190,7 +190,7 @@ void toggleSound(void) {
 }
 
 
-BOOL soundEnabled(void) {
+bool soundEnabled(void) {
   
   int digiVolume;
   int midiVolume;
@@ -198,10 +198,10 @@ BOOL soundEnabled(void) {
   get_volume(&digiVolume, &midiVolume);
   
   if (digiVolume == 0) {
-    return NO;
+    return false;
   }
   
-  return YES;
+  return true;
   
 }
 

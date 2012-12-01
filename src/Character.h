@@ -32,7 +32,7 @@ typedef enum {
 }
 
 
-- (BOOL) waiting;
+- (bool) waiting;
 - wait;
 - go;
 

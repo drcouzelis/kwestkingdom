@@ -151,14 +151,14 @@ void readHighScores() {
 }
 
 
-+ (BOOL) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins {
++ (bool) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins {
   if (num < numOfHighScores) {
     strcpy(initials, highScores[num].initials);
     *room = highScores[num].room;
     *coins = highScores[num].coins;
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

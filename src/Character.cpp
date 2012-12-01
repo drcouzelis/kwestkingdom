@@ -22,11 +22,11 @@
 }
 
 
-- (BOOL) isDead {
+- (bool) isDead {
   if (health == 0) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
@@ -66,11 +66,11 @@
 }
 
 
-- (BOOL) waiting {
+- (bool) waiting {
   if (turns > 0) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

@@ -76,11 +76,11 @@
 }
 
 
-- (BOOL) moving {
+- (bool) moving {
   if (visualX != x || visualY != y) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

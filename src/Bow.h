@@ -28,7 +28,7 @@
     andTeam: (int) aTeam
     andWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
 
-- (BOOL) held;
+- (bool) held;
 
 // State control
 - toHoldState;

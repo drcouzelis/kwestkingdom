@@ -23,7 +23,7 @@ typedef struct {
 + (void) deallocInstance;
 + (int) highScorePositionWithRoom: (int) room andCoins: (int) coins;
 + addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins;
-+ (BOOL) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins;
++ (bool) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins;
 
 
 @end

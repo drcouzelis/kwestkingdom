@@ -44,7 +44,7 @@ typedef enum {
     [standAnimation addFrame: getImage(IMAGES_HERO_STAND_2)];
     [standAnimation addFrame: getImage(IMAGES_HERO_STAND_3)];
     [standAnimation addFrame: getImage(IMAGES_HERO_STAND_2)];
-    [standAnimation setLoop: YES];
+    [standAnimation setLoop: true];
     [standAnimation setSpeed: 6];
     
     beginAttackAnimation = [[Animation alloc] init];
@@ -52,14 +52,14 @@ typedef enum {
     [beginAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_2)];
     [beginAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_3)];
     [beginAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_4)];
-    [beginAttackAnimation setLoop: NO];
+    [beginAttackAnimation setLoop: false];
     [beginAttackAnimation setSpeed: HERO_ATTACK_SPEED];
     
     endAttackAnimation = [[Animation alloc] init];
     [endAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_3)];
     [endAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_2)];
     [endAttackAnimation addFrame: getImage(IMAGES_HERO_ATTACK_1)];
-    [endAttackAnimation setLoop: NO];
+    [endAttackAnimation setLoop: false];
     [endAttackAnimation setSpeed: HERO_ATTACK_SPEED];
     
     hurtAnimation = [[Animation alloc] init];
@@ -70,7 +70,7 @@ typedef enum {
     [hurtAnimation addFrame: getImage(IMAGES_HERO_HURT_3)];
     [hurtAnimation addFrame: getImage(IMAGES_HERO_HURT_2)];
     [hurtAnimation addFrame: getImage(IMAGES_HERO_HURT_1)];
-    [hurtAnimation setLoop: NO];
+    [hurtAnimation setLoop: false];
     [hurtAnimation setSpeed: 12];
     
     deadAnimation = [[Animation alloc] init];
@@ -79,7 +79,7 @@ typedef enum {
     [deadAnimation addFrame: getImage(IMAGES_HERO_DIE_3)];
     [deadAnimation addFrame: getImage(IMAGES_HERO_DIE_4)];
     [deadAnimation addFrame: getImage(IMAGES_HERO_DIE_5)];
-    [deadAnimation setLoop: NO];
+    [deadAnimation setLoop: false];
     [deadAnimation setSpeed: 6];
     
     upKey = [[KeyControl alloc] initWithKey: KEY_UP];
@@ -482,11 +482,11 @@ typedef enum {
 }
 
 
-- (BOOL) isDead {
+- (bool) isDead {
   if (state == HERO_DEAD_STATE && [animation finished]) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

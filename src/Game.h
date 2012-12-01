@@ -45,7 +45,7 @@
 
 
 - readPlayerInitials;
-- (BOOL) continuePlaying;
+- (bool) continuePlaying;
 - activateMenuSelection;
 - drawMenu: (BITMAP *) buffer;
 - drawHighScores: (BITMAP *) buffer;

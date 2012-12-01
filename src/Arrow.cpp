@@ -22,9 +22,9 @@ typedef enum {
     flyRightAnimation = [[Animation alloc] init];
     [flyRightAnimation addFrame: getImage(IMAGES_ARROW)];
     
-    flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: YES];
-    flyDownAnimation = [[flyRightAnimation copy] setRotate: YES];
-    flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
+    flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: true];
+    flyDownAnimation = [[flyRightAnimation copy] setRotate: true];
+    flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: true] setRotate: true];
     
     direction = UP;
     
@@ -85,11 +85,11 @@ typedef enum {
 }
 
 
-- (BOOL) isInsideScreen {
+- (bool) isInsideScreen {
   if (x < 0 || x > COLS - 1 || y < 0 || y > ROWS - 1) {
-    return NO;
+    return false;
   }
-  return YES;
+  return true;
 }
 
 
@@ -184,11 +184,11 @@ typedef enum {
 }
 
 
-- (BOOL) stopped {
+- (bool) stopped {
   if (state == ARROW_STOPPED_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

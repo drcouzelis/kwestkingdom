@@ -37,7 +37,7 @@ typedef enum {
     [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
     [standAnimation addFrame: getImage(IMAGES_GIANT_3)];
     [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [standAnimation setLoop: YES];
+    [standAnimation setLoop: true];
     [standAnimation setSpeed: 3];
     
     attackAnimation = [[Animation alloc] init];
@@ -51,7 +51,7 @@ typedef enum {
     [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
     [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
     [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [attackAnimation setLoop: NO];
+    [attackAnimation setLoop: false];
     [attackAnimation setSpeed: 24];
     
     animation = standAnimation;
@@ -74,7 +74,7 @@ typedef enum {
 }
 
 
-- (BOOL) target: (id<Positionable>) target isInRange: (int) range {
+- (bool) target: (id<Positionable>) target isInRange: (int) range {
   
   if (
     abs(x - [target getX]) + abs(y - [target getY]) <= range ||
@@ -83,11 +83,11 @@ typedef enum {
     abs(x + 1 - [target getX]) + abs(y + 1 - [target getY]) <= range
   ) {
     
-    return YES;
+    return true;
     
   }
   
-  return NO;
+  return false;
       
 }
 
@@ -129,7 +129,7 @@ typedef enum {
 }
 
 
-- (BOOL) isMeAtX: (int) atX andY: (int) atY {
+- (bool) isMeAtX: (int) atX andY: (int) atY {
   if (
     (x == atX && y == atY) ||
     (x + 1 == atX && y == atY) ||
@@ -137,16 +137,16 @@ typedef enum {
     (x + 1 == atX && y + 1 == atY)
   ) {
     
-    return YES;
+    return true;
     
   }
   
-  return NO;
+  return false;
   
 }
 
 
-- (BOOL) canWalkToX: (int) toX andY: (int) toY {
+- (bool) canWalkToX: (int) toX andY: (int) toY {
   
   if (
     ![world isWalkableAtX: toX andY: toY] ||
@@ -159,11 +159,11 @@ typedef enum {
     ([world isInhabitedAtX: toX + 1 andY: toY + 1] && ![self isMeAtX: toX + 1 andY: toY + 1])
   ) {
     
-    return NO;
+    return false;
     
   }
   
-  return YES;
+  return true;
   
 }
 

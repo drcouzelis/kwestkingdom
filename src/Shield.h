@@ -12,7 +12,7 @@
 }
 
 
-- (BOOL) held;
+- (bool) held;
 
 // Deprecated
 - toHoldState;

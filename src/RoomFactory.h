@@ -79,7 +79,7 @@
 - (List *) generateEnemies;
 - (List *) generateItems;
 
-- (BOOL) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
+- (bool) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
 
 - setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
 - setType: (int) theType;

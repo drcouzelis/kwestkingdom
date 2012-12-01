@@ -31,7 +31,7 @@ typedef enum {
 }
 
 
-- (BOOL) held;
+- (bool) held;
 
 
 @end

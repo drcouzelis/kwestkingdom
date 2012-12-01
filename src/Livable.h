@@ -6,7 +6,7 @@
 
 
 @protocol Livable
-- (BOOL) isDead;
+- (bool) isDead;
 - setHealth: (int) theHealth;
 - (int) getHealth;
 - setMaxHealth: (int) theHealth;

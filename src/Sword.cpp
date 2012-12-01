@@ -28,7 +28,7 @@ typedef enum {
     [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_2)];
     [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_3)];
     [holdAnimation addFrame: getImage(IMAGES_SWORD_HOLD_4)];
-    [holdAnimation setLoop: YES];
+    [holdAnimation setLoop: true];
     [holdAnimation setSpeed: 6];
     
     attackRightAnimation = [[Animation alloc] init];
@@ -41,12 +41,12 @@ typedef enum {
     [attackRightAnimation addFrame: getImage(IMAGES_SWORD_STAB_1)];
     [attackRightAnimation setOffsetX: -TILE_SIZE];
     [attackRightAnimation setOffsetY: -TILE_SIZE];
-    [attackRightAnimation setLoop: NO];
+    [attackRightAnimation setLoop: false];
     [attackRightAnimation setSpeed: 12];
     
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
-    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: YES] setRotate: YES];
+    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: true];
+    attackDownAnimation = [[attackRightAnimation copy] setRotate: true];
+    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: true] setRotate: true];
     
     [self toAwayState];
     
@@ -113,11 +113,11 @@ typedef enum {
 }
 
 
-- (BOOL) held {
+- (bool) held {
   if (state == SWORD_HOLD_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

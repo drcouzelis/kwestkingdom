@@ -21,7 +21,7 @@ typedef enum {
     [holdAnimation addFrame: getImage(IMAGES_SHIELD_2)];
     [holdAnimation addFrame: getImage(IMAGES_SHIELD_3)];
     [holdAnimation addFrame: getImage(IMAGES_SHIELD_4)];
-    [holdAnimation setLoop: YES];
+    [holdAnimation setLoop: true];
     [holdAnimation setSpeed: 6];
 	
     [self toAwayState];
@@ -53,11 +53,11 @@ typedef enum {
 }
 
 
-- (BOOL) held {
+- (bool) held {
   if (state == SHIELD_HOLD_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 

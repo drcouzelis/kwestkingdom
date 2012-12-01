@@ -40,7 +40,7 @@
 }
 
 
-- (BOOL) moving;
+- (bool) moving;
 - (int) getWidth;
 - (int) getHeight;
 

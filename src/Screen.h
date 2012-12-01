@@ -10,14 +10,14 @@
 
 void setWindowSize(int width, int height);
 
-BOOL initializeScreen(int width, int height, BOOL fullscreen);
+bool initializeScreen(int width, int height, bool fullscreen);
 void destroyScreen();
 
 int getWindowWidth();
 int getWindowHeight();
 
 BITMAP *getWindow();
-BOOL showScreen();
+bool showScreen();
 
 
 

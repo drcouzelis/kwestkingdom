@@ -16,7 +16,7 @@
     [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_3)];
     [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_4)];
     [holdAnimation setOffsetY: TILE_SIZE];
-    [holdAnimation setLoop: YES];
+    [holdAnimation setLoop: true];
     [holdAnimation setSpeed: 6];
     
     attackRightAnimation = [[Animation alloc] init];
@@ -31,15 +31,15 @@
     [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_2)];
     [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_1)];
     [attackRightAnimation setOffsetX: TILE_SIZE];
-    [attackRightAnimation setLoop: NO];
+    [attackRightAnimation setLoop: false];
     [attackRightAnimation setSpeed: 24];
     
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: YES];
+    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: true];
     [attackLeftAnimation setOffsetX: -TILE_SIZE * 2];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: YES];
+    attackDownAnimation = [[attackRightAnimation copy] setRotate: true];
     [attackDownAnimation setOffsetX: 0];
     [attackDownAnimation setOffsetY: TILE_SIZE];
-    attackUpAnimation = [[[[attackRightAnimation copy] setHorizontalFlip: YES] setVerticalFlip: YES] setRotate: YES];
+    attackUpAnimation = [[[[attackRightAnimation copy] setHorizontalFlip: true] setVerticalFlip: true] setRotate: true];
     [attackUpAnimation setOffsetX: -TILE_SIZE];
     [attackUpAnimation setOffsetY: -TILE_SIZE * 2];
     
@@ -129,11 +129,11 @@
 }
 
 
-- (BOOL) held {
+- (bool) held {
   if (state == HAMMER_HOLD_STATE) {
-    return YES;
+    return true;
   }
-  return NO;
+  return false;
 }
 
 
