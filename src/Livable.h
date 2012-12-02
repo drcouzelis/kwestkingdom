@@ -6,13 +6,13 @@
 
 
 @protocol Livable
-- (bool) isDead;
-- setHealth: (int) theHealth;
-- (int) getHealth;
-- setMaxHealth: (int) theHealth;
-- (int) getMaxHealth;
-- hurt;
-@end
+  (bool) isDead;
+  setHealth: (int) theHealth;
+  (int) getHealth;
+  setMaxHealth: (int) theHealth;
+  (int) getMaxHealth;
+  hurt;
+};
 
 
 

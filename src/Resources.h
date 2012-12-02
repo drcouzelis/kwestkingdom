@@ -92,7 +92,7 @@ typedef enum {
   IMAGES_SHIELD_4,
   IMAGES_TERRAIN_PATH,
   NUMBER_OF_IMAGES
-} IMAGES;
+public: IMAGES;
 
 typedef enum {
   SOUNDS_MONEY,
@@ -104,7 +104,7 @@ typedef enum {
   SOUNDS_GASP,
   SOUNDS_SWORD,
   NUMBER_OF_SOUNDS
-} SOUNDS;
+public: SOUNDS;
 
 void initializeResources();
 void destroyResources();

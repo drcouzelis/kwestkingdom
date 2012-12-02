@@ -44,7 +44,7 @@
 #define DEFAULT_CHANCE_OF_GIANT 3
 
 
-@interface RoomFactory : NSObject {
+class RoomFactory : public NSObject {
   
   id<Inhabitable, Targetable, Traversable> world;
   int type;
@@ -70,32 +70,32 @@
   int path[MAX_NUM_OF_STEPS];
   int steps;
   
-}
+public:
 
-- (Room *) createRoom;
+  (Room *) createRoom;
 
-- (Map *) generatePathToEdge;
-- (Map *) generateTerrain;
-- (List *) generateEnemies;
-- (List *) generateItems;
+  (Map *) generatePathToEdge;
+  (Map *) generateTerrain;
+  (List *) generateEnemies;
+  (List *) generateItems;
 
-- (bool) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
+  (bool) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-- setType: (int) theType;
-- setTerrain: (int) theTerrain;
-- setNumber: (int) theNumber;
-- setDifficulty: (int) theDifficulty;
-- setPathBeginX: (int) thePathBeginX;
-- setPathBeginY: (int) thePathBeginY;
+  setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
+  setType: (int) theType;
+  setTerrain: (int) theTerrain;
+  setNumber: (int) theNumber;
+  setDifficulty: (int) theDifficulty;
+  setPathBeginX: (int) thePathBeginX;
+  setPathBeginY: (int) thePathBeginY;
 
-- setChanceOfChomper: (int) chance;
-- setChanceOfArcher: (int) chance;
-- setChanceOfNinja: (int) chance;
-- setChanceOfGiant: (int) chance;
+  setChanceOfChomper: (int) chance;
+  setChanceOfArcher: (int) chance;
+  setChanceOfNinja: (int) chance;
+  setChanceOfGiant: (int) chance;
 
 
-@end
+};
 
 
 #endif

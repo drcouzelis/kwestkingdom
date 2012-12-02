@@ -5,21 +5,21 @@
 #include "Sprite.h"
 
 
-@interface Shield : Sprite {
+class Shield : public Sprite {
   
   Animation *holdAnimation;
   
-}
+public:
 
 
-- (bool) held;
+  (bool) held;
 
 // Deprecated
-- toHoldState;
-- toAwayState;
+  toHoldState;
+  toAwayState;
 
 
-@end
+};
 
 
 #endif

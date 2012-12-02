@@ -5,9 +5,9 @@
 #include <allegro.h>
 
 
-@protocol Drawable
-- (id) draw: (BITMAP *) buffer;
-@end
+class Drawable {
+  virtual void draw(BITMAP *buffer);
+};
 
 
 

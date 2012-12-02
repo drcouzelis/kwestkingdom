@@ -3,9 +3,9 @@
 
 
 @protocol Moneyable
-- (int) getMoney;
-- setMoney: (int) amount;
-@end
+  (int) getMoney;
+  setMoney: (int) amount;
+};
 
 
 

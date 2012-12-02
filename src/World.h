@@ -19,7 +19,7 @@
 #include "Text.h"
 
 
-@interface World : NSObject <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
+class World : public NSObject <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
   
   Hero *hero;
   List *enemies;
@@ -44,29 +44,29 @@
   
   int state;
   
-}
+public:
 
 
-- updateRoom;
-- updateItems;
-- updateTurn;
-- updateHero;
-- updateEnemies;
+  updateRoom;
+  updateItems;
+  updateTurn;
+  updateHero;
+  updateEnemies;
 
-- (Room *) createNextRoom;
-- changeRooms;
+  (Room *) createNextRoom;
+  changeRooms;
 
-- drawTerrain: (BITMAP *) buffer;
-- drawCharacters: (BITMAP *) buffer;
-- drawUserInterface: (BITMAP *) buffer;
+  drawTerrain: (BITMAP *) buffer;
+  drawCharacters: (BITMAP *) buffer;
+  drawUserInterface: (BITMAP *) buffer;
 
-- (int) getRoomNumber;
-- (int) getMoney;
+  (int) getRoomNumber;
+  (int) getMoney;
 
-- addHelpTile: (id) aHelpTile;
+  addHelpTile: (id) aHelpTile;
 
 
-@end
+};
 
 
 

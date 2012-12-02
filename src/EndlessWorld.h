@@ -5,11 +5,12 @@
 #include "World.h"
 
 
-@interface EndlessWorld : World {
-}
+class EndlessWorld : public World {
+public:
 
+  EndlessWorld();
 
-@end
+};
 
 
 

@@ -6,10 +6,10 @@
 #include "Room.h"
 
 
-@interface UndergroundRoom : Room {
-}
+class UndergroundRoom : public Room {
+public:
 
-@end
+};
 
 
 #endif

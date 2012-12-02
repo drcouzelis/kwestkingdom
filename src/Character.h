@@ -20,7 +20,7 @@ typedef enum {
 } TEAM;
 
 
-@interface Character : Sprite <Livable, Moneyable> {
+class Character : public Sprite, public Livable, public Moneyable {
   
   int health;
   int maxHealth;
@@ -29,18 +29,19 @@ typedef enum {
   
   int turns;
   
-}
+public:
+
+  Character();
+
+  bool waiting();
+  void wait();
+  void go();
+
+  void setTeam(int aTeam);
+  int getTeam();
 
 
-- (bool) waiting;
-- wait;
-- go;
-
-- setTeam: (int) aTeam;
-- (int) getTeam;
-
-
-@end
+};
 
 
 #endif

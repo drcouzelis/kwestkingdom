@@ -16,11 +16,11 @@
 #include "Updatable.h"
 
 
-@interface Sprite : NSObject <Drawable, Positionable, Updatable> {
+class Sprite : public NSObject <Drawable, Positionable, Updatable> {
   
   // Position on the map
-  int x; // Horizontal, from 0 to COLS - 1
-  int y; // Vertical, from 0 to ROWS - 1
+  int x; // Horizontal, from 0 to COLS   1
+  int y; // Vertical, from 0 to ROWS   1
   int w; // Width of the sprite, or, how many square it occupies horizontally
   int h; // Height of the sprite
   
@@ -37,19 +37,19 @@
   
   int state;
   
-}
+public:
 
 
-- (bool) moving;
-- (int) getWidth;
-- (int) getHeight;
+  (bool) moving;
+  (int) getWidth;
+  (int) getHeight;
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-- setSpeed: (int) theSpeed;
-- setState: (int) aState;
+  setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
+  setSpeed: (int) theSpeed;
+  setState: (int) aState;
 
 
-@end
+};
 
 
 #endif

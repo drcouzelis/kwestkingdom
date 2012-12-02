@@ -10,7 +10,7 @@
 #define ANIMATION_MAX_FRAMES 16
 
 
-class Animation : public Updatable {
+class Animation : public public Updatable {
 
   BITMAP *frames[ANIMATION_MAX_FRAMES];
   
@@ -56,7 +56,7 @@ public:
   int width();
   int height();
   int currentFrameNumber();
-};
+public:;
 
 
 #endif

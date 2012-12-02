@@ -6,12 +6,12 @@
 
 
 @protocol Traversable
-- (bool) isSwimmableAtX: (int) x andY: (int) y;
-- (bool) isWalkableAtX: (int) x andY: (int) y;
-- (bool) isJumpableAtX: (int) x andY: (int) y;
-- (bool) isFlyableAtX: (int) x andY: (int) y;
-- (bool) isSoarableAtX: (int) x andY: (int) y;
-@end
+  (bool) isSwimmableAtX: (int) x andY: (int) y;
+  (bool) isWalkableAtX: (int) x andY: (int) y;
+  (bool) isJumpableAtX: (int) x andY: (int) y;
+  (bool) isFlyableAtX: (int) x andY: (int) y;
+  (bool) isSoarableAtX: (int) x andY: (int) y;
+};
 
 
 

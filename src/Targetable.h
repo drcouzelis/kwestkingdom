@@ -6,8 +6,8 @@
 
 
 @protocol Targetable
-- (id<Positionable>) getTarget;
-@end
+  (id<Positionable>) getTarget;
+};
 
 
 

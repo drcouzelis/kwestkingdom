@@ -14,7 +14,7 @@
 #define MAX_HERO_HEALTH 3
 
 
-@interface Hero : Character {
+class Hero : public Character {
   
   Shield *shield;
   Sword *sword;
@@ -39,27 +39,27 @@
   
   int direction;
   
-}
+public:
 
 
-- emptyHands;
+  emptyHands;
 
 // Updates
-- updateStandState;
+  updateStandState;
 
 // State control
-- toStandState;
-- toMoveState;
-- toAttackState;
-- toHurtState;
-- toDeadState;
-- toPushSwordState;
-- toPullSwordState;
-- toDrawBowState;
-- toShootArrowState;
+  toStandState;
+  toMoveState;
+  toAttackState;
+  toHurtState;
+  toDeadState;
+  toPushSwordState;
+  toPullSwordState;
+  toDrawBowState;
+  toShootArrowState;
 
 
-@end
+};
 
 
 #endif

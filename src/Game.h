@@ -17,7 +17,7 @@
 #include "Updatable.h"
 
 
-@interface Game : NSObject <Drawable, Updatable> {
+class Game : public NSObject <Drawable, Updatable> {
   
   World *world;
   
@@ -41,22 +41,22 @@
   
   char playerInitials[4];
   
-}
+public:
 
 
-- readPlayerInitials;
-- (bool) continuePlaying;
-- activateMenuSelection;
-- drawMenu: (BITMAP *) buffer;
-- drawHighScores: (BITMAP *) buffer;
-- drawEnterInitials: (BITMAP *) buffer;
+  readPlayerInitials;
+  (bool) continuePlaying;
+  activateMenuSelection;
+  drawMenu: (BITMAP *) buffer;
+  drawHighScores: (BITMAP *) buffer;
+  drawEnterInitials: (BITMAP *) buffer;
 
-- setState: (int) aState;
+  setState: (int) aState;
 
-- gameOver;
+  gameOver;
 
 
-@end
+};
 
 
 #endif

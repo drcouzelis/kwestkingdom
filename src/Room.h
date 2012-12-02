@@ -21,10 +21,10 @@
 #define EXIT_TERRAIN 4
 
 #define MAX_NUM_OF_STEPS (ROWS * COLS)
-#define NO_STEP -1
+#define NO_STEP  1
 
 
-@interface Room : NSObject <Drawable, Traversable, Updatable> {
+class Room : public NSObject <Drawable, Traversable, Updatable> {
   
   // Add a terrain map, item map, character map...
   Map *terrainMap;
@@ -66,53 +66,53 @@
   int path[MAX_NUM_OF_STEPS];
   int steps;
   
-}
+public:
 
 
-- setPathMap: (Map *) aPathMap;
-- setTerrainMap: (Map *) aTerrainMap;
+  setPathMap: (Map *) aPathMap;
+  setTerrainMap: (Map *) aTerrainMap;
 
-- addStep: (int) aStep;
-- (int) getSizeOfPath;
-- (int) getXOfStepNumber: (int) aStep;
-- (int) getYOfStepNumber: (int) aStep;
+  addStep: (int) aStep;
+  (int) getSizeOfPath;
+  (int) getXOfStepNumber: (int) aStep;
+  (int) getYOfStepNumber: (int) aStep;
 
-- (List *) retrieveEnemies;
-- storeEnemies: (List *) list;
+  (List *) retrieveEnemies;
+  storeEnemies: (List *) list;
 
-- (List *) retrieveItems;
-- storeItems: (List *) list;
+  (List *) retrieveItems;
+  storeItems: (List *) list;
 
-- (List *) retrieveHelpTiles;
-- storeHelpTiles: (List *) list;
+  (List *) retrieveHelpTiles;
+  storeHelpTiles: (List *) list;
 
-- (int) getEntranceFromNextRoomX;
-- (int) getEntranceFromNextRoomY;
-- (int) getEntranceFromPrevRoomX;
-- (int) getEntranceFromPrevRoomY;
-- (int) getExitToNextRoomX;
-- (int) getExitToNextRoomY;
-- (int) getExitToPrevRoomX;
-- (int) getExitToPrevRoomY;
+  (int) getEntranceFromNextRoomX;
+  (int) getEntranceFromNextRoomY;
+  (int) getEntranceFromPrevRoomX;
+  (int) getEntranceFromPrevRoomY;
+  (int) getExitToNextRoomX;
+  (int) getExitToNextRoomY;
+  (int) getExitToPrevRoomX;
+  (int) getExitToPrevRoomY;
 
-- setEntranceFromNextRoomX: (int) newX;
-- setEntranceFromNextRoomY: (int) newY;
-- setEntranceFromPrevRoomX: (int) newX;
-- setEntranceFromPrevRoomY: (int) newY;
-- setExitToNextRoomX: (int) newX;
-- setExitToNextRoomY: (int) newY;
-- setExitToPrevRoomX: (int) newX;
-- setExitToPrevRoomY: (int) newY;
+  setEntranceFromNextRoomX: (int) newX;
+  setEntranceFromNextRoomY: (int) newY;
+  setEntranceFromPrevRoomX: (int) newX;
+  setEntranceFromPrevRoomY: (int) newY;
+  setExitToNextRoomX: (int) newX;
+  setExitToNextRoomY: (int) newY;
+  setExitToPrevRoomX: (int) newX;
+  setExitToPrevRoomY: (int) newY;
 
-- setNumber: (int) aNumber;
-- (int) getNumber;
+  setNumber: (int) aNumber;
+  (int) getNumber;
 
-- removeExitToPrevRoom;
+  removeExitToPrevRoom;
 
-- (Map *) getPathMap;
+  (Map *) getPathMap;
 
 
-@end
+};
 
 
 #endif

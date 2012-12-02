@@ -4,7 +4,7 @@
 
 class Updatable {
   virtual void update()=0;
-};
+public:;
 
 
 #endif

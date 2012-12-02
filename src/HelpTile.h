@@ -2,7 +2,6 @@
 #define HELPTILE_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include "Drawable.h"
 #include "KwestKingdom.h"
 #include "Screen.h"
@@ -17,7 +16,7 @@ typedef enum {
 } CORNER;
 
 
-@interface HelpTile : NSObject <Drawable> {
+class HelpTile : public Drawable {
   
   int x;
   int y;
@@ -31,26 +30,28 @@ typedef enum {
   
   int location;
   
-}
+public:
+
+  HelpTile();
+  ~HelpTile();
+
+  void setX(int newX);
+  void setY(int newY;)
+
+  void setLine1(char *newLine1,
+                char *newLine2,
+                char *newLine3,
+                char *newLine4,
+                char *newLine5,
+                char *newLine6);
+
+  void setLocation(int theLocation);
+
+  int getX();
+  int getY();
 
 
-- setX: (int) newX;
-- setY: (int) newY;
-
-- setLine1: (char *) newLine1
-      and2: (char *) newLine2
-      and3: (char *) newLine3
-      and4: (char *) newLine4
-      and5: (char *) newLine5
-      and6: (char *) newLine6;
-
-- setLocation: (int) theLocation;
-
-- (int) getX;
-- (int) getY;
-
-
-@end
+};
 
 
 #endif

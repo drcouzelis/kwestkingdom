@@ -2,13 +2,12 @@
 #define COLLECTABLE_HEADER
 
 
-#include "Livable.h"
-#include "Moneyable.h"
+#include "Character.h"
 
 
-@protocol Collectable
-- collectedBy: (id<Livable, Moneyable>) character;
-@end
+class Collectable {
+  virtual void collectedBy(Character *character)=0;
+};
 
 
 

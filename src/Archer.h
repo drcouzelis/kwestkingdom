@@ -6,7 +6,7 @@
 #include "Bow.h"
 
 
-class Archer : public Enemy {
+class Archer : public public Enemy {
   
   Bow *bow;
   
@@ -26,7 +26,7 @@ public:
   void toMoveState();
   void toDrawBowState();
   void toShootArrowState();
-};
+public:;
 
 
 #endif

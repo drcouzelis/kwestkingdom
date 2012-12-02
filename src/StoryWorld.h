@@ -5,11 +5,11 @@
 #include "World.h"
 
 
-@interface StoryWorld : World {
-}
+class StoryWorld : public World {
+public:
 
 
-@end
+};
 
 
 

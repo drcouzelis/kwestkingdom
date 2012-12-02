@@ -20,7 +20,7 @@ typedef enum {
 } HAMMER_STATE;
 
 
-@interface Hammer : Sprite {
+class Hammer : public Sprite {
   
   Animation *holdAnimation;
   Animation *attackUpAnimation;
@@ -28,13 +28,13 @@ typedef enum {
   Animation *attackLeftAnimation;
   Animation *attackRightAnimation;
   
-}
+public:
 
+  Hammer();
+  ~Hammer();
 
-- (bool) held;
-
-
-@end
+  bool held();
+};
 
 
 #endif

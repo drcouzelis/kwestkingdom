@@ -6,23 +6,23 @@
 #include "Hammer.h"
 
 
-@interface Giant : Enemy {
+class Giant : public Enemy {
   
   Hammer *hammer;
   
   Animation *standAnimation;
   Animation *attackAnimation;
   
-}
+public:
 
+  Giant();
+  ~Giant();
 
-- (bool) target: (id<Positionable>) target isInRange: (int) range;
-- (int) directionToTarget: (id<Positionable>) target;
-- (bool) isMeAtX: (int) atX andY: (int) atY;
-- (bool) canWalkToX: (int) toX andY: (int) toY;
-
-
-@end
+  bool target(Positionable *target, int range);
+  int directionToTarget(Positionable *target);
+  bool isMe(int atX, int atY);
+  bool canWalkTo(int toX, int toY);
+};
 
 
 #endif

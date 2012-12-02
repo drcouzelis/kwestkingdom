@@ -4,9 +4,10 @@
 
 #include "Arrow.h"
 #include "Sprite.h"
+#include "World.h"
 
 
-@interface Bow : Sprite {
+class Bow : public Sprite {
   
   Arrow *arrow;
   
@@ -16,30 +17,28 @@
   Animation *attackLeftAnimation;
   Animation *attackRightAnimation;
   
-}
+public:
+
+  Bow();
+  ~Bow();
+
+  void setArrow(Arrow *anArrow);
+  Arrow *getArrow();
+
+  void setArrow(int newX, int newY, int aDirection, int aTeam, World *aWorld);
+
+  bool held();
+
+  // State control
+  void toHoldState();
+  void toAwayState();
+  void toAttackUpState();
+  void toAttackDownState();
+  void toAttackLeftState();
+  void toAttackRightState();
 
 
-- setArrow: (Arrow *) anArrow;
-- (Arrow *) getArrow;
-
-- setArrowWithX: (int) newX
-    andY: (int) newY
-    andDirection: (int) aDirection
-    andTeam: (int) aTeam
-    andWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-
-- (bool) held;
-
-// State control
-- toHoldState;
-- toAwayState;
-- toAttackUpState;
-- toAttackDownState;
-- toAttackLeftState;
-- toAttackRightState;
-
-
-@end
+};
 
 
 #endif

@@ -5,17 +5,17 @@
 #include "Sprite.h"
 
 
-@interface Snapshot : Sprite {
+class Snapshot : public Sprite {
   
   BITMAP *canvas;
   
-}
+public:
 
 
-- (BITMAP *) getCanvas;
+  (BITMAP *) getCanvas;
 
 
-@end
+};
 
 
 #endif

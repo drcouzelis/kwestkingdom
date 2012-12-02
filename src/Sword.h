@@ -5,7 +5,7 @@
 #include "Sprite.h"
 
 
-@interface Sword : Sprite {
+class Sword : public Sprite {
   
   Animation *holdAnimation;
   Animation *attackUpAnimation;
@@ -13,22 +13,22 @@
   Animation *attackLeftAnimation;
   Animation *attackRightAnimation;
   
-}
+public:
 
 
-- (bool) held;
+  (bool) held;
 
-- toHoldState;
-- toAwayState;
+  toHoldState;
+  toAwayState;
 
 // Deprecated
-- toAttackUpState;
-- toAttackDownState;
-- toAttackLeftState;
-- toAttackRightState;
+  toAttackUpState;
+  toAttackDownState;
+  toAttackLeftState;
+  toAttackRightState;
 
 
-@end
+};
 
 
 #endif

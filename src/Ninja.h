@@ -6,7 +6,7 @@
 #include "Sword.h"
 
 
-@interface Ninja : Enemy {
+class Ninja : public Enemy {
   
   Sword *sword;
   
@@ -14,10 +14,10 @@
   Animation *attackAnimation;
   Animation *dashAnimation;
   
-}
+public:
 
 
-@end
+};
 
 
 #endif

@@ -7,16 +7,16 @@
 
 @protocol Inhabitable
 
-- (bool) isInhabitedAtX: (int) x andY: (int) y;
+  (bool) isInhabitedAtX: (int) x andY: (int) y;
 
-- (bool) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y;
-- attackFromTeam: (int) team atX: (int) x andY: (int) y;
-- shake;
+  (bool) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y;
+  attackFromTeam: (int) team atX: (int) x andY: (int) y;
+  shake;
 
-- addCharacter: (id) aCharacter;
-- addItem: (id) anItem;
+  addCharacter: (id) aCharacter;
+  addItem: (id) anItem;
 
-@end
+};
 
 
 

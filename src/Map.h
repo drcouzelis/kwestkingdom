@@ -7,18 +7,18 @@
 #include "Screen.h"
 
 
-@interface Map : NSObject {
+class Map : public NSObject {
   int map[COLS][ROWS];
   int cols;
   int rows;
-}
+public:
 
 
-- setX: (int) x andY: (int) y toValue: (int) value;
-- (int) getValueAtX: (int) x andY: (int) y;
+  setX: (int) x andY: (int) y toValue: (int) value;
+  (int) getValueAtX: (int) x andY: (int) y;
 
 
-@end
+};
 
 
 #endif

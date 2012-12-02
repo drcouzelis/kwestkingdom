@@ -6,10 +6,10 @@
 #include "Sprite.h"
 
 
-@interface Heart : Sprite <Collectable> {
-}
-
-@end
+class Heart : public Sprite, public Collectable {
+public:
+  Heart();
+};
 
 
 #endif

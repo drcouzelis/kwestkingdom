@@ -12,11 +12,11 @@ typedef struct {
   char initials[4];
   int room;
   int coins;
-} HighScore;
+public: HighScore;
 
 
-@interface HighScoreLibrary : NSObject {
-}
+class HighScoreLibrary : public NSObject {
+public:
 
 
 + initInstance;
@@ -26,7 +26,7 @@ typedef struct {
 + (bool) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins;
 
 
-@end
+};
 
 
 #endif

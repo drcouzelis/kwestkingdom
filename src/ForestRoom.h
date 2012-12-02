@@ -6,10 +6,12 @@
 #include "Room.h"
 
 
-@interface ForestRoom : Room {
-}
+class ForestRoom : public Room {
+public:
 
-@end
+  ForestRoom();
+
+};
 
 
 #endif

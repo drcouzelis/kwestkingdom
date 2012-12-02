@@ -7,20 +7,20 @@
 #include "KwestKingdom.h"
 
 
-@interface KeyControl : NSObject {
+class KeyControl : public NSObject {
   int keyCode;
   bool released;
   int timer; // Update every tick while the key is pressed
   int delay; // Number of ticks to wait until the action for this key is performed again
-}
+public:
 
 
-- initWithKey: (int) aKey;
-- setDelay: (bool) theDelay;
-- (bool) isPressed;
+  initWithKey: (int) aKey;
+  setDelay: (bool) theDelay;
+  (bool) isPressed;
 
 
-@end
+};
 
 
 

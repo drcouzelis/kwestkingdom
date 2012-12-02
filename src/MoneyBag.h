@@ -6,16 +6,16 @@
 #include "Sprite.h"
 
 
-@interface MoneyBag : Sprite <Collectable> {
+class MoneyBag : public Sprite <Collectable> {
   int amount;
-}
+public:
 
 
-- (int) getAmount;
-- setAmount: (int) anAmount;
+  (int) getAmount;
+  setAmount: (int) anAmount;
 
 
-@end
+};
 
 
 #endif

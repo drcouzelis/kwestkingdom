@@ -5,17 +5,19 @@
 #include "Enemy.h"
 
 
-@interface Chomper : Enemy {
+class Chomper : public Enemy {
   
   Animation *standAnimation;
   Animation *attackAnimation;
   
   int prevDirection;
   
-}
+public:
 
+  Chomper();
+  ~Chomper();
 
-@end
+};
 
 
 #endif

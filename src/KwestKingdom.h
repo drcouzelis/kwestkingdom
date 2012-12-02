@@ -34,7 +34,7 @@ typedef enum {
   DOWN,
   LEFT,
   RIGHT
-} DIRECTION;
+public: DIRECTION;
 
 
 int getTileSize();

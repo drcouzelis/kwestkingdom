@@ -6,7 +6,7 @@
 #include "Resources.h"
 
 
-class Arrow : public Character {
+class Arrow : public public Character {
   
   Animation *flyUpAnimation;
   Animation *flyDownAnimation;
@@ -26,7 +26,7 @@ public:
   void toHoldState();
   void toFlyingState();
   void toStoppedState();
-};
+public:;
 
 
 #endif
