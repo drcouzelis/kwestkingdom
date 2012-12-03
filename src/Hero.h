@@ -41,24 +41,24 @@ class Hero : public Character {
   
 public:
 
+  Hero();
+  ~Hero();
 
-  emptyHands;
+  void emptyHands();
 
-// Updates
-  updateStandState;
+  // Updates
+  void updateStandState();
 
-// State control
-  toStandState;
-  toMoveState;
-  toAttackState;
-  toHurtState;
-  toDeadState;
-  toPushSwordState;
-  toPullSwordState;
-  toDrawBowState;
-  toShootArrowState;
-
-
+  // State control
+  void toStandState();
+  void toMoveState();
+  void toAttackState();
+  void toHurtState();
+  void toDeadState();
+  void toPushSwordState();
+  void toPullSwordState();
+  void toDrawBowState();
+  void toShootArrowState();
 };
 
 

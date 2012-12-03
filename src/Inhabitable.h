@@ -2,22 +2,20 @@
 #define INHABITABLE_HEADER
 
 
-#include <Foundation/Foundation.h>
+#include "Character.h"
+#include "Item.h"
 
 
-@protocol Inhabitable
+class Inhabitable {
+  virtual bool isInhabited(int x, int y)=0;
 
-  (bool) isInhabitedAtX: (int) x andY: (int) y;
+  virtual bool isAttackable(int team, int x, int y)=0;
+  virtual void attackFromTeam(int team, int x, int y)=0;
+  virtual void shake()=0;
 
-  (bool) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y;
-  attackFromTeam: (int) team atX: (int) x andY: (int) y;
-  shake;
-
-  addCharacter: (id) aCharacter;
-  addItem: (id) anItem;
-
+  virtual void addCharacter(Character *aCharacter)=0;
+  virtual void addItem(Item  *anItem)=0;
 };
-
 
 
 #endif

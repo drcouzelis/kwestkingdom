@@ -6,15 +6,14 @@
 #include "Sprite.h"
 
 
-class MoneyBag : public Sprite <Collectable> {
+class MoneyBag : public Sprite, public Collectable {
   int amount;
 public:
 
+  MoneyBag();
 
-  (int) getAmount;
-  setAmount: (int) anAmount;
-
-
+  int getAmount();
+  void setAmount(int anAmount);
 };
 
 

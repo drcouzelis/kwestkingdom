@@ -2,22 +2,20 @@
 #define MAP_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include "KwestKingdom.h"
 #include "Screen.h"
 
 
-class Map : public NSObject {
+class Map {
   int map[COLS][ROWS];
   int cols;
   int rows;
 public:
 
+  Map();
 
-  setX: (int) x andY: (int) y toValue: (int) value;
-  (int) getValueAtX: (int) x andY: (int) y;
-
-
+  void set(int x, int y, int value);
+  int getValue(int x, int y);
 };
 
 

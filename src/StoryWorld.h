@@ -7,10 +7,8 @@
 
 class StoryWorld : public World {
 public:
-
-
+  StoryWorld();
 };
-
 
 
 #endif

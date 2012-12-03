@@ -2,17 +2,13 @@
 #define TRAVERSABLE_HEADER
 
 
-#include <Foundation/Foundation.h>
-
-
-@protocol Traversable
-  (bool) isSwimmableAtX: (int) x andY: (int) y;
-  (bool) isWalkableAtX: (int) x andY: (int) y;
-  (bool) isJumpableAtX: (int) x andY: (int) y;
-  (bool) isFlyableAtX: (int) x andY: (int) y;
-  (bool) isSoarableAtX: (int) x andY: (int) y;
+class Traversable {
+  virtual bool isSwimmable(int x, int y);
+  virtual bool isWalkable(int x, int y);
+  virtual bool isJumpable(int x, int y);
+  virtual bool isFlyable(int x, int y);
+  virtual bool isSoarable(int x, int y);
 };
-
 
 
 #endif

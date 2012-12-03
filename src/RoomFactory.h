@@ -2,7 +2,6 @@
 #define ROOMFACTORY_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include "Inhabitable.h"
 #include "List.h"
 #include "Map.h"
@@ -44,9 +43,9 @@
 #define DEFAULT_CHANCE_OF_GIANT 3
 
 
-class RoomFactory : public NSObject {
+class RoomFactory {
   
-  id<Inhabitable, Targetable, Traversable> world;
+  World *world;
   int type;
   int terrain;
   int number;
@@ -72,29 +71,30 @@ class RoomFactory : public NSObject {
   
 public:
 
-  (Room *) createRoom;
+  RoomFactory();
+  ~RoomFactory();
 
-  (Map *) generatePathToEdge;
-  (Map *) generateTerrain;
-  (List *) generateEnemies;
-  (List *) generateItems;
+  Room *createRoom();
 
-  (bool) characterExistsInList: (List *) list atX: (int) x andY: (int) y withWidth: (int) w andHeight: (int) h;
+  Map *generatePathToEdge();
+  Map *generateTerrain();
+  List *generateEnemies();
+  List *generateItems();
 
-  setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-  setType: (int) theType;
-  setTerrain: (int) theTerrain;
-  setNumber: (int) theNumber;
-  setDifficulty: (int) theDifficulty;
-  setPathBeginX: (int) thePathBeginX;
-  setPathBeginY: (int) thePathBeginY;
+  bool characterExists(List *list, int x, int y, int w, int h);
 
-  setChanceOfChomper: (int) chance;
-  setChanceOfArcher: (int) chance;
-  setChanceOfNinja: (int) chance;
-  setChanceOfGiant: (int) chance;
+  void setWorld(World *aWorld);
+  void setType(int theType);
+  void setTerrain(int theTerrain);
+  void setNumber(int theNumber);
+  void setDifficulty(int theDifficulty);
+  void setPathBeginX(int thePathBeginX);
+  void setPathBeginY(int thePathBeginY);
 
-
+  void setChanceOfChomper(int chance);
+  void setChanceOfArcher(int chance);
+  void setChanceOfNinja(int chance);
+  void setChanceOfGiant(int chance);
 };
 
 

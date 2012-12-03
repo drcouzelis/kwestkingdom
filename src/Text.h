@@ -10,5 +10,4 @@ void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, ch
 void drawBox(BITMAP *buffer, int x, int y, int w, int h);
 
 
-
 #endif

@@ -8,7 +8,7 @@
 
 class SnowRoom : public Room {
 public:
-
+  SnowRoom();
 };
 
 

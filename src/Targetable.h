@@ -5,10 +5,9 @@
 #include "Positionable.h"
 
 
-@protocol Targetable
-  (id<Positionable>) getTarget;
+class Targetable {
+  virtual Positionable *getTarget=0;
 };
-
 
 
 #endif

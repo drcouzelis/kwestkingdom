@@ -16,7 +16,8 @@ class Ninja : public Enemy {
   
 public:
 
-
+  Ninja();
+  ~Ninja();
 };
 
 

@@ -2,9 +2,6 @@
 #define HIGHSCORELIBRARY_HEADER
 
 
-#include <Foundation/Foundation.h>
-
-
 #define MAX_NUM_OF_HIGH_SCORES 5
 
 
@@ -12,20 +9,21 @@ typedef struct {
   char initials[4];
   int room;
   int coins;
-public: HighScore;
+} HighScore;
 
 
-class HighScoreLibrary : public NSObject {
+class HighScoreLibrary {
+
+  HighScoreLibrary();
+  ~HighScoreLibrary();
+
 public:
 
-
-+ initInstance;
-+ (void) deallocInstance;
-+ (int) highScorePositionWithRoom: (int) room andCoins: (int) coins;
-+ addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins;
-+ (bool) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins;
-
-
+  static void initInstance();
+  static void deallocInstance();
+  static int highScorePosition(int room, int coins);
+  static void addHighScore(char *initials, int room, int coins);
+  static bool getHighScore(int num, char *initials, int *room, int *coins);
 };
 
 

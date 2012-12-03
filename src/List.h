@@ -5,47 +5,45 @@
 #include <Foundation/Foundation.h>
 
 
-class Node : public NSObject {
-  id item;
+class Node {
+  void *item;
   Node *next;
   Node *prev;
 public:
 
+  Node();
 
-  setItem: (id) anItem;
-  setNext: (Node *) theNext;
-  setPrev: (Node *) thePrev;
-  (id) getItem;
-  (Node *) getNext;
-  (Node *) getPrev;
-
-
+  void setItem(void *anItem);
+  void setNext(Node *theNext);
+  void setPrev(Node *thePrev);
+  void *getItem;
+  Node *getNext;
+  Node *getPrev;
 };
 
 
-class List : public NSObject {
+class List {
   Node *head;
   Node *tail;
   Node *next;
   int size;
 public:
 
+  List();
 
-  append: (id) item;
-  remove: (id) item;
+  void append(void *item);
+  void remove(void *item);
 
-  (int) findIndex: (id) item;
-  (id) getIndex: (int) index;
+  int findIndex(void *item);
+  void *getIndex(int index);
 
-  (id) getHead;
-  (id) getTail;
+  void *getHead();
+  void *getTail();
 
-  iterate;
-  (id) next;
+  void iterate();
+  void *getNext();
 
-  (int) size;
-
-
+  int getSize();
 };
 
 

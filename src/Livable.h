@@ -2,18 +2,14 @@
 #define LIVABLE_HEADER
 
 
-#include <Foundation/Foundation.h>
-
-
-@protocol Livable
-  (bool) isDead;
-  setHealth: (int) theHealth;
-  (int) getHealth;
-  setMaxHealth: (int) theHealth;
-  (int) getMaxHealth;
-  hurt;
+class Livable {
+  virtual bool isDead=0;
+  virtual void setHealth(int theHealth)=0;
+  virtual int getHealth()=0;
+  virtual void setMaxHealth(int theHealth)=0;
+  virtual int getMaxHealth()=0;
+  virtual void hurt()=0;
 };
-
 
 
 #endif

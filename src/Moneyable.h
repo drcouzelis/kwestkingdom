@@ -2,11 +2,10 @@
 #define MONEYABLE_HEADER
 
 
-@protocol Moneyable
-  (int) getMoney;
-  setMoney: (int) amount;
+class Moneyable {
+  virtual int getMoney()=0;
+  virtual setMoney(int amount)=0;
 };
-
 
 
 #endif

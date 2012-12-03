@@ -15,19 +15,19 @@ class Sword : public Sprite {
   
 public:
 
+  Sword();
+  ~Sword();
 
-  (bool) held;
+  bool held();
 
-  toHoldState;
-  toAwayState;
+  toHoldState();
+  toAwayState();
 
-// Deprecated
-  toAttackUpState;
-  toAttackDownState;
-  toAttackLeftState;
-  toAttackRightState;
-
-
+  // Deprecated
+  void toAttackUpState();
+  void toAttackDownState();
+  void toAttackLeftState();
+  void toAttackRightState();
 };
 
 

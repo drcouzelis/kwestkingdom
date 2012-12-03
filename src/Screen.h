@@ -2,7 +2,6 @@
 #define SCREEN_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include <allegro.h>
 #include "al_screen.h"
 #include "KwestKingdom.h"
@@ -18,7 +17,6 @@ int getWindowHeight();
 
 BITMAP *getWindow();
 bool showScreen();
-
 
 
 #endif

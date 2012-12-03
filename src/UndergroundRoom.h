@@ -8,7 +8,7 @@
 
 class UndergroundRoom : public Room {
 public:
-
+  UndergroundRoom();
 };
 
 

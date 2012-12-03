@@ -2,7 +2,6 @@
 #define SPRITE_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include <allegro.h>
 #include "Animation.h"
 #include "Drawable.h"
@@ -16,7 +15,7 @@
 #include "Updatable.h"
 
 
-class Sprite : public NSObject <Drawable, Positionable, Updatable> {
+class Sprite : public Drawable, public Positionable, public Updatable {
   
   // Position on the map
   int x; // Horizontal, from 0 to COLS   1
@@ -33,22 +32,22 @@ class Sprite : public NSObject <Drawable, Positionable, Updatable> {
   
   Animation *animation;
   
-  id<Inhabitable, Targetable, Traversable> world;
+  World *world;
   
   int state;
   
 public:
 
+  Sprite();
+  ~Sprite();
 
-  (bool) moving;
-  (int) getWidth;
-  (int) getHeight;
+  bool moving();
+  int getWidth();
+  int getHeight();
 
-  setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld;
-  setSpeed: (int) theSpeed;
-  setState: (int) aState;
-
-
+  void setWorld(World *aWorld);
+  void setSpeed(int theSpeed);
+  void setState(int aState);
 };
 
 

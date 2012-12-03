@@ -2,8 +2,8 @@
 #define RESOURCES_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include <allegro.h>
+
 
 typedef enum {
   IMAGES_HERO_ATTACK_3,
@@ -92,7 +92,8 @@ typedef enum {
   IMAGES_SHIELD_4,
   IMAGES_TERRAIN_PATH,
   NUMBER_OF_IMAGES
-public: IMAGES;
+} IMAGES;
+
 
 typedef enum {
   SOUNDS_MONEY,
@@ -104,7 +105,8 @@ typedef enum {
   SOUNDS_GASP,
   SOUNDS_SWORD,
   NUMBER_OF_SOUNDS
-public: SOUNDS;
+} SOUNDS;
+
 
 void initializeResources();
 void destroyResources();
@@ -116,7 +118,6 @@ void playSound(int sound);
 void toggleSound(void);
 
 bool soundEnabled(void);
-
 
 
 #endif

@@ -11,10 +11,10 @@ class Snapshot : public Sprite {
   
 public:
 
+  Snaphshot();
+  ~Snapshot();
 
-  (BITMAP *) getCanvas;
-
-
+  BITMAP *getCanvas();
 };
 
 

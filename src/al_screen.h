@@ -1,7 +1,7 @@
-/*                                                              
-        al_screen.h    header file for screen update API
-        (c) Chris "23yrold3yrold" Barry, 2004
-                                                                */
+/*--------------------------------------------------------------
+	al_screen.h -- header file for screen update API
+					(c) Chris "23yrold3yrold" Barry, 2004
+  --------------------------------------------------------------*/
 
 #ifndef SCREEN_UPDATE_H
 #define SCREEN_UPDATE_H
@@ -19,7 +19,7 @@ enum {
 		UPDATE_TRIPLE_WMB,
 		UPDATE_PAGEFLIP_WMB,
 		UPDATE_MAX
-public:;
+};
 
 int     initialize_screen_updating(int i);
 void    update_screen();
@@ -32,7 +32,7 @@ void    toggle_vsync();
 int     vsync_is_enabled();
 
 #ifdef __cplusplus
-	public:
+	}
 #endif
 
 #endif

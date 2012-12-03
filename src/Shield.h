@@ -11,14 +11,14 @@ class Shield : public Sprite {
   
 public:
 
+  Shield();
+  ~Shield();
 
-  (bool) held;
+  bool held();
 
-// Deprecated
-  toHoldState;
-  toAwayState;
-
-
+  // Deprecated
+  void toHoldState();
+  void toAwayState();
 };
 
 

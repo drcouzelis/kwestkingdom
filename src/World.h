@@ -2,7 +2,6 @@
 #define WORLD_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include "Collectable.h"
 #include "Drawable.h"
 #include "Enemy.h"
@@ -19,7 +18,7 @@
 #include "Text.h"
 
 
-class World : public NSObject <Drawable, Inhabitable, Targetable, Traversable, Updatable> {
+class World {
   
   Hero *hero;
   List *enemies;
@@ -46,28 +45,27 @@ class World : public NSObject <Drawable, Inhabitable, Targetable, Traversable, U
   
 public:
 
+  World();
+  ~World();
 
-  updateRoom;
-  updateItems;
-  updateTurn;
-  updateHero;
-  updateEnemies;
+  void updateRoom();
+  void updateItems();
+  void updateTurn();
+  void updateHero();
+  void updateEnemies();
 
-  (Room *) createNextRoom;
-  changeRooms;
+  Room *createNextRoom();
+  void changeRooms();
 
-  drawTerrain: (BITMAP *) buffer;
-  drawCharacters: (BITMAP *) buffer;
-  drawUserInterface: (BITMAP *) buffer;
+  void drawTerrain(BITMAP *buffer);
+  void drawCharacters(BITMAP *buffer);
+  void drawUserInterface(BITMAP *buffer);
 
-  (int) getRoomNumber;
-  (int) getMoney;
+  int getRoomNumber();
+  int getMoney();
 
-  addHelpTile: (id) aHelpTile;
-
-
+  void addHelpTile(HelpTile *aHelpTile);
 };
-
 
 
 #endif
