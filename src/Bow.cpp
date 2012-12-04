@@ -86,7 +86,7 @@ typedef enum {
     andY: (int) newY
     andDirection: (int) aDirection
     andTeam: (int) aTeam
-    andWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
+    andWorld: (World *) aWorld {
   
   arrow = [[Arrow alloc] init];
   [arrow setTeam: aTeam];

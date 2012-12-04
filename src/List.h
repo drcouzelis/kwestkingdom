@@ -2,9 +2,6 @@
 #define LIST_HEADER
 
 
-#include <Foundation/Foundation.h>
-
-
 class Node {
   void *item;
   Node *next;

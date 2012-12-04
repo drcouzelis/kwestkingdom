@@ -2,7 +2,6 @@
 #define HELPTILE_HEADER
 
 
-#include "Drawable.h"
 #include "KwestKingdom.h"
 #include "Screen.h"
 #include "Text.h"
@@ -16,8 +15,10 @@ typedef enum {
 } CORNER;
 
 
-class HelpTile : public Drawable {
+class HelpTile {
   
+protected:
+
   int x;
   int y;
   
@@ -35,8 +36,10 @@ public:
   HelpTile();
   ~HelpTile();
 
+  virtual void draw(BITMAP *buffer);
+
   void setX(int newX);
-  void setY(int newY;)
+  void setY(int newY);
 
   void setLine1(char *newLine1,
                 char *newLine2,

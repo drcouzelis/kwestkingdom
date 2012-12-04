@@ -2,9 +2,10 @@
 #define BOW_HEADER
 
 
-#include "Arrow.h"
 #include "Sprite.h"
-#include "World.h"
+
+class Arrow;
+class World;
 
 
 class Bow : public Sprite {
@@ -36,8 +37,6 @@ public:
   void toAttackDownState();
   void toAttackLeftState();
   void toAttackRightState();
-
-
 };
 
 

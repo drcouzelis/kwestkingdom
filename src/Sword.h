@@ -6,7 +6,9 @@
 
 
 class Sword : public Sprite {
-  
+ 
+protected:
+
   Animation *holdAnimation;
   Animation *attackUpAnimation;
   Animation *attackDownAnimation;
@@ -20,8 +22,8 @@ public:
 
   bool held();
 
-  toHoldState();
-  toAwayState();
+  void toHoldState();
+  void toAwayState();
 
   // Deprecated
   void toAttackUpState();

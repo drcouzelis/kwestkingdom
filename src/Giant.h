@@ -18,8 +18,8 @@ public:
   Giant();
   ~Giant();
 
-  bool target(Positionable *target, int range);
-  int directionToTarget(Positionable *target);
+  bool target(Character *target, int range);
+  int directionToTarget(Character *target);
   bool isMe(int atX, int atY);
   bool canWalkTo(int toX, int toY);
 };

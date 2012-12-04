@@ -2,12 +2,9 @@
 #define ROOMFACTORY_HEADER
 
 
-#include "Inhabitable.h"
 #include "List.h"
 #include "Map.h"
 #include "KwestKingdom.h"
-#include "Targetable.h"
-#include "Traversable.h"
 
 // Rooms
 #include "ForestRoom.h"
@@ -19,6 +16,8 @@
 #include "Giant.h"
 #include "Ninja.h"
 #include "Chomper.h"
+
+class World;
 
 
 // Types

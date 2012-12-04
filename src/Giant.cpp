@@ -74,7 +74,7 @@ typedef enum {
 }
 
 
-- (bool) target: (id<Positionable>) target isInRange: (int) range {
+- (bool) target: (Character) target isInRange: (int) range {
   
   if (
     abs(x - [target getX]) + abs(y - [target getY]) <= range ||
@@ -92,7 +92,7 @@ typedef enum {
 }
 
 
-- (int) directionToTarget: (id<Positionable>) target {
+- (int) directionToTarget: (Character) target {
   
   if ( // Up
     (x == [target getX] && y == [target getY] + 1) ||
@@ -173,7 +173,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Character *target;
   
   [super update];
   [hammer update];
@@ -318,7 +318,7 @@ typedef enum {
 }
 
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
+- setWorld: (World *) aWorld {
   world = aWorld;
   [hammer setWorld: world];
   return self;

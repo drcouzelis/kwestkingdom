@@ -4,13 +4,12 @@
 
 #include <allegro.h>
 #include "KwestKingdom.h"
-#include "Updatable.h"
 
 
 #define ANIMATION_MAX_FRAMES 16
 
 
-class Animation : public Updatable {
+class Animation {
 
   BITMAP *frames[ANIMATION_MAX_FRAMES];
   

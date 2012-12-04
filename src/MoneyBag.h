@@ -2,11 +2,10 @@
 #define MONEYBAG_HEADER
 
 
-#include "Collectable.h"
-#include "Sprite.h"
+#include "Item.h"
 
 
-class MoneyBag : public Sprite, public Collectable {
+class MoneyBag : public Item {
   int amount;
 public:
 

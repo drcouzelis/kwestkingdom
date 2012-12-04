@@ -606,7 +606,7 @@ int roomNumber;
 }
 
 
-- setWorld: (id<Inhabitable, Targetable, Traversable>) aWorld {
+- setWorld: (World *) aWorld {
   world = aWorld;
   return self;
 }

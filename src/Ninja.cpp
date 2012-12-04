@@ -75,7 +75,7 @@ typedef enum {
   int dir;
   int toX;
   int toY;
-  id<Positionable> target;
+  Character *target;
   
   [super update];
   [sword update];

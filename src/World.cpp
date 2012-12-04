@@ -92,13 +92,13 @@ typedef enum {
 
 - updateItems {
   
-  id<Collectable, Positionable, Updatable> item;
+  Item *item;
   //Enemy *enemy;
   int x;
   int y;
   
   [items iterate];
-  while ((item = (id<Collectable, Positionable, Updatable>)[items next]) != nil) {
+  while ((item = (Item *)[items next]) != nil) {
     
     [item update];
     
@@ -310,7 +310,7 @@ typedef enum {
 }
 
 
-- (id<Positionable>) getTarget {
+- (Sprite *) getTarget {
   return hero;
 }
 
@@ -673,10 +673,10 @@ typedef enum {
 - drawCharacters: (BITMAP *) buffer{
   
   Enemy *enemy;
-  id<Collectable, Drawable> item;
+  Item *item;
   
   [items iterate];
-  while ((item = (id<Collectable, Drawable>)[items next]) != nil) {
+  while ((item = (Item *)[items next]) != nil) {
     [item draw: buffer];
   }
   

@@ -3,11 +3,14 @@
 
 
 #include "Enemy.h"
-#include "Bow.h"
+
+class Bow;
 
 
-class Archer : public public Enemy {
+class Archer : public Enemy {
   
+protected:
+
   Bow *bow;
   
   Animation *standAnimation;
@@ -21,12 +24,20 @@ public:
   Archer();
   ~Archer();
 
+  virtual void update();
+  virtual void draw(BITMAP *buffer);
+
+  virtual void setX(int newX);
+  virtual void setY(int newY);
+  virtual void moveX(int newX);
+  virtual void moveY(int newY);
+
   // State control
   void toStandState();
   void toMoveState();
   void toDrawBowState();
   void toShootArrowState();
-public:;
+};
 
 
 #endif

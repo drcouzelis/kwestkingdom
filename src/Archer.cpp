@@ -1,4 +1,6 @@
 #include "Archer.h"
+#include "Bow.h"
+#include "World.h"
 
 
 typedef enum {
@@ -48,7 +50,7 @@ Archer::Archer() {
   animation = standAnimation;
   state = ARCHER_STAND_STATE;
   direction = UP;
-  self->wait();
+  this->wait();
 }
 
 
@@ -66,7 +68,7 @@ Archer::update() {
   int dir;
   int toX;
   int toY;
-  Positionable *target;
+  Character *target;
   
   Enemy::update();
   bow->update();
@@ -115,8 +117,8 @@ Archer::update() {
         direction = DOWN;
       }
       
-      self->toDrawBowState();
-      self->wait();
+      this->toDrawBowState();
+      this->wait();
       
     } else if ((y == target->getY() - 1 || y == target->getY() + 1) && random_number(0, 1) == 1) {
       
@@ -126,8 +128,8 @@ Archer::update() {
         direction = RIGHT;
       }
       
-      self->toDrawBowState();
-      self->wait();
+      this->toDrawBowState();
+      this->wait();
       
     } else {
       
@@ -153,29 +155,28 @@ Archer::update() {
         this->toMoveState();
       }
       
-      self->wait();
-      
+      this->wait();
     }
     
     // Bound him so he doesn't wander right out of the screen!
-    self->bound(1, ROWS - 2, 1, COLS - 2);
+    this->bound(1, ROWS - 2, 1, COLS - 2);
     
     break;
     
   case ARCHER_MOVE_STATE:
-    if (!self->moving()) {
-      self->toStandState();
+    if (!this->moving()) {
+      this->toStandState();
     }
     break;
     
   case ARCHER_DRAW_BOW_STATE:
-    if (animation->finished()) {
-      self->toShootArrowState();
+    if (animation->isFinished()) {
+      this->toShootArrowState();
     }
     break;
     
   case ARCHER_SHOOT_ARROW_STATE:
-    if (animation->finished()) {
+    if (animation->isFinished()) {
       animation = standAnimation;
       bow->toHoldState();
     }

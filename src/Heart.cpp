@@ -18,7 +18,7 @@
 }
 
 
-- collectedBy: (id<Livable, Moneyable>) character {
+- collectedBy: (Character *) character {
   [character setHealth: [character getHealth] + 1];
   playSound(SOUNDS_HEART);
   return self;

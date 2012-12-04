@@ -2,9 +2,7 @@
 #define GAME_HEADER
 
 
-#include <Foundation/Foundation.h>
 #include "Animation.h"
-#include "Drawable.h"
 #include "EndlessWorld.h"
 #include "HighScoreLibrary.h"
 #include "KeyControl.h"
@@ -14,10 +12,9 @@
 #include "Snapshot.h"
 #include "StoryWorld.h"
 #include "Text.h"
-#include "Updatable.h"
 
 
-class Game : public NSObject <Drawable, Updatable> {
+class Game {
   
   World *world;
   
@@ -43,19 +40,22 @@ class Game : public NSObject <Drawable, Updatable> {
   
 public:
 
+  Game();
+  ~Game();
 
-  readPlayerInitials;
-  (bool) continuePlaying;
-  activateMenuSelection;
-  drawMenu: (BITMAP *) buffer;
-  drawHighScores: (BITMAP *) buffer;
-  drawEnterInitials: (BITMAP *) buffer;
+  virtual void update();
+  virtual void draw(BITMAP *buffer);
 
-  setState: (int) aState;
+  void readPlayerInitials();
+  bool continuePlaying();
+  void activateMenuSelection();
+  void drawMenu(BITMAP *buffer);
+  void drawHighScores(BITMAP *buffer);
+  void drawEnterInitials(BITMAP *buffer);
 
-  gameOver;
+  void setState(int aState);
 
-
+  void gameOver();
 };
 
 

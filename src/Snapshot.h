@@ -6,12 +6,14 @@
 
 
 class Snapshot : public Sprite {
-  
+ 
+protected:
+
   BITMAP *canvas;
   
 public:
 
-  Snaphshot();
+  Snapshot();
   ~Snapshot();
 
   BITMAP *getCanvas();

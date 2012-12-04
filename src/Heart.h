@@ -2,11 +2,10 @@
 #define HEART_HEADER
 
 
-#include "Collectable.h"
-#include "Sprite.h"
+#include "Item.h"
 
 
-class Heart : public Sprite, public Collectable {
+class Heart : public Item {
 public:
   Heart();
 };

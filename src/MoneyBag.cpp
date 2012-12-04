@@ -19,7 +19,7 @@
 }
 
 
-- collectedBy: (id<Livable, Moneyable>) character {
+- collectedBy: (Character *) character {
   [character setMoney: [character getMoney] + amount];
   playSound(SOUNDS_MONEY);
   return self;

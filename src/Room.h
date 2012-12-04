@@ -3,14 +3,11 @@
 
 
 #include "Animation.h"
-#include "Drawable.h"
 #include "HelpTile.h"
 #include "List.h"
 #include "Map.h"
 #include "KwestKingdom.h"
 #include "Screen.h"
-#include "Traversable.h"
-#include "Updatable.h"
 
 
 #define GRASS_TERRAIN 0
@@ -23,7 +20,7 @@
 #define NO_STEP  1
 
 
-class Room : public Drawable, public Traversable, public Updatable {
+class Room {
   
   // Add a terrain map, item map, character map...
   Map *terrainMap;
@@ -70,12 +67,21 @@ public:
   Room();
   ~Room();
 
+  virtual void update();
+  virtual void draw(BITMAP *buffer);
+
+  virtual bool isSwimmable(int x, int y);
+  virtual bool isWalkable(int x, int y);
+  virtual bool isJumpable(int x, int y);
+  virtual bool isFlyable(int x, int y);
+  virtual bool isSoarable(int x, int y);
+
   void setPathMap(Map *aPathMap);
   void setTerrainMap(Map *aTerrainMap);
 
   void addStep(int aStep);
   int getSizeOfPath();
-  int getXOfStepNumber(int aStep;)
+  int getXOfStepNumber(int aStep);
   int getYOfStepNumber(int aStep);
 
   List *retrieveEnemies();

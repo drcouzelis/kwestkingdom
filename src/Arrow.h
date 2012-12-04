@@ -6,8 +6,10 @@
 #include "Resources.h"
 
 
-class Arrow : public public Character {
-  
+class Arrow : public Character {
+ 
+protected:
+
   Animation *flyUpAnimation;
   Animation *flyDownAnimation;
   Animation *flyLeftAnimation;
@@ -16,6 +18,7 @@ class Arrow : public public Character {
   int direction;
   
 public:
+
   bool isInsideScreen();
   void findTarget();
   void setDirection(int aDirection);
@@ -26,7 +29,7 @@ public:
   void toHoldState();
   void toFlyingState();
   void toStoppedState();
-public:;
+};
 
 
 #endif

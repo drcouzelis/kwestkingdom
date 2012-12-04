@@ -4,19 +4,17 @@
 
 #include <allegro.h>
 #include "Animation.h"
-#include "Drawable.h"
-#include "Inhabitable.h"
 #include "KwestKingdom.h"
-#include "Positionable.h"
 #include "Resources.h"
 #include "Screen.h"
-#include "Targetable.h"
-#include "Traversable.h"
-#include "Updatable.h"
+
+class World;
 
 
-class Sprite : public Drawable, public Positionable, public Updatable {
+class Sprite {
   
+protected:
+
   // Position on the map
   int x; // Horizontal, from 0 to COLS   1
   int y; // Vertical, from 0 to ROWS   1
@@ -41,13 +39,24 @@ public:
   Sprite();
   ~Sprite();
 
+  virtual void update();
+  virtual void draw(BITMAP *buffer);
+
   bool moving();
   int getWidth();
   int getHeight();
 
   void setWorld(World *aWorld);
-  void setSpeed(int theSpeed);
   void setState(int aState);
+
+  virtual void setX(int newX);
+  virtual void setY(int newY);
+  virtual int getX();
+  virtual int getY();
+  virtual void moveX(int newX);
+  virtual void moveY(int newY);
+  virtual void setSpeed(int newSpeed);
+  virtual void bound(int top, int bottom, int left, int right);
 };
 
 

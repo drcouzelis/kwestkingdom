@@ -21,8 +21,6 @@ kwestkingdom_SOURCES = \
   Character.cpp \
   Chomper.h \
   Chomper.cpp \
-  Collectable.h \
-  Drawable.h \
   EndlessWorld.h \
   EndlessWorld.cpp \
   Enemy.h \
@@ -43,22 +41,18 @@ kwestkingdom_SOURCES = \
   Hero.cpp \
   HighScoreLibrary.h \
   HighScoreLibrary.cpp \
-  Inhabitable.h \
   KeyControl.h \
   KeyControl.cpp \
   KwestKingdom.h \
   KwestKingdom.cpp \
   List.h \
   List.cpp \
-  Livable.h \
   Map.h \
   Map.cpp \
-  Moneyable.h \
   MoneyBag.h \
   MoneyBag.cpp \
   Ninja.h \
   Ninja.cpp \
-  Positionable.h \
   Resources.h \
   Resources.cpp \
   RoomFactory.h \
@@ -79,13 +73,10 @@ kwestkingdom_SOURCES = \
   StoryWorld.cpp \
   Sword.h \
   Sword.cpp \
-  Targetable.h \
   Text.h \
   Text.cpp \
-  Traversable.h \
   UndergroundRoom.h \
   UndergroundRoom.cpp \
-  Updatable.h \
   World.h \
   World.cpp
 

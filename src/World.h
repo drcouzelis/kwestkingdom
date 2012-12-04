@@ -2,19 +2,14 @@
 #define WORLD_HEADER
 
 
-#include "Collectable.h"
-#include "Drawable.h"
 #include "Enemy.h"
 #include "HelpTile.h"
 #include "Hero.h"
-#include "Inhabitable.h"
+#include "Item.h"
 #include "List.h"
 #include "Room.h"
 #include "RoomFactory.h"
 #include "Snapshot.h"
-#include "Targetable.h"
-#include "Traversable.h"
-#include "Updatable.h"
 #include "Text.h"
 
 
@@ -47,6 +42,26 @@ public:
 
   World();
   ~World();
+
+  virtual void update();
+  virtual void draw(BITMAP *buffer);
+
+  virtual bool isInhabited(int x, int y);
+
+  virtual bool isAttackable(int team, int x, int y);
+  virtual void attackFromTeam(int team, int x, int y);
+  virtual void shake();
+
+  virtual void addCharacter(Character *aCharacter);
+  virtual void addItem(void  *anItem);
+
+  virtual Character *getTarget();
+
+  virtual bool isSwimmable(int x, int y);
+  virtual bool isWalkable(int x, int y);
+  virtual bool isJumpable(int x, int y);
+  virtual bool isFlyable(int x, int y);
+  virtual bool isSoarable(int x, int y);
 
   void updateRoom();
   void updateItems();
