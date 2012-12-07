@@ -14,6 +14,8 @@ typedef struct {
 
 class HighScoreLibrary {
 
+protected:
+
   HighScoreLibrary();
   ~HighScoreLibrary();
 

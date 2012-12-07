@@ -9,9 +9,8 @@
 
 
 class Enemy : public Character {
-
 public:
-  virtual void dropItem()=0;
+  virtual void dropItem();
 };
 
 

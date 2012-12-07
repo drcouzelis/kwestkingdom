@@ -3,7 +3,6 @@
 
 
 #include <allegro.h>
-#include "KwestKingdom.h"
 
 
 #define ANIMATION_MAX_FRAMES 16
@@ -30,6 +29,7 @@ class Animation {
   bool rotate;
 
 public:
+
   Animation();
 
   void update();
@@ -38,13 +38,13 @@ public:
  
   void addFrame(BITMAP *bitmap);
  
-  void setLoop(bool loopOn);
-  void setSpeed(int newSpeed);
-  void setOffsetX(int newOffsetX);
-  void setOffsetY(int newOffsetY);
-  void setRotate(bool rotateOn);
-  void setHorizontalFlip(bool hFlipOn);
-  void setVerticalFlip(bool vFlipOn);
+  Animation *setLoop(bool loopOn);
+  Animation *setSpeed(int newSpeed);
+  Animation *setOffsetX(int newOffsetX);
+  Animation *setOffsetY(int newOffsetY);
+  Animation *setRotate(bool rotateOn);
+  Animation *setHorizontalFlip(bool hFlipOn);
+  Animation *setVerticalFlip(bool vFlipOn);
  
   void reset();
  

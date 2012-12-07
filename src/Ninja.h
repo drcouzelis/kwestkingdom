@@ -3,11 +3,14 @@
 
 
 #include "Enemy.h"
-#include "Sword.h"
+
+class Sword;
 
 
 class Ninja : public Enemy {
   
+protected:
+
   Sword *sword;
   
   Animation *standAnimation;

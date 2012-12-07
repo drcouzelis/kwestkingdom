@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Animation.h"
+#include "KwestKingdom.h"
 
 
 extern int timer;
@@ -90,15 +91,17 @@ Animation::addFrame(BITMAP *bitmap) {
 }
 
 
-void
+Animation *
 Animation::setSpeed(int newSpeed) {
   speed = newSpeed;
+  return this;
 }
 
 
-void
+Animation *
 Animation::setLoop(bool loopOn) {
   loop = loopOn;
+  return this;
 }
 
 
@@ -210,15 +213,17 @@ Animation::update() {
 }
 
 
-void
+Animation *
 Animation::setOffsetX(int newOffsetX) {
   offsetX = newOffsetX;
+  return this;
 }
 
 
-void
+Animation *
 Animation::setOffsetY(int newOffsetY) {
   offsetY = newOffsetY;
+  return this;
 }
 
 
@@ -240,20 +245,23 @@ Animation::height() {
 }
 
 
-void
+Animation *
 Animation::setRotate(bool rotateOn) {
   rotate = rotateOn;
+  return this;
 }
 
 
-void
+Animation *
 Animation::setHorizontalFlip(bool hFlipOn) {
   hFlip = hFlipOn;
+  return this;
 }
 
 
-void
+Animation *
 Animation::setVerticalFlip(bool vFlipOn) {
   vFlip = vFlipOn;
+  return this;
 }
 

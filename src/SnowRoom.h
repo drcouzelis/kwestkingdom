@@ -2,7 +2,6 @@
 #define SNOWROOM_HEADER
 
 
-#include "Resources.h"
 #include "Room.h"
 
 

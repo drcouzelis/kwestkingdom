@@ -1,5 +1,9 @@
+#include "Animation.h"
 #include "Archer.h"
+#include "Arrow.h"
 #include "Bow.h"
+#include "KwestKingdom.h"
+#include "Resources.h"
 #include "World.h"
 
 

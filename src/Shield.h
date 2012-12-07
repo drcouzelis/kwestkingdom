@@ -6,6 +6,8 @@
 
 
 class Shield : public Sprite {
+
+protected:
   
   Animation *holdAnimation;
   

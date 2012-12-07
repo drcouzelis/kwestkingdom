@@ -3,13 +3,16 @@
 
 
 #include "KwestKingdom.h"
-#include "Screen.h"
 
 
 class Map {
+
+protected:
+
   int map[COLS][ROWS];
   int cols;
   int rows;
+
 public:
 
   Map();

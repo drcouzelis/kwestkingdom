@@ -1,4 +1,5 @@
 #include "Arrow.h"
+#include "Resources.h"
 
 
 typedef enum {
@@ -8,32 +9,20 @@ typedef enum {
 } ARROW_STATE;
 
 
-@implementation Arrow
-
-
-- init {
+Arrow::Arrow() {
   
-  self = [super init];
+  this->setSpeed(getWalkSpeed() * 4);
   
-  if (self) {
-    
-    [self setSpeed: getWalkSpeed() * 4];
-    
-    flyRightAnimation = [[Animation alloc] init];
-    [flyRightAnimation addFrame: getImage(IMAGES_ARROW)];
-    
-    flyLeftAnimation = [[flyRightAnimation copy] setHorizontalFlip: true];
-    flyDownAnimation = [[flyRightAnimation copy] setRotate: true];
-    flyUpAnimation = [[[flyRightAnimation copy] setHorizontalFlip: true] setRotate: true];
-    
-    direction = UP;
-    
-    [self toHoldState];
-    
-  }
+  flyRightAnimation = new Animation();
+  flyRightAnimation->addFrame(getImage(IMAGES_ARROW));
   
-  return self;
+  flyLeftAnimation = flyRightAnimation->copy()->setHorizontalFlip(true);
+  flyDownAnimation = flyRightAnimation->copy()->setRotate(true);
+  flyUpAnimation = flyRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
   
+  direction = UP;
+  
+  this->toHoldState();
 }
 
 

@@ -2,13 +2,12 @@
 #define HERO_HEADER
 
 
-#include "Arrow.h"
-#include "Bow.h"
 #include "Character.h"
-#include "KeyControl.h"
-#include "Resources.h"
-#include "Shield.h"
-#include "Sword.h"
+
+class Bow;
+class KeyControl;
+class Shield;
+class Sword;
 
 
 #define MAX_HERO_HEALTH 3

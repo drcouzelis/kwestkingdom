@@ -2,11 +2,9 @@
 #define KEYCONTROL_HEADER
 
 
-#include <allegro.h>
-#include "KwestKingdom.h"
-
-
 class KeyControl {
+
+protected:
 
   int keyCode;
   bool released;

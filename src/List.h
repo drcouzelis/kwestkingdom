@@ -3,9 +3,13 @@
 
 
 class Node {
+
+protected:
+
   void *item;
   Node *next;
   Node *prev;
+
 public:
 
   Node();
@@ -20,10 +24,14 @@ public:
 
 
 class List {
+
+protected:
+
   Node *head;
   Node *tail;
   Node *next;
   int size;
+
 public:
 
   List();

@@ -2,10 +2,6 @@
 #define CHARACTER_HEADER
 
 
-#include "Heart.h"
-#include "KwestKingdom.h"
-#include "MoneyBag.h"
-#include "Screen.h"
 #include "Sprite.h"
 
 

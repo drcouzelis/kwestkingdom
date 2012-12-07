@@ -2,9 +2,7 @@
 #define HELPTILE_HEADER
 
 
-#include "KwestKingdom.h"
-#include "Screen.h"
-#include "Text.h"
+#include <allegro.h>
 
 
 typedef enum {
@@ -52,8 +50,6 @@ public:
 
   int getX();
   int getY();
-
-
 };
 
 

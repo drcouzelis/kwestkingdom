@@ -3,7 +3,6 @@
 
 
 #include "Character.h"
-#include "Resources.h"
 
 
 class Arrow : public Character {

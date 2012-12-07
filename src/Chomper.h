@@ -6,6 +6,8 @@
 
 
 class Chomper : public Enemy {
+
+protected:
   
   Animation *standAnimation;
   Animation *attackAnimation;

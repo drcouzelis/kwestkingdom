@@ -2,16 +2,12 @@
 #define GAME_HEADER
 
 
-#include "Animation.h"
-#include "EndlessWorld.h"
-#include "HighScoreLibrary.h"
-#include "KeyControl.h"
-#include "KwestKingdom.h"
-#include "Resources.h"
-#include "RoomFactory.h"
-#include "Snapshot.h"
-#include "StoryWorld.h"
-#include "Text.h"
+#include <allegro.h>
+
+class Animation;
+class KeyControl;
+class Snapshot;
+class World;
 
 
 class Game {

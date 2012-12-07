@@ -2,15 +2,15 @@
 #define WORLD_HEADER
 
 
-#include "Enemy.h"
-#include "HelpTile.h"
-#include "Hero.h"
-#include "Item.h"
-#include "List.h"
-#include "Room.h"
-#include "RoomFactory.h"
-#include "Snapshot.h"
-#include "Text.h"
+class Animation;
+class Character;
+class HelpTile;
+class Hero;
+class Item;
+class List;
+class Room;
+class RoomFactory;
+class Snapshot;
 
 
 class World {
@@ -53,7 +53,7 @@ public:
   virtual void shake();
 
   virtual void addCharacter(Character *aCharacter);
-  virtual void addItem(void  *anItem);
+  virtual void addItem(Item *anItem);
 
   virtual Character *getTarget();
 

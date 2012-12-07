@@ -2,21 +2,8 @@
 #define ROOMFACTORY_HEADER
 
 
-#include "List.h"
-#include "Map.h"
-#include "KwestKingdom.h"
-
-// Rooms
-#include "ForestRoom.h"
-#include "SnowRoom.h"
-#include "UndergroundRoom.h"
-
-// Enemies
-#include "Archer.h"
-#include "Giant.h"
-#include "Ninja.h"
-#include "Chomper.h"
-
+class List;
+class Map;
 class World;
 
 

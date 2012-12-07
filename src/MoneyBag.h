@@ -6,7 +6,11 @@
 
 
 class MoneyBag : public Item {
+
+protected:
+
   int amount;
+
 public:
 
   MoneyBag();

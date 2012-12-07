@@ -3,11 +3,14 @@
 
 
 #include "Enemy.h"
-#include "Hammer.h"
+
+class Hammer;
 
 
 class Giant : public Enemy {
   
+protected:
+
   Hammer *hammer;
   
   Animation *standAnimation;

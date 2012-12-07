@@ -3,8 +3,6 @@
 
 
 #include <allegro.h>
-#include "al_screen.h"
-#include "KwestKingdom.h"
 
 
 void setWindowSize(int width, int height);

@@ -7,9 +7,7 @@
 
 class EndlessWorld : public World {
 public:
-
   EndlessWorld();
-
 };
 
 

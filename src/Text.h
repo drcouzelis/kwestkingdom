@@ -3,7 +3,6 @@
 
 
 #include <allegro.h>
-#include "KwestKingdom.h"
 
 
 void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, char *text);

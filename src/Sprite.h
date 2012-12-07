@@ -3,10 +3,6 @@
 
 
 #include <allegro.h>
-#include "Animation.h"
-#include "KwestKingdom.h"
-#include "Resources.h"
-#include "Screen.h"
 
 class World;
 

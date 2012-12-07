@@ -2,12 +2,9 @@
 #define ROOM_HEADER
 
 
-#include "Animation.h"
-#include "HelpTile.h"
-#include "List.h"
-#include "Map.h"
-#include "KwestKingdom.h"
-#include "Screen.h"
+class Animation;
+class List;
+class Map;
 
 
 #define GRASS_TERRAIN 0
