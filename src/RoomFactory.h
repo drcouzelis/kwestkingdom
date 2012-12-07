@@ -2,6 +2,8 @@
 #define ROOMFACTORY_HEADER
 
 
+#include "Room.h"
+
 class List;
 class Map;
 class World;

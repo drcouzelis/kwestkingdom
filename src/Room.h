@@ -2,6 +2,8 @@
 #define ROOM_HEADER
 
 
+#include "KwestKingdom.h"
+
 class Animation;
 class List;
 class Map;
@@ -18,7 +20,9 @@ class Map;
 
 
 class Room {
-  
+ 
+protected:
+
   // Add a terrain map, item map, character map...
   Map *terrainMap;
   Map *pathMap;

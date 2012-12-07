@@ -1,6 +1,7 @@
 #include "Animation.h"
 #include "Enemy.h"
 #include "MoneyBag.h"
+#include "World.h"
 
 
 Enemy::Enemy() {

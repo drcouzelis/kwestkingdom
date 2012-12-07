@@ -15,6 +15,8 @@ public:
 
   MoneyBag();
 
+  void collectedBy(Character *character);
+
   int getAmount();
   void setAmount(int anAmount);
 };
