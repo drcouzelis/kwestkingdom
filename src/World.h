@@ -2,6 +2,8 @@
 #define WORLD_HEADER
 
 
+#include <allegro.h>
+
 class Animation;
 class Character;
 class HelpTile;
@@ -15,6 +17,8 @@ class Snapshot;
 
 class World {
   
+protected:
+
   Hero *hero;
   List *enemies;
   List *rooms;

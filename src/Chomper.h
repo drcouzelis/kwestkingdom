@@ -19,6 +19,7 @@ public:
   Chomper();
   ~Chomper();
 
+  virtual void update();
 };
 
 

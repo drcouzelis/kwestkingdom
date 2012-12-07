@@ -1,28 +1,24 @@
+#include "Animation.h"
 #include "Character.h"
+#include "KwestKingdom.h"
 
 
-@implementation Character
 
 
-- init {
+
+Character::Character() {
   
-  self = [super init];
-  
-  if (self) {
-    turns = 0;
-    health = 1;
-    maxHealth = 3;
-    money = 0;
-    team = NO_TEAM;
-    speed = getWalkSpeed();
-  }
-  
-  return self;
+  turns = 0;
+  health = 1;
+  maxHealth = 3;
+  money = 0;
+  team = NO_TEAM;
+  speed = getWalkSpeed();
   
 }
 
 
-- (bool) isDead {
+bool Character::isDead() {
   if (health == 0) {
     return true;
   }
@@ -30,43 +26,43 @@
 }
 
 
-- setHealth: (int) theHealth {
+void Character::setHealth(int theHealth) {
   health = theHealth;
   if (health < 0) {
     health = 0;
   } else if (health > maxHealth) {
     health = maxHealth;
   }
-  return self;
+
 }
 
 
-- (int) getHealth {
+int Character::getHealth() {
   return health;
 }
 
 
-- setMaxHealth: (int) theHealth {
+void Character::setMaxHealth(int theHealth) {
   maxHealth = theHealth;
-  return self;
+
 }
 
 
-- (int) getMaxHealth {
+int Character::getMaxHealth() {
   return maxHealth;
 }
 
 
-- hurt {
+void Character::hurt() {
   health--;
   if (health < 0) {
     health = 0;
   }
-  return self;
+
 }
 
 
-- (bool) waiting {
+bool Character::waiting() {
   if (turns > 0) {
     return true;
   }
@@ -74,46 +70,46 @@
 }
 
 
-- go {
+void Character::go() {
   turns--;
   if (turns < 0) {
     turns = 0;
   }
-  return self;
+
 }
 
 
-- wait {
+void Character::wait() {
   turns++;
-  return self;
+
 }
 
 
-- setTeam: (int) aTeam {
+void Character::setTeam(int aTeam) {
   team = aTeam;
-  return self;
+
 }
 
 
-- (int) getTeam {
+int Character::getTeam() {
   return team;
 }
 
 
-- (int) getMoney {
+int Character::getMoney() {
   return money;
 }
 
 
-- setMoney: (int) amount {
+void Character::setMoney(int amount) {
   money = amount;
   if (money < 0) {
     money = 0;
   } else if (money > 999) {
     money = 999;
   }
-  return self;
+
 }
 
 
-@end
+

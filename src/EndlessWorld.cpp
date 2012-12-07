@@ -1,21 +1,7 @@
 #include "EndlessWorld.h"
 
 
-@implementation EndlessWorld
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    difficulty = 100;
-  }
-  
-  return self;
-  
+EndlessWorld::EndlessWorld() {
+  difficulty = 100;
 }
-
-
-@end
 

@@ -1,4 +1,6 @@
+#include "Animation.h"
 #include "Enemy.h"
+#include "MoneyBag.h"
 
 
 Enemy::Enemy() {

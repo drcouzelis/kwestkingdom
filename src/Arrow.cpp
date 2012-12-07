@@ -1,5 +1,8 @@
+#include "Animation.h"
 #include "Arrow.h"
+#include "KwestKingdom.h"
 #include "Resources.h"
+#include "World.h"
 
 
 typedef enum {
@@ -26,18 +29,18 @@ Arrow::Arrow() {
 }
 
 
-- (void) dealloc {
-  [flyUpAnimation release];
-  [flyDownAnimation release];
-  [flyLeftAnimation release];
-  [flyRightAnimation release];
-  [super dealloc];
+Arrow::~Arrow() {
+  delete flyUpAnimation;
+  delete flyDownAnimation;
+  delete flyLeftAnimation;
+  delete flyRightAnimation;
+
 }
 
 
-- update {
+void Arrow::update() {
   
-  [super update];
+  Character::update();
   
   switch (state) {
   case ARROW_HOLD_STATE:
@@ -46,19 +49,19 @@ Arrow::Arrow() {
     
   case ARROW_FLYING_STATE:
     
-    if (![self moving]) {
+    if (!this->moving()) {
       
       if (direction == LEFT) {
-        [world attackFromTeam: team atX: x - 1 andY: y];
+        world->attackFromTeam(team, x - 1, y);
       } else if (direction == RIGHT) {
-        [world attackFromTeam: team atX: x + 1 andY: y];
+        world->attackFromTeam(team, x + 1, y);
       } else if (direction == UP) {
-        [world attackFromTeam: team atX: x andY: y - 1];
+        world->attackFromTeam(team, x, y - 1);
       } else {
-        [world attackFromTeam: team atX: x andY: y + 1];
+        world->attackFromTeam(team, x, y + 1);
       }
       
-      [self toStoppedState];
+      this->toStoppedState();
       
     }
     
@@ -69,12 +72,12 @@ Arrow::Arrow() {
     break;
   }
   
-  return self;
+
   
 }
 
 
-- (bool) isInsideScreen {
+bool Arrow::isInsideScreen() {
   if (x < 0 || x > COLS - 1 || y < 0 || y > ROWS - 1) {
     return false;
   }
@@ -82,32 +85,32 @@ Arrow::Arrow() {
 }
 
 
-- findTarget {
+void Arrow::findTarget() {
   
   if (direction == LEFT) {
-    while ([world isFlyableAtX: x - 1 andY: y] && ![world isAttackableFromTeam: team atX: x - 1 andY: y] && [self isInsideScreen]) {
+    while (world->isFlyable(x - 1, y) && !world->isAttackable(team, x - 1, y) && this->isInsideScreen()) {
       x--;
     }
   } else if (direction == RIGHT) {
-    while ([world isFlyableAtX: x + 1 andY: y] && ![world isAttackableFromTeam: team atX: x + 1 andY: y] && [self isInsideScreen]) {
+    while (world->isFlyable(x + 1, y) && !world->isAttackable(team, x + 1, y) && this->isInsideScreen()) {
       x++;
     }
   } else if (direction == UP) {
-    while ([world isFlyableAtX: x andY: y - 1] && ![world isAttackableFromTeam: team atX: x andY: y - 1] && [self isInsideScreen]) {
+    while (world->isFlyable(x, y - 1) && !world->isAttackable(team, x, y - 1) && this->isInsideScreen()) {
       y--;
     }
   } else {
-    while ([world isFlyableAtX: x andY: y + 1] && ![world isAttackableFromTeam: team atX: x andY: y + 1] && [self isInsideScreen]) {
+    while (world->isFlyable(x, y + 1) && !world->isAttackable(team, x, y + 1) && this->isInsideScreen()) {
       y++;
     }
   }
   
-  return self;
+
   
 }
 
 
-- setDirection: (int) aDirection {
+void Arrow::setDirection(int aDirection) {
   direction = aDirection;
   if (direction == UP) {
     animation = flyUpAnimation;
@@ -118,11 +121,11 @@ Arrow::Arrow() {
   } else {
     animation = flyRightAnimation;
   }
-  return self;
+
 }
 
 
-- toHoldState {
+void Arrow::toHoldState() {
   
   int visualOffset;
   
@@ -130,50 +133,50 @@ Arrow::Arrow() {
   
   state = ARROW_HOLD_STATE;
   
-  [self setDirection: direction];
+  this->setDirection(direction);
   
   // Offset the animation a little bit to make it look like
   // the arrow is in the bow string.
-  [flyUpAnimation setOffsetX: 0];
-  [flyUpAnimation setOffsetY: visualOffset];
-  [flyDownAnimation setOffsetX: 0];
-  [flyDownAnimation setOffsetY: -visualOffset];
-  [flyLeftAnimation setOffsetX: visualOffset];
-  [flyLeftAnimation setOffsetY: 0];
-  [flyRightAnimation setOffsetX: -visualOffset];
-  [flyRightAnimation setOffsetY: 0];
+  flyUpAnimation->setOffsetX(0);
+  flyUpAnimation->setOffsetY(visualOffset);
+  flyDownAnimation->setOffsetX(0);
+  flyDownAnimation->setOffsetY(-visualOffset);
+  flyLeftAnimation->setOffsetX(visualOffset);
+  flyLeftAnimation->setOffsetY(0);
+  flyRightAnimation->setOffsetX(-visualOffset);
+  flyRightAnimation->setOffsetY(0);
   
-  return self;
+
 }
 
 
-- toFlyingState {
+void Arrow::toFlyingState() {
   state = ARROW_FLYING_STATE;
-  [self setDirection: direction];
-  [self findTarget];
+  this->setDirection(direction);
+  this->findTarget();
   // Put the animation back to where it's supposed to be.
-  [flyUpAnimation setOffsetX: 0];
-  [flyUpAnimation setOffsetY: 0];
-  [flyDownAnimation setOffsetX: 0];
-  [flyDownAnimation setOffsetY: 0];
-  [flyLeftAnimation setOffsetX: 0];
-  [flyLeftAnimation setOffsetY: 0];
-  [flyRightAnimation setOffsetX: 0];
-  [flyRightAnimation setOffsetY: 0];
+  flyUpAnimation->setOffsetX(0);
+  flyUpAnimation->setOffsetY(0);
+  flyDownAnimation->setOffsetX(0);
+  flyDownAnimation->setOffsetY(0);
+  flyLeftAnimation->setOffsetX(0);
+  flyLeftAnimation->setOffsetY(0);
+  flyRightAnimation->setOffsetX(0);
+  flyRightAnimation->setOffsetY(0);
   playSound(SOUNDS_ARROW_FLY);
-  return self;
+
 }
 
 
-- toStoppedState {
+void Arrow::toStoppedState() {
   state = ARROW_STOPPED_STATE;
-  [self setDirection: direction];
+  this->setDirection(direction);
   playSound(SOUNDS_ARROW_HIT);
-  return self;
+
 }
 
 
-- (bool) stopped {
+bool Arrow::stopped() {
   if (state == ARROW_STOPPED_STATE) {
     return true;
   }
@@ -181,4 +184,4 @@ Arrow::Arrow() {
 }
 
 
-@end
+

@@ -18,6 +18,11 @@ protected:
   
 public:
 
+  Arrow();
+  ~Arrow();
+
+  void update();
+
   bool isInsideScreen();
   void findTarget();
   void setDirection(int aDirection);

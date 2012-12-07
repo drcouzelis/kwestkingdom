@@ -10,6 +10,9 @@
 
 class Enemy : public Character {
 public:
+
+  Enemy();
+
   virtual void dropItem();
 };
 
