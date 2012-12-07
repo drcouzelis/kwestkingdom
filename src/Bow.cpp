@@ -1,4 +1,7 @@
+#include "Animation.h"
+#include "Arrow.h"
 #include "Bow.h"
+#include "Resources.h"
 
 
 typedef enum {
@@ -7,143 +10,131 @@ typedef enum {
 } BOW_STATE;
 
 
-@implementation Bow
 
 
-- init {
+
+Bow::Bow() {
   
-  self = [super init];
-  
-  if (self) {
+    arrow = NULL;
     
-    arrow = nil;
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMAGES_BOW_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMAGES_BOW_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMAGES_BOW_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMAGES_BOW_HOLD_4)];
-    [holdAnimation setLoop: true];
-    [holdAnimation setSpeed: 6];
+    holdAnimation = new Animation();
+    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_1));
+    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_2));
+    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_3));
+    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_4));
+    holdAnimation->setLoop(true);
+    holdAnimation->setSpeed(6);
 	
-    attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMAGES_BOW_DRAW_1)];
-    [attackRightAnimation addFrame: getImage(IMAGES_BOW_DRAW_2)];
-    [attackRightAnimation addFrame: getImage(IMAGES_BOW_DRAW_3)];
-    [attackRightAnimation setLoop: false];
-    [attackRightAnimation setSpeed: 12];
+    attackRightAnimation = new Animation();
+    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_1));
+    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_2));
+    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_3));
+    attackRightAnimation->setLoop(false);
+    attackRightAnimation->setSpeed(12);
 	
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: true];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: true];
-    attackUpAnimation = [[[attackRightAnimation copy] setHorizontalFlip: true] setRotate: true];
+    attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
+    attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
+    attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
     
-    [self toAwayState];
-    
-  }
-  
-  return self;
+
   
 }
 
 
-- (void) dealloc {
-  [holdAnimation release];
-  [attackUpAnimation release];
-  [attackDownAnimation release];
-  [attackLeftAnimation release];
-  [attackRightAnimation release];
-  [arrow release];
-  [super dealloc];
+Bow::~Bow() {
+  delete holdAnimation;
+  delete attackUpAnimation;
+  delete attackDownAnimation;
+  delete attackLeftAnimation;
+  delete attackRightAnimation;
+  delete arrow;
+
 }
 
 
-- update {
-  [super update];
-  [arrow update];
-  return self;
+void Bow::update() {
+  Sprite::update();
+  arrow->update();
+
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [arrow draw: buffer];
-  return self;
+void Bow::draw(BITMAP * buffer) {
+  Sprite::draw(buffer);
+  arrow->draw(buffer);
+
 }
 
 
-- setArrow: (Arrow *) anArrow {
+void Bow::setArrow(Arrow * anArrow) {
   arrow = anArrow;
-  return self;
+
 }
 
 
-- (Arrow *) getArrow {
+Arrow * Bow::getArrow() {
   return arrow;
 }
 
 
-- setArrowWithX: (int) newX
-    andY: (int) newY
-    andDirection: (int) aDirection
-    andTeam: (int) aTeam
-    andWorld: (World *) aWorld {
+void Bow::setArrow(int newX, int newY, int aDirection, int aTeam, World *aWorld) {
   
-  arrow = [[Arrow alloc] init];
-  [arrow setTeam: aTeam];
-  [arrow setX: newX];
-  [arrow setY: newY];
-  [arrow setWorld: aWorld];
-  [arrow setDirection: aDirection];
-  [arrow toHoldState];
+  arrow = new Arrow();
+  arrow->setTeam(aTeam);
+  arrow->setX(newX);
+  arrow->setY(newY);
+  arrow->setWorld(aWorld);
+  arrow->setDirection(aDirection);
+  arrow->toHoldState();
   
-  return self;
+
   
 }
 
 
-- toHoldState {
+void Bow::toHoldState() {
   state = BOW_HOLD_STATE;
   animation = holdAnimation;
-  return self;
+
 }
 
 
-- toAwayState {
+void Bow::toAwayState() {
   state = BOW_AWAY_STATE;
-  animation = nil;
-  return self;
+  animation = NULL;
+
 }
 
 
-- toAttackUpState {
+void Bow::toAttackUpState() {
   animation = attackUpAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
+
 }
 
 
-- toAttackDownState {
+void Bow::toAttackDownState() {
   animation = attackDownAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
+
 }
 
 
-- toAttackLeftState {
+void Bow::toAttackLeftState() {
   animation = attackLeftAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
+
 }
 
 
-- toAttackRightState {
+void Bow::toAttackRightState() {
   animation = attackRightAnimation;
-  [animation reset];
-  return self;
+  animation->reset();
+
 }
 
 
-- (bool) held {
+bool Bow::held() {
   if (state != BOW_AWAY_STATE) {
     return true;
   }
@@ -151,5 +142,5 @@ typedef enum {
 }
 
 
-@end
+
 
