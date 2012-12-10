@@ -1,4 +1,5 @@
 #include <allegro.h>
+#include <stdio.h>
 
 #include "KeyControl.h"
 
@@ -44,9 +45,8 @@ bool KeyControl::isPressed() {
 }
 
 
-void KeyControl::setDelay(bool theDelay) {
+void KeyControl::setDelay(int theDelay) {
   delay = theDelay;
-
 }
 
 

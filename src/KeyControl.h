@@ -15,7 +15,7 @@ public:
 
   KeyControl(int aKey);
 
-  void setDelay(bool theDelay);
+  void setDelay(int theDelay);
   bool isPressed();
 };
 
