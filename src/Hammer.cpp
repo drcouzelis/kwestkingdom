@@ -1,89 +1,84 @@
+#include "Animation.h"
 #include "Hammer.h"
+#include "KwestKingdom.h"
+#include "Resources.h"
+#include "World.h"
 
 
-@implementation Hammer
 
 
-- init {
+
+Hammer::Hammer() {
   
-  self = [super init];
+  holdAnimation = new Animation();
+  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_1));
+  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_2));
+  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_3));
+  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_4));
+  holdAnimation->setOffsetY(TILE_SIZE);
+  holdAnimation->setLoop(true);
+  holdAnimation->setSpeed(6);
   
-  if (self) {
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_1)];
-    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_2)];
-    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_3)];
-    [holdAnimation addFrame: getImage(IMAGES_HAMMER_HOLD_4)];
-    [holdAnimation setOffsetY: TILE_SIZE];
-    [holdAnimation setLoop: true];
-    [holdAnimation setSpeed: 6];
-    
-    attackRightAnimation = [[Animation alloc] init];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_1)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_2)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_3)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_4)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_3)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_2)];
-    [attackRightAnimation addFrame: getImage(IMAGES_HAMMER_SWING_1)];
-    [attackRightAnimation setOffsetX: TILE_SIZE];
-    [attackRightAnimation setLoop: false];
-    [attackRightAnimation setSpeed: 24];
-    
-    attackLeftAnimation = [[attackRightAnimation copy] setHorizontalFlip: true];
-    [attackLeftAnimation setOffsetX: -TILE_SIZE * 2];
-    attackDownAnimation = [[attackRightAnimation copy] setRotate: true];
-    [attackDownAnimation setOffsetX: 0];
-    [attackDownAnimation setOffsetY: TILE_SIZE];
-    attackUpAnimation = [[[[attackRightAnimation copy] setHorizontalFlip: true] setVerticalFlip: true] setRotate: true];
-    [attackUpAnimation setOffsetX: -TILE_SIZE];
-    [attackUpAnimation setOffsetY: -TILE_SIZE * 2];
-    
-    [self setState: HAMMER_AWAY_STATE];
-    
-  }
+  attackRightAnimation = new Animation();
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_1));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_2));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_3));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_3));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_2));
+  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_1));
+  attackRightAnimation->setOffsetX(TILE_SIZE);
+  attackRightAnimation->setLoop(false);
+  attackRightAnimation->setSpeed(24);
   
-  return self;
+  attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
+  attackLeftAnimation->setOffsetX(-TILE_SIZE * 2);
+  attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
+  attackDownAnimation->setOffsetX(0);
+  attackDownAnimation->setOffsetY(TILE_SIZE);
+  attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setVerticalFlip(true)->setRotate(true);
+  attackUpAnimation->setOffsetX(-TILE_SIZE);
+  attackUpAnimation->setOffsetY(-TILE_SIZE * 2);
+  
+  this->setState(HAMMER_AWAY_STATE);
   
 }
 
 
-- (void) dealloc {
-  [holdAnimation release];
-  [attackUpAnimation release];
-  [attackDownAnimation release];
-  [attackLeftAnimation release];
-  [attackRightAnimation release];
-  [super dealloc];
+Hammer::~Hammer() {
+  delete holdAnimation;
+  delete attackUpAnimation;
+  delete attackDownAnimation;
+  delete attackLeftAnimation;
+  delete attackRightAnimation;
 }
 
 
-- update {
+void Hammer::update() {
   
-  [super update];
+  Sprite::update();
   
   switch (state) {
   case HAMMER_ATTACK_UP_STATE:
   case HAMMER_ATTACK_DOWN_STATE:
   case HAMMER_ATTACK_LEFT_STATE:
   case HAMMER_ATTACK_RIGHT_STATE:
-    if ([animation currentFrameNumber] == 3) {
-      [self setState: HAMMER_END_ATTACK_STATE];
+    if (animation->currentFrameNumber() == 3) {
+      this->setState(HAMMER_END_ATTACK_STATE);
     }
     break;
   }
   
-  return self;
+
   
 }
 
 
 
-- setState: (int) aState {
+void Hammer::setState(int aState) {
   
   state = aState;
   
@@ -94,42 +89,42 @@
     break;
     
   case HAMMER_AWAY_STATE:
-    animation = nil;
+    animation = NULL;
     break;
     
   case HAMMER_ATTACK_UP_STATE:
     animation = attackUpAnimation;
-    [animation reset];
+    animation->reset();
     break;
     
   case HAMMER_ATTACK_DOWN_STATE:
     animation = attackDownAnimation;
-    [animation reset];
+    animation->reset();
     break;
     
   case HAMMER_ATTACK_LEFT_STATE:
     animation = attackLeftAnimation;
-    [animation reset];
+    animation->reset();
     break;
     
   case HAMMER_ATTACK_RIGHT_STATE:
     animation = attackRightAnimation;
-    [animation reset];
+    animation->reset();
     break;
     
   case HAMMER_END_ATTACK_STATE:
     playSound(SOUNDS_HAMMER);
-    [world shake];
+    world->shake();
     break;
     
   }
   
-  return self;
+
   
 }
 
 
-- (bool) held {
+bool Hammer::held() {
   if (state == HAMMER_HOLD_STATE) {
     return true;
   }
@@ -137,5 +132,5 @@
 }
 
 
-@end
+
 

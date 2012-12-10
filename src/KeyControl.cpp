@@ -1,22 +1,17 @@
+#include <allegro.h>
+
 #include "KeyControl.h"
 
 
-@implementation KeyControl
-
-
-- initWithKey: (int) aKey {
-  self = [super init];
-  if (self) {
-    keyCode = aKey;
-    released = true;
-    timer = 0;
-    delay = 0; //GAME_TICKER / 4;
-  }
-  return self;
+KeyControl::KeyControl(int aKey) {
+  keyCode = aKey;
+  released = true;
+  timer = 0;
+  delay = 0; //GAME_TICKER / 4;
 }
 
 
-- (bool) isPressed {
+bool KeyControl::isPressed() {
   
   bool ret = false;
   
@@ -49,11 +44,11 @@
 }
 
 
-- setDelay: (bool) theDelay {
+void KeyControl::setDelay(bool theDelay) {
   delay = theDelay;
-  return self;
+
 }
 
 
-@end
+
 

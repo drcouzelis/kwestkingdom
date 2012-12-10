@@ -1,39 +1,35 @@
+#include "Animation.h"
+#include "KwestKingdom.h"
 #include "Sprite.h"
 
 
-@implementation Sprite
-
-
-- init {
+Sprite::Sprite() {
   
-  self = [super init];
-  
-  if (self) {
-    x = 0;
-    y = 0;
-    w = 1;
-    h = 1;
-    visualX = 0;
-    visualY = 0;
-    fudge = 0;
-    speed = 0;
-    animation = nil;
-    world = nil;
-    state = 0;
-  }
-  
-  return self;
-  
+  x = 0;
+  y = 0;
+  w = 1;
+  h = 1;
+  visualX = 0;
+  visualY = 0;
+  fudge = 0;
+  speed = 0;
+  animation = NULL;
+  world = NULL;
+  state = 0;
 }
 
 
-- update {
+Sprite::~Sprite() {
+}
+
+
+void Sprite::update() {
   
-  [animation update];
+  animation->update();
   
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
-  if ([self moving]) {
+  if (this->moving()) {
     
     if (speed > 0) {
       
@@ -62,18 +58,16 @@
       visualY = y * getTileSize();
     }
     
-    if (![self moving]) {
+    if (!this->moving()) {
       fudge = 0;
     }
     
   }
   
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
+void Sprite::draw(BITMAP * buffer) {
   
   // Add a shadow.
   /*
@@ -85,14 +79,11 @@
   hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
   
-  [animation drawTo: buffer atX: visualX andY: visualY];
-  
-  return self;
-  
+  animation->drawTo(buffer, visualX, visualY);
 }
 
 
-- (bool) moving {
+bool Sprite::moving() {
   if (visualX != x * getTileSize() || visualY != y * getTileSize()) {
     return true;
   }
@@ -100,88 +91,82 @@
 }
 
 
-- boundAtTop: (int) top andBottom: (int) bottom andLeft: (int) left andRight: (int) right {
+void Sprite::bound(int top, int bottom, int left, int right) {
   
   if (x < left) {
-    [self moveX: left];
+    this->moveX(left);
   } else if (x + w - 1 > right) {
-    [self moveX: right];
+    this->moveX(right);
   }
   
   if (y < top) {
-    [self moveY: top];
+    this->moveY(top);
   } else if (y + h - 1 > bottom) {
-    [self moveY: bottom];
+    this->moveY(bottom);
   }
-  
-  return self;
-  
 }
 
 
-- (int) getX {
+int Sprite::getX() {
   return x;
 }
 
 
-- (int) getY {
+int Sprite::getY() {
   return y;
 }
 
 
-- setX: (int) newX {
+void Sprite::setX(int newX) {
   x = newX;
   visualX = x * getTileSize();
-  return self;
+
 }
 
 
-- setY: (int) newY {
+void Sprite::setY(int newY) {
   y = newY;
   visualY = y * getTileSize();
-  return self;
+
 }
 
 
-- moveX: (int) newX {
+void Sprite::moveX(int newX) {
   x = newX;
-  return self;
+
 }
 
 
-- moveY: (int) newY {
+void Sprite::moveY(int newY) {
   y = newY;
-  return self;
+
 }
 
 
-- (int) getWidth {
+int Sprite::getWidth() {
   return w;
 }
 
 
-- (int) getHeight {
+int Sprite::getHeight() {
   return h;
 }
 
 
-- setWorld: (World *) aWorld {
+void Sprite::setWorld(World * aWorld) {
   world = aWorld;
-  return self;
+
 }
 
 
-- setState: (int) aState {
+void Sprite::setState(int aState) {
   state = aState;
-  return self;
+
 }
 
 
-- setSpeed: (int) theSpeed {
+void Sprite::setSpeed(int theSpeed) {
   speed = theSpeed;
-  return self;
+
 }
-
-
-@end
 

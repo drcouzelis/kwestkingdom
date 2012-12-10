@@ -8,6 +8,9 @@
 class StoryWorld : public World {
 public:
   StoryWorld();
+
+  void update();
+  void changeRooms();
 };
 
 

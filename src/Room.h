@@ -66,7 +66,7 @@ protected:
 public:
 
   Room();
-  ~Room();
+  virtual ~Room();
 
   virtual void update();
   virtual void draw(BITMAP *buffer);
@@ -77,47 +77,47 @@ public:
   virtual bool isFlyable(int x, int y);
   virtual bool isSoarable(int x, int y);
 
-  void setPathMap(Map *aPathMap);
-  void setTerrainMap(Map *aTerrainMap);
+  virtual void setPathMap(Map *aPathMap);
+  virtual void setTerrainMap(Map *aTerrainMap);
 
-  void addStep(int aStep);
-  int getSizeOfPath();
-  int getXOfStepNumber(int aStep);
-  int getYOfStepNumber(int aStep);
+  virtual void addStep(int aStep);
+  virtual int getSizeOfPath();
+  virtual int getXOfStepNumber(int aStep);
+  virtual int getYOfStepNumber(int aStep);
 
-  List *retrieveEnemies();
-  void storeEnemies(List *list);
+  virtual List *retrieveEnemies();
+  virtual void storeEnemies(List *list);
 
-  List *retrieveItems();
-  void storeItems(List *list);
+  virtual List *retrieveItems();
+  virtual void storeItems(List *list);
 
-  List *retrieveHelpTiles();
-  void storeHelpTiles(List *list);
+  virtual List *retrieveHelpTiles();
+  virtual void storeHelpTiles(List *list);
 
-  int getEntranceFromNextRoomX();
-  int getEntranceFromNextRoomY();
-  int getEntranceFromPrevRoomX();
-  int getEntranceFromPrevRoomY();
-  int getExitToNextRoomX();
-  int getExitToNextRoomY();
-  int getExitToPrevRoomX();
-  int getExitToPrevRoomY();
+  virtual int getEntranceFromNextRoomX();
+  virtual int getEntranceFromNextRoomY();
+  virtual int getEntranceFromPrevRoomX();
+  virtual int getEntranceFromPrevRoomY();
+  virtual int getExitToNextRoomX();
+  virtual int getExitToNextRoomY();
+  virtual int getExitToPrevRoomX();
+  virtual int getExitToPrevRoomY();
 
-  void setEntranceFromNextRoomX(int newX);
-  void setEntranceFromNextRoomY(int newY);
-  void setEntranceFromPrevRoomX(int newX);
-  void setEntranceFromPrevRoomY(int newY);
-  void setExitToNextRoomX(int newX);
-  void setExitToNextRoomY(int newY);
-  void setExitToPrevRoomX(int newX);
-  void setExitToPrevRoomY(int newY);
+  virtual void setEntranceFromNextRoomX(int newX);
+  virtual void setEntranceFromNextRoomY(int newY);
+  virtual void setEntranceFromPrevRoomX(int newX);
+  virtual void setEntranceFromPrevRoomY(int newY);
+  virtual void setExitToNextRoomX(int newX);
+  virtual void setExitToNextRoomY(int newY);
+  virtual void setExitToPrevRoomX(int newX);
+  virtual void setExitToPrevRoomY(int newY);
 
-  void setNumber(int aNumber);
-  int getNumber();
+  virtual void setNumber(int aNumber);
+  virtual int getNumber();
 
-  void removeExitToPrevRoom();
+  virtual void removeExitToPrevRoom();
 
-  Map *getPathMap();
+  virtual Map *getPathMap();
 };
 
 

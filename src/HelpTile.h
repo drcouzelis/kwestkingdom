@@ -39,7 +39,7 @@ public:
   void setX(int newX);
   void setY(int newY);
 
-  void setLine1(char *newLine1,
+  void setLines(char *newLine1,
                 char *newLine2,
                 char *newLine3,
                 char *newLine4,

@@ -1,9 +1,13 @@
 #include "config.h"
 
-#include "KwestKingdom.h"
 #include "Game.h"
+#include "KwestKingdom.h"
 #include "Resources.h"
 #include "Screen.h"
+
+#ifdef ALLEGRO_UNIX
+  #include <xalleg.h>
+#endif
 
 
 volatile int timer = 0;
@@ -42,7 +46,7 @@ int getWalkSpeed() {
 
 
 void game_over() {
-  [game gameOver];
+  game->gameOver();
 }
 
 
@@ -74,7 +78,7 @@ void init_game() {
   
   initializeResources();
 
-  if (initializeScreen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, NO) == NO) {
+  if (initializeScreen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);
   }
 
@@ -106,13 +110,13 @@ int main(int argc, char **argv) {
 
   init_game();
   
-  game = [[Game alloc] init];
+  game = new Game();
   
   // Reset the timers just before the game begins.
   timer = 0;
   fps_timer = 0;
   
-  while ([game continuePlaying]) {
+  while (game->continuePlaying()) {
     
     while (timer == 0) {
       rest(1);
@@ -122,7 +126,7 @@ int main(int argc, char **argv) {
       
       timemark = timer;
       
-      [game update];
+      game->update();
       
       timer--;
       
@@ -141,7 +145,7 @@ int main(int argc, char **argv) {
       prevTime = fps_timer;
     }
     
-    [game draw: getWindow()];
+    game->draw(getWindow());
     //clear_to_color(getBuffer(), BLACK);
     textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
@@ -151,7 +155,7 @@ int main(int argc, char **argv) {
     
   }
   
-  [game release];
+  delete game;
   
   destroyScreen();
   

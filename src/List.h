@@ -17,9 +17,9 @@ public:
   void setItem(void *anItem);
   void setNext(Node *theNext);
   void setPrev(Node *thePrev);
-  void *getItem;
-  Node *getNext;
-  Node *getPrev;
+  void *getItem();
+  Node *getNext();
+  Node *getPrev();
 };
 
 
@@ -35,6 +35,7 @@ protected:
 public:
 
   List();
+  ~List();
 
   void append(void *item);
   void remove(void *item);

@@ -1,116 +1,103 @@
+#include "Animation.h"
+#include "List.h"
+#include "Map.h"
 #include "Room.h"
 
 
-@implementation Room
-
-
-- init {
+Room::Room() {
   
   int i;
   
-  self = [super init];
+  pathMap = NULL;
+  terrainMap = NULL;
   
-  if (self) {
-    
-    pathMap = nil;
-    terrainMap = nil;
-    
-    enemyStorage = nil;
-    itemStorage = nil;
-    helpTileStorage = [[List alloc] init]; //nil;
-    
-    entranceFromNextRoomX = 0;
-    entranceFromNextRoomY = 0;
-    entranceFromPrevRoomX = 0;
-    entranceFromPrevRoomY = 0;
-    exitToNextRoomX = 0;
-    exitToNextRoomY = 0;
-    exitToPrevRoomX = 0;
-    exitToPrevRoomY = 0;
-    
-    number = 0;
-    
-    grassAnimation = nil;
-    pathAnimation = nil;
-    mountainAnimation = nil;
-    waterAnimation = nil;
-    shoreNorthAnimation = nil;
-    shoreSouthAnimation = nil;
-    shoreEastAnimation = nil;
-    shoreWestAnimation = nil;
-    shoreInsideNEAnimation = nil;
-    shoreInsideNWAnimation = nil;
-    shoreInsideSEAnimation = nil;
-    shoreInsideSWAnimation = nil;
-    shoreOutsideNEAnimation = nil;
-    shoreOutsideNWAnimation = nil;
-    shoreOutsideSEAnimation = nil;
-    shoreOutsideSWAnimation = nil;
-    
-    for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
-      path[i] = NO_STEP;
-    }
-    steps = 0;
-    
+  enemyStorage = NULL;
+  itemStorage = NULL;
+  helpTileStorage = new List(); //NULL;
+  
+  entranceFromNextRoomX = 0;
+  entranceFromNextRoomY = 0;
+  entranceFromPrevRoomX = 0;
+  entranceFromPrevRoomY = 0;
+  exitToNextRoomX = 0;
+  exitToNextRoomY = 0;
+  exitToPrevRoomX = 0;
+  exitToPrevRoomY = 0;
+  
+  number = 0;
+  
+  grassAnimation = NULL;
+  pathAnimation = NULL;
+  mountainAnimation = NULL;
+  waterAnimation = NULL;
+  shoreNorthAnimation = NULL;
+  shoreSouthAnimation = NULL;
+  shoreEastAnimation = NULL;
+  shoreWestAnimation = NULL;
+  shoreInsideNEAnimation = NULL;
+  shoreInsideNWAnimation = NULL;
+  shoreInsideSEAnimation = NULL;
+  shoreInsideSWAnimation = NULL;
+  shoreOutsideNEAnimation = NULL;
+  shoreOutsideNWAnimation = NULL;
+  shoreOutsideSEAnimation = NULL;
+  shoreOutsideSWAnimation = NULL;
+  
+  for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
+    path[i] = NO_STEP;
   }
-  
-  return self;
-  
+  steps = 0;
 }
 
 
-- (void) dealloc {
-  
-  [grassAnimation release];
-  [pathAnimation release];
-  [mountainAnimation release];
-  [waterAnimation release];
-  [shoreNorthAnimation release];
-  [shoreSouthAnimation release];
-  [shoreEastAnimation release];
-  [shoreWestAnimation release];
-  [shoreInsideNEAnimation release];
-  [shoreInsideNWAnimation release];
-  [shoreInsideSEAnimation release];
-  [shoreInsideSWAnimation release];
-  [shoreOutsideNEAnimation release];
-  [shoreOutsideNWAnimation release];
-  [shoreOutsideSEAnimation release];
-  [shoreOutsideSWAnimation release];
-  
-  [pathMap release];
-  [terrainMap release];
-  [enemyStorage release];
-  [itemStorage release];
-  [helpTileStorage release];
-  
-  [super dealloc];
-  
+Room::~Room() {
+  delete grassAnimation;
+  delete pathAnimation;
+  delete mountainAnimation;
+  delete waterAnimation;
+  delete shoreNorthAnimation;
+  delete shoreSouthAnimation;
+  delete shoreEastAnimation;
+  delete shoreWestAnimation;
+  delete shoreInsideNEAnimation;
+  delete shoreInsideNWAnimation;
+  delete shoreInsideSEAnimation;
+  delete shoreInsideSWAnimation;
+  delete shoreOutsideNEAnimation;
+  delete shoreOutsideNWAnimation;
+  delete shoreOutsideSEAnimation;
+  delete shoreOutsideSWAnimation;
+
+  delete pathMap;
+  delete terrainMap;
+  delete enemyStorage;
+  delete itemStorage;
+  delete helpTileStorage;
 }
 
 
-- update {
-  [grassAnimation update];
-  [pathAnimation update];
-  [mountainAnimation update];
-  [waterAnimation update];
-  [shoreNorthAnimation update];
-  [shoreSouthAnimation update];
-  [shoreEastAnimation update];
-  [shoreWestAnimation update];
-  [shoreInsideNEAnimation update];
-  [shoreInsideNWAnimation update];
-  [shoreInsideSEAnimation update];
-  [shoreInsideSWAnimation update];
-  [shoreOutsideNEAnimation update];
-  [shoreOutsideNWAnimation update];
-  [shoreOutsideSEAnimation update];
-  [shoreOutsideSWAnimation update];
-  return self;
+void Room::update() {
+  grassAnimation->update();
+  pathAnimation->update();
+  mountainAnimation->update();
+  waterAnimation->update();
+  shoreNorthAnimation->update();
+  shoreSouthAnimation->update();
+  shoreEastAnimation->update();
+  shoreWestAnimation->update();
+  shoreInsideNEAnimation->update();
+  shoreInsideNWAnimation->update();
+  shoreInsideSEAnimation->update();
+  shoreInsideSWAnimation->update();
+  shoreOutsideNEAnimation->update();
+  shoreOutsideNWAnimation->update();
+  shoreOutsideSEAnimation->update();
+  shoreOutsideSWAnimation->update();
+
 }
 
 
-- draw: (BITMAP *) buffer {
+void Room::draw(BITMAP * buffer) {
   
   int x;
   int y;
@@ -118,29 +105,29 @@
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
       
-      //if ([pathMap getValueAtX: x andY: y] == true) { // Draw the path
-        //[pathAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+      //if (pathMap->getValue(x, y) == true) { // Draw the path
+        //pathAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
       //} else
-      if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
-        [grassAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
-      } else if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
-        [mountainAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
-      } else if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
+      if (terrainMap->getValue(x, y) == GRASS_TERRAIN) {
+        grassAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
+      } else if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
+        mountainAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
+      } else if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
         
-        [waterAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        waterAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         
         // Add the shore borders
-        if ([terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN) { // North
-          [shoreNorthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        if (terrainMap->getValue(x, y - 1) != WATER_TERRAIN) { // North
+          shoreNorthAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
-        if ([terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN) { // South
-          [shoreSouthAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        if (terrainMap->getValue(x, y + 1) != WATER_TERRAIN) { // South
+          shoreSouthAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
-        if ([terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN) { // East
-          [shoreEastAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        if (terrainMap->getValue(x + 1, y) != WATER_TERRAIN) { // East
+          shoreEastAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
-        if ([terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN) { // West
-          [shoreWestAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+        if (terrainMap->getValue(x - 1, y) != WATER_TERRAIN) { // West
+          shoreWestAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
           
       }
@@ -152,62 +139,62 @@
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
       
-      if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
+      if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
         
         // Add the shore inside corners
         if (
-          [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
+          terrainMap->getValue(x, y - 1) != WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y) != WATER_TERRAIN
         ) { // North East
-          [shoreInsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreInsideNEAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y] != WATER_TERRAIN
+          terrainMap->getValue(x, y + 1) != WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y) != WATER_TERRAIN
         ) { // South East
-          [shoreInsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreInsideSEAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y - 1] != WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
+          terrainMap->getValue(x, y - 1) != WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y) != WATER_TERRAIN
         ) { // North West
-          [shoreInsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreInsideNWAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y + 1] != WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y] != WATER_TERRAIN
+          terrainMap->getValue(x, y + 1) != WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y) != WATER_TERRAIN
         ) { // South West
-          [shoreInsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreInsideSWAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
           
         // Add the shore outside corners.
         if (
-          [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y - 1] != WATER_TERRAIN
+          terrainMap->getValue(x, y - 1) == WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y) == WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y - 1) != WATER_TERRAIN
         ) { // North East
-          [shoreOutsideNEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreOutsideNEAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x + 1 andY: y + 1] != WATER_TERRAIN
+          terrainMap->getValue(x, y + 1) == WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y) == WATER_TERRAIN &&
+          terrainMap->getValue(x + 1, y + 1) != WATER_TERRAIN
         ) { // South East
-          [shoreOutsideSEAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreOutsideSEAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y - 1] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y - 1] != WATER_TERRAIN
+          terrainMap->getValue(x, y - 1) == WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y) == WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y - 1) != WATER_TERRAIN
         ) { // North West
-          [shoreOutsideNWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreOutsideNWAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          [terrainMap getValueAtX: x andY: y + 1] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y] == WATER_TERRAIN &&
-          [terrainMap getValueAtX: x - 1 andY: y + 1] != WATER_TERRAIN
+          terrainMap->getValue(x, y + 1) == WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y) == WATER_TERRAIN &&
+          terrainMap->getValue(x - 1, y + 1) != WATER_TERRAIN
         ) { // South West
-          [shoreOutsideSWAnimation drawTo: buffer atX: x * getTileSize() andY: y * getTileSize()];
+          shoreOutsideSWAnimation->drawTo(buffer, x * getTileSize(), y * getTileSize());
         }
           
       }
@@ -215,86 +202,86 @@
     }
   }
   
-  return self;
+
   
 }
 
 
-- (List *) retrieveEnemies {
+List * Room::retrieveEnemies() {
   List *list;
   list = enemyStorage;
-  enemyStorage = nil;
+  enemyStorage = NULL;
   return list;
 }
 
 
-- storeEnemies: (List *) list {
-  [enemyStorage release];
+void Room::storeEnemies(List * list) {
+  delete enemyStorage;
   enemyStorage = list;
-  return self;
+
 }
 
 
-- (List *) retrieveItems {
+List * Room::retrieveItems() {
   List *list;
   list = itemStorage;
-  itemStorage = nil;
+  itemStorage = NULL;
   return list;
 }
 
 
-- storeItems: (List *) list {
-  [itemStorage release];
+void Room::storeItems(List * list) {
+  delete itemStorage;
   itemStorage = list;
-  return self;
+
 }
 
 
-- (List *) retrieveHelpTiles {
+List * Room::retrieveHelpTiles() {
   List *list;
   list = helpTileStorage;
-  helpTileStorage = nil;
+  helpTileStorage = NULL;
   return list;
 }
 
 
-- storeHelpTiles: (List *) list {
-  [helpTileStorage release];
+void Room::storeHelpTiles(List * list) {
+  delete helpTileStorage;
   helpTileStorage = list;
-  return self;
+
 }
 
 
-- setNumber: (int) aNumber {
+void Room::setNumber(int aNumber) {
   number = aNumber;
-  return self;
+
 }
 
 
-- (int) getNumber {
+int Room::getNumber() {
   return number;
 }
 
 
-- setPathMap: (Map *) aPathMap {
+void Room::setPathMap(Map * aPathMap) {
   pathMap = aPathMap;
-  return self;
+
 }
 
 
-- addStep: (int) aStep {
+void Room::addStep(int aStep) {
   path[steps] = aStep;
   steps++;
-  return self;
+
 }
 
 
-- (int) getSizeOfPath {
+int Room::getSizeOfPath() {
   return steps;
 }
 
 
-- (int) getXOfStepNumber: (int) aStep {
+int Room::getXOfStepNumber(int aStep) {
   if (path[aStep] == NO_STEP) {
     return NO_STEP;
   }
@@ -302,7 +289,7 @@
 }
 
 
-- (int) getYOfStepNumber: (int) aStep {
+int Room::getYOfStepNumber(int aStep) {
   if (path[aStep] == NO_STEP) {
     return NO_STEP;
   }
@@ -310,150 +297,150 @@
 }
 
 
-- (Map *) getPathMap {
+Map * Room::getPathMap() {
   return pathMap;
 }
 
 
-- setTerrainMap: (Map *) aTerrainMap {
+void Room::setTerrainMap(Map * aTerrainMap) {
   terrainMap = aTerrainMap;
-  return self;
+
 }
 
 
-- (bool) isSwimmableAtX: (int) x andY: (int) y {
-  if ([terrainMap getValueAtX: x andY: y] == WATER_TERRAIN) {
+bool Room::isSwimmable(int x, int y) {
+  if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
     return true;
   }
   return false;
 }
 
 
-- (bool) isWalkableAtX: (int) x andY: (int) y {
-  if ([terrainMap getValueAtX: x andY: y] == GRASS_TERRAIN) {
+bool Room::isWalkable(int x, int y) {
+  if (terrainMap->getValue(x, y) == GRASS_TERRAIN) {
     return true;
   }
   return false;
 }
 
 
-- (bool) isJumpableAtX: (int) x andY: (int) y {
-  if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
+bool Room::isJumpable(int x, int y) {
+  if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
     return false;
   }
   return true;
 }
 
 
-- (bool) isFlyableAtX: (int) x andY: (int) y {
-  if ([terrainMap getValueAtX: x andY: y] == TREE_TERRAIN) {
+bool Room::isFlyable(int x, int y) {
+  if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
     return false;
   }
   return true;
 }
 
 
-- (bool) isSoarableAtX: (int) x andY: (int) y {
+bool Room::isSoarable(int x, int y) {
   // You can soar above any type of terrain.
   return true;
 }
 
 
-- removeExitToPrevRoom {
-  [terrainMap setX: entranceFromPrevRoomX andY: entranceFromPrevRoomY toValue: TREE_TERRAIN];
-  [self setExitToPrevRoomX: -1];
-  [self setExitToPrevRoomY: -1];
-  return self;
+void Room::removeExitToPrevRoom() {
+  terrainMap->set(entranceFromPrevRoomX, entranceFromPrevRoomY, TREE_TERRAIN);
+  this->setExitToPrevRoomX(-1);
+  this->setExitToPrevRoomY(-1);
+
 }
 
 
-- (int) getEntranceFromNextRoomX {
+int Room::getEntranceFromNextRoomX() {
   return entranceFromNextRoomX;
 }
 
 
-- (int) getEntranceFromNextRoomY {
+int Room::getEntranceFromNextRoomY() {
   return entranceFromNextRoomY;
 }
 
 
-- (int) getEntranceFromPrevRoomX {
+int Room::getEntranceFromPrevRoomX() {
   return entranceFromPrevRoomX;
 }
 
 
-- (int) getEntranceFromPrevRoomY {
+int Room::getEntranceFromPrevRoomY() {
   return entranceFromPrevRoomY;
 }
 
 
-- (int) getExitToNextRoomX {
+int Room::getExitToNextRoomX() {
   return exitToNextRoomX;
 }
 
 
-- (int) getExitToNextRoomY {
+int Room::getExitToNextRoomY() {
   return exitToNextRoomY;
 }
 
 
-- (int) getExitToPrevRoomX {
+int Room::getExitToPrevRoomX() {
   return exitToPrevRoomX;
 }
 
 
-- (int) getExitToPrevRoomY {
+int Room::getExitToPrevRoomY() {
   return exitToPrevRoomY;
 }
 
 
-- setEntranceFromNextRoomX: (int) newX {
+void Room::setEntranceFromNextRoomX(int newX) {
   entranceFromNextRoomX = newX;
-  return self;
+
 }
 
 
-- setEntranceFromNextRoomY: (int) newY {
+void Room::setEntranceFromNextRoomY(int newY) {
   entranceFromNextRoomY = newY;
-  return self;
+
 }
 
 
-- setEntranceFromPrevRoomX: (int) newX {
+void Room::setEntranceFromPrevRoomX(int newX) {
   entranceFromPrevRoomX = newX;
-  return self;
+
 }
 
 
-- setEntranceFromPrevRoomY: (int) newY {
+void Room::setEntranceFromPrevRoomY(int newY) {
   entranceFromPrevRoomY = newY;
-  return self;
+
 }
 
 
-- setExitToNextRoomX: (int) newX {
+void Room::setExitToNextRoomX(int newX) {
   exitToNextRoomX = newX;
-  return self;
+
 }
 
 
-- setExitToNextRoomY: (int) newY {
+void Room::setExitToNextRoomY(int newY) {
   exitToNextRoomY = newY;
-  return self;
+
 }
 
 
-- setExitToPrevRoomX: (int) newX {
+void Room::setExitToPrevRoomX(int newX) {
   exitToPrevRoomX = newX;
-  return self;
+
 }
 
 
-- setExitToPrevRoomY: (int) newY {
+void Room::setExitToPrevRoomY(int newY) {
   exitToPrevRoomY = newY;
-  return self;
+
 }
 
 
-@end
+
 

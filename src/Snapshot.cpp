@@ -1,31 +1,23 @@
+#include "Animation.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
 #include "Snapshot.h"
 
 
-@implementation Snapshot
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    canvas = create_bitmap(getWindowWidth(), getWindowHeight());
-  }
-  
-  return self;
-  
+Snapshot::Snapshot() {
+  canvas = create_bitmap(getWindowWidth(), getWindowHeight());
 }
 
 
-- (void) dealloc {
+Snapshot::~Snapshot() {
   destroy_bitmap(canvas);
-  [super dealloc];
+
 }
 
 
-- update {
+void Snapshot::update() {
   
-  if ([self moving]) {
+  if (this->moving()) {
     
     if (speed > 0) {
       
@@ -54,29 +46,29 @@
       visualY = y;
     }
     
-    if (![self moving]) {
+    if (!this->moving()) {
       fudge = 0;
     }
     
   }
   
-  return self;
+
   
 }
 
 
-- draw: (BITMAP *) buffer {
-  draw_sprite(buffer, [self getCanvas], visualX, visualY);
-  return self;
+void Snapshot::draw(BITMAP * buffer) {
+  draw_sprite(buffer, this->getCanvas(), visualX, visualY);
+
 }
 
 
-- (BITMAP *) getCanvas {
+BITMAP * Snapshot::getCanvas() {
   return canvas;
 }
 
 
-- (bool) moving {
+bool Snapshot::moving() {
   if (visualX != x || visualY != y) {
     return true;
   }
@@ -84,18 +76,18 @@
 }
 
 
-- setX: (int) newX {
+void Snapshot::setX(int newX) {
   x = newX;
   visualX = x;
-  return self;
+
 }
 
 
-- setY: (int) newY {
+void Snapshot::setY(int newY) {
   y = newY;
   visualY = y;
-  return self;
+
 }
 
 
-@end
+

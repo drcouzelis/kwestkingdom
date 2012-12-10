@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
 #include "HighScoreLibrary.h"
 
 
@@ -45,7 +48,7 @@ void readHighScores() {
   }
   
   while (fgets(line, 255, file) != NULL) {
-    sscanf(line, "%s %d %d", highScores[numOfHighScores].initials, &(highScores[numOfHighScores].room), &(highScores[numOfHighScores].coins));
+    sscanf(line, "%s %d %d", highScores[numOfHighScores].initials, &(highScores[numOfHighScores].room),&(highScores[numOfHighScores].coins));
     numOfHighScores++;
   }
   
@@ -54,10 +57,10 @@ void readHighScores() {
 }
 
 
-@implementation HighScoreLibrary
 
 
-+ initInstance {
+
+void HighScoreLibrary::initInstance() {
 
   char *path;
   int i;
@@ -78,7 +81,7 @@ void readHighScores() {
     mkdir(highScoresFilename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
     strcat(highScoresFilename, "/highscores.txt");
 
-    highScoreLibraryInstance = [[HighScoreLibrary alloc] init];
+    highScoreLibraryInstance = new HighScoreLibrary();
     for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
       strcpy(highScores[i].initials, "\0");
       highScores[i].room = 0;
@@ -87,16 +90,23 @@ void readHighScores() {
     numOfHighScores = 0;
     readHighScores();
   }
-  return highScoreLibraryInstance;
 }
 
 
-+ (void) deallocInstance {
-  [highScoreLibraryInstance release];
+void HighScoreLibrary::deallocInstance() {
+  delete highScoreLibraryInstance;
 }
 
 
-+ (int) highScorePositionWithRoom: (int) room andCoins: (int) coins {
+HighScoreLibrary::HighScoreLibrary() {
+}
+
+
+HighScoreLibrary::~HighScoreLibrary() {
+}
+
+
+int HighScoreLibrary::highScorePosition(int room, int coins) {
   
   int position;
   int i;
@@ -120,15 +130,15 @@ void readHighScores() {
 }
 
 
-+ addHighScoreWithInitials: (char *) initials andRoom: (int) room andCoins: (int) coins {
+void HighScoreLibrary::addHighScore(char *initials, int room, int coins) {
   
   int position;
   int i;
   
-  position = [HighScoreLibrary highScorePositionWithRoom: room andCoins: coins];
+  position = HighScoreLibrary::highScorePosition(room, coins);
   
   if (position == MAX_NUM_OF_HIGH_SCORES) {
-    return self;
+
   }
   
   for (i = MAX_NUM_OF_HIGH_SCORES - 2; i >= position; i--) {
@@ -146,12 +156,10 @@ void readHighScores() {
   writeHighScores();
   readHighScores();
   
-  return self;
-  
 }
 
 
-+ (bool) getHighScoreNumber: (int) num returnInitials: (char *) initials andRoom: (int *) room andCoins: (int *) coins {
+bool HighScoreLibrary::getHighScore(int num, char *initials, int *room, int * coins) {
   if (num < numOfHighScores) {
     strcpy(initials, highScores[num].initials);
     *room = highScores[num].room;
@@ -162,4 +170,4 @@ void readHighScores() {
 }
 
 
-@end
+

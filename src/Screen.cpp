@@ -1,3 +1,8 @@
+#include <allegro.h>
+#include <stdio.h>
+
+#include "al_screen.h"
+#include "KwestKingdom.h"
 #include "Screen.h"
 
 
@@ -112,7 +117,7 @@ bool initializeScreen(int width, int height, bool fullscreen) {
 
   }
   
-  if (selectBestScreen() == NO) {
+  if (selectBestScreen() == false) {
     return false;
   }
 

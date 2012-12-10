@@ -1,3 +1,8 @@
+#include "Animation.h"
+#include "HelpTile.h"
+#include "Hero.h"
+#include "RoomFactory.h"
+#include "Snapshot.h"
 #include "StoryWorld.h"
 
 
@@ -65,207 +70,193 @@
 #define GIANT_TEXT_LINE_3 "Don't get flattened!"
 
 
-@implementation StoryWorld
 
 
-- init {
+
+StoryWorld::StoryWorld() {
   
   HelpTile *helpTile;
   
-  self = [super init];
+  roomFactory->setChanceOfChomper(0);
+  roomFactory->setChanceOfArcher(0);
+  roomFactory->setChanceOfNinja(0);
+  roomFactory->setChanceOfGiant(0);
   
-  if (self) {
-    
-    [roomFactory setChanceOfChomper: 0];
-    [roomFactory setChanceOfArcher: 0];
-    [roomFactory setChanceOfNinja: 0];
-    [roomFactory setChanceOfGiant: 0];
-    
-    // Welcome help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 2]];
-    [helpTile setY: [room getYOfStepNumber: 2]];
-    [helpTile setLine1: WELCOME_TEXT_LINE_1
-                  and2: WELCOME_TEXT_LINE_2
-                  and3: WELCOME_TEXT_LINE_3
-                  and4: NULL
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
-    
-    // About help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 4]];
-    [helpTile setY: [room getYOfStepNumber: 4]];
-    [helpTile setLine1: ABOUT_TEXT_LINE_1
-                  and2: ABOUT_TEXT_LINE_2
-                  and3: ABOUT_TEXT_LINE_3
-                  and4: NULL
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
-    
-    [hero emptyHands];
-    
-  }
+  // Welcome help
+  helpTile = new HelpTile();
+  helpTile->setX(room->getXOfStepNumber(2));
+  helpTile->setY(room->getYOfStepNumber(2));
+  helpTile->setLines((char *)WELCOME_TEXT_LINE_1,
+                     (char *)WELCOME_TEXT_LINE_2,
+                     (char *)WELCOME_TEXT_LINE_3,
+                     (char *)NULL,
+                     (char *)NULL,
+                     (char *)NULL);
+  this->addHelpTile(helpTile);
   
-  return self;
+  // About help
+  helpTile = new HelpTile();
+  helpTile->setX(room->getXOfStepNumber(4));
+  helpTile->setY(room->getYOfStepNumber(4));
+  helpTile->setLines((char *)ABOUT_TEXT_LINE_1,
+                     (char *)ABOUT_TEXT_LINE_2,
+                     (char *)ABOUT_TEXT_LINE_3,
+                     (char *)NULL,
+                     (char *)NULL,
+                     (char *)NULL);
+  this->addHelpTile(helpTile);
   
+  hero->emptyHands();
+    
 }
 
 
-- update {
+void StoryWorld::update() {
   
-  [super update];
+  World::update();
   
   // This will add the enemy to the room AFTER the room number that is shown here.
-  if ([room getNumber] == 2) {
-    [roomFactory setChanceOfChomper: DEFAULT_CHANCE_OF_CHOMPER];
+  if (room->getNumber() == 2) {
+    roomFactory->setChanceOfChomper(DEFAULT_CHANCE_OF_CHOMPER);
     difficulty = 5;
-  } else if ([room getNumber] == 5) {
-    [roomFactory setChanceOfArcher: DEFAULT_CHANCE_OF_ARCHER];
-  } else if ([room getNumber] == 8) {
-    [roomFactory setChanceOfNinja: DEFAULT_CHANCE_OF_NINJA];
-  } else if ([room getNumber] == 11) {
-    [roomFactory setChanceOfGiant: DEFAULT_CHANCE_OF_GIANT];
-  } else if ([room getNumber] == 16) {
+  } else if (room->getNumber() == 5) {
+    roomFactory->setChanceOfArcher(DEFAULT_CHANCE_OF_ARCHER);
+  } else if (room->getNumber() == 8) {
+    roomFactory->setChanceOfNinja(DEFAULT_CHANCE_OF_NINJA);
+  } else if (room->getNumber() == 11) {
+    roomFactory->setChanceOfGiant(DEFAULT_CHANCE_OF_GIANT);
+  } else if (room->getNumber() == 16) {
     difficulty = 100;
   }
   
-  if ([room getNumber] == MAX_NUM_OF_ROOMS) {
+  if (room->getNumber() == MAX_NUM_OF_ROOMS) {
     // There are no more rooms to explore!
     // It's the end of the game.
     //playSound(ENDING_SOUND);
     game_over();
   }
   
-  return self;
+
 }
 
 
-- changeRooms {
+void StoryWorld::changeRooms() {
   
   HelpTile *helpTile;
   
-  [super changeRooms];
+  World::changeRooms();
   
-  if ([room getNumber] == 2) {
+  if (room->getNumber() == 2) {
     
     // Sword help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 2]];
-    [helpTile setY: [room getYOfStepNumber: 2]];
-    [helpTile setLine1: SWORD_TEXT_LINE_1
-                  and2: SWORD_TEXT_LINE_2
-                  and3: SWORD_TEXT_LINE_3
-                  and4: SWORD_TEXT_LINE_4
-                  and5: SWORD_TEXT_LINE_5
-                  and6: SWORD_TEXT_LINE_6];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(2));
+    helpTile->setY(room->getYOfStepNumber(2));
+    helpTile->setLines((char *)SWORD_TEXT_LINE_1,
+                       (char *)SWORD_TEXT_LINE_2,
+                       (char *)SWORD_TEXT_LINE_3,
+                       (char *)SWORD_TEXT_LINE_4,
+                       (char *)SWORD_TEXT_LINE_5,
+                       (char *)SWORD_TEXT_LINE_6);
+    this->addHelpTile(helpTile);
     
     // Chomper help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setY: [room getYOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setLine1: CHOMPER_TEXT_LINE_1
-                  and2: CHOMPER_TEXT_LINE_2
-                  and3: CHOMPER_TEXT_LINE_3
-                  and4: CHOMPER_TEXT_LINE_4
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setY(room->getYOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setLines((char *)CHOMPER_TEXT_LINE_1,
+                       (char *)CHOMPER_TEXT_LINE_2,
+                       (char *)CHOMPER_TEXT_LINE_3,
+                       (char *)CHOMPER_TEXT_LINE_4,
+                       (char *)NULL,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
-  } else if ([room getNumber] == 3) {
+  } else if (room->getNumber() == 3) {
     
     // Wait help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 2]];
-    [helpTile setY: [room getYOfStepNumber: 2]];
-    [helpTile setLine1: WAIT_TEXT_LINE_1
-                  and2: WAIT_TEXT_LINE_2
-                  and3: WAIT_TEXT_LINE_3
-                  and4: WAIT_TEXT_LINE_4
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(2));
+    helpTile->setY(room->getYOfStepNumber(2));
+    helpTile->setLines((char *)WAIT_TEXT_LINE_1,
+                       (char *)WAIT_TEXT_LINE_2,
+                       (char *)WAIT_TEXT_LINE_3,
+                       (char *)WAIT_TEXT_LINE_4,
+                       (char *)NULL,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
-  } else if ([room getNumber] == 4) {
+  } else if (room->getNumber() == 4) {
     
     // Shield help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 2]];
-    [helpTile setY: [room getYOfStepNumber: 2]];
-    [helpTile setLine1: SHIELD_TEXT_LINE_1
-                  and2: SHIELD_TEXT_LINE_2
-                  and3: SHIELD_TEXT_LINE_3
-                  and4: SHIELD_TEXT_LINE_4
-                  and5: SHIELD_TEXT_LINE_5
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(2));
+    helpTile->setY(room->getYOfStepNumber(2));
+    helpTile->setLines((char *)SHIELD_TEXT_LINE_1,
+                       (char *)SHIELD_TEXT_LINE_2,
+                       (char *)SHIELD_TEXT_LINE_3,
+                       (char *)SHIELD_TEXT_LINE_4,
+                       (char *)SHIELD_TEXT_LINE_5,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
-  } else if ([room getNumber] == 5) {
+  } else if (room->getNumber() == 5) {
     
     // Bow help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: 2]];
-    [helpTile setY: [room getYOfStepNumber: 2]];
-    [helpTile setLine1: BOW_TEXT_LINE_1
-                  and2: BOW_TEXT_LINE_2
-                  and3: BOW_TEXT_LINE_3
-                  and4: BOW_TEXT_LINE_4
-                  and5: BOW_TEXT_LINE_5
-                  and6: BOW_TEXT_LINE_6];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(2));
+    helpTile->setY(room->getYOfStepNumber(2));
+    helpTile->setLines((char *)BOW_TEXT_LINE_1,
+                       (char *)BOW_TEXT_LINE_2,
+                       (char *)BOW_TEXT_LINE_3,
+                       (char *)BOW_TEXT_LINE_4,
+                       (char *)BOW_TEXT_LINE_5,
+                       (char *)BOW_TEXT_LINE_6);
+    this->addHelpTile(helpTile);
     
     // Archer help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setY: [room getYOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setLine1: ARCHER_TEXT_LINE_1
-                  and2: ARCHER_TEXT_LINE_2
-                  and3: ARCHER_TEXT_LINE_3
-                  and4: NULL
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setY(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setLines((char *)ARCHER_TEXT_LINE_1,
+                       (char *)ARCHER_TEXT_LINE_2,
+                       (char *)ARCHER_TEXT_LINE_3,
+                       (char *)NULL,
+                       (char *)NULL,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
-  } else if ([room getNumber] == 8) {
+  } else if (room->getNumber() == 8) {
     
     // Ninja help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setY: [room getYOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setLine1: NINJA_TEXT_LINE_1
-                  and2: NINJA_TEXT_LINE_2
-                  and3: NULL
-                  and4: NULL
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setY(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setLines((char *)NINJA_TEXT_LINE_1,
+                       (char *)NINJA_TEXT_LINE_2,
+                       (char *)NULL,
+                       (char *)NULL,
+                       (char *)NULL,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
-  } else if ([room getNumber] == 11) {
+  } else if (room->getNumber() == 11) {
     
     // Giant help
-    helpTile = [[HelpTile alloc] init];
-    [helpTile setX: [room getXOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setY: [room getYOfStepNumber: [room getSizeOfPath] - 4]];
-    [helpTile setLine1: GIANT_TEXT_LINE_1
-                  and2: GIANT_TEXT_LINE_2
-                  and3: GIANT_TEXT_LINE_3
-                  and4: NULL
-                  and5: NULL
-                  and6: NULL];
-    [self addHelpTile: helpTile];
+    helpTile = new HelpTile();
+    helpTile->setX(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setY(room->getXOfStepNumber(room->getSizeOfPath() - 4));
+    helpTile->setLines((char *)GIANT_TEXT_LINE_1,
+                       (char *)GIANT_TEXT_LINE_2,
+                       (char *)GIANT_TEXT_LINE_3,
+                       (char *)NULL,
+                       (char *)NULL,
+                       (char *)NULL);
+    this->addHelpTile(helpTile);
     
   }
   
-  [self drawTerrain: [nextRoomSnapshot getCanvas]];
-  [self drawCharacters: [nextRoomSnapshot getCanvas]];
-  
-  return self;
-  
+  this->drawTerrain(nextRoomSnapshot->getCanvas());
+  this->drawCharacters(nextRoomSnapshot->getCanvas());
 }
-
-
-@end
 

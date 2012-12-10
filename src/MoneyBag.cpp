@@ -1,44 +1,37 @@
+#include "Animation.h"
+#include "Character.h"
 #include "MoneyBag.h"
+#include "Resources.h"
 
 
-@implementation MoneyBag
-
-
-- init {
+MoneyBag::MoneyBag() {
   
-  self = [super init];
-  
-  if (self) {
-    amount = 1;
-    animation = [[Animation alloc] init];
-    [animation addFrame: getImage(IMAGES_MONEYBAG)];
-  }
-  
-  return self;
-  
+  amount = 1;
+  animation = new Animation();
+  animation->addFrame(getImage(IMAGES_MONEYBAG));
 }
 
 
-- collectedBy: (Character *) character {
-  [character setMoney: [character getMoney] + amount];
+void MoneyBag::collectedBy(Character * character) {
+  character->setMoney(character->getMoney() + amount);
   playSound(SOUNDS_MONEY);
-  return self;
+
 }
 
 
-- (int) getAmount {
+int MoneyBag::getAmount() {
   return amount;
 }
 
 
-- setAmount: (int) anAmount {
+void MoneyBag::setAmount(int anAmount) {
   amount = anAmount;
   if (amount < 0) {
     amount = 0;
   }
-  return self;
+
 }
 
 
-@end
+
 

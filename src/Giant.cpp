@@ -1,4 +1,9 @@
+#include "Animation.h"
 #include "Giant.h"
+#include "Hammer.h"
+#include "KwestKingdom.h"
+#include "Resources.h"
+#include "World.h"
 
 
 typedef enum {
@@ -8,79 +13,69 @@ typedef enum {
 } GIANT_STATE;
 
 
-@implementation Giant
 
 
-- init {
+
+Giant::Giant() {
   
-  self = [super init];
+  x = 0;
+  y = 0;
   
-  if (self) {
-    
-    x = 0;
-    y = 0;
-    
-    w = 2;
-    h = 2;
-    
-    speed = getWalkSpeed();
-    maxHealth = 5;
-    health = 5;
-    team = ENEMY_TEAM;
-    
-    hammer = [[Hammer alloc] init];
-    [hammer setSpeed: speed];
-    [hammer setState: HAMMER_HOLD_STATE];
-    
-    standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMAGES_GIANT_1)];
-    [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [standAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [standAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [standAnimation setLoop: true];
-    [standAnimation setSpeed: 3];
-    
-    attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_1)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_3)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [attackAnimation addFrame: getImage(IMAGES_GIANT_2)];
-    [attackAnimation setLoop: false];
-    [attackAnimation setSpeed: 24];
-    
-    animation = standAnimation;
-    state = GIANT_STAND_STATE;
-    [self setMoney: 5];
-    [self wait];
-    
-  }
+  w = 2;
+  h = 2;
   
-  return self;
+  speed = getWalkSpeed();
+  maxHealth = 5;
+  health = 5;
+  team = ENEMY_TEAM;
   
+  hammer = new Hammer();
+  hammer->setSpeed(speed);
+  hammer->setState(HAMMER_HOLD_STATE);
+  
+  standAnimation = new Animation();
+  standAnimation->addFrame(getImage(IMAGES_GIANT_1));
+  standAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  standAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  standAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  standAnimation->setLoop(true);
+  standAnimation->setSpeed(3);
+  
+  attackAnimation = new Animation();
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_1));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  attackAnimation->setLoop(false);
+  attackAnimation->setSpeed(24);
+  
+  animation = standAnimation;
+  state = GIANT_STAND_STATE;
+  this->setMoney(5);
+  this->wait();
 }
 
 
-- (void) dealloc {
-  [hammer release];
-  [standAnimation release];
-  [attackAnimation release];
-  [super dealloc];
+Giant::~Giant() {
+  delete hammer;
+  delete standAnimation;
+  delete attackAnimation;
 }
 
 
-- (bool) target: (Character) target isInRange: (int) range {
+bool Giant::target(Character *target, int range) {
   
   if (
-    abs(x - [target getX]) + abs(y - [target getY]) <= range ||
-    abs(x + 1 - [target getX]) + abs(y - [target getY]) <= range ||
-    abs(x - [target getX]) + abs(y + 1 - [target getY]) <= range ||
-    abs(x + 1 - [target getX]) + abs(y + 1 - [target getY]) <= range
+    abs(x - target->getX()) + abs(y - target->getY()) <= range ||
+    abs(x + 1 - target->getX()) + abs(y - target->getY()) <= range ||
+    abs(x - target->getX()) + abs(y + 1 - target->getY()) <= range ||
+    abs(x + 1 - target->getX()) + abs(y + 1 - target->getY()) <= range
   ) {
     
     return true;
@@ -92,32 +87,32 @@ typedef enum {
 }
 
 
-- (int) directionToTarget: (Character) target {
+int Giant::directionToTarget(Character *target) {
   
   if ( // Up
-    (x == [target getX] && y == [target getY] + 1) ||
-    (x + 1 == [target getX] && y == [target getY] + 1)
+    (x == target->getX() && y == target->getY() + 1) ||
+    (x + 1 == target->getX() && y == target->getY() + 1)
   ) {
     
     return UP;
     
   } else if ( // Down
-    (x == [target getX] && y == [target getY] - 2) ||
-    (x + 1 == [target getX] && y == [target getY] - 2)
+    (x == target->getX() && y == target->getY() - 2) ||
+    (x + 1 == target->getX() && y == target->getY() - 2)
   ) {
     
     return DOWN;
     
   } else if ( // Left
-    (x == [target getX] + 1 && y == [target getY]) ||
-    (x == [target getX] + 1 && y + 1 == [target getY])
+    (x == target->getX() + 1 && y == target->getY()) ||
+    (x == target->getX() + 1 && y + 1 == target->getY())
   ) {
     
     return LEFT;
     
   } else if ( // Right
-    (x == [target getX] - 2 && y == [target getY]) ||
-    (x == [target getX] - 2 && y + 1 == [target getY])
+    (x == target->getX() - 2 && y == target->getY()) ||
+    (x == target->getX() - 2 && y + 1 == target->getY())
   ) {
     
     return RIGHT;
@@ -129,7 +124,7 @@ typedef enum {
 }
 
 
-- (bool) isMeAtX: (int) atX andY: (int) atY {
+bool Giant::isMe(int atX, int atY) {
   if (
     (x == atX && y == atY) ||
     (x + 1 == atX && y == atY) ||
@@ -146,17 +141,17 @@ typedef enum {
 }
 
 
-- (bool) canWalkToX: (int) toX andY: (int) toY {
+bool Giant::canWalkTo(int toX, int toY) {
   
   if (
-    ![world isWalkableAtX: toX andY: toY] ||
-    ![world isWalkableAtX: toX + 1 andY: toY] ||
-    ![world isWalkableAtX: toX andY: toY + 1] ||
-    ![world isWalkableAtX: toX + 1 andY: toY + 1] ||
-    ([world isInhabitedAtX: toX andY: toY] && ![self isMeAtX: toX andY: toY]) ||
-    ([world isInhabitedAtX: toX + 1 andY: toY] && ![self isMeAtX: toX + 1 andY: toY]) ||
-    ([world isInhabitedAtX: toX andY: toY + 1] && ![self isMeAtX: toX andY: toY + 1]) ||
-    ([world isInhabitedAtX: toX + 1 andY: toY + 1] && ![self isMeAtX: toX + 1 andY: toY + 1])
+    !world->isWalkable(toX, toY) ||
+    !world->isWalkable(toX + 1, toY) ||
+    !world->isWalkable(toX, toY + 1) ||
+    !world->isWalkable(toX + 1, toY + 1) ||
+    (world->isInhabited(toX, toY) && !this->isMe(toX, toY)) ||
+    (world->isInhabited(toX + 1, toY) && !this->isMe(toX + 1, toY)) ||
+    (world->isInhabited(toX, toY + 1) && !this->isMe(toX, toY + 1)) ||
+    (world->isInhabited(toX + 1, toY + 1) && !this->isMe(toX + 1, toY + 1))
   ) {
     
     return false;
@@ -168,51 +163,52 @@ typedef enum {
 }
 
 
-- update {
+void Giant::update() {
   
   int dir;
   int toX;
   int toY;
   Character *target;
   
-  [super update];
-  [hammer update];
+  Enemy::update();
+  hammer->update();
   
-  if ([self waiting]) {
-    return self;
+  if (this->waiting()) {
+    return;
   }
   
   if (health == 0) {
-    return self;
+    return;
   }
   
-  target = [world getTarget];
+  target = world->getTarget();
   
   switch (state) {
   
   case GIANT_STAND_STATE:
     
     // If the target has a walking distance of one...
-    if ([self target: target isInRange: 1]) {
+    if (this->target(target, 1)) {
       
       state = GIANT_ATTACK_STATE;
       animation = attackAnimation;
-      [animation reset];
+      animation->reset();
       
       // Change the state of the hammer.
-      if ([self directionToTarget: target] == UP) {
-        [hammer setState: HAMMER_ATTACK_UP_STATE];
-      } else if ([self directionToTarget: target] == DOWN) {
-        [hammer setState: HAMMER_ATTACK_DOWN_STATE];
-      } else if ([self directionToTarget: target] == LEFT) {
-        [hammer setState: HAMMER_ATTACK_LEFT_STATE];
-      } else if ([self directionToTarget: target] == RIGHT) {
-        [hammer setState: HAMMER_ATTACK_RIGHT_STATE];
+      if (this->directionToTarget(target) == UP) {
+        hammer->setState(HAMMER_ATTACK_UP_STATE);
+      } else if (this->directionToTarget(target) == DOWN) {
+        hammer->setState(HAMMER_ATTACK_DOWN_STATE);
+      } else if (this->directionToTarget(target) == LEFT) {
+        hammer->setState(HAMMER_ATTACK_LEFT_STATE);
+      } else if (this->directionToTarget(target) == RIGHT) {
+        hammer->setState(HAMMER_ATTACK_RIGHT_STATE);
       }
       
-    } else if (/* Hero is nearby */ NO) {
+    } else if (/* Hero is nearby */ false) {
       
       // Then chase the hero!
+      // (Not implemented)
       
     } else {
       
@@ -232,97 +228,91 @@ typedef enum {
         toX--;
       }
       
-      if ([self canWalkToX: toX andY: toY]) {
+      if (this->canWalkTo(toX, toY)) {
         
-        [self moveX: toX];
-        [self moveY: toY];
+        this->moveX(toX);
+        this->moveY(toY);
         state = GIANT_MOVE_STATE;
         
       }
       
-      [self wait];
+      this->wait();
       
     }
     
     // Bound him so he doesn't wander right out of the screen!
-    [self boundAtTop: 1 andBottom: ROWS - 2 andLeft: 1 andRight: COLS - 2];
+    this->bound(1, ROWS - 2, 1, COLS - 2);
     
     break;
     
   case GIANT_MOVE_STATE:
-    if (![self moving]) {
+    if (!this->moving()) {
       state = GIANT_STAND_STATE;
     }
     break;
     
   case GIANT_ATTACK_STATE:
-    if ([animation finished]) {
+    if (animation->isFinished()) {
       // Send the hero soaring!
-      [world attackFromTeam: team atX: [target getX] andY: [target getY]];
+      world->attackFromTeam(team, target->getX(), target->getY());
       
       state = GIANT_STAND_STATE;
       animation = standAnimation;
-      [animation reset];
-      [hammer setState: HAMMER_HOLD_STATE];
-      [self wait];
+      animation->reset();
+      hammer->setState(HAMMER_HOLD_STATE);
+      this->wait();
     }
     break;
     
   }
   
-  return self;
+
   
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [hammer draw: buffer];
-  return self;
+void Giant::draw(BITMAP * buffer) {
+  Enemy::draw(buffer);
+  hammer->draw(buffer);
 }
 
 
-- setX: (int) newX {
-  [super setX: newX];
-  [hammer setX: newX];
-  return self;
+void Giant::setX(int newX) {
+  Enemy::setX(newX);
+  hammer->setX(newX);
 }
 
 
-- setY: (int) newY {
-  [super setY: newY];
-  [hammer setY: newY];
-  return self;
+void Giant::setY(int newY) {
+  Enemy::setY(newY);
+  hammer->setY(newY);
 }
 
 
-- moveX: (int) newX {
-  [super moveX: newX];
-  [hammer moveX: newX];
-  return self;
+void Giant::moveX(int newX) {
+  Enemy::moveX(newX);
+  hammer->moveX(newX);
 }
 
 
-- moveY: (int) newY {
-  [super moveY: newY];
-  [hammer moveY: newY];
-  return self;
+void Giant::moveY(int newY) {
+  Enemy::moveY(newY);
+  hammer->moveY(newY);
 }
 
 
-- dropItem {
+void Giant::dropItem() {
   y++;
-  [super dropItem];
+  Enemy::dropItem();
   y--;
-  return self;
 }
 
 
-- setWorld: (World *) aWorld {
+void Giant::setWorld(World * aWorld) {
   world = aWorld;
-  [hammer setWorld: world];
-  return self;
+  hammer->setWorld(world);
+
 }
 
 
-@end
+

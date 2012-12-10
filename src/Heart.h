@@ -8,6 +8,8 @@
 class Heart : public Item {
 public:
   Heart();
+
+  void collectedBy(Character *character);
 };
 
 

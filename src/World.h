@@ -45,7 +45,7 @@ protected:
 public:
 
   World();
-  ~World();
+  virtual ~World();
 
   virtual void update();
   virtual void draw(BITMAP *buffer);
@@ -67,23 +67,23 @@ public:
   virtual bool isFlyable(int x, int y);
   virtual bool isSoarable(int x, int y);
 
-  void updateRoom();
-  void updateItems();
-  void updateTurn();
-  void updateHero();
-  void updateEnemies();
+  virtual void updateRoom();
+  virtual void updateItems();
+  virtual void updateTurn();
+  virtual void updateHero();
+  virtual void updateEnemies();
 
-  Room *createNextRoom();
-  void changeRooms();
+  virtual Room *createNextRoom();
+  virtual void changeRooms();
 
-  void drawTerrain(BITMAP *buffer);
-  void drawCharacters(BITMAP *buffer);
-  void drawUserInterface(BITMAP *buffer);
+  virtual void drawTerrain(BITMAP *buffer);
+  virtual void drawCharacters(BITMAP *buffer);
+  virtual void drawUserInterface(BITMAP *buffer);
 
-  int getRoomNumber();
-  int getMoney();
+  virtual int getRoomNumber();
+  virtual int getMoney();
 
-  void addHelpTile(HelpTile *aHelpTile);
+  virtual void addHelpTile(HelpTile *aHelpTile);
 };
 
 

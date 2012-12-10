@@ -1,3 +1,5 @@
+#include "Animation.h"
+#include "Resources.h"
 #include "Shield.h"
 
 
@@ -7,53 +9,41 @@ typedef enum {
 } SHIELD_STATE;
 
 
-@implementation Shield
-
-
-- init {
+Shield::Shield() {
   
-  self = [super init];
+  holdAnimation = new Animation();
+  holdAnimation->addFrame(getImage(IMAGES_SHIELD_1));
+  holdAnimation->addFrame(getImage(IMAGES_SHIELD_2));
+  holdAnimation->addFrame(getImage(IMAGES_SHIELD_3));
+  holdAnimation->addFrame(getImage(IMAGES_SHIELD_4));
+  holdAnimation->setLoop(true);
+  holdAnimation->setSpeed(6);
   
-  if (self) {
-    
-    holdAnimation = [[Animation alloc] init];
-    [holdAnimation addFrame: getImage(IMAGES_SHIELD_1)];
-    [holdAnimation addFrame: getImage(IMAGES_SHIELD_2)];
-    [holdAnimation addFrame: getImage(IMAGES_SHIELD_3)];
-    [holdAnimation addFrame: getImage(IMAGES_SHIELD_4)];
-    [holdAnimation setLoop: true];
-    [holdAnimation setSpeed: 6];
-	
-    [self toAwayState];
-    
-  }
-  
-  return self;
-  
+  this->toAwayState();
 }
 
 
-- (void) dealloc {
-  [holdAnimation release];
-  [super dealloc];
+Shield::~Shield() {
+  delete holdAnimation;
+
 }
 
 
-- toHoldState {
+void Shield::toHoldState() {
   state = SHIELD_HOLD_STATE;
   animation = holdAnimation;
-  return self;
+
 }
 
 
-- toAwayState {
+void Shield::toAwayState() {
   state = SHIELD_AWAY_STATE;
-  animation = nil;
-  return self;
+  animation = NULL;
+
 }
 
 
-- (bool) held {
+bool Shield::held() {
   if (state == SHIELD_HOLD_STATE) {
     return true;
   }
@@ -61,5 +51,5 @@ typedef enum {
 }
 
 
-@end
+
 

@@ -1,31 +1,23 @@
 #include "HelpTile.h"
+#include "KwestKingdom.h"
+#include "Screen.h"
+#include "Text.h"
 
 
-@implementation HelpTile
-
-
-- init {
-  
-  self = [super init];
-  
-  if (self) {
-    x = -1;
-    y = -1;
-    line1 = NULL;
-    line2 = NULL;
-    line3 = NULL;
-    line4 = NULL;
-    line5 = NULL;
-    line6 = NULL;
-    location = UPPER_LEFT;
-  }
-  
-  return self;
-  
+HelpTile::HelpTile() {
+  x = -1;
+  y = -1;
+  line1 = NULL;
+  line2 = NULL;
+  line3 = NULL;
+  line4 = NULL;
+  line5 = NULL;
+  line6 = NULL;
+  location = UPPER_LEFT;
 }
 
 
-- draw: (BITMAP *) buffer {
+void HelpTile::draw(BITMAP * buffer) {
   
   int leftSide;
   int upperSide;
@@ -73,29 +65,29 @@
   }
   
   
-  return self;
+
   
 }
 
 
-- setX: (int) newX {
+void HelpTile::setX(int newX) {
   x = newX;
-  return self;
+
 }
 
 
-- setY: (int) newY {
+void HelpTile::setY(int newY) {
   y = newY;
-  return self;
+
 }
 
 
-- setLine1: (char *) newLine1
-      and2: (char *) newLine2
-      and3: (char *) newLine3
-      and4: (char *) newLine4
-      and5: (char *) newLine5
-      and6: (char *) newLine6 {
+void HelpTile::setLines(char *newLine1,
+                        char *newLine2,
+                        char *newLine3,
+                        char *newLine4,
+                        char *newLine5,
+                        char *newLine6) {
   
   line1 = newLine1;
   line2 = newLine2;
@@ -103,27 +95,24 @@
   line4 = newLine4;
   line5 = newLine5;
   line6 = newLine6;
-  
-  return self;
-  
 }
 
 
-- (int) getX {
+int HelpTile::getX() {
   return x;
 }
 
 
-- (int) getY {
+int HelpTile::getY() {
   return y;
 }
 
 
-- setLocation: (int) theLocation {
+void HelpTile::setLocation(int theLocation) {
   location = theLocation;
-  return self;
+
 }
 
 
-@end
+
 

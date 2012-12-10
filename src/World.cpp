@@ -1,3 +1,17 @@
+#include <stdio.h>
+
+#include "Animation.h"
+#include "Enemy.h"
+#include "HelpTile.h"
+#include "Hero.h"
+#include "Item.h"
+#include "KwestKingdom.h"
+#include "List.h"
+#include "Resources.h"
+#include "RoomFactory.h"
+#include "Screen.h"
+#include "Snapshot.h"
+#include "Text.h"
 #include "World.h"
 
 
@@ -8,110 +22,99 @@ typedef enum {
 } WORLD_STATE;
 
 
-@implementation World
-
-
-- init {
+World::World() {
   
-  self = [super init];
+  difficulty = 0;
   
-  if (self) {
-    
-    difficulty = 0;
-    
-    hero = [[Hero alloc] init];
-    [hero setMaxHealth: MAX_HERO_HEALTH];
-    [hero setHealth: MAX_HERO_HEALTH];
-    [hero setWorld: self];
-    [hero setX: COLS / 2 - 1];
-    [hero setY: ROWS - 2];
-    
-    // Create the starting room.
-    roomFactory = [[RoomFactory alloc] init];
-    [roomFactory setWorld: self];
-    [roomFactory setType: ROOM_FOREST];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    [roomFactory setNumber: 1];
-    [roomFactory setDifficulty: difficulty];
-    [roomFactory setPathBeginX: [hero getX]];
-    [roomFactory setPathBeginY: [hero getY]];
-    
-    room = [self createNextRoom];
-    [room setExitToPrevRoomX: -1]; // Remove the entrance to the first room.
-    [room setExitToPrevRoomY: -1];
-    
-    rooms = [[List alloc] init];
-    [rooms append: room];
-    
-    enemies = [[List alloc] init];
-    items = [[List alloc] init];
-    helpTiles = [[List alloc] init];
-    
-    heartAnimation = [[Animation alloc] init];
-    [heartAnimation addFrame: getImage(IMAGES_HEART)];
-    heartEmptyAnimation = [[Animation alloc] init];
-    [heartEmptyAnimation addFrame: getImage(IMAGES_EMPTYHEART)];
-    helpTileAnimation = [[Animation alloc] init];
-    [helpTileAnimation addFrame: getImage(IMAGES_HELP)];
-    
-    prevRoomSnapshot = [[Snapshot alloc] init];
-    nextRoomSnapshot = [[Snapshot alloc] init];
-    
-    currentCharacter = nil;
-    
-    state = WORLD_UPDATE_STATE;
-    
-  }
+  hero = new Hero();
+  hero->setMaxHealth(MAX_HERO_HEALTH);
+  hero->setHealth(MAX_HERO_HEALTH);
+  hero->setWorld(this);
+  hero->setX(COLS / 2 - 1);
+  hero->setY(ROWS - 2);
   
-  return self;
+  // Create the starting room.
+  roomFactory = new RoomFactory();
+  roomFactory->setWorld(this);
+  roomFactory->setType(ROOM_FOREST);
+  roomFactory->setTerrain(ROOM_NO_WATER);
+  roomFactory->setNumber(1);
+  roomFactory->setDifficulty(difficulty);
+  roomFactory->setPathBeginX(hero->getX());
+  roomFactory->setPathBeginY(hero->getY());
   
+  room = this->createNextRoom();
+  room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
+  room->setExitToPrevRoomY(-1);
+  
+  rooms = new List();
+  rooms->append(room);
+  
+  enemies = new List();
+  items = new List();
+  helpTiles = new List();
+  
+  heartAnimation = new Animation();
+  heartAnimation->addFrame(getImage(IMAGES_HEART));
+  heartEmptyAnimation = new Animation();
+  heartEmptyAnimation->addFrame(getImage(IMAGES_EMPTYHEART));
+  helpTileAnimation = new Animation();
+  helpTileAnimation->addFrame(getImage(IMAGES_HELP));
+  
+  prevRoomSnapshot = new Snapshot();
+  nextRoomSnapshot = new Snapshot();
+  
+  currentCharacter = NULL;
+  
+  state = WORLD_UPDATE_STATE;
+    
 }
 
 
-- (void) dealloc {
-  [rooms release];
-  [roomFactory release];
-  [hero release];
-  [enemies release];
-  [items release];
-  [helpTiles release];
-  [heartAnimation release];
-  [heartEmptyAnimation release];
-  [helpTileAnimation release];
-  [prevRoomSnapshot release];
-  [nextRoomSnapshot release];
-  [super dealloc];
+World::~World() {
+  delete rooms;
+  delete roomFactory;
+  delete hero;
+  delete enemies;
+  delete items;
+  delete helpTiles;
+  delete heartAnimation;
+  delete heartEmptyAnimation;
+  delete helpTileAnimation;
+  delete prevRoomSnapshot;
+  delete nextRoomSnapshot;
+
 }
 
 
-- updateRoom {
-  [room update];
-  return self;
+void World::updateRoom() {
+  room->update();
+
 }
 
 
-- updateItems {
+void World::updateItems() {
   
   Item *item;
   //Enemy *enemy;
   int x;
   int y;
   
-  [items iterate];
-  while ((item = (Item *)[items next]) != nil) {
+  items->iterate();
+  while ((item = (Item *)items->getNext()) != NULL) {
     
-    [item update];
+    item->update();
     
     // For the entire size of the hero
     // see if he is standing on an item
-    for (x = 0; x < [hero getWidth]; x++) {
-      for (y = 0; y < [hero getHeight]; y++) {
+    for (x = 0; x < hero->getWidth(); x++) {
+      for (y = 0; y < hero->getHeight(); y++) {
         
         // Hero is standing on the item
-        if ([item getX] == [hero getX] + x && [item getY] == [hero getY] + y) {
-          [item collectedBy: hero];
-          [items remove: item];
-          return self;
+        if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
+          item->collectedBy(hero);
+          items->remove(item);
+
         }
         
       }
@@ -119,19 +122,19 @@ typedef enum {
     
     /*
     // Enemies can not collect items.
-    [enemies iterate];
-    while ((enemy = (Enemy *)[enemies next]) != nil) {
+    enemies->iterate();
+    while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
       
       // For the entire size of the hero
       // see if he is standing on an item
-      for (x = 0; x < [enemy getWidth]; x++) {
-        for (y = 0; y < [enemy getHeight]; y++) {
+      for (x = 0; x < enemy->getWidth(); x++) {
+        for (y = 0; y < enemy->getHeight(); y++) {
           
           // If an enemy is standing on the item
-          if ([item getX] == [enemy getX] + x && [item getY] == [enemy getY] + y) {
-            [item collectedBy: enemy];
-            [items remove: item];
-            return self;
+          if (item getX] == [enemy getX] + x && [item getY] == [enemy->getY() + y) {
+            item->collectedBy(enemy);
+            items->remove(item);
+
           }
           
         }
@@ -142,180 +145,166 @@ typedef enum {
     
   }
   
-  return self;
+
   
 }
 
 
-- updateTurn {
+void World::updateTurn() {
   
   int index;
   
   // Determine whose turn it is next and tell them to go.
-  if (currentCharacter == nil || [currentCharacter waiting]) {
+  if (currentCharacter == NULL || currentCharacter->waiting()) {
     
-    if (currentCharacter == nil) {
+    if (currentCharacter == NULL) {
       currentCharacter = hero;
     } else if (currentCharacter == hero) {
-      currentCharacter = (Character *)[enemies getIndex: 0];
-      if (currentCharacter == nil) {
+      currentCharacter = (Character *)enemies->getIndex(0);
+      if (currentCharacter == NULL) {
         currentCharacter = hero;
       }
     } else {
-      index = [enemies findIndex: currentCharacter];
+      index = enemies->findIndex(currentCharacter);
       if (index >= 0) {
-        currentCharacter = [enemies getIndex: index + 1];
+        currentCharacter = (Character *)enemies->getIndex(index + 1);
       } else {
-        currentCharacter = nil;
+        currentCharacter = NULL;
       }
-      if (currentCharacter == nil) {
+      if (currentCharacter == NULL) {
         currentCharacter = hero;
       }
     }
     
-    [currentCharacter go];
+    currentCharacter->go();
     
   }
-  
-  return self;
-  
 }
 
 
-- updateHero {
+void World::updateHero() {
   
-  [hero update];
+  hero->update();
   
   // If the hero is at an exit...
   if (
-    ([hero getX] == [room getExitToNextRoomX] && [hero getY] == [room getExitToNextRoomY]) ||
-    ([hero getX] == [room getExitToPrevRoomX] && [hero getY] == [room getExitToPrevRoomY])
+    (hero->getX() == room->getExitToNextRoomX() && hero->getY() == room->getExitToNextRoomY()) ||
+    (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY())
   ) {
     
     // This prevents enemies from moving around during a change of rooms.
-    if ([hero waiting]) {
-      [hero go];
+    if (hero->waiting()) {
+      hero->go();
     }
     
-    if (![hero moving]) {
-      [self changeRooms];
+    if (!hero->moving()) {
+      this->changeRooms();
       currentCharacter = hero;
     }
     
   }
   
-  if ([hero isDead]) {
+  if (hero->isDead()) {
     game_over();
   }
-  
-  return self;
-  
 }
 
 
-- updateEnemies {
+void World::updateEnemies() {
   
   Enemy *enemy;
   
   // Update the enemies and remove any that are dead.
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
+  enemies->iterate();
+  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
     
-    [enemy update];
+    enemy->update();
     
-    if ([enemy isDead]) {
-      [enemy dropItem];
-      [enemies remove: enemy];
+    if (enemy->isDead()) {
+      enemy->dropItem();
+      enemies->remove(enemy);
     }
     
   }
-  
-  return self;
-  
 }
 
 
-- update {
+void World::update() {
   
   switch (state) {
   
   case WORLD_UPDATE_STATE:
-    [self updateRoom];
-    [self updateItems];
-    [self updateTurn];
-    [self updateHero];
-    [self updateEnemies];
+    this->updateRoom();
+    this->updateItems();
+    this->updateTurn();
+    this->updateHero();
+    this->updateEnemies();
     break;
     
   case WORLD_ROOM_TRANSITION_STATE:
-    [prevRoomSnapshot update];
-    [nextRoomSnapshot update];
-    if (![nextRoomSnapshot moving]) {
+    prevRoomSnapshot->update();
+    nextRoomSnapshot->update();
+    if (!nextRoomSnapshot->moving()) {
       state = WORLD_UPDATE_STATE;
     }
     break;
   
   case WORLD_SHAKING_STATE:
-    [self updateRoom];
-    [self updateItems];
-    [self updateTurn];
-    [self updateHero];
-    [self updateEnemies];
-    [prevRoomSnapshot update];
-    if (![prevRoomSnapshot moving]) {
-      if ([prevRoomSnapshot getY] == 10) {
-        [prevRoomSnapshot moveY: -8];
-      } else if ([prevRoomSnapshot getY] == -8) {
-        [prevRoomSnapshot moveY: 6];
-      } else if ([prevRoomSnapshot getY] == 6) {
-        [prevRoomSnapshot moveY: -4];
-      } else if ([prevRoomSnapshot getY] == -4) {
-        [prevRoomSnapshot moveY: 2];
-      } else if ([prevRoomSnapshot getY] == 2) {
-        [prevRoomSnapshot moveY: 0];
-      } else if ([prevRoomSnapshot getY] == 0) {
+    this->updateRoom();
+    this->updateItems();
+    this->updateTurn();
+    this->updateHero();
+    this->updateEnemies();
+    prevRoomSnapshot->update();
+    if (!prevRoomSnapshot->moving()) {
+      if (prevRoomSnapshot->getY() == 10) {
+        prevRoomSnapshot->moveY(-8);
+      } else if (prevRoomSnapshot->getY() == -8) {
+        prevRoomSnapshot->moveY(6);
+      } else if (prevRoomSnapshot->getY() == 6) {
+        prevRoomSnapshot->moveY(-4);
+      } else if (prevRoomSnapshot->getY() == -4) {
+        prevRoomSnapshot->moveY(2);
+      } else if (prevRoomSnapshot->getY() == 2) {
+        prevRoomSnapshot->moveY(0);
+      } else if (prevRoomSnapshot->getY() == 0) {
         state = WORLD_UPDATE_STATE;
       }
     }
     break;
   
   }
-  
-  return self;
 }
 
 
-- addCharacter: (id) aCharacter {
-  if (aCharacter != nil) {
-    [aCharacter setWorld: self];
-    [enemies append: aCharacter];
+void World::addCharacter(Character *aCharacter) {
+  if (aCharacter != NULL) {
+    aCharacter->setWorld(this);
+    enemies->append(aCharacter);
   }
-  return self;
 }
 
 
-- addItem: (id) anItem {
-  if (anItem != nil) {
-    [items append: anItem];
+void World::addItem(Item *anItem) {
+  if (anItem != NULL) {
+    items->append(anItem);
   }
-  return self;
 }
 
 
-- addHelpTile: (id) aHelpTile {
-  if (aHelpTile != nil) {
-    [helpTiles append: aHelpTile];
+void World::addHelpTile(HelpTile *aHelpTile) {
+  if (aHelpTile != NULL) {
+    helpTiles->append(aHelpTile);
   }
-  return self;
 }
 
 
-- (Sprite *) getTarget {
+Character * World::getTarget() {
   return hero;
 }
 
 
-- (bool) isAttackableFromTeam: (int) team atX: (int) x andY: (int) y {
+bool World::isAttackable(int team, int x, int y) {
   
   Enemy *enemy;
   int i, j;
@@ -329,21 +318,21 @@ typedef enum {
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       
-      for (m = 0; m < [hero getWidth]; m++) {
-        for (n = 0; n < [hero getHeight]; n++) {
+      for (m = 0; m < hero->getWidth(); m++) {
+        for (n = 0; n < hero->getHeight(); n++) {
           
-          if (team != [hero getTeam] && x + i == [hero getX] + m && y + j == [hero getY] + n) {
+          if (team != hero->getTeam() && x + i == hero->getX() + m && y + j == hero->getY() + n) {
             return true;
           }
           
         }
       }
       
-      [enemies iterate];
-      while ((enemy = (Enemy *)[enemies next]) != nil) {
-        for (m = 0; m < [enemy getWidth]; m++) {
-          for (n = 0; n < [enemy getHeight]; n++) {
-            if (team != [enemy getTeam] && x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
+      enemies->iterate();
+      while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+        for (m = 0; m < enemy->getWidth(); m++) {
+          for (n = 0; n < enemy->getHeight(); n++) {
+            if (team != enemy->getTeam() && x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
               return true;
             }
           }
@@ -354,65 +343,64 @@ typedef enum {
   }
   
   return false;
-  
 }
 
 
-- attackFromTeam: (int) team atX: (int) x andY: (int) y {
+void World::attackFromTeam(int team, int x, int y) {
   
   Enemy *enemy;
   int m, n;
   
-  for (m = 0; m < [hero getWidth]; m++) {
-    for (n = 0; n < [hero getHeight]; n++) {
-      if (team != [hero getTeam] && x == [hero getX] + m && y == [hero getY] + n) {
-        [hero hurt];
+  for (m = 0; m < hero->getWidth(); m++) {
+    for (n = 0; n < hero->getHeight(); n++) {
+      if (team != hero->getTeam() && x == hero->getX() + m && y == hero->getY() + n) {
+        hero->hurt();
       }
     }
   }
   
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
-    for (m = 0; m < [enemy getWidth]; m++) {
-      for (n = 0; n < [enemy getHeight]; n++) {
-        if (team != [enemy getTeam] && x == [enemy getX] + m && y == [enemy getY] + n) {
-          [enemy hurt];
+  enemies->iterate();
+  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+    for (m = 0; m < enemy->getWidth(); m++) {
+      for (n = 0; n < enemy->getHeight(); n++) {
+        if (team != enemy->getTeam() && x == enemy->getX() + m && y == enemy->getY() + n) {
+          enemy->hurt();
         }
       }
     }
   }
   
-  return self;
+
   
 }
 
 
-- (bool) isSwimmableAtX: (int) x andY: (int) y {
-  return [room isSwimmableAtX: x andY: y];
+bool World::isSwimmable(int x, int y) {
+  return room->isSwimmable(x, y);
 }
 
 
-- (bool) isWalkableAtX: (int) x andY: (int) y {
-  return [room isWalkableAtX: x andY: y];
+bool World::isWalkable(int x, int y) {
+  return room->isWalkable(x, y);
 }
 
 
-- (bool) isJumpableAtX: (int) x andY: (int) y {
-  return [room isJumpableAtX: x andY: y];
+bool World::isJumpable(int x, int y) {
+  return room->isJumpable(x, y);
 }
 
 
-- (bool) isFlyableAtX: (int) x andY: (int) y {
-  return [room isFlyableAtX: x andY: y];
+bool World::isFlyable(int x, int y) {
+  return room->isFlyable(x, y);
 }
 
 
-- (bool) isSoarableAtX: (int) x andY: (int) y {
-  return [room isSoarableAtX: x andY: y];
+bool World::isSoarable(int x, int y) {
+  return room->isSoarable(x, y);
 }
 
 
-- (bool) isInhabitedAtX: (int) x andY: (int) y {
+bool World::isInhabited(int x, int y) {
   
   Enemy *enemy;
   int i, j;
@@ -426,21 +414,21 @@ typedef enum {
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       
-      for (m = 0; m < [hero getWidth]; m++) {
-        for (n = 0; n < [hero getHeight]; n++) {
+      for (m = 0; m < hero->getWidth(); m++) {
+        for (n = 0; n < hero->getHeight(); n++) {
           
-          if (x + i == [hero getX] + m && y + j == [hero getY] + n) {
+          if (x + i == hero->getX() + m && y + j == hero->getY() + n) {
             return true;
           }
           
         }
       }
       
-      [enemies iterate];
-      while ((enemy = (Enemy *)[enemies next]) != nil) {
-        for (m = 0; m < [enemy getWidth]; m++) {
-          for (n = 0; n < [enemy getHeight]; n++) {
-            if (x + i == [enemy getX] + m && y + j == [enemy getY] + n) {
+      enemies->iterate();
+      while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+        for (m = 0; m < enemy->getWidth(); m++) {
+          for (n = 0; n < enemy->getHeight(); n++) {
+            if (x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
               return true;
             }
           }
@@ -451,60 +439,57 @@ typedef enum {
   }
   
   return false;
-  
 }
 
 
-- (int) getRoomNumber {
-  return [room getNumber];
+int World::getRoomNumber() {
+  return room->getNumber();
 }
 
 
-- (int) getMoney {
-  return [hero getMoney];
+int World::getMoney() {
+  return hero->getMoney();
 }
 
 
-- shake {
+void World::shake() {
   state = WORLD_SHAKING_STATE;
-  [prevRoomSnapshot setX: 0];
-  [prevRoomSnapshot setY: 0];
-  [prevRoomSnapshot moveY: 10];
-  [prevRoomSnapshot setSpeed: getWindowHeight()];
-  [self drawTerrain: [prevRoomSnapshot getCanvas]];
-  [self drawCharacters: [prevRoomSnapshot getCanvas]];
-  return self;
+  prevRoomSnapshot->setX(0);
+  prevRoomSnapshot->setY(0);
+  prevRoomSnapshot->moveY(10);
+  prevRoomSnapshot->setSpeed(getWindowHeight());
+  this->drawTerrain(prevRoomSnapshot->getCanvas());
+  this->drawCharacters(prevRoomSnapshot->getCanvas());
 }
 
 
-- (Room *) createNextRoom {
+Room * World::createNextRoom() {
   
   int number;
   
-  number = [room getNumber] + 1;
+  number = room->getNumber() + 1;
   
   if (number % 20 == 0) {
-    [roomFactory setType: ROOM_UNDERGROUND];
-    [roomFactory setTerrain: ROOM_NO_WATER];
-    [roomFactory setDifficulty: 0];
+    roomFactory->setType(ROOM_UNDERGROUND);
+    roomFactory->setTerrain(ROOM_NO_WATER);
+    roomFactory->setDifficulty(0);
   } else if (number / 20 % 2 == 0) {
-    [roomFactory setType: ROOM_FOREST];
-    [roomFactory setTerrain: ROOM_RANDOM];
-    [roomFactory setDifficulty: difficulty];
+    roomFactory->setType(ROOM_FOREST);
+    roomFactory->setTerrain(ROOM_RANDOM);
+    roomFactory->setDifficulty(difficulty);
   } else {
-    [roomFactory setType: ROOM_SNOW];
-    [roomFactory setTerrain: ROOM_RANDOM];
-    [roomFactory setDifficulty: difficulty];
+    roomFactory->setType(ROOM_SNOW);
+    roomFactory->setTerrain(ROOM_RANDOM);
+    roomFactory->setDifficulty(difficulty);
   }
   
-  [roomFactory setNumber: number];
+  roomFactory->setNumber(number);
   
-  return [roomFactory createRoom];
-  
+  return roomFactory->createRoom();
 }
 
 
-- changeRooms {
+void World::changeRooms() {
   
   Room *nextRoom;
   Room *firstRoom;
@@ -512,70 +497,70 @@ typedef enum {
   int entranceY;
   
   // Prepare the room transition.
-  if ([hero getX] < 0) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: getWindowWidth()];
-    [prevRoomSnapshot setSpeed: getWindowWidth()];
-    [nextRoomSnapshot setX: -getWindowWidth()];
-    [nextRoomSnapshot setY: 0];
-    [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: getWindowWidth()];
-  } else if ([hero getX] > COLS - 1) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveX: -getWindowWidth()];
-    [prevRoomSnapshot setSpeed: getWindowWidth()];
-    [nextRoomSnapshot setX: getWindowWidth()];
-    [nextRoomSnapshot setY: 0];
-    [nextRoomSnapshot moveX: 0];
-    [nextRoomSnapshot setSpeed: getWindowWidth()];
-  } else if ([hero getY] < 0) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: getWindowHeight()];
-    [prevRoomSnapshot setSpeed: getWindowHeight()];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: -getWindowHeight()];
-    [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: getWindowHeight()];
-  } else if ([hero getY] > ROWS - 1) {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [prevRoomSnapshot moveY: -getWindowHeight()];
-    [prevRoomSnapshot setSpeed: getWindowHeight()];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: getWindowHeight()];
-    [nextRoomSnapshot moveY: 0];
-    [nextRoomSnapshot setSpeed: getWindowHeight()];
+  if (hero->getX() < 0) {
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveX(getWindowWidth());
+    prevRoomSnapshot->setSpeed(getWindowWidth());
+    nextRoomSnapshot->setX(-getWindowWidth());
+    nextRoomSnapshot->setY(0);
+    nextRoomSnapshot->moveX(0);
+    nextRoomSnapshot->setSpeed(getWindowWidth());
+  } else if (hero->getX() > COLS - 1) {
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveX(-getWindowWidth());
+    prevRoomSnapshot->setSpeed(getWindowWidth());
+    nextRoomSnapshot->setX(getWindowWidth());
+    nextRoomSnapshot->setY(0);
+    nextRoomSnapshot->moveX(0);
+    nextRoomSnapshot->setSpeed(getWindowWidth());
+  } else if (hero->getY() < 0) {
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveY(getWindowHeight());
+    prevRoomSnapshot->setSpeed(getWindowHeight());
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(-getWindowHeight());
+    nextRoomSnapshot->moveY(0);
+    nextRoomSnapshot->setSpeed(getWindowHeight());
+  } else if (hero->getY() > ROWS - 1) {
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    prevRoomSnapshot->moveY(-getWindowHeight());
+    prevRoomSnapshot->setSpeed(getWindowHeight());
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(getWindowHeight());
+    nextRoomSnapshot->moveY(0);
+    nextRoomSnapshot->setSpeed(getWindowHeight());
   } else {
-    [prevRoomSnapshot setX: 0];
-    [prevRoomSnapshot setY: 0];
-    [nextRoomSnapshot setX: 0];
-    [nextRoomSnapshot setY: 0];
+    prevRoomSnapshot->setX(0);
+    prevRoomSnapshot->setY(0);
+    nextRoomSnapshot->setX(0);
+    nextRoomSnapshot->setY(0);
   }
   
-  [self drawTerrain: [prevRoomSnapshot getCanvas]];
-  [self drawCharacters: [prevRoomSnapshot getCanvas]];
+  this->drawTerrain(prevRoomSnapshot->getCanvas());
+  this->drawCharacters(prevRoomSnapshot->getCanvas());
   
   // If the hero is at the exit that leads to the next room...
-  if ([hero getX] == [room getExitToNextRoomX] && [hero getY] == [room getExitToNextRoomY]) {
+  if (hero->getX() == room->getExitToNextRoomX() && hero->getY() == room->getExitToNextRoomY()) {
     
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
+    room->storeEnemies(enemies);
+    room->storeItems(items);
+    room->storeHelpTiles(helpTiles);
     
-    nextRoom = (Room *)[rooms getIndex: [rooms findIndex: room] + 1];
+    nextRoom = (Room *)rooms->getIndex(rooms->findIndex(room) + 1);
     
     // Create the next room here, if necessary.
-    if (nextRoom != nil) {
+    if (nextRoom != NULL) {
       
       room = nextRoom;
       
     } else {
       
-      entranceX = [(Room *)[rooms getTail] getExitToNextRoomX];
-      entranceY = [(Room *)[rooms getTail] getExitToNextRoomY];
+      entranceX = ((Room *)rooms->getTail())->getExitToNextRoomX();
+      entranceY = ((Room *)rooms->getTail())->getExitToNextRoomY();
       
       // Bound the entrance.
       if (entranceX < 0) {
@@ -601,161 +586,143 @@ typedef enum {
         entranceY = 0;
       }
       
-      [roomFactory setPathBeginX: entranceX];
-      [roomFactory setPathBeginY: entranceY];
-      nextRoom = [self createNextRoom];
-      [rooms append: nextRoom];
+      roomFactory->setPathBeginX(entranceX);
+      roomFactory->setPathBeginY(entranceY);
+      nextRoom = this->createNextRoom();
+      rooms->append(nextRoom);
       
       room = nextRoom;
       
       // Delete the oldest room.
-      if ([rooms size] > 2) {
-        firstRoom = (Room *)[rooms getHead];
-        [rooms remove: [rooms getHead]];
-        [firstRoom release];
-        firstRoom = (Room *)[rooms getHead];
-        [firstRoom removeExitToPrevRoom];
+      if (rooms->getSize() > 2) {
+        firstRoom = (Room *)rooms->getHead();
+        rooms->remove(rooms->getHead());
+        delete firstRoom;
+        firstRoom = (Room *)rooms->getHead();
+        firstRoom->removeExitToPrevRoom();
       }
       
     }
     
-    [hero setX: [room getEntranceFromPrevRoomX]];
-    [hero setY: [room getEntranceFromPrevRoomY]];
+    hero->setX(room->getEntranceFromPrevRoomX());
+    hero->setY(room->getEntranceFromPrevRoomY());
     
-    enemies = [room retrieveEnemies];
-    items = [room retrieveItems];
-    helpTiles = [room retrieveHelpTiles];
+    enemies = room->retrieveEnemies();
+    items = room->retrieveItems();
+    helpTiles = room->retrieveHelpTiles();
     
-  } else if ([hero getX] == [room getExitToPrevRoomX] && [hero getY] == [room getExitToPrevRoomY]) {
+  } else if (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY()) {
     
-    [room storeEnemies: enemies];
-    [room storeItems: items];
-    [room storeHelpTiles: helpTiles];
+    room->storeEnemies(enemies);
+    room->storeItems(items);
+    room->storeHelpTiles(helpTiles);
     
     // Go to the previous room.
-    room = (Room *)[rooms getIndex: [rooms findIndex: room] - 1];
-    [hero setX: [room getEntranceFromNextRoomX]];
-    [hero setY: [room getEntranceFromNextRoomY]];
+    room = (Room *)rooms->getIndex(rooms->findIndex(room - 1));
+    hero->setX(room->getEntranceFromNextRoomX());
+    hero->setY(room->getEntranceFromNextRoomY());
     
-    enemies = [room retrieveEnemies];
-    items = [room retrieveItems];
-    helpTiles = [room retrieveHelpTiles];
+    enemies = room->retrieveEnemies();
+    items = room->retrieveItems();
+    helpTiles = room->retrieveHelpTiles();
     
   }
   
-  [self drawTerrain: [nextRoomSnapshot getCanvas]];
-  [self drawCharacters: [nextRoomSnapshot getCanvas]];
+  this->drawTerrain(nextRoomSnapshot->getCanvas());
+  this->drawCharacters(nextRoomSnapshot->getCanvas());
   
   state = WORLD_ROOM_TRANSITION_STATE;
-  
-  return self;
-  
 }
 
 
-- drawTerrain: (BITMAP *) buffer {
+void World::drawTerrain(BITMAP * buffer) {
   
   HelpTile *helpTile;
   
-  [room draw: buffer];
+  room->draw(buffer);
   
   // Draw help tiles.
-  [helpTiles iterate];
-  while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    [helpTileAnimation drawTo: buffer atX: [helpTile getX] * getTileSize() andY: [helpTile getY] * getTileSize()];
+  helpTiles->iterate();
+  while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
+    helpTileAnimation->drawTo(buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
-  
-  return self;
-  
 }
 
 
-- drawCharacters: (BITMAP *) buffer{
+void World::drawCharacters(BITMAP *buffer) {
   
   Enemy *enemy;
   Item *item;
   
-  [items iterate];
-  while ((item = (Item *)[items next]) != nil) {
-    [item draw: buffer];
+  items->iterate();
+  while ((item = (Item *)items->getNext()) != NULL) {
+    item->draw(buffer);
   }
   
-  [enemies iterate];
-  while ((enemy = (Enemy *)[enemies next]) != nil) {
-    [enemy draw: buffer];
+  enemies->iterate();
+  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+    enemy->draw(buffer);
   }
   
-  [hero draw: buffer];
-  
-  return self;
-  
+  hero->draw(buffer);
 }
 
 
-- drawUserInterface: (BITMAP *) buffer {
+void World::drawUserInterface(BITMAP * buffer) {
   
   HelpTile *helpTile;
   char moneyLine[256];
   int i;
   
   // Put the hero's health on the screen.
-  for (i = 0; i < [hero getMaxHealth]; i++) {
-    if (i < [hero getHealth]) {
-      [heartAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+  for (i = 0; i < hero->getMaxHealth(); i++) {
+    if (i < hero->getHealth()) {
+      heartAnimation->drawTo(buffer, getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     } else {
-      [heartEmptyAnimation drawTo: buffer atX: getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)) andY: 0];
+      heartEmptyAnimation->drawTo(buffer, getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     }
   }
   
-  sprintf(moneyLine, "$%d", [hero getMoney]);
+  sprintf(moneyLine, "$%d", hero->getMoney());
   resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  [helpTiles iterate];
+  helpTiles->iterate();
   
-  while ((helpTile = (HelpTile *)[helpTiles next]) != nil) {
-    if ([helpTile getX] == [hero getX] && [helpTile getY] == [hero getY]) {
-      [helpTile draw: buffer];
+  while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
+    if (helpTile->getX() == hero->getX() && helpTile->getY() == hero->getY()) {
+      helpTile->draw(buffer);
     }
   }
-  
-  return self;
-  
 }
 
 
-- draw: (BITMAP *) buffer {
+void World::draw(BITMAP * buffer) {
   
   switch (state) {
   
   case WORLD_UPDATE_STATE:
-    [self drawTerrain: buffer];
-    [self drawCharacters: buffer];
-    [self drawUserInterface: buffer];
+    this->drawTerrain(buffer);
+    this->drawCharacters(buffer);
+    this->drawUserInterface(buffer);
     break;
   
   case WORLD_ROOM_TRANSITION_STATE:
-    [prevRoomSnapshot draw: buffer];
-    [nextRoomSnapshot draw: buffer];
-    [self drawUserInterface: buffer];
+    prevRoomSnapshot->draw(buffer);
+    nextRoomSnapshot->draw(buffer);
+    this->drawUserInterface(buffer);
     break;
   
   case WORLD_SHAKING_STATE:
-    [self drawTerrain: [prevRoomSnapshot getCanvas]];
-    [self drawCharacters: [prevRoomSnapshot getCanvas]];
-    [prevRoomSnapshot draw: buffer];
-    [self drawUserInterface: buffer];
+    this->drawTerrain(prevRoomSnapshot->getCanvas());
+    this->drawCharacters(prevRoomSnapshot->getCanvas());
+    prevRoomSnapshot->draw(buffer);
+    this->drawUserInterface(buffer);
     break;
     
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", [room getNumber]);
-  
-  return self;
-  
+  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", room->getNumber());
 }
-
-
-@end
 

@@ -43,6 +43,16 @@ public:
   Hero();
   ~Hero();
 
+  void update();
+  void draw(BITMAP *buffer);
+
+  virtual void hurt();
+  virtual bool isDead();
+  virtual void setX(int newX);
+  virtual void setY(int newY);
+  virtual void moveX(int newX);
+  virtual void moveY(int newY);
+
   void emptyHands();
 
   // Updates

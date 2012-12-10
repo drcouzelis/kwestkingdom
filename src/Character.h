@@ -37,12 +37,12 @@ public:
   virtual int getMoney();
   virtual void setMoney(int amount);
 
-  bool waiting();
-  void wait();
-  void go();
+  virtual bool waiting();
+  virtual void wait();
+  virtual void go();
 
-  void setTeam(int aTeam);
-  int getTeam();
+  virtual void setTeam(int aTeam);
+  virtual int getTeam();
 };
 
 

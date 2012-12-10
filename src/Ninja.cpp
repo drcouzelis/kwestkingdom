@@ -1,4 +1,9 @@
+#include "Animation.h"
+#include "KwestKingdom.h"
 #include "Ninja.h"
+#include "Resources.h"
+#include "Sword.h"
+#include "World.h"
 
 
 typedef enum {
@@ -9,141 +14,129 @@ typedef enum {
 } NINJA_STATE;
 
 
-@implementation Ninja
-
-
-- init {
+Ninja::Ninja() {
   
-  self = [super init];
+  x = 0;
+  y = 0;
   
-  if (self) {
-    
-    x = 0;
-    y = 0;
-    
-    [self setSpeed: getWalkSpeed()];
-    team = ENEMY_TEAM;
-    
-    sword = [[Sword alloc] init];
-    [sword setSpeed: speed];
-    [sword toHoldState];
-    
-    standAnimation = [[Animation alloc] init];
-    [standAnimation addFrame: getImage(IMAGES_NINJA_1)];
-    [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [standAnimation addFrame: getImage(IMAGES_NINJA_3)];
-    [standAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [standAnimation setLoop: true];
-    [standAnimation setSpeed: 6];
-    
-    dashAnimation = [standAnimation copy];
-    [dashAnimation setSpeed: 24];
-    
-    attackAnimation = [[Animation alloc] init];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_1)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_3)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [attackAnimation addFrame: getImage(IMAGES_NINJA_2)];
-    [attackAnimation setLoop: false];
-    [attackAnimation setSpeed: 12];
-    
-    animation = standAnimation;
-    state = NINJA_STAND_STATE;
-    [self wait];
-    
-  }
+  this->setSpeed(getWalkSpeed());
+  team = ENEMY_TEAM;
   
-  return self;
+  sword = new Sword();
+  sword->setSpeed(speed);
+  sword->toHoldState();
   
+  standAnimation = new Animation();
+  standAnimation->addFrame(getImage(IMAGES_NINJA_1));
+  standAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  standAnimation->addFrame(getImage(IMAGES_NINJA_3));
+  standAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  standAnimation->setLoop(true);
+  standAnimation->setSpeed(6);
+  
+  dashAnimation = standAnimation->copy();
+  dashAnimation->setSpeed(24);
+  
+  attackAnimation = new Animation();
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_1));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_3));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_3));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  attackAnimation->setLoop(false);
+  attackAnimation->setSpeed(12);
+  
+  animation = standAnimation;
+  state = NINJA_STAND_STATE;
+  this->wait();
 }
 
 
-- (void) dealloc {
-  [sword release];
-  [standAnimation release];
-  [dashAnimation release];
-  [attackAnimation release];
-  [super dealloc];
+Ninja::~Ninja() {
+  delete sword;
+  delete standAnimation;
+  delete dashAnimation;
+  delete attackAnimation;
+
 }
 
 
-- update {
+void Ninja::update() {
   
   int dir;
   int toX;
   int toY;
   Character *target;
   
-  [super update];
-  [sword update];
+  Enemy::update();
+  sword->update();
   
-  if ([self waiting]) {
-    return self;
+  if (this->waiting()) {
+    return;
   }
   
   if (health == 0) {
-    return self;
+    return;
   }
   
-  target = [world getTarget];
+  target = world->getTarget();
   
   switch (state) {
   
   case NINJA_STAND_STATE:
     
     // If the target has a walking distance of one...
-    if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
+    if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
       
       state = NINJA_ATTACK_STATE;
       animation = attackAnimation;
-      [animation reset];
+      animation->reset();
       // Change the state of the sword.
-      if (x == [target getX] && y == [target getY] + 1) { // Up
-        [sword toAttackUpState];
-      } else if (x == [target getX] && y == [target getY] - 1) { // Down
-        [sword toAttackDownState];
-      } else if (x == [target getX] + 1 && y == [target getY]) { // Left
-        [sword toAttackLeftState];
-      } else if (x == [target getX] - 1 && y == [target getY]) { // Right
-        [sword toAttackRightState];
+      if (x == target->getX() && y == target->getY() + 1) { // Up
+        sword->toAttackUpState();
+      } else if (x == target->getX() && y == target->getY() - 1) { // Down
+        sword->toAttackDownState();
+      } else if (x == target->getX() + 1 && y == target->getY()) { // Left
+        sword->toAttackLeftState();
+      } else if (x == target->getX() - 1 && y == target->getY()) { // Right
+        sword->toAttackRightState();
       }
       
-    } else if (x == [target getX]) {
+    } else if (x == target->getX()) {
       
-      if (y > [target getY]) { // Hero is directly up.
-        while (y - 1 != [target getY] && [world isWalkableAtX: x andY: y - 1] && ![world isInhabitedAtX: x andY: y - 1]) {
-          [self moveY: y - 1];
+      if (y > target->getY()) { // Hero is directly up.
+        while (y - 1 != target->getY() && world->isWalkable(x, y - 1) && !world->isInhabited(x, y - 1)) {
+          this->moveY(y - 1);
         }
       } else { // Hero is directly down.
-        while (y + 1 != [target getY] && [world isWalkableAtX: x andY: y + 1] && ![world isInhabitedAtX: x andY: y + 1]) {
-          [self moveY: y + 1];
+        while (y + 1 != target->getY() && world->isWalkable(x, y + 1) && !world->isInhabited(x, y + 1)) {
+          this->moveY(y + 1);
         }
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      this->setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
       animation = dashAnimation;
-      [animation reset];
+      animation->reset();
       
-    } else if (y == [target getY]) {
+    } else if (y == target->getY()) {
       
-      if (x > [target getX]) { // Hero is directly left.
-        while (x - 1 != [target getX] && [world isWalkableAtX: x - 1 andY: y] && ![world isInhabitedAtX: x - 1 andY: y]) {
-          [self moveX: x - 1];
+      if (x > target->getX()) { // Hero is directly left.
+        while (x - 1 != target->getX() && world->isWalkable(x - 1, y) && !world->isInhabited(x - 1, y)) {
+          this->moveX(x - 1);
         }
       } else { // Hero is directly right.
-        while (x + 1 != [target getX] && [world isWalkableAtX: x + 1 andY: y] && ![world isInhabitedAtX: x + 1 andY: y]) {
-          [self moveX: x + 1];
+        while (x + 1 != target->getX() && world->isWalkable(x + 1, y) && !world->isInhabited(x + 1, y)) {
+          this->moveX(x + 1);
         }
       }
       
       state = NINJA_DASH_STATE;
-      [self setSpeed: getWalkSpeed() + (getWalkSpeed() / 5)];
+      this->setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
       animation = dashAnimation;
-      [animation reset];
+      animation->reset();
       
     } else {
       
@@ -163,112 +156,112 @@ typedef enum {
         toX--;
       }
       
-      if ([world isWalkableAtX: toX andY: toY] && ![world isInhabitedAtX: toX andY: toY]) {
-        [self moveX: toX];
-        [self moveY: toY];
+      if (world->isWalkable(toX, toY) && !world->isInhabited(toX, toY)) {
+        this->moveX(toX);
+        this->moveY(toY);
         state = NINJA_MOVE_STATE;
       }
       
-      [self wait];
+      this->wait();
       
     }
     
     // Bound him so he doesn't wander right out of the screen!
-    [self boundAtTop: 1 andBottom: ROWS - 2 andLeft: 1 andRight: COLS - 2];
+    this->bound(1, ROWS - 2, 1, COLS - 2);
     
     break;
     
   case NINJA_MOVE_STATE:
-    if (![self moving]) {
+    if (!this->moving()) {
       state = NINJA_STAND_STATE;
     }
     break;
     
   case NINJA_DASH_STATE:
-    if (![self moving]) {
-      [self setSpeed: getWalkSpeed()];
+    if (!this->moving()) {
+      this->setSpeed(getWalkSpeed());
       // If the target has a walking distance of one...
-      if (abs(x - [target getX]) + abs(y - [target getY]) == 1) {
+      if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
         state = NINJA_ATTACK_STATE;
         animation = attackAnimation;
-        [animation reset];
+        animation->reset();
         // Change the state of the sword.
-        if (x == [target getX] && y == [target getY] + 1) { // Up
-          [sword toAttackUpState];
-        } else if (x == [target getX] && y == [target getY] - 1) { // Down
-          [sword toAttackDownState];
-        } else if (x == [target getX] + 1 && y == [target getY]) { // Left
-          [sword toAttackLeftState];
-        } else if (x == [target getX] - 1 && y == [target getY]) { // Right
-          [sword toAttackRightState];
+        if (x == target->getX() && y == target->getY() + 1) { // Up
+          sword->toAttackUpState();
+        } else if (x == target->getX() && y == target->getY() - 1) { // Down
+          sword->toAttackDownState();
+        } else if (x == target->getX() + 1 && y == target->getY()) { // Left
+          sword->toAttackLeftState();
+        } else if (x == target->getX() - 1 && y == target->getY()) { // Right
+          sword->toAttackRightState();
         }
       } else {
         state = NINJA_STAND_STATE;
         animation = standAnimation;
-        [animation reset];
-        [self wait];
+        animation->reset();
+        this->wait();
       }
     }
     break;
     
   case NINJA_ATTACK_STATE:
-    if ([animation finished]) {
-      [world attackFromTeam: team atX: [target getX] andY: [target getY]];
+    if (animation->isFinished()) {
+      world->attackFromTeam(team, target->getX(), target->getY());
       state = NINJA_STAND_STATE;
       animation = standAnimation;
-      [animation reset];
-      [sword toHoldState];
-      [self wait];
+      animation->reset();
+      sword->toHoldState();
+      this->wait();
     }
 	break;
 	
   }
   
-  return self;
+
   
 }
 
 
-- draw: (BITMAP *) buffer {
-  [super draw: buffer];
-  [sword draw: buffer];
-  return self;
+void Ninja::draw(BITMAP * buffer) {
+  Enemy::draw(buffer);
+  sword->draw(buffer);
+
 }
 
 
-- setX: (int) newX {
-  [super setX: newX];
-  [sword setX: newX];
-  return self;
+void Ninja::setX(int newX) {
+  Enemy::setX(newX);
+  sword->setX(newX);
+
 }
 
 
-- setY: (int) newY {
-  [super setY: newY];
-  [sword setY: newY];
-  return self;
+void Ninja::setY(int newY) {
+  Enemy::setY(newY);
+  sword->setY(newY);
+
 }
 
 
-- moveX: (int) newX {
-  [super moveX: newX];
-  [sword moveX: newX];
-  return self;
+void Ninja::moveX(int newX) {
+  Enemy::moveX(newX);
+  sword->moveX(newX);
+
 }
 
 
-- moveY: (int) newY {
-  [super moveY: newY];
-  [sword moveY: newY];
-  return self;
+void Ninja::moveY(int newY) {
+  Enemy::moveY(newY);
+  sword->moveY(newY);
+
 }
 
 
-- setSpeed: (int) theSpeed {
+void Ninja::setSpeed(int theSpeed) {
   speed = theSpeed;
-  [sword setSpeed: speed];
-  return self;
+  sword->setSpeed(speed);
+
 }
 
 
-@end
+

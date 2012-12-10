@@ -33,6 +33,9 @@ public:
   Hammer();
   ~Hammer();
 
+  void update();
+
+  void setState(int aState);
   bool held();
 };
 

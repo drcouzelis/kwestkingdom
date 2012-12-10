@@ -1,0 +1,42 @@
+classname=${1%.*}
+
+# Remove @ lines
+sed -i -e 's/^@.*$//g' "$1"
+
+# Remove "return self" lines
+sed -i -e 's/.*return self.*//g' "$1"
+
+# Remove "[super dealloc]" lines
+sed -i -e 's/.*\[super dealloc\].*//g' "$1"
+
+# self to this
+sed -i -e 's/self/this/g' "$1"
+
+# Add class name to 0 return value
+sed -i -e "s/^- \([^(]\)/void ${classname}::\1/g" "$1"
+
+# Add class name to 1 return value
+sed -i -e "s/^- (\(.*[^)]\)) /\1 ${classname}::/g" "$1"
+
+# Add parenthesis to 0 parameters
+sed -i -e 's/\(::[A-Za-z]*\) {/\1() {/g' "$1"
+
+# Replace constructors and deconstructors
+sed -i -e "s/void \(.*\)::init/\1::${classname}/g" "$1"
+sed -i -e "s/void \(.*\)::dealloc/\1::~${classname}/g" "$1"
+
+# Replace calls to constructors
+sed -i -e 's/\[\[\(.*\) alloc\] init\]/new \1()/g' "$1"
+
+# Add parenthesis to 1 parameter
+sed -i -e 's/\(::.*\): (\(.*\)) \(.*\) {/\1(\2 \3) {/g' "$1"
+
+# Convert method calls with 1 parameters
+sed -i -e 's/\[\(.*\) \(.*\): \(.*\)\]/\1->\2(\3)/g' "$1"
+
+# Convert method calls with 0 parameters
+sed -i -e 's/\[\(.*\) \(.*\)\]/\1->\2()/g' "$1"
+
+# nil to NULL
+sed -i -e 's/nil/NULL/g' "$1"
+

@@ -1,154 +1,142 @@
+#include <stdio.h>
+
 #include "List.h"
 
 
-@implementation Node
 
 
-- init {
-  self = [super init];
-  if (self) {
-    item = nil;
-    next = nil;
-    prev = nil;
-  }
-  return self;
+
+Node::Node() {
+  item = NULL;
+  next = NULL;
+  prev = NULL;
 }
 
 
-- setItem: (id) anItem {
+void Node::setItem(void *anItem) {
   item = anItem;
-  return self;
+
 }
 
 
-- setNext: (Node *) theNext {
+void Node::setNext(Node * theNext) {
   next = theNext;
-  return self;
+
 }
 
 
-- setPrev: (Node *) thePrev {
+void Node::setPrev(Node * thePrev) {
   prev = thePrev;
-  return self;
+
 }
 
 
-- (id) getItem {
+void * Node::getItem() {
   return item;
 }
 
 
-- (Node *) getNext {
+Node * Node::getNext() {
   return next;
 }
 
 
-- (Node *) getPrev {
+Node * Node::getPrev() {
   return prev;
 }
 
 
-@end
 
 
-@implementation List
 
 
-- init {
+
+
+List::List() {
   
-  self = [super init];
-  
-  if (self) {
-    head = nil;
-    tail = nil;
-    next = nil;
-    size = 0;
-  }
-  
-  return self;
-  
+  head = NULL;
+  tail = NULL;
+  next = NULL;
+  size = 0;
 }
 
 
-- (void) dealloc {
+List::~List() {
   
   Node *node;
   Node *tmp;
   
   node = head;
   
-  while (node != nil) {
-    tmp = [node getNext];
-    [[node getItem] release];
-    [node release];
+  while (node != NULL) {
+    tmp = node->getNext();
+    delete node->getItem();
+    delete node;
     node = tmp;
   }
 
-  [super dealloc];
+
 }
 
 
-- append: (id) item {
+void List::append(void *item) {
   
   Node *node;
   
-  node = [[Node alloc] init];
-  [node setItem: item];
+  node = new Node();
+  node->setItem(item);
   
-  if (head == nil) {
+  if (head == NULL) {
     head = node;
   } else {
-    [node setPrev: tail];
-    [tail setNext: node];
+    node->setPrev(tail);
+    tail->setNext(node);
   }
   
   tail = node;
   size++;
   
-  return self;
+
   
 }
 
 
-- remove: (id) item {
+void List::remove(void *item) {
   
   Node *node;
   
   node = head;
   
-  while (node != nil && [node getItem] != item) {
-    node = [node getNext];
+  while (node != NULL && node->getItem() != item) {
+    node = node->getNext();
   }
   
-  if (node == nil) {
-    return nil;
+  if (node == NULL) {
+    return;
   }
   
   if (node == head && node == tail) {
-    head = nil;
-    tail = nil;
+    head = NULL;
+    tail = NULL;
   }
   
   if (node == head) {
-    head = [head getNext];
-    [head setPrev: nil];
+    head = head->getNext();
+    head->setPrev(NULL);
   } else if (node == tail) {
-    tail = [tail getPrev];
-    [tail setNext: nil];
+    tail = tail->getPrev();
+    tail->setNext(NULL);
   } else {
-    [[node getPrev] setNext: [node getNext]];
-    [[node getNext] setPrev: [node getPrev]];
+    node->getPrev()->setNext(node->getNext());
+    node->getNext()->setPrev(node->getPrev());
   }
   
-  [node release];
+  delete node;
   size--;
-  
-  return self;
-  
 }
 
 
-- (int) findIndex: (id) item {
+int List::findIndex(void *item) {
   
   Node *node;
   int index;
@@ -156,16 +144,16 @@
   node = head;
   index = 0;
   
-  if (item == nil) {
+  if (item == NULL) {
     return -1;
   }
   
-  while (node != nil && [node getItem] != item) {
-    node = [node getNext];
+  while (node != NULL && node->getItem() != item) {
+    node = node->getNext();
     index++;
   }
   
-  if (node == nil) {
+  if (node == NULL) {
     return -1;
   }
   
@@ -174,7 +162,7 @@
 }
 
 
-- (id) getIndex: (int) index {
+void * List::getIndex(int index) {
   
   Node *node;
   int count;
@@ -183,58 +171,58 @@
   count = 0;
   
   if (index < 0) {
-    return nil;
+    return NULL;
   }
   
-  while (node != nil && count != index) {
-    node = [node getNext];
+  while (node != NULL && count != index) {
+    node = node->getNext();
     count++;
   }
   
-  if (node == nil) {
-    return nil;
+  if (node == NULL) {
+    return NULL;
   }
   
-  return [node getItem];
+  return node->getItem();
   
 }
 
 
-- iterate {
+void List::iterate() {
   next = head;
-  return self;
+
 }
 
 
-- (id) getHead {
-  return [head getItem];
+void * List::getHead() {
+  return head->getItem();
 }
 
 
-- (id) getTail {
-  return [tail getItem];
+void * List::getTail() {
+  return tail->getItem();
 }
 
 
-- (id) next {
+void * List::getNext() {
   
-  id item;
+  void * item;
   
-  if (next == nil) {
-    return nil;
+  if (next == NULL) {
+    return NULL;
   }
   
-  item = [next getItem];
-  next = [next getNext];
+  item = next->getItem();
+  next = next->getNext();
   
   return item;
   
 }
 
 
-- (int) size {
+int List::getSize() {
   return size;
 }
 
 
-@end
+

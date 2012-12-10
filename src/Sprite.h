@@ -33,17 +33,17 @@ protected:
 public:
 
   Sprite();
-  ~Sprite();
+  virtual ~Sprite();
 
   virtual void update();
   virtual void draw(BITMAP *buffer);
 
-  bool moving();
-  int getWidth();
-  int getHeight();
+  virtual bool moving();
+  virtual int getWidth();
+  virtual int getHeight();
 
-  void setWorld(World *aWorld);
-  void setState(int aState);
+  virtual void setWorld(World *aWorld);
+  virtual void setState(int aState);
 
   virtual void setX(int newX);
   virtual void setY(int newY);
