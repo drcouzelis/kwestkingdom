@@ -43,6 +43,7 @@ World::World() {
   roomFactory->setPathBeginX(hero->getX());
   roomFactory->setPathBeginY(hero->getY());
   
+  room = NULL;
   room = this->createNextRoom();
   room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
   room->setExitToPrevRoomY(-1);
@@ -467,7 +468,11 @@ Room * World::createNextRoom() {
   
   int number;
   
-  number = room->getNumber() + 1;
+  if (room != NULL) {
+    number = room->getNumber() + 1;
+  } else {
+    number = 1;
+  }
   
   if (number % 20 == 0) {
     roomFactory->setType(ROOM_UNDERGROUND);
