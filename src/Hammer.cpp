@@ -44,7 +44,6 @@ Hammer::Hammer() {
   attackUpAnimation->setOffsetY(-TILE_SIZE * 2);
   
   this->setState(HAMMER_AWAY_STATE);
-  
 }
 
 
@@ -71,9 +70,6 @@ void Hammer::update() {
     }
     break;
   }
-  
-
-  
 }
 
 
@@ -116,11 +112,7 @@ void Hammer::setState(int aState) {
     playSound(SOUNDS_HAMMER);
     world->shake();
     break;
-    
   }
-  
-
-  
 }
 
 
@@ -130,7 +122,4 @@ bool Hammer::held() {
   }
   return false;
 }
-
-
-
 

@@ -79,7 +79,6 @@ Game::Game() {
   menuPointer->setSpeed(6);
   
   this->setState(GAME_MENU_STATE);
-  
 }
 
 
@@ -97,7 +96,6 @@ Game::~Game() {
   delete highScoresBackground;
   delete menuPointer;
   HighScoreLibrary::deallocInstance();
-
 }
 
 
@@ -208,11 +206,7 @@ void Game::update() {
   case GAME_QUIT_STATE:
     // Do nothing.
     break;
-    
   }
-  
-
-  
 }
 
 

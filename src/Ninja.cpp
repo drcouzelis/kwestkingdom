@@ -19,7 +19,6 @@ Ninja::Ninja() {
   x = 0;
   y = 0;
   
-  this->setSpeed(getWalkSpeed());
   team = ENEMY_TEAM;
   
   sword = new Sword();
@@ -50,6 +49,7 @@ Ninja::Ninja() {
   
   animation = standAnimation;
   state = NINJA_STAND_STATE;
+  this->setSpeed(getWalkSpeed());
   this->wait();
 }
 

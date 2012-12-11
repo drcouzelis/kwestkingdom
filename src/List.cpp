@@ -127,8 +127,12 @@ void List::remove(void *item) {
     tail = tail->getPrev();
     tail->setNext(NULL);
   } else {
-    node->getPrev()->setNext(node->getNext());
-    node->getNext()->setPrev(node->getPrev());
+    if  (node->getPrev()) {
+      node->getPrev()->setNext(node->getNext());
+    }
+    if (node->getNext()) {
+      node->getNext()->setPrev(node->getPrev());
+    }
   }
   
   delete node;

@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
     
     game->draw(getWindow());
     //clear_to_color(getBuffer(), BLACK);
-    textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    //textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
     showScreen();
     

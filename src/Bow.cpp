@@ -35,9 +35,6 @@ Bow::Bow() {
     attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
     attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
     attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
-    
-
-  
 }
 
 
@@ -48,27 +45,29 @@ Bow::~Bow() {
   delete attackLeftAnimation;
   delete attackRightAnimation;
   delete arrow;
-
 }
 
 
 void Bow::update() {
   Sprite::update();
-  arrow->update();
 
+  if (arrow) {
+    arrow->update();
+  }
 }
 
 
 void Bow::draw(BITMAP * buffer) {
   Sprite::draw(buffer);
-  arrow->draw(buffer);
 
+  if (arrow) {
+    arrow->draw(buffer);
+  }
 }
 
 
 void Bow::setArrow(Arrow * anArrow) {
   arrow = anArrow;
-
 }
 
 
@@ -86,51 +85,42 @@ void Bow::setArrow(int newX, int newY, int aDirection, int aTeam, World *aWorld)
   arrow->setWorld(aWorld);
   arrow->setDirection(aDirection);
   arrow->toHoldState();
-  
-
-  
 }
 
 
 void Bow::toHoldState() {
   state = BOW_HOLD_STATE;
   animation = holdAnimation;
-
 }
 
 
 void Bow::toAwayState() {
   state = BOW_AWAY_STATE;
   animation = NULL;
-
 }
 
 
 void Bow::toAttackUpState() {
   animation = attackUpAnimation;
   animation->reset();
-
 }
 
 
 void Bow::toAttackDownState() {
   animation = attackDownAnimation;
   animation->reset();
-
 }
 
 
 void Bow::toAttackLeftState() {
   animation = attackLeftAnimation;
   animation->reset();
-
 }
 
 
 void Bow::toAttackRightState() {
   animation = attackRightAnimation;
   animation->reset();
-
 }
 
 

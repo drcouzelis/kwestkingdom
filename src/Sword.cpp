@@ -48,7 +48,6 @@ Sword::Sword() {
   attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
   
   this->toAwayState();
-    
 }
 
 
@@ -58,21 +57,18 @@ Sword::~Sword() {
   delete attackDownAnimation;
   delete attackLeftAnimation;
   delete attackRightAnimation;
-
 }
 
 
 void Sword::toHoldState() {
   state = SWORD_HOLD_STATE;
   animation = holdAnimation;
-
 }
 
 
 void Sword::toAwayState() {
   state = SWORD_AWAY_STATE;
   animation = NULL;
-
 }
 
 
@@ -80,7 +76,6 @@ void Sword::toAttackUpState() {
   animation = attackUpAnimation;
   animation->reset();
   playSound(SOUNDS_SWORD);
-
 }
 
 
@@ -88,7 +83,6 @@ void Sword::toAttackDownState() {
   animation = attackDownAnimation;
   animation->reset();
   playSound(SOUNDS_SWORD);
-
 }
 
 
@@ -96,7 +90,6 @@ void Sword::toAttackLeftState() {
   animation = attackLeftAnimation;
   animation->reset();
   playSound(SOUNDS_SWORD);
-
 }
 
 
@@ -104,7 +97,6 @@ void Sword::toAttackRightState() {
   animation = attackRightAnimation;
   animation->reset();
   playSound(SOUNDS_SWORD);
-
 }
 
 
@@ -114,7 +106,4 @@ bool Sword::held() {
   }
   return false;
 }
-
-
-
 

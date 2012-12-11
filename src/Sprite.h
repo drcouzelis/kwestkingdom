@@ -33,7 +33,6 @@ protected:
 public:
 
   Sprite();
-  virtual ~Sprite();
 
   virtual void update();
   virtual void draw(BITMAP *buffer);

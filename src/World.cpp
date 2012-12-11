@@ -68,7 +68,6 @@ World::World() {
   currentCharacter = NULL;
   
   state = WORLD_UPDATE_STATE;
-    
 }
 
 
@@ -84,13 +83,11 @@ World::~World() {
   delete helpTileAnimation;
   delete prevRoomSnapshot;
   delete nextRoomSnapshot;
-
 }
 
 
 void World::updateRoom() {
   room->update();
-
 }
 
 
@@ -115,7 +112,7 @@ void World::updateItems() {
         if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
           item->collectedBy(hero);
           items->remove(item);
-
+          return;
         }
         
       }
@@ -132,10 +129,10 @@ void World::updateItems() {
         for (y = 0; y < enemy->getHeight(); y++) {
           
           // If an enemy is standing on the item
-          if (item getX] == [enemy getX] + x && [item getY] == [enemy->getY() + y) {
+          if (item->getX() == enemy->getX() + x && item->getY() == enemy->getY() + y) {
             item->collectedBy(enemy);
             items->remove(item);
-
+            return;
           }
           
         }
@@ -145,9 +142,6 @@ void World::updateItems() {
     */
     
   }
-  
-
-  
 }
 
 
@@ -370,9 +364,6 @@ void World::attackFromTeam(int team, int x, int y) {
       }
     }
   }
-  
-
-  
 }
 
 
@@ -623,7 +614,7 @@ void World::changeRooms() {
     room->storeHelpTiles(helpTiles);
     
     // Go to the previous room.
-    room = (Room *)rooms->getIndex(rooms->findIndex(room - 1));
+    room = (Room *)rooms->getIndex(rooms->findIndex(room) - 1);
     hero->setX(room->getEntranceFromNextRoomX());
     hero->setY(room->getEntranceFromNextRoomY());
     

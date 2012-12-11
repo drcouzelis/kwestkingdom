@@ -19,13 +19,11 @@ Sprite::Sprite() {
 }
 
 
-Sprite::~Sprite() {
-}
-
-
 void Sprite::update() {
   
-  animation->update();
+  if (animation != NULL) {
+    animation->update();
+  }
   
   // This will make the visual position of the sprite match up
   // with the actual position of the sprite at the right speed.
@@ -61,9 +59,7 @@ void Sprite::update() {
     if (!this->moving()) {
       fudge = 0;
     }
-    
   }
-  
 }
 
 
@@ -79,7 +75,9 @@ void Sprite::draw(BITMAP * buffer) {
   hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
   
-  animation->drawTo(buffer, visualX, visualY);
+  if (animation != NULL) {
+    animation->drawTo(buffer, visualX, visualY);
+  }
 }
 
 
@@ -120,26 +118,22 @@ int Sprite::getY() {
 void Sprite::setX(int newX) {
   x = newX;
   visualX = x * getTileSize();
-
 }
 
 
 void Sprite::setY(int newY) {
   y = newY;
   visualY = y * getTileSize();
-
 }
 
 
 void Sprite::moveX(int newX) {
   x = newX;
-
 }
 
 
 void Sprite::moveY(int newY) {
   y = newY;
-
 }
 
 
@@ -155,18 +149,15 @@ int Sprite::getHeight() {
 
 void Sprite::setWorld(World * aWorld) {
   world = aWorld;
-
 }
 
 
 void Sprite::setState(int aState) {
   state = aState;
-
 }
 
 
 void Sprite::setSpeed(int theSpeed) {
   speed = theSpeed;
-
 }
 

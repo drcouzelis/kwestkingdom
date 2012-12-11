@@ -171,6 +171,7 @@ bool showScreen() {
   x = getTileSize() / 5;
   y = getWindowHeight() - (getTileSize() / 2);
   
+  /*
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
     textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Triple Buffering");
@@ -185,6 +186,7 @@ bool showScreen() {
     textprintf_ex(getWindow(), font, x, y, WHITE, -1, "Double Buffering");
     break;
   }
+  */
   
   // Scale the window onto the screen.
   stretch_blit(

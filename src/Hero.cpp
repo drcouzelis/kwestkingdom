@@ -26,9 +26,6 @@ typedef enum {
 } HERO_STATE;
 
 
-
-
-
 Hero::Hero() {
   
   speed = getWalkSpeed(); // In FPS
@@ -236,7 +233,7 @@ void Hero::update() {
   bow->update();
   
   if (this->waiting()) {
-
+    return;
   }
   
   if (waitKey->isPressed()) {

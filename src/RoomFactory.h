@@ -60,7 +60,6 @@ class RoomFactory {
 public:
 
   RoomFactory();
-  ~RoomFactory();
 
   Room *createRoom();
 

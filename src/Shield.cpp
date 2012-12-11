@@ -25,21 +25,18 @@ Shield::Shield() {
 
 Shield::~Shield() {
   delete holdAnimation;
-
 }
 
 
 void Shield::toHoldState() {
   state = SHIELD_HOLD_STATE;
   animation = holdAnimation;
-
 }
 
 
 void Shield::toAwayState() {
   state = SHIELD_AWAY_STATE;
   animation = NULL;
-
 }
 
 
@@ -49,7 +46,4 @@ bool Shield::held() {
   }
   return false;
 }
-
-
-
 

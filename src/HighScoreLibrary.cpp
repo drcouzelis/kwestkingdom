@@ -138,7 +138,7 @@ void HighScoreLibrary::addHighScore(char *initials, int room, int coins) {
   position = HighScoreLibrary::highScorePosition(room, coins);
   
   if (position == MAX_NUM_OF_HIGH_SCORES) {
-
+    return;
   }
   
   for (i = MAX_NUM_OF_HIGH_SCORES - 2; i >= position; i--) {

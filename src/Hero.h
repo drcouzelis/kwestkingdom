@@ -14,7 +14,9 @@ class Sword;
 
 
 class Hero : public Character {
-  
+
+protected:
+
   Shield *shield;
   Sword *sword;
   Bow *bow;

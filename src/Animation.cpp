@@ -135,11 +135,14 @@ BITMAP *getCanvas(int width, int height) {
 }
 
 
+#include <stdio.h>
+
+
 void
 Animation::drawTo(BITMAP *buffer, int x, int y) {
   
   BITMAP *canvas;
-  
+
   if (this->getImage() == NULL) {
     return;
   }

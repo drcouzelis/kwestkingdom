@@ -49,10 +49,6 @@ RoomFactory::RoomFactory() {
 }
 
 
-RoomFactory::~RoomFactory() {
-}
-
-
 Room * RoomFactory::createRoom() {
   
   Room *room;
