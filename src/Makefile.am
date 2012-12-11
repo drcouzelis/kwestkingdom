@@ -7,7 +7,7 @@ bin_PROGRAMS = kwestkingdom
 # The "SOURCES" suffix marks it as source code.
 kwestkingdom_SOURCES = \
   al_screen.h \
-  al_screen.cpp \
+  al_screen.c \
   allegro_icon.cpp \
   Animation.h \
   Animation.cpp \
@@ -63,6 +63,8 @@ kwestkingdom_SOURCES = \
   Screen.cpp \
   Shield.h \
   Shield.cpp \
+  simclist.h \
+  simclist.c \
   Snapshot.h \
   Snapshot.cpp \
   SnowRoom.h \

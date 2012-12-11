@@ -353,9 +353,6 @@ void Game::drawEnterInitials(BITMAP * buffer) {
   
   // Initials
   resizedTextOut(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
-  
-
-  
 }
 
 

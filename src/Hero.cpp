@@ -29,7 +29,7 @@ typedef enum {
 Hero::Hero() {
   
   speed = getWalkSpeed(); // In FPS
-  health = 3;
+  health = 1; //3;
   maxHealth = MAX_HERO_HEALTH;
   team = HERO_TEAM;
   
