@@ -27,9 +27,9 @@ protected:
   Map *terrainMap;
   Map *pathMap;
   
-  List *enemyStorage;
-  List *itemStorage;
-  List *helpTileStorage;
+  List *enemies;
+  List *items;
+  List *helpTiles;
   
   int entranceFromNextRoomX;
   int entranceFromNextRoomY;

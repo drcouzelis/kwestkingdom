@@ -11,9 +11,9 @@ Room::Room() {
   pathMap = NULL;
   terrainMap = NULL;
   
-  enemyStorage = new List();
-  itemStorage = new List();
-  helpTileStorage = new List();
+  enemies = new List();
+  items = new List();
+  helpTiles = new List();
   
   entranceFromNextRoomX = 0;
   entranceFromNextRoomY = 0;
@@ -71,9 +71,9 @@ Room::~Room() {
   delete pathMap;
   delete terrainMap;
 
-  delete enemyStorage;
-  delete itemStorage;
-  delete helpTileStorage;
+  delete enemies;
+  delete items;
+  delete helpTiles;
 }
 
 
@@ -209,17 +209,17 @@ void Room::draw(BITMAP * buffer) {
 
 
 List * Room::getEnemies() {
-  return enemyStorage;
+  return enemies;
 }
 
 
 List * Room::getItems() {
-  return itemStorage;
+  return items;
 }
 
 
 List * Room::getHelpTiles() {
-  return helpTileStorage;
+  return helpTiles;
 }
 
 
