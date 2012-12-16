@@ -56,7 +56,6 @@ public:
   virtual void attackFromTeam(int team, int x, int y);
   virtual void shake();
 
-  virtual void addCharacter(Character *aCharacter);
   virtual void addItem(Item *anItem);
 
   virtual Character *getTarget();

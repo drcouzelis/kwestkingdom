@@ -15,26 +15,28 @@ typedef enum {
 
 Bow::Bow() {
   
-    arrow = NULL;
-    
-    holdAnimation = new Animation();
-    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_1));
-    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_2));
-    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_3));
-    holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_4));
-    holdAnimation->setLoop(true);
-    holdAnimation->setSpeed(6);
-	
-    attackRightAnimation = new Animation();
-    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_1));
-    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_2));
-    attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_3));
-    attackRightAnimation->setLoop(false);
-    attackRightAnimation->setSpeed(12);
-	
-    attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
-    attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
-    attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
+  arrow = NULL;
+  
+  holdAnimation = new Animation();
+  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_1));
+  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_2));
+  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_3));
+  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_4));
+  holdAnimation->setLoop(true);
+  holdAnimation->setSpeed(6);
+  
+  attackRightAnimation = new Animation();
+  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_1));
+  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_2));
+  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_3));
+  attackRightAnimation->setLoop(false);
+  attackRightAnimation->setSpeed(12);
+  
+  attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
+  attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
+  attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
+
+  this->toAwayState();
 }
 
 

@@ -82,7 +82,7 @@ Room * RoomFactory::createRoom() {
   
   // Create the terrain, enemies, and items.
   terrainMap = this->generateTerrain();
-  enemies = this->generateEnemies();
+  this->generateEnemies(room);
   items = this->generateItems();
   
   // Set the two entrances to this room.
@@ -140,7 +140,6 @@ Room * RoomFactory::createRoom() {
   room->setNumber(number);
   room->setPathMap(pathMap);
   room->setTerrainMap(terrainMap);
-  room->storeEnemies(enemies);
   room->storeItems(items);
   
   for (i = 0; path[i] != NO_STEP; i++) {
@@ -180,7 +179,7 @@ bool RoomFactory::characterExists(List *list, int x, int y, int w, int h) {
 }
 
 
-List * RoomFactory::generateEnemies() {
+void RoomFactory::generateEnemies(Room *room) {
   
   List *list;
   Character *enemy;
@@ -202,10 +201,10 @@ List * RoomFactory::generateEnemies() {
   
   int randomNum;
   
-  list = new List();
+  list = room->getEnemies();
   
   if (difficulty == 0) {
-    return list;
+    return;
   }
   
   // The default difficulty.
@@ -291,7 +290,7 @@ List * RoomFactory::generateEnemies() {
     }
   }
   
-  return list;
+  return;
   
 }
 

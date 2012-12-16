@@ -51,7 +51,6 @@ World::World() {
   rooms = new List();
   rooms->append(room);
   
-  enemies = new List();
   items = new List();
   helpTiles = new List();
   
@@ -75,7 +74,6 @@ World::~World() {
   delete rooms;
   delete roomFactory;
   delete hero;
-  delete enemies;
   delete items;
   delete helpTiles;
   delete heartAnimation;
@@ -117,36 +115,37 @@ void World::updateItems() {
         
       }
     }
+  }
     
-    /*
-    // Enemies can not collect items.
-    enemies->iterate();
-    while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
-      
-      // For the entire size of the hero
-      // see if he is standing on an item
-      for (x = 0; x < enemy->getWidth(); x++) {
-        for (y = 0; y < enemy->getHeight(); y++) {
-          
-          // If an enemy is standing on the item
-          if (item->getX() == enemy->getX() + x && item->getY() == enemy->getY() + y) {
-            item->collectedBy(enemy);
-            items->remove(item);
-            return;
-          }
-          
+  /*
+  // Enemies can not collect items.
+  List *enemies = room->getEnemies();
+  enemies->iterate();
+  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+    
+    // For the entire size of the hero
+    // see if he is standing on an item
+    for (x = 0; x < enemy->getWidth(); x++) {
+      for (y = 0; y < enemy->getHeight(); y++) {
+        
+        // If an enemy is standing on the item
+        if (item->getX() == enemy->getX() + x && item->getY() == enemy->getY() + y) {
+          item->collectedBy(enemy);
+          items->remove(item);
+          return;
         }
+        
       }
-      
     }
-    */
     
   }
+  */
 }
 
 
 void World::updateTurn() {
   
+  List *enemies = room->getEnemies();
   int index;
   
   // Determine whose turn it is next and tell them to go.
@@ -179,6 +178,8 @@ void World::updateTurn() {
 
 void World::updateHero() {
   
+  List *enemies = room->getEnemies();
+
   hero->update();
   
   // If the hero is at an exit...
@@ -207,6 +208,7 @@ void World::updateHero() {
 
 void World::updateEnemies() {
   
+  List *enemies = room->getEnemies();
   Enemy *enemy;
   
   // Update the enemies and remove any that are dead.
@@ -272,14 +274,6 @@ void World::update() {
 }
 
 
-void World::addCharacter(Character *aCharacter) {
-  if (aCharacter != NULL) {
-    aCharacter->setWorld(this);
-    enemies->append(aCharacter);
-  }
-}
-
-
 void World::addItem(Item *anItem) {
   if (anItem != NULL) {
     items->append(anItem);
@@ -301,6 +295,7 @@ Character * World::getTarget() {
 
 bool World::isAttackable(int team, int x, int y) {
   
+  List *enemies = room->getEnemies();
   Enemy *enemy;
   int i, j;
   int m, n;
@@ -343,6 +338,7 @@ bool World::isAttackable(int team, int x, int y) {
 
 void World::attackFromTeam(int team, int x, int y) {
   
+  List *enemies = room->getEnemies();
   Enemy *enemy;
   int m, n;
   
@@ -394,6 +390,7 @@ bool World::isSoarable(int x, int y) {
 
 bool World::isInhabited(int x, int y) {
   
+  List *enemies = room->getEnemies();
   Enemy *enemy;
   int i, j;
   int m, n;
@@ -542,7 +539,6 @@ void World::changeRooms() {
   // If the hero is at the exit that leads to the next room...
   if (hero->getX() == room->getExitToNextRoomX() && hero->getY() == room->getExitToNextRoomY()) {
     
-    room->storeEnemies(enemies);
     room->storeItems(items);
     room->storeHelpTiles(helpTiles);
     
@@ -603,13 +599,11 @@ void World::changeRooms() {
     hero->setX(room->getEntranceFromPrevRoomX());
     hero->setY(room->getEntranceFromPrevRoomY());
     
-    enemies = room->retrieveEnemies();
     items = room->retrieveItems();
     helpTiles = room->retrieveHelpTiles();
     
   } else if (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY()) {
     
-    room->storeEnemies(enemies);
     room->storeItems(items);
     room->storeHelpTiles(helpTiles);
     
@@ -618,7 +612,6 @@ void World::changeRooms() {
     hero->setX(room->getEntranceFromNextRoomX());
     hero->setY(room->getEntranceFromNextRoomY());
     
-    enemies = room->retrieveEnemies();
     items = room->retrieveItems();
     helpTiles = room->retrieveHelpTiles();
     
@@ -647,6 +640,7 @@ void World::drawTerrain(BITMAP * buffer) {
 
 void World::drawCharacters(BITMAP *buffer) {
   
+  List *enemies = room->getEnemies();
   Enemy *enemy;
   Item *item;
   

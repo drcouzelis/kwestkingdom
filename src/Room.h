@@ -77,6 +77,8 @@ public:
   virtual bool isFlyable(int x, int y);
   virtual bool isSoarable(int x, int y);
 
+  virtual List *getEnemies();
+
   virtual void setPathMap(Map *aPathMap);
   virtual void setTerrainMap(Map *aTerrainMap);
 
@@ -84,9 +86,6 @@ public:
   virtual int getSizeOfPath();
   virtual int getXOfStepNumber(int aStep);
   virtual int getYOfStepNumber(int aStep);
-
-  virtual List *retrieveEnemies();
-  virtual void storeEnemies(List *list);
 
   virtual List *retrieveItems();
   virtual void storeItems(List *list);
