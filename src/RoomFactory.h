@@ -66,7 +66,7 @@ public:
   Map *generatePathToEdge();
   Map *generateTerrain();
   void generateEnemies(Room *room);
-  List *generateItems();
+  void generateItems(Room *room);
 
   bool characterExists(List *list, int x, int y, int w, int h);
 

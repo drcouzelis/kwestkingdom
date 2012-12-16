@@ -12,8 +12,8 @@ Room::Room() {
   terrainMap = NULL;
   
   enemyStorage = new List();
-  itemStorage = NULL;
-  helpTileStorage = new List(); //NULL;
+  itemStorage = new List();
+  helpTileStorage = new List();
   
   entranceFromNextRoomX = 0;
   entranceFromNextRoomY = 0;
@@ -70,6 +70,7 @@ Room::~Room() {
 
   delete pathMap;
   delete terrainMap;
+
   delete enemyStorage;
   delete itemStorage;
   delete helpTileStorage;
@@ -212,33 +213,13 @@ List * Room::getEnemies() {
 }
 
 
-List * Room::retrieveItems() {
-  List *list;
-  list = itemStorage;
-  itemStorage = NULL;
-  return list;
+List * Room::getItems() {
+  return itemStorage;
 }
 
 
-void Room::storeItems(List * list) {
-  delete itemStorage;
-  itemStorage = list;
-
-}
-
-
-List * Room::retrieveHelpTiles() {
-  List *list;
-  list = helpTileStorage;
-  helpTileStorage = NULL;
-  return list;
-}
-
-
-void Room::storeHelpTiles(List * list) {
-  delete helpTileStorage;
-  helpTileStorage = list;
-
+List * Room::getHelpTiles() {
+  return helpTileStorage;
 }
 
 

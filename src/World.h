@@ -26,9 +26,6 @@ protected:
   RoomFactory *roomFactory;
   Room *room;
   
-  List *items;
-  List *helpTiles;
-  
   Animation *heartAnimation;
   Animation *heartEmptyAnimation;
   Animation *helpTileAnimation;

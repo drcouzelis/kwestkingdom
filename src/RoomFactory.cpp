@@ -83,7 +83,7 @@ Room * RoomFactory::createRoom() {
   // Create the terrain, enemies, and items.
   terrainMap = this->generateTerrain();
   this->generateEnemies(room);
-  items = this->generateItems();
+  this->generateItems(room);
   
   // Set the two entrances to this room.
   room->setEntranceFromPrevRoomX(pathStartX);
@@ -140,7 +140,6 @@ Room * RoomFactory::createRoom() {
   room->setNumber(number);
   room->setPathMap(pathMap);
   room->setTerrainMap(terrainMap);
-  room->storeItems(items);
   
   for (i = 0; path[i] != NO_STEP; i++) {
     room->addStep(path[i]);
@@ -291,11 +290,10 @@ void RoomFactory::generateEnemies(Room *room) {
   }
   
   return;
-  
 }
 
 
-List * RoomFactory::generateItems() {
+void RoomFactory::generateItems(Room *room) {
   
   List *list;
   Heart *heart;
@@ -304,13 +302,13 @@ List * RoomFactory::generateItems() {
   int backupX;
   int backupY;
   
-  list = new List();
+  list = room->getItems();
   
   heart = NULL;
   
   // The underground passage
   if (type == ROOM_UNDERGROUND) {
-    
+    return;
   }
   
   if (number % 5 == 0) {
@@ -340,8 +338,7 @@ List * RoomFactory::generateItems() {
     
   }
   
-  return list;
-  
+  return;
 }
 
 
@@ -495,7 +492,6 @@ Map * RoomFactory::generatePathToEdge() {
   */
   
   return map;
-  
 }
 
 
@@ -602,75 +598,60 @@ Map * RoomFactory::generateTerrain() {
   }
   
   return map;
-
 }
 
 
 void RoomFactory::setWorld(World * aWorld) {
   world = aWorld;
-
 }
 
 
 void RoomFactory::setType(int theType) {
   type = theType;
-
 }
 
 
 void RoomFactory::setTerrain(int theTerrain) {
   terrain = theTerrain;
-
 }
 
 
 void RoomFactory::setNumber(int theNumber) {
   number = theNumber;
-
 }
 
 
 void RoomFactory::setDifficulty(int theDifficulty) {
   difficulty = theDifficulty;
-
 }
 
 
 void RoomFactory::setPathBeginX(int thePathBeginX) {
   pathStartX = thePathBeginX;
-
 }
 
 
 void RoomFactory::setPathBeginY(int thePathBeginY) {
   pathStartY = thePathBeginY;
-
 }
 
 
 void RoomFactory::setChanceOfChomper(int chance) {
   chanceOfChomper = chance;
-
 }
 
 
 void RoomFactory::setChanceOfArcher(int chance) {
   chanceOfArcher = chance;
-
 }
 
 
 void RoomFactory::setChanceOfNinja(int chance) {
   chanceOfNinja = chance;
-
 }
 
 
 void RoomFactory::setChanceOfGiant(int chance) {
   chanceOfGiant = chance;
-
 }
-
-
-
 

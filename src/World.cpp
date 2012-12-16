@@ -51,9 +51,6 @@ World::World() {
   rooms = new List();
   rooms->append(room);
   
-  items = new List();
-  helpTiles = new List();
-  
   heartAnimation = new Animation();
   heartAnimation->addFrame(getImage(IMAGES_HEART));
   heartEmptyAnimation = new Animation();
@@ -74,8 +71,6 @@ World::~World() {
   delete rooms;
   delete roomFactory;
   delete hero;
-  delete items;
-  delete helpTiles;
   delete heartAnimation;
   delete heartEmptyAnimation;
   delete helpTileAnimation;
@@ -91,6 +86,7 @@ void World::updateRoom() {
 
 void World::updateItems() {
   
+  List *items = room->getItems();
   Item *item;
   //Enemy *enemy;
   int x;
@@ -276,14 +272,14 @@ void World::update() {
 
 void World::addItem(Item *anItem) {
   if (anItem != NULL) {
-    items->append(anItem);
+    room->getItems()->append(anItem);
   }
 }
 
 
 void World::addHelpTile(HelpTile *aHelpTile) {
   if (aHelpTile != NULL) {
-    helpTiles->append(aHelpTile);
+    room->getHelpTiles()->append(aHelpTile);
   }
 }
 
@@ -539,9 +535,6 @@ void World::changeRooms() {
   // If the hero is at the exit that leads to the next room...
   if (hero->getX() == room->getExitToNextRoomX() && hero->getY() == room->getExitToNextRoomY()) {
     
-    room->storeItems(items);
-    room->storeHelpTiles(helpTiles);
-    
     nextRoom = (Room *)rooms->getIndex(rooms->findIndex(room) + 1);
     
     // Create the next room here, if necessary.
@@ -599,21 +592,12 @@ void World::changeRooms() {
     hero->setX(room->getEntranceFromPrevRoomX());
     hero->setY(room->getEntranceFromPrevRoomY());
     
-    items = room->retrieveItems();
-    helpTiles = room->retrieveHelpTiles();
-    
   } else if (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY()) {
-    
-    room->storeItems(items);
-    room->storeHelpTiles(helpTiles);
     
     // Go to the previous room.
     room = (Room *)rooms->getIndex(rooms->findIndex(room) - 1);
     hero->setX(room->getEntranceFromNextRoomX());
     hero->setY(room->getEntranceFromNextRoomY());
-    
-    items = room->retrieveItems();
-    helpTiles = room->retrieveHelpTiles();
     
   }
   
@@ -626,6 +610,7 @@ void World::changeRooms() {
 
 void World::drawTerrain(BITMAP * buffer) {
   
+  List *helpTiles = room->getHelpTiles();
   HelpTile *helpTile;
   
   room->draw(buffer);
@@ -640,6 +625,7 @@ void World::drawTerrain(BITMAP * buffer) {
 
 void World::drawCharacters(BITMAP *buffer) {
   
+  List *items = room->getItems();
   List *enemies = room->getEnemies();
   Enemy *enemy;
   Item *item;
@@ -660,6 +646,7 @@ void World::drawCharacters(BITMAP *buffer) {
 
 void World::drawUserInterface(BITMAP * buffer) {
   
+  List *helpTiles = room->getHelpTiles();
   HelpTile *helpTile;
   char moneyLine[256];
   int i;
