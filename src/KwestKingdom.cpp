@@ -15,13 +15,12 @@ volatile int fps_timer = 0;
 
 Game *game;
 
-//MIDI *bgm;
-
 
 /**
  * To keep the game running at the correct frames per second
  */
-void do_timer(void) {
+void do_timer(void)
+{
   timer++;
 } END_OF_FUNCTION (do_timer);
 
@@ -29,37 +28,42 @@ void do_timer(void) {
 /**
  * To display the current frames per second
  */
-void game_time_ticker() {
+void game_time_ticker()
+{
   fps_timer++;
 }
 END_OF_FUNCTION(game_time_ticker)
 
 
-int getTileSize() {
+int getTileSize()
+{
   return TILE_SIZE;
 }
 
 
-int getWalkSpeed() {
+int getWalkSpeed()
+{
   return 60;
 }
 
 
-void game_over() {
+void game_over()
+{
   game->gameOver();
 }
 
 
-int random_number(int low, int high) {
+int random_number(int low, int high)
+{
   return (rand() % (high - low + 1)) + low;
 }
 
 
-void init_game() {
-  
+void init_game()
+{
   allegro_init();
-  
   install_timer();
+  install_keyboard();
   
   LOCK_VARIABLE(timer);
   LOCK_FUNCTION(do_timer);
@@ -73,8 +77,6 @@ void init_game() {
   fps_timer = 0;
   
   srand(time(NULL));
-  
-  install_keyboard();
   
   initializeResources();
 
@@ -93,12 +95,11 @@ void init_game() {
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggleSound(); // Turn off sound
-
 }
 
 
-int main(int argc, char **argv) {
-  
+int main(int argc, char **argv)
+{
   int timemark;
   int fps;
   int frames_done;
@@ -133,7 +134,6 @@ int main(int argc, char **argv) {
       if (timemark <= timer) {
         break;
       }
-      
     }
     
     // If a second has passed since we last measured the frame rate...
@@ -146,23 +146,17 @@ int main(int argc, char **argv) {
     }
     
     game->draw(getWindow());
-    //clear_to_color(getBuffer(), BLACK);
     //textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
     showScreen();
-    
     frames_done++;
-    
   }
   
   delete game;
-  
   destroyScreen();
-  
   destroyResources();
-  //destroy_midi(bgm);
   
   return 0;
-  
 }
 END_OF_MAIN()
+
