@@ -39,8 +39,8 @@ kwestkingdom_SOURCES = \
   HelpTile.cpp \
   Hero.h \
   Hero.cpp \
-  HighScoreLibrary.h \
-  HighScoreLibrary.cpp \
+  highscore.h \
+  highscore.c \
   KeyControl.h \
   KeyControl.cpp \
   KwestKingdom.h \

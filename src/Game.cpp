@@ -3,7 +3,7 @@
 #include "Animation.h"
 #include "EndlessWorld.h"
 #include "Game.h"
-#include "HighScoreLibrary.h"
+#include "highscore.h"
 #include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
@@ -44,8 +44,6 @@ Game::Game() {
   world = NULL;
   menuSelection = NEW_GAME_SELECTION;
   strcpy(playerInitials, "\0");
-  
-  HighScoreLibrary::initInstance();
   
   titleAnimation = new Animation();
   titleAnimation->addFrame(getImage(IMAGES_TITLE));
@@ -95,7 +93,6 @@ Game::~Game() {
   delete menuBackground;
   delete highScoresBackground;
   delete menuPointer;
-  HighScoreLibrary::deallocInstance();
 }
 
 
@@ -183,7 +180,7 @@ void Game::update() {
     this->readPlayerInitials();
     if (strlen(playerInitials) > 0 && selectKey->isPressed()) {
       this->setState(GAME_MENU_STATE);
-      HighScoreLibrary::addHighScore(playerInitials, world->getRoomNumber(), world->getMoney());
+      add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
       delete world;
       world = NULL;
       strcpy(playerInitials, "\0");
@@ -193,7 +190,7 @@ void Game::update() {
   case GAME_OVER_STATE:
     if (selectKey->isPressed()) {
       menuSelection = NEW_GAME_SELECTION;
-      if (HighScoreLibrary::highScorePosition(world->getRoomNumber(), world->getMoney()) == -1) {
+      if (high_score_pos(world->getRoomNumber(), world->getMoney()) == -1) {
         this->setState(GAME_MENU_STATE);
         delete world;
         world = NULL;
@@ -277,16 +274,13 @@ void Game::drawMenu(BITMAP * buffer) {
 
 void Game::drawHighScores(BITMAP * buffer) {
   
+  HIGH_SCORE high_score;
   int x;
   int y;
   int w;
   int h;
   int lineSpacing;
   int vTextOffset;
-  
-  char initials[4];
-  int room;
-  int coins;
   
   char line[256];
   int i;
@@ -309,8 +303,8 @@ void Game::drawHighScores(BITMAP * buffer) {
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
-    if (HighScoreLibrary::getHighScore(i, initials, &room, &coins) == true) {
-      sprintf(line, "#%d %3s %4d %6d", i + 1, initials, room, coins);
+    if (get_high_score(i, &high_score) == true) {
+      sprintf(line, "#%d %3s %4d %6d", i + 1, high_score.initials, high_score.room, high_score.coins);
     } else {
       sprintf(line, "#%d", i + 1);
     }
