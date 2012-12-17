@@ -75,8 +75,8 @@ kwestkingdom_SOURCES = \
   StoryWorld.cpp \
   Sword.h \
   Sword.cpp \
-  Text.h \
-  Text.cpp \
+  text.h \
+  text.cpp \
   UndergroundRoom.h \
   UndergroundRoom.cpp \
   World.h \

@@ -11,7 +11,7 @@
 #include "Screen.h"
 #include "Snapshot.h"
 #include "StoryWorld.h"
-#include "Text.h"
+#include "text.h"
 #include "World.h"
 
 
@@ -226,7 +226,7 @@ void Game::drawMenu(BITMAP * buffer) {
   vTextOffset = lineSpacing;
   
   menuBackground->draw(buffer);
-  drawBox(buffer, x, y, w, h);
+  draw_box(buffer, x, y, w, h);
 
   // Draw the title of the game
   titleAnimation->drawTo(
@@ -236,36 +236,36 @@ void Game::drawMenu(BITMAP * buffer) {
   );
   
   // New Game
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
+  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
 
   // Survival Mode
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, (char *)"Survival Mode");
+  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, (char *)"Survival Mode");
   
   // Resume Game
   if (world == NULL) {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, (char *)"Resume Game");
+    draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, (char *)"Resume Game");
   } else {
-    resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, (char *)"Resume Game");
+    draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, (char *)"Resume Game");
   }
   
   // High Scores
-  resizedTextOut(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, (char *)"High Scores");
+  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, (char *)"High Scores");
   
   // Quit
-  resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, (char *)"Press ESC To Quit");
+  draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, (char *)"Press ESC To Quit");
   
   // Fullscreen
   if (is_windowed_mode()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Fullscreen");
+    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Fullscreen");
   } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Windowed");
+    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Windowed");
   }
   
   // Sound
   if (soundEnabled()) {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
+    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
   } else {
-    resizedTextOut(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
+    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
   }
   
   menuPointer->drawTo(buffer, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
@@ -293,13 +293,13 @@ void Game::drawHighScores(BITMAP * buffer) {
   vTextOffset = lineSpacing;
   
   highScoresBackground->draw(buffer);
-  drawBox(buffer, x, y, w, h);
+  draw_box(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, (char *)"High Scores");
+  draw_text(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, (char *)"High Scores");
   
   // Header
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"        Room  Coins");
+  draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
@@ -308,11 +308,11 @@ void Game::drawHighScores(BITMAP * buffer) {
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
   }
   
   // Return
-  resizedTextOut(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
+  draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
   
 
   
@@ -338,15 +338,15 @@ void Game::drawEnterInitials(BITMAP * buffer) {
   
   world->draw(buffer);
   
-  drawBox(buffer, x, y, w, h);
+  draw_box(buffer, x, y, w, h);
   
   // Title
-  resizedTextOut(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, (char *)"Congratulations!");
-  resizedTextOut(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, (char *)"You got a high score!");
-  resizedTextOut(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"Please enter your initials: ");
+  draw_text(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, (char *)"Congratulations!");
+  draw_text(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, (char *)"You got a high score!");
+  draw_text(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"Please enter your initials: ");
   
   // Initials
-  resizedTextOut(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
+  draw_text(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
 }
 
 

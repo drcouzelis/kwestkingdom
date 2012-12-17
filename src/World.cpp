@@ -11,7 +11,7 @@
 #include "RoomFactory.h"
 #include "Screen.h"
 #include "Snapshot.h"
-#include "Text.h"
+#include "text.h"
 #include "World.h"
 
 
@@ -661,7 +661,7 @@ void World::drawUserInterface(BITMAP * buffer) {
   }
   
   sprintf(moneyLine, "$%d", hero->getMoney());
-  resizedTextOut(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
+  draw_text(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   helpTiles->iterate();

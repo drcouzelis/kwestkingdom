@@ -1,7 +1,7 @@
 #include "HelpTile.h"
 #include "KwestKingdom.h"
 #include "Screen.h"
-#include "Text.h"
+#include "text.h"
 
 
 HelpTile::HelpTile() {
@@ -38,30 +38,30 @@ void HelpTile::draw(BITMAP * buffer) {
   //width = getWindowWidth() - (getTileSize() * 2);
   //height = (numOfLines + 2) * lineSpacing;
   
-  //drawBox(buffer, leftSide, upperSide, leftSide + width, upperSide + height);
+  //draw_box(buffer, leftSide, upperSide, leftSide + width, upperSide + height);
   
   if (line1) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);
   }
   
   if (line2) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 2), 1, WHITE, line2);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 2), 1, WHITE, line2);
   }
   
   if (line3) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 3), 1, WHITE, line3);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 3), 1, WHITE, line3);
   }
   
   if (line4) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 4), 1, WHITE, line4);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 4), 1, WHITE, line4);
   }
   
   if (line5) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 5), 1, WHITE, line5);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 5), 1, WHITE, line5);
   }
   
   if (line6) {
-    resizedTextOut(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 6), 1, WHITE, line6);
+    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 6), 1, WHITE, line6);
   }
   
   

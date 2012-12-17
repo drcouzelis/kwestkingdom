@@ -1,8 +1,9 @@
 #include "KwestKingdom.h"
-#include "Text.h"
+#include "text.h"
 
 
-void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, char *text) {
+void draw_text(BITMAP *dest, int x, int y, double multiplier, int color, char *text)
+{
   //BITMAP *tempBitmap;
   //tempBitmap = create_bitmap(text_length(font, text), text_height(font));
   //clear_to_color(tempBitmap, makecol(255, 0, 255));
@@ -13,8 +14,8 @@ void resizedTextOut(BITMAP *dest, int x, int y, double multiplier, int color, ch
 }
 
 
-void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
-  
+void draw_box(BITMAP *buffer, int x, int y, int w, int h)
+{
   /*
   int leftOutside;
   int rightOutside;
@@ -195,7 +196,5 @@ void drawBox(BITMAP *buffer, int x, int y, int w, int h) {
   vline(buffer, rightOutside - 10, topOutside + 14, bottomOutside - 14, WHITE);
   vline(buffer, rightOutside - 11, topOutside + 14, bottomOutside - 14, WHITE);
   */
-  
 }
-
 
