@@ -1,0 +1,133 @@
+/**
+ * Copyright 2009 David Couzelis
+ *
+ * This file is part of "Kwest Kingdom".
+ *
+ * "Kwest Kingdom" is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * "Kwest Kingdom" is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with "Kwest Kingdom".  If not, see <http://www.gnu.org/licenses/>.
+ */
+#import <Foundation/Foundation.h>
+#import <allegro.h>
+
+typedef enum {
+  IMAGES_HERO_ATTACK_3,
+  IMAGES_BOW_HOLD_2,
+  IMAGES_HAMMER_SWING_3,
+  IMAGES_GAMEOVER,
+  IMAGES_CHOMPER_STAND_1,
+  IMAGES_BOW_HOLD_3,
+  IMAGES_TERRAIN_ICE,
+  IMAGES_GIANT_2,
+  IMAGES_HAMMER_HOLD_2,
+  IMAGES_SWORD_STAB_4,
+  IMAGES_ARCHER_1,
+  IMAGES_NINJA_1,
+  IMAGES_HERO_HURT_1,
+  IMAGES_HERO_STAND_3,
+  IMAGES_BOW_DRAW_2,
+  IMAGES_HERO_DIE_4,
+  IMAGES_TERRAIN_WATER,
+  IMAGES_ARROW,
+  IMAGES_SWORD_HOLD_4,
+  IMAGES_GIANT_1,
+  IMAGES_ARCHER_2,
+  IMAGES_NINJA_2,
+  IMAGES_HAMMER_HOLD_1,
+  IMAGES_HERO_STAND_1,
+  IMAGES_BOW_HOLD_4,
+  IMAGES_TERRAIN_DIRT,
+  IMAGES_SWORD_STAB_2,
+  IMAGES_SHIELD_3,
+  IMAGES_TITLE,
+  IMAGES_SHORE_SNOW,
+  IMAGES_HERO_HURT_3,
+  IMAGES_HERO_DIE_3,
+  IMAGES_TERRAIN_SNOW,
+  IMAGES_CHOMPER_BITE_2,
+  IMAGES_SHORE_SNOW_OUTSIDECORNER,
+  IMAGES_ARCHER_3,
+  IMAGES_CHOMPER_BITE_5,
+  IMAGES_HERO_DIE_2,
+  IMAGES_CHOMPER_STAND_2,
+  IMAGES_HAMMER_HOLD_3,
+  IMAGES_CHOMPER_BITE_3,
+  IMAGES_HERO_ATTACK_1,
+  IMAGES_GIANT_3,
+  IMAGES_SWORD_HOLD_1,
+  IMAGES_HERO_DIE_5,
+  IMAGES_HAMMER_SWING_1,
+  IMAGES_TERRAIN_SPIRE,
+  IMAGES_BOW_DRAW_3,
+  IMAGES_SHORE_GRASS,
+  IMAGES_HERO_DIE_1,
+  IMAGES_SWORD_HOLD_3,
+  IMAGES_HERO_HURT_4,
+  IMAGES_SHIELD_2,
+  IMAGES_TERRAIN_EVERGREEN,
+  IMAGES_SWORD_STAB_1,
+  IMAGES_TERRAIN_DOWNSTAIRS,
+  IMAGES_HAMMER_SWING_4,
+  IMAGES_HERO_STAND_2,
+  IMAGES_BOW_DRAW_1,
+  IMAGES_HAMMER_HOLD_4,
+  IMAGES_SWORD_STAB_3,
+  IMAGES_BOW_HOLD_1,
+  IMAGES_TERRAIN_GRASS,
+  IMAGES_SWORD_HOLD_2,
+  IMAGES_CHOMPER_STAND_3,
+  IMAGES_SHORE_SNOW_INSIDECORNER,
+  IMAGES_SHIELD_1,
+  IMAGES_TERRAIN_OAK,
+  IMAGES_PALETTE,
+  IMAGES_HAMMER_SWING_2,
+  IMAGES_HERO_ATTACK_4,
+  IMAGES_HERO_ATTACK_2,
+  IMAGES_HERO_HURT_2,
+  IMAGES_HELP,
+  IMAGES_TERRAIN_UPSTAIRS,
+  IMAGES_EMPTYHEART,
+  IMAGES_HEART,
+  IMAGES_CHOMPER_BITE_4,
+  IMAGES_NINJA_3,
+  IMAGES_SHORE_GRASS_OUTSIDECORNER,
+  IMAGES_CHOMPER_BITE_1,
+  IMAGES_MONEYBAG,
+  IMAGES_SHORE_GRASS_INSIDECORNER,
+  IMAGES_SHIELD_4,
+  IMAGES_TERRAIN_PATH,
+  NUMBER_OF_IMAGES
+} IMAGES;
+
+typedef enum {
+  SOUNDS_MONEY,
+  SOUNDS_ARROW_FLY,
+  SOUNDS_ARROW_HIT,
+  SOUNDS_HAMMER,
+  SOUNDS_CHOMP,
+  SOUNDS_HEART,
+  SOUNDS_GASP,
+  SOUNDS_SWORD,
+  NUMBER_OF_SOUNDS
+} SOUNDS;
+
+void initializeResources();
+void destroyResources();
+
+BITMAP * getImage(int image);
+void setPalette(void);
+
+void playSound(int sound);
+void toggleSound(void);
+
+BOOL soundEnabled(void);
+
