@@ -1,11 +1,11 @@
 #include "Animation.h"
 #include "KwestKingdom.h"
-#include "Screen.h"
+#include "screen.h"
 #include "Snapshot.h"
 
 
 Snapshot::Snapshot() {
-  canvas = create_bitmap(getWindowWidth(), getWindowHeight());
+  canvas = create_bitmap(get_win_w(), get_win_h());
 }
 
 

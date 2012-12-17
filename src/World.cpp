@@ -9,7 +9,7 @@
 #include "List.h"
 #include "Resources.h"
 #include "RoomFactory.h"
-#include "Screen.h"
+#include "screen.h"
 #include "Snapshot.h"
 #include "text.h"
 #include "World.h"
@@ -442,7 +442,7 @@ void World::shake() {
   prevRoomSnapshot->setX(0);
   prevRoomSnapshot->setY(0);
   prevRoomSnapshot->moveY(10);
-  prevRoomSnapshot->setSpeed(getWindowHeight());
+  prevRoomSnapshot->setSpeed(get_win_h());
   this->drawTerrain(prevRoomSnapshot->getCanvas());
   this->drawCharacters(prevRoomSnapshot->getCanvas());
 }
@@ -489,39 +489,39 @@ void World::changeRooms() {
   if (hero->getX() < 0) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveX(getWindowWidth());
-    prevRoomSnapshot->setSpeed(getWindowWidth());
-    nextRoomSnapshot->setX(-getWindowWidth());
+    prevRoomSnapshot->moveX(get_win_w());
+    prevRoomSnapshot->setSpeed(get_win_w());
+    nextRoomSnapshot->setX(-get_win_w());
     nextRoomSnapshot->setY(0);
     nextRoomSnapshot->moveX(0);
-    nextRoomSnapshot->setSpeed(getWindowWidth());
+    nextRoomSnapshot->setSpeed(get_win_w());
   } else if (hero->getX() > COLS - 1) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveX(-getWindowWidth());
-    prevRoomSnapshot->setSpeed(getWindowWidth());
-    nextRoomSnapshot->setX(getWindowWidth());
+    prevRoomSnapshot->moveX(-get_win_w());
+    prevRoomSnapshot->setSpeed(get_win_w());
+    nextRoomSnapshot->setX(get_win_w());
     nextRoomSnapshot->setY(0);
     nextRoomSnapshot->moveX(0);
-    nextRoomSnapshot->setSpeed(getWindowWidth());
+    nextRoomSnapshot->setSpeed(get_win_w());
   } else if (hero->getY() < 0) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveY(getWindowHeight());
-    prevRoomSnapshot->setSpeed(getWindowHeight());
+    prevRoomSnapshot->moveY(get_win_h());
+    prevRoomSnapshot->setSpeed(get_win_h());
     nextRoomSnapshot->setX(0);
-    nextRoomSnapshot->setY(-getWindowHeight());
+    nextRoomSnapshot->setY(-get_win_h());
     nextRoomSnapshot->moveY(0);
-    nextRoomSnapshot->setSpeed(getWindowHeight());
+    nextRoomSnapshot->setSpeed(get_win_h());
   } else if (hero->getY() > ROWS - 1) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveY(-getWindowHeight());
-    prevRoomSnapshot->setSpeed(getWindowHeight());
+    prevRoomSnapshot->moveY(-get_win_h());
+    prevRoomSnapshot->setSpeed(get_win_h());
     nextRoomSnapshot->setX(0);
-    nextRoomSnapshot->setY(getWindowHeight());
+    nextRoomSnapshot->setY(get_win_h());
     nextRoomSnapshot->moveY(0);
-    nextRoomSnapshot->setSpeed(getWindowHeight());
+    nextRoomSnapshot->setSpeed(get_win_h());
   } else {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
@@ -654,14 +654,14 @@ void World::drawUserInterface(BITMAP * buffer) {
   // Put the hero's health on the screen.
   for (i = 0; i < hero->getMaxHealth(); i++) {
     if (i < hero->getHealth()) {
-      heartAnimation->drawTo(buffer, getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      heartAnimation->drawTo(buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     } else {
-      heartEmptyAnimation->drawTo(buffer, getWindowWidth() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      heartEmptyAnimation->drawTo(buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     }
   }
   
   sprintf(moneyLine, "$%d", hero->getMoney());
-  draw_text(buffer, getWindowWidth() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
+  draw_text(buffer, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   helpTiles->iterate();
@@ -700,6 +700,6 @@ void World::draw(BITMAP * buffer) {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, getWindowWidth() - (getTileSize() * 3), getWindowHeight() - (getTileSize() / 2), WHITE, -1, "Room %d", room->getNumber());
+  textprintf_ex(buffer, font, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), WHITE, -1, "Room %d", room->getNumber());
 }
 

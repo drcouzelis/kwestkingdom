@@ -1,6 +1,6 @@
 #include "HelpTile.h"
 #include "KwestKingdom.h"
-#include "Screen.h"
+#include "screen.h"
 #include "text.h"
 
 
@@ -33,9 +33,9 @@ void HelpTile::draw(BITMAP * buffer) {
   upperSide = 0;
  
   leftSide = getTileSize(); //(getTileSize() / 2);
-  upperSide = (getWindowHeight() / 2) - (getTileSize() * 2); //(getTileSize() / 2);
+  upperSide = (get_win_h() / 2) - (getTileSize() * 2); //(getTileSize() / 2);
 
-  //width = getWindowWidth() - (getTileSize() * 2);
+  //width = get_win_w() - (getTileSize() * 2);
   //height = (numOfLines + 2) * lineSpacing;
   
   //draw_box(buffer, leftSide, upperSide, leftSide + width, upperSide + height);

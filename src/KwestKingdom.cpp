@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
-#include "Screen.h"
+#include "screen.h"
 
 #ifdef ALLEGRO_UNIX
   #include <xalleg.h>
@@ -80,7 +80,7 @@ void init_game()
   
   initializeResources();
 
-  if (initializeScreen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
+  if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);
   }
 
@@ -91,7 +91,7 @@ void init_game()
 #endif
 
   setPalette();
-  setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+  set_win_size(WINDOW_WIDTH, WINDOW_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
   toggleSound(); // Turn off sound
@@ -145,15 +145,15 @@ int main(int argc, char **argv)
       prevTime = fps_timer;
     }
     
-    game->draw(getWindow());
-    //textprintf_ex(getWindow(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    game->draw(get_win());
+    //textprintf_ex(get_win(), font, 10, 10, WHITE, -1, "FPS %d", fps);
     
-    showScreen();
+    show_screen();
     frames_done++;
   }
   
   delete game;
-  destroyScreen();
+  free_screen();
   destroyResources();
   
   return 0;

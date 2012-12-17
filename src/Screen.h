@@ -5,16 +5,16 @@
 #include <allegro.h>
 
 
-void setWindowSize(int width, int height);
+void set_win_size(int width, int height);
 
-bool initializeScreen(int width, int height, bool fullscreen);
-void destroyScreen();
+int init_screen(int width, int height, bool fullscreen);
+void free_screen();
 
-int getWindowWidth();
-int getWindowHeight();
+int get_win_w();
+int get_win_h();
 
-BITMAP *getWindow();
-bool showScreen();
+BITMAP *get_win();
+bool show_screen();
 
 
 #endif

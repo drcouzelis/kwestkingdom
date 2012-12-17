@@ -8,7 +8,7 @@
 #include "KwestKingdom.h"
 #include "Resources.h"
 #include "RoomFactory.h"
-#include "Screen.h"
+#include "screen.h"
 #include "Snapshot.h"
 #include "StoryWorld.h"
 #include "text.h"
@@ -126,7 +126,7 @@ void Game::readPlayerInitials() {
 void Game::update() {
   
   if (fullscreenKey != NULL && fullscreenKey->isPressed()) {
-    if (initializeScreen(-1, -1, is_windowed_mode()) == false) {
+    if (init_screen(-1, -1, is_windowed_mode()) == false) {
       this->setState(GAME_QUIT_STATE);
     }
     setPalette();
@@ -217,8 +217,8 @@ void Game::drawMenu(BITMAP * buffer) {
   int hTextOffset;
   int vTextOffset;
   
-  x = (getWindowWidth() / 2) - (getTileSize() * 4);
-  y = (getWindowHeight() / 2) - (getTileSize() / 2);
+  x = (get_win_w() / 2) - (getTileSize() * 4);
+  y = (get_win_h() / 2) - (getTileSize() / 2);
   w = getTileSize() * 4 * 2;
   h = getTileSize() * 5;
   lineSpacing = getTileSize() / 2;
@@ -231,8 +231,8 @@ void Game::drawMenu(BITMAP * buffer) {
   // Draw the title of the game
   titleAnimation->drawTo(
     buffer,
-    (getWindowWidth() / 2) - (titleAnimation->width() / 2),
-    (getWindowWidth() - titleAnimation->width()) / 2
+    (get_win_w() / 2) - (titleAnimation->width() / 2),
+    (get_win_w() - titleAnimation->width()) / 2
   );
   
   // New Game
@@ -366,8 +366,8 @@ void Game::draw(BITMAP * buffer) {
     world->draw(buffer);
     gameOverAnimation->drawTo(
       buffer,
-      (getWindowWidth() / 2) - (gameOverAnimation->width() / 2),
-      (getWindowHeight() / 2) - (gameOverAnimation->height() / 2)
+      (get_win_w() / 2) - (gameOverAnimation->width() / 2),
+      (get_win_h() / 2) - (gameOverAnimation->height() / 2)
     );
     break;
     
