@@ -39,8 +39,8 @@ kwestkingdom_SOURCES = \
   HelpTile.cpp \
   Hero.h \
   Hero.cpp \
-  kk_highscore.h \
-  kk_highscore.c \
+  highscore.h \
+  highscore.c \
   KeyControl.h \
   KeyControl.cpp \
   KwestKingdom.h \
@@ -59,8 +59,8 @@ kwestkingdom_SOURCES = \
   RoomFactory.cpp \
   Room.h \
   Room.cpp \
-  kk_screen.h \
-  kk_screen.c \
+  screen.h \
+  screen.c \
   Shield.h \
   Shield.cpp \
   simclist.h \
@@ -75,8 +75,8 @@ kwestkingdom_SOURCES = \
   StoryWorld.cpp \
   Sword.h \
   Sword.cpp \
-  kk_text.h \
-  kk_text.c \
+  text.h \
+  text.c \
   UndergroundRoom.h \
   UndergroundRoom.cpp \
   World.h \

@@ -3,7 +3,7 @@
 
 #include "al_screen.h"
 #include "KwestKingdom.h"
-#include "kk_screen.h"
+#include "screen.h"
 
 
 #define DEFAULT_COLOR_DEPTH 8

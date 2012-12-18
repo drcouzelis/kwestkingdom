@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "kk_highscore.h"
+#include "highscore.h"
 
 
 /* Whether or not the high scores have been initialized */

@@ -3,15 +3,15 @@
 #include "Animation.h"
 #include "EndlessWorld.h"
 #include "Game.h"
-#include "kk_highscore.h"
+#include "highscore.h"
 #include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
 #include "RoomFactory.h"
-#include "kk_screen.h"
+#include "screen.h"
 #include "Snapshot.h"
 #include "StoryWorld.h"
-#include "kk_text.h"
+#include "text.h"
 #include "World.h"
 
 
