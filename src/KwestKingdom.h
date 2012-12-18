@@ -29,20 +29,10 @@
 #define DEFAULT_SCREEN_RATIO 2
 
 
-typedef enum {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT
-} DIRECTION;
-
-
 int getTileSize();
 int getWalkSpeed();
 
 void game_over();
-
-int random_number(int low, int high);
 
 
 #endif

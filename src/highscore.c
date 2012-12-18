@@ -156,7 +156,7 @@ void add_high_score(char *initials, int room, int money)
 }
 
 
-int get_high_score(int pos, HIGH_SCORE *high_score)
+FLAG get_high_score(int pos, HIGH_SCORE *high_score)
 {
   init_high_scores();
 
@@ -164,10 +164,10 @@ int get_high_score(int pos, HIGH_SCORE *high_score)
     strcpy(high_score->initials, high_scores[pos].initials);
     high_score->room = high_scores[pos].room;
     high_score->money = high_scores[pos].money;
-    return 1;
+    return ON;
   }
 
   /* High score not found, return false */
-  return 0;
+  return OFF;
 }
 

@@ -6,6 +6,9 @@
 #endif 
 
 
+#include "utilites.h"
+
+
 #define MAX_NUM_OF_HIGH_SCORES 5
 
 
@@ -19,7 +22,7 @@ typedef struct
 
 int high_score_pos(int room, int money);
 void add_high_score(char *initials, int room, int money);
-int get_high_score(int num, HIGH_SCORE *high_score);
+FLAG get_high_score(int num, HIGH_SCORE *high_score);
 
 
 #ifdef __cplusplus
