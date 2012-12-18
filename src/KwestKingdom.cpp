@@ -3,7 +3,7 @@
 #include "Game.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
-#include "screen.h"
+#include "kk_screen.h"
 
 #ifdef ALLEGRO_UNIX
   #include <xalleg.h>

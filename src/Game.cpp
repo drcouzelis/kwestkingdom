@@ -3,15 +3,15 @@
 #include "Animation.h"
 #include "EndlessWorld.h"
 #include "Game.h"
-#include "highscore.h"
+#include "kk_highscore.h"
 #include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
 #include "RoomFactory.h"
-#include "screen.h"
+#include "kk_screen.h"
 #include "Snapshot.h"
 #include "StoryWorld.h"
-#include "text.h"
+#include "kk_text.h"
 #include "World.h"
 
 
@@ -304,7 +304,7 @@ void Game::drawHighScores(BITMAP * buffer) {
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
     if (get_high_score(i, &high_score) == true) {
-      sprintf(line, "#%d %3s %4d %6d", i + 1, high_score.initials, high_score.room, high_score.coins);
+      sprintf(line, "#%d %3s %4d %6d", i + 1, high_score.initials, high_score.room, high_score.money);
     } else {
       sprintf(line, "#%d", i + 1);
     }

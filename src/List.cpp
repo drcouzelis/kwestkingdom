@@ -70,7 +70,8 @@ List::~List() {
   
   while (node != NULL) {
     tmp = node->getNext();
-    delete node->getItem();
+    // TODO: This is a memory leak!
+    //delete node->getItem();
     delete node;
     node = tmp;
   }

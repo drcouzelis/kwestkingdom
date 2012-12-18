@@ -1,7 +1,7 @@
 #include "HelpTile.h"
 #include "KwestKingdom.h"
-#include "screen.h"
-#include "text.h"
+#include "kk_screen.h"
+#include "kk_text.h"
 
 
 HelpTile::HelpTile() {

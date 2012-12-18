@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "highscore.h"
+#include "kk_highscore.h"
 
 
 /* Whether or not the high scores have been initialized */
@@ -41,6 +41,7 @@ void read_high_scores()
 {
   FILE *file;
   char line[256];
+  int i;
   
   file = fopen(high_scores_filename, "r");
   
@@ -66,7 +67,7 @@ void read_high_scores()
 }
 
 
-void initialize_high_scores()
+void init_high_scores()
 {
   char *path;
   int i;
@@ -98,7 +99,7 @@ int high_score_pos(int room, int money)
   int pos;
   int i;
   
-  initialize_high_scores()
+  init_high_scores();
 
   pos = num_high_scores;
   
@@ -124,7 +125,7 @@ void add_high_score(char *initials, int room, int money)
   int pos;
   int i;
   
-  initialize_high_scores()
+  init_high_scores();
 
   /* Decide if this is a high score */
   pos = high_score_pos(room, money);
@@ -157,10 +158,12 @@ void add_high_score(char *initials, int room, int money)
 
 int get_high_score(int pos, HIGH_SCORE *high_score)
 {
-  if (num < num_high_scores) {
-    strcpy(high_score->initials, high_scores[num].initials);
-    high_score->room = high_scores[num].room;
-    high_score->money = high_scores[num].money;
+  init_high_scores();
+
+  if (pos < num_high_scores) {
+    strcpy(high_score->initials, high_scores[pos].initials);
+    high_score->room = high_scores[pos].room;
+    high_score->money = high_scores[pos].money;
     return 1;
   }
 

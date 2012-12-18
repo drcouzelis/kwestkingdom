@@ -3,7 +3,7 @@
 
 #include "al_screen.h"
 #include "KwestKingdom.h"
-#include "screen.h"
+#include "kk_screen.h"
 
 
 #define DEFAULT_COLOR_DEPTH 8
@@ -72,7 +72,7 @@ void set_win_size(int width, int height)
 }
 
 
-int init_screen(int width, int height, bool fullscreen)
+int init_screen(int width, int height, int fullscreen)
 {
   int colorDepth;
 
@@ -152,8 +152,10 @@ int get_win_h()
 
 int show_screen()
 {
+  /*
   int x;
   int y;
+  */
 
   if (screen == NULL) {
     printf("Failed to find a screen to show. \n");
@@ -165,10 +167,10 @@ int show_screen()
     return 0;
   }
 
+  /*
   x = getTileSize() / 5;
   y = get_win_h() - (getTileSize() / 2);
   
-  /*
   switch (get_update_method()) {
   case UPDATE_TRIPLE_BUFFER:
     textprintf_ex(get_win(), font, x, y, WHITE, -1, "Triple Buffering");

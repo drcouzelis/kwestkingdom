@@ -1,5 +1,5 @@
 #include "KwestKingdom.h"
-#include "text.h"
+#include "kk_text.h"
 
 
 void draw_text(BITMAP *dest, int x, int y, double multiplier, int color, char *text)

@@ -9,9 +9,9 @@
 #include "List.h"
 #include "Resources.h"
 #include "RoomFactory.h"
-#include "screen.h"
+#include "kk_screen.h"
 #include "Snapshot.h"
-#include "text.h"
+#include "kk_text.h"
 #include "World.h"
 
 
