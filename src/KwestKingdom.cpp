@@ -53,12 +53,6 @@ void game_over()
 }
 
 
-int random_number(int low, int high)
-{
-  return (rand() % (high - low + 1)) + low;
-}
-
-
 void init_game()
 {
   allegro_init();
@@ -75,8 +69,6 @@ void init_game()
   
   timer = 0;
   fps_timer = 0;
-  
-  srand(time(NULL));
   
   initializeResources();
 
