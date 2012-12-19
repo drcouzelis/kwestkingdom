@@ -7,6 +7,7 @@
 #include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
+#include "resources.h"
 #include "RoomFactory.h"
 #include "screen.h"
 #include "Snapshot.h"
@@ -49,7 +50,7 @@ Game::Game() {
   titleAnimation->addFrame(getImage(IMAGES_TITLE));
   
   gameOverAnimation = new Animation();
-  gameOverAnimation->addFrame(getImage(IMAGES_GAMEOVER));
+  gameOverAnimation->addFrame(IMG("gameover.bmp"));
   
   escapeKey = new KeyControl(KEY_ESC);
   escapeKey->setDelay(GAME_TICKER);
