@@ -3,6 +3,7 @@
 #include "Hammer.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
+#include "utilities.h"
 #include "World.h"
 
 

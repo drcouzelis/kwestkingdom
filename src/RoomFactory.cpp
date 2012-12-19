@@ -11,6 +11,7 @@
 #include "RoomFactory.h"
 #include "SnowRoom.h"
 #include "UndergroundRoom.h"
+#include "utilities.h"
 #include "World.h"
 
 

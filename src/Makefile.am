@@ -79,6 +79,8 @@ kwestkingdom_SOURCES = \
   text.c \
   UndergroundRoom.h \
   UndergroundRoom.cpp \
+  utilities.h \
+  utilities.c \
   World.h \
   World.cpp
 

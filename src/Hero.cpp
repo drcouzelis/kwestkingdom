@@ -7,6 +7,7 @@
 #include "Resources.h"
 #include "Shield.h"
 #include "Sword.h"
+#include "utilities.h"
 #include "World.h"
 
 

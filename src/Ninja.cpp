@@ -3,6 +3,7 @@
 #include "Ninja.h"
 #include "Resources.h"
 #include "Sword.h"
+#include "utilities.h"
 #include "World.h"
 
 

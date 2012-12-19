@@ -132,7 +132,7 @@ void add_high_score(char *initials, int room, int money)
   if (pos == MAX_NUM_OF_HIGH_SCORES) {
     return;
   }
-  
+
   /* Shift the high scores to make room for the new one */
   if (pos < num_high_scores) {
     for (i = MAX_NUM_OF_HIGH_SCORES - 2; i >= pos; i--) {
@@ -148,7 +148,7 @@ void add_high_score(char *initials, int room, int money)
   high_scores[pos].money = money;
 
   /* Increment the number of high scores if necessary */  
-  if (num_high_scores < MAX_NUM_OF_HIGH_SCORES - 1) {
+  if (num_high_scores < MAX_NUM_OF_HIGH_SCORES) {
     num_high_scores++;
   }
   
