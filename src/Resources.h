@@ -1,5 +1,5 @@
-#ifndef RESOURCES_HEADER
-#define RESOURCES_HEADER
+#ifndef RESOURCES_HEADER_OLD
+#define RESOURCES_HEADER_OLD
 
 
 #include <allegro.h>

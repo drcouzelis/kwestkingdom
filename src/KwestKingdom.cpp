@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
+#include "resources.h"
 #include "screen.h"
 
 #ifdef ALLEGRO_UNIX
@@ -71,6 +72,7 @@ void init_game()
   fps_timer = 0;
   
   initializeResources();
+  init_resources();
 
   if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);
@@ -146,6 +148,7 @@ int main(int argc, char **argv)
   
   delete game;
   free_screen();
+  stop_resources();
   destroyResources();
   
   return 0;
