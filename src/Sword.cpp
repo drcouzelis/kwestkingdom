@@ -1,6 +1,6 @@
 #include "Animation.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "Sword.h"
 
 
@@ -23,21 +23,21 @@ typedef enum {
 Sword::Sword() {
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("SWORD_HOLD_1"));
-  holdAnimation->addFrame(IMG("SWORD_HOLD_2"));
-  holdAnimation->addFrame(IMG("SWORD_HOLD_3"));
-  holdAnimation->addFrame(IMG("SWORD_HOLD_4"));
+  holdAnimation->addFrame(IMG("sword_hold_1.bmp"));
+  holdAnimation->addFrame(IMG("sword_hold_2.bmp"));
+  holdAnimation->addFrame(IMG("sword_hold_3.bmp"));
+  holdAnimation->addFrame(IMG("sword_hold_4.bmp"));
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   
   attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_1"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_2"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_3"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_4"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_3"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_2"));
-  attackRightAnimation->addFrame(IMG("SWORD_STAB_1"));
+  attackRightAnimation->addFrame(IMG("sword_stab_1.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_2.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_3.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_4.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_3.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_2.bmp"));
+  attackRightAnimation->addFrame(IMG("sword_stab_1.bmp"));
   attackRightAnimation->setOffsetX(-TILE_SIZE);
   attackRightAnimation->setOffsetY(-TILE_SIZE);
   attackRightAnimation->setLoop(false);
@@ -75,28 +75,28 @@ void Sword::toAwayState() {
 void Sword::toAttackUpState() {
   animation = attackUpAnimation;
   animation->reset();
-  playSound(SOUNDS_SWORD);
+  play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackDownState() {
   animation = attackDownAnimation;
   animation->reset();
-  playSound(SOUNDS_SWORD);
+  play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackLeftState() {
   animation = attackLeftAnimation;
   animation->reset();
-  playSound(SOUNDS_SWORD);
+  play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackRightState() {
   animation = attackRightAnimation;
   animation->reset();
-  playSound(SOUNDS_SWORD);
+  play_sound(SND("sword.wav"));
 }
 
 

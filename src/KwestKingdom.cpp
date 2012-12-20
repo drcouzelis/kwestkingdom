@@ -2,7 +2,6 @@
 
 #include "Game.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
 #include "resources.h"
 #include "screen.h"
 
@@ -71,9 +70,9 @@ void init_game()
   timer = 0;
   fps_timer = 0;
   
-  initializeResources();
   init_resources();
   add_resource_path( PKGDATADIR "/images/");
+  add_resource_path( PKGDATADIR "/sounds/");
 
   if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);
@@ -89,7 +88,7 @@ void init_game()
   set_win_size(WINDOW_WIDTH, WINDOW_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
-  toggleSound(); // Turn off sound
+  toggle_sound(); // Turn off sound
 }
 
 
@@ -150,7 +149,6 @@ int main(int argc, char **argv)
   delete game;
   free_screen();
   stop_resources();
-  destroyResources();
   
   return 0;
 }

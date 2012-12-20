@@ -132,7 +132,7 @@ void StoryWorld::update() {
   if (room->getNumber() == MAX_NUM_OF_ROOMS) {
     // There are no more rooms to explore!
     // It's the end of the game.
-    //playSound(ENDING_SOUND);
+    //play_sound(SND("sound.wav"));
     game_over();
   }
   

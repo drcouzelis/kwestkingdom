@@ -7,7 +7,7 @@
 #include "Item.h"
 #include "KwestKingdom.h"
 #include "List.h"
-#include "Resources.h"
+#include "resources.h"
 #include "RoomFactory.h"
 #include "screen.h"
 #include "Snapshot.h"
@@ -52,11 +52,11 @@ World::World() {
   rooms->append(room);
   
   heartAnimation = new Animation();
-  heartAnimation->addFrame(IMG("HEART"));
+  heartAnimation->addFrame(IMG("heart.bmp"));
   heartEmptyAnimation = new Animation();
-  heartEmptyAnimation->addFrame(IMG("EMPTYHEART"));
+  heartEmptyAnimation->addFrame(IMG("emptyheart.bmp"));
   helpTileAnimation = new Animation();
-  helpTileAnimation->addFrame(IMG("HELP"));
+  helpTileAnimation->addFrame(IMG("help.bmp"));
   
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();

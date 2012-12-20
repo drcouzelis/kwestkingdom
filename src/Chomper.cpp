@@ -88,7 +88,7 @@ void Chomper::update() {
       state = CHOMPER_ATTACK_STATE;
       animation = attackAnimation;
       animation->reset();
-      playSound(SOUNDS_CHOMP);
+      play_sound(SND("chomp.wav"));
       
     } else {
       

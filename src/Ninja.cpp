@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "KwestKingdom.h"
 #include "Ninja.h"
-#include "Resources.h"
+#include "resources.h"
 #include "Sword.h"
 #include "utilities.h"
 #include "World.h"
@@ -27,10 +27,10 @@ Ninja::Ninja() {
   sword->toHoldState();
   
   standAnimation = new Animation();
-  standAnimation->addFrame(IMG("NINJA_1"));
-  standAnimation->addFrame(IMG("NINJA_2"));
-  standAnimation->addFrame(IMG("NINJA_3"));
-  standAnimation->addFrame(IMG("NINJA_2"));
+  standAnimation->addFrame(IMG("ninja_1.bmp"));
+  standAnimation->addFrame(IMG("ninja_2.bmp"));
+  standAnimation->addFrame(IMG("ninja_3.bmp"));
+  standAnimation->addFrame(IMG("ninja_2.bmp"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(6);
   
@@ -38,13 +38,13 @@ Ninja::Ninja() {
   dashAnimation->setSpeed(24);
   
   attackAnimation = new Animation();
-  attackAnimation->addFrame(IMG("NINJA_1"));
-  attackAnimation->addFrame(IMG("NINJA_2"));
-  attackAnimation->addFrame(IMG("NINJA_2"));
-  attackAnimation->addFrame(IMG("NINJA_3"));
-  attackAnimation->addFrame(IMG("NINJA_3"));
-  attackAnimation->addFrame(IMG("NINJA_2"));
-  attackAnimation->addFrame(IMG("NINJA_2"));
+  attackAnimation->addFrame(img.bmp("NINJA_1"));
+  attackAnimation->addFrame(img.bmp("NINJA_2"));
+  attackAnimation->addFrame(img.bmp("NINJA_2"));
+  attackAnimation->addFrame(img.bmp("NINJA_3"));
+  attackAnimation->addFrame(img.bmp("NINJA_3"));
+  attackAnimation->addFrame(img.bmp("NINJA_2"));
+  attackAnimation->addFrame(img.bmp("NINJA_2"));
   attackAnimation->setLoop(false);
   attackAnimation->setSpeed(12);
   

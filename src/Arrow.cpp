@@ -164,16 +164,14 @@ void Arrow::toFlyingState() {
   flyLeftAnimation->setOffsetY(0);
   flyRightAnimation->setOffsetX(0);
   flyRightAnimation->setOffsetY(0);
-  playSound(SOUNDS_ARROW_FLY);
-
+  play_sound(SND("arrow_fly.wav"));
 }
 
 
 void Arrow::toStoppedState() {
   state = ARROW_STOPPED_STATE;
   this->setDirection(direction);
-  playSound(SOUNDS_ARROW_HIT);
-
+  play_sound(SND("arrow_hit.wav"));
 }
 
 

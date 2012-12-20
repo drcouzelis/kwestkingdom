@@ -10,7 +10,12 @@
 #endif
 
 
-#define IMG(imgname) (get_resource_image(imgname))
+#define IMG(name) (get_image(name))
+#define SND(name) (get_image(name))
+
+
+typedef BITMAP IMAGE;
+typedef SAMPLE SOUND;
 
 
 /**
@@ -39,7 +44,12 @@ void add_resource_path(const char *path);
  * in order of the paths that you added. If the
  * resource isn't found it will return NULL.
  */
-BITMAP *get_resource_image(const char *filename);
+IMAGE *get_image(const char *name);
+SOUND *get_sound(const char *name);
+
+void play_sound(SOUND *sound);
+void toggle_sound();
+bool is_sound_enabled();
 
 
 #ifdef __cplusplus
@@ -48,3 +58,4 @@ BITMAP *get_resource_image(const char *filename);
 
 
 #endif
+

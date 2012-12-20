@@ -6,7 +6,6 @@
 #include "highscore.h"
 #include "KeyControl.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
 #include "resources.h"
 #include "RoomFactory.h"
 #include "screen.h"
@@ -126,15 +125,15 @@ void Game::readPlayerInitials() {
 
 void Game::update() {
   
-  if (fullscreenKey != NULL && fullscreenKey->isPressed()) {
+  if (fullscreenKey && fullscreenKey->isPressed()) {
     if (init_screen(-1, -1, is_windowed_mode()) == false) {
       this->setState(GAME_QUIT_STATE);
     }
     setPalette();
   }
   
-  if (soundKey != NULL && soundKey->isPressed()) {
-    toggleSound();
+  if (soundKey && soundKey->isPressed()) {
+    toggle_sound();
   }
   
   switch (state) {
@@ -263,7 +262,7 @@ void Game::drawMenu(BITMAP * buffer) {
   }
   
   // Sound
-  if (soundEnabled()) {
+  if (is_sound_enabled()) {
     draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
   } else {
     draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
@@ -465,11 +464,7 @@ void Game::setState(int aState) {
     delete soundKey;
     soundKey = NULL;
     break;
-    
   }
-  
-
-  
 }
 
 

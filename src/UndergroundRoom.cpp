@@ -1,5 +1,5 @@
 #include "Animation.h"
-#include "Resources.h"
+#include "resources.h"
 #include "UndergroundRoom.h"
 
 
@@ -13,17 +13,17 @@ UndergroundRoom::UndergroundRoom() {
   shoreInsideNEAnimation = new Animation();
   shoreOutsideNEAnimation = new Animation();
   
-  grassAnimation->addFrame(IMG("TERRAIN_DIRT"));
-  //pathAnimation->addFrame(getImage(SNOW_PATH_01));
-  mountainAnimation->addFrame(IMG("TERRAIN_SPIRE"));
-  //waterAnimation->addFrame(IMG("TERRAIN_WATER"));
+  grassAnimation->addFrame(IMG("terrain_dirt.bmp"));
+  //pathAnimation->addFrame(IMG("snow_path_01.bmp"));
+  mountainAnimation->addFrame(IMG("terrain_spire.bmp"));
+  //waterAnimation->addFrame(IMG("terrain_water.bmp"));
   
-  //shoreNorthAnimation->addFrame(getImage(SHORE_01));
+  //shoreNorthAnimation->addFrame(IMG("shore_01.bmp"));
   //shoreSouthAnimation = shoreNorthAnimation->copy()->setVerticalFlip(true);
   //shoreEastAnimation = shoreNorthAnimation->copy()->setRotate(true);
   //shoreWestAnimation = shoreNorthAnimation->copy()->setVerticalFlip(true)->setRotate(true);
   
-  //shoreInsideNEAnimation->addFrame(getImage(SHORE_INSIDE_CORNER_01));
+  //shoreInsideNEAnimation->addFrame(IMG("shore_inside_corner_01.bmp"));
   //shoreInsideNWAnimation = shoreInsideNEAnimation->copy()->setHorizontalFlip(true);
   //shoreInsideSEAnimation = shoreInsideNEAnimation->copy()->setVerticalFlip(true);
   //shoreInsideSWAnimation = shoreInsideNEAnimation->copy()->setVerticalFlip(true)->setHorizontalFlip(true);

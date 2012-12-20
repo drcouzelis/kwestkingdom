@@ -6,9 +6,6 @@
 #include "screen.h"
 
 
-#define DEFAULT_COLOR_DEPTH 8
-
-
 /* The window is the area inside the screen that the game is drawn on */
 static BITMAP *window = NULL;
 
@@ -83,7 +80,11 @@ FLAG init_screen(int width, int height, int fullscreen)
   // Set the color depth.
   colorDepth = desktop_color_depth();
   if (colorDepth == 0) {
-    colorDepth = DEFAULT_COLOR_DEPTH;
+    colorDepth = 8;
+    PALETTE palette;
+    BITMAP *bitmap = create_bitmap( PKGDATADIR "/images/palette.bmp", palette);
+    set_palette(palette);
+    destroy_bitmap(bitmap);
   }
   set_color_depth(colorDepth);
 

@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "Hammer.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "World.h"
 
 
@@ -11,25 +11,25 @@
 Hammer::Hammer() {
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("HAMMER_HOLD_1"));
-  holdAnimation->addFrame(IMG("HAMMER_HOLD_2"));
-  holdAnimation->addFrame(IMG("HAMMER_HOLD_3"));
-  holdAnimation->addFrame(IMG("HAMMER_HOLD_4"));
+  holdAnimation->addFrame(IMG("hammer_hold_1.bmp"));
+  holdAnimation->addFrame(IMG("hammer_hold_2.bmp"));
+  holdAnimation->addFrame(IMG("hammer_hold_3.bmp"));
+  holdAnimation->addFrame(IMG("hammer_hold_4.bmp"));
   holdAnimation->setOffsetY(TILE_SIZE);
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   
   attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_1"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_2"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_3"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_3"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_2"));
-  attackRightAnimation->addFrame(IMG("HAMMER_SWING_1"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_1.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_2.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_3.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_3.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_2.bmp"));
+  attackRightAnimation->addFrame(IMG("hammer_swing_1.bmp"));
   attackRightAnimation->setOffsetX(TILE_SIZE);
   attackRightAnimation->setLoop(false);
   attackRightAnimation->setSpeed(24);
@@ -109,7 +109,7 @@ void Hammer::setState(int aState) {
     break;
     
   case HAMMER_END_ATTACK_STATE:
-    playSound(SOUNDS_HAMMER);
+    play_sound(SND("hammer.wav"));
     world->shake();
     break;
   }

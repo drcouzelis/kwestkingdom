@@ -55,8 +55,6 @@ kwestkingdom_SOURCES = \
   MoneyBag.cpp \
   Ninja.h \
   Ninja.cpp \
-  Resources.h \
-  Resources.cpp \
   resources.h \
   resources.c \
   RoomFactory.h \

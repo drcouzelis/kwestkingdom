@@ -4,7 +4,6 @@
 #include "Hero.h"
 #include "KeyControl.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
 #include "resources.h"
 #include "Shield.h"
 #include "Sword.h"
@@ -389,10 +388,7 @@ void Hero::toHurtState() {
     bow->toHoldState();
   }
   
-  playSound(SOUNDS_GASP);
-  
-
-  
+  play_sound(SND("gasp.wav"));
 }
 
 
