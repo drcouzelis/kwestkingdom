@@ -8,7 +8,7 @@ MoneyBag::MoneyBag() {
   
   amount = 1;
   animation = new Animation();
-  animation->addFrame(getImage(IMAGES_MONEYBAG));
+  animation->addFrame(IMG("MONEYBAG"));
 }
 
 

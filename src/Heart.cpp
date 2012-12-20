@@ -6,7 +6,7 @@
 
 Heart::Heart() {
   animation = new Animation();
-  animation->addFrame(getImage(IMAGES_HEART));
+  animation->addFrame(IMG("HEART"));
 }
 
 

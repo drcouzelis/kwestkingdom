@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "Arrow.h"
 #include "Bow.h"
-#include "Resources.h"
+#include "resources.h"
 
 
 typedef enum {
@@ -18,17 +18,17 @@ Bow::Bow() {
   arrow = NULL;
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_1));
-  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_2));
-  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_3));
-  holdAnimation->addFrame(getImage(IMAGES_BOW_HOLD_4));
+  holdAnimation->addFrame(IMG("bow_hold_1.bmp"));
+  holdAnimation->addFrame(IMG("bow_hold_2.bmp"));
+  holdAnimation->addFrame(IMG("bow_hold_3.bmp"));
+  holdAnimation->addFrame(IMG("bow_hold_4.bmp"));
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   
   attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_1));
-  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_2));
-  attackRightAnimation->addFrame(getImage(IMAGES_BOW_DRAW_3));
+  attackRightAnimation->addFrame(IMG("bow_draw_1.bmp"));
+  attackRightAnimation->addFrame(IMG("bow_draw_2.bmp"));
+  attackRightAnimation->addFrame(IMG("bow_draw_3.bmp"));
   attackRightAnimation->setLoop(false);
   attackRightAnimation->setSpeed(12);
   

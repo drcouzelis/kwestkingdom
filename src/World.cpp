@@ -52,11 +52,11 @@ World::World() {
   rooms->append(room);
   
   heartAnimation = new Animation();
-  heartAnimation->addFrame(getImage(IMAGES_HEART));
+  heartAnimation->addFrame(IMG("HEART"));
   heartEmptyAnimation = new Animation();
-  heartEmptyAnimation->addFrame(getImage(IMAGES_EMPTYHEART));
+  heartEmptyAnimation->addFrame(IMG("EMPTYHEART"));
   helpTileAnimation = new Animation();
-  helpTileAnimation->addFrame(getImage(IMAGES_HELP));
+  helpTileAnimation->addFrame(IMG("HELP"));
   
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();

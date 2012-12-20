@@ -47,7 +47,7 @@ Game::Game() {
   strcpy(playerInitials, "\0");
   
   titleAnimation = new Animation();
-  titleAnimation->addFrame(getImage(IMAGES_TITLE));
+  titleAnimation->addFrame(IMG("title.bmp"));
   
   gameOverAnimation = new Animation();
   gameOverAnimation->addFrame(IMG("gameover.bmp"));
@@ -69,10 +69,10 @@ Game::Game() {
   highScoresBackground = new Snapshot();
   
   menuPointer = new Animation();
-  menuPointer->addFrame(getImage(IMAGES_SWORD_HOLD_1));
-  menuPointer->addFrame(getImage(IMAGES_SWORD_HOLD_2));
-  menuPointer->addFrame(getImage(IMAGES_SWORD_HOLD_3));
-  menuPointer->addFrame(getImage(IMAGES_SWORD_HOLD_4));
+  menuPointer->addFrame(IMG("sword_hold_1.bmp"));
+  menuPointer->addFrame(IMG("sword_hold_2.bmp"));
+  menuPointer->addFrame(IMG("sword_hold_3.bmp"));
+  menuPointer->addFrame(IMG("sword_hold_4.bmp"));
   menuPointer->setRotate(true);
   menuPointer->setLoop(true);
   menuPointer->setSpeed(6);

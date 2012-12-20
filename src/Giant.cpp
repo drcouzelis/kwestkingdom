@@ -2,7 +2,7 @@
 #include "Giant.h"
 #include "Hammer.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "utilities.h"
 #include "World.h"
 
@@ -35,24 +35,24 @@ Giant::Giant() {
   hammer->setState(HAMMER_HOLD_STATE);
   
   standAnimation = new Animation();
-  standAnimation->addFrame(getImage(IMAGES_GIANT_1));
-  standAnimation->addFrame(getImage(IMAGES_GIANT_2));
-  standAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  standAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  standAnimation->addFrame(IMG("giant_1.bmp"));
+  standAnimation->addFrame(IMG("giant_2.bmp"));
+  standAnimation->addFrame(IMG("giant_3.bmp"));
+  standAnimation->addFrame(IMG("giant_2.bmp"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(3);
   
   attackAnimation = new Animation();
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_1));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_3));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
-  attackAnimation->addFrame(getImage(IMAGES_GIANT_2));
+  attackAnimation->addFrame(IMG("giant_1.bmp"));
+  attackAnimation->addFrame(IMG("giant_2.bmp"));
+  attackAnimation->addFrame(IMG("giant_2.bmp"));
+  attackAnimation->addFrame(IMG("giant_3.bmp"));
+  attackAnimation->addFrame(IMG("giant_3.bmp"));
+  attackAnimation->addFrame(IMG("giant_3.bmp"));
+  attackAnimation->addFrame(IMG("giant_3.bmp"));
+  attackAnimation->addFrame(IMG("giant_3.bmp"));
+  attackAnimation->addFrame(IMG("giant_2.bmp"));
+  attackAnimation->addFrame(IMG("giant_2.bmp"));
   attackAnimation->setLoop(false);
   attackAnimation->setSpeed(24);
   

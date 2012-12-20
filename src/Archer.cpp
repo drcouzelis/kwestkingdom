@@ -3,7 +3,7 @@
 #include "Arrow.h"
 #include "Bow.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "utilities.h"
 #include "World.h"
 
@@ -30,25 +30,25 @@ Archer::Archer() {
   bow->toHoldState();
   
   standAnimation = new Animation();
-  standAnimation->addFrame(getImage(IMAGES_ARCHER_1));
-  standAnimation->addFrame(getImage(IMAGES_ARCHER_2));
-  standAnimation->addFrame(getImage(IMAGES_ARCHER_3));
-  standAnimation->addFrame(getImage(IMAGES_ARCHER_2));
+  standAnimation->addFrame(IMG("archer_1.bmp"));
+  standAnimation->addFrame(IMG("archer_2.bmp"));
+  standAnimation->addFrame(IMG("archer_3.bmp"));
+  standAnimation->addFrame(IMG("archer_2.bmp"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(3);
   
   beginAttackAnimation = new Animation();
-  beginAttackAnimation->addFrame(getImage(IMAGES_ARCHER_1));
-  beginAttackAnimation->addFrame(getImage(IMAGES_ARCHER_2));
-  beginAttackAnimation->addFrame(getImage(IMAGES_ARCHER_2));
-  beginAttackAnimation->addFrame(getImage(IMAGES_ARCHER_3));
+  beginAttackAnimation->addFrame(IMG("archer_1.bmp"));
+  beginAttackAnimation->addFrame(IMG("archer_2.bmp"));
+  beginAttackAnimation->addFrame(IMG("archer_2.bmp"));
+  beginAttackAnimation->addFrame(IMG("archer_3.bmp"));
   beginAttackAnimation->setLoop(false);
   beginAttackAnimation->setSpeed(12);
   
   endAttackAnimation = new Animation();
-  endAttackAnimation->addFrame(getImage(IMAGES_ARCHER_3));
-  endAttackAnimation->addFrame(getImage(IMAGES_ARCHER_2));
-  endAttackAnimation->addFrame(getImage(IMAGES_ARCHER_2));
+  endAttackAnimation->addFrame(IMG("archer_3.bmp"));
+  endAttackAnimation->addFrame(IMG("archer_2.bmp"));
+  endAttackAnimation->addFrame(IMG("archer_2.bmp"));
   endAttackAnimation->setLoop(false);
   endAttackAnimation->setSpeed(12);
   

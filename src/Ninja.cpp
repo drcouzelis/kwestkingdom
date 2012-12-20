@@ -27,10 +27,10 @@ Ninja::Ninja() {
   sword->toHoldState();
   
   standAnimation = new Animation();
-  standAnimation->addFrame(getImage(IMAGES_NINJA_1));
-  standAnimation->addFrame(getImage(IMAGES_NINJA_2));
-  standAnimation->addFrame(getImage(IMAGES_NINJA_3));
-  standAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  standAnimation->addFrame(IMG("NINJA_1"));
+  standAnimation->addFrame(IMG("NINJA_2"));
+  standAnimation->addFrame(IMG("NINJA_3"));
+  standAnimation->addFrame(IMG("NINJA_2"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(6);
   
@@ -38,13 +38,13 @@ Ninja::Ninja() {
   dashAnimation->setSpeed(24);
   
   attackAnimation = new Animation();
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_1));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_3));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_3));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
-  attackAnimation->addFrame(getImage(IMAGES_NINJA_2));
+  attackAnimation->addFrame(IMG("NINJA_1"));
+  attackAnimation->addFrame(IMG("NINJA_2"));
+  attackAnimation->addFrame(IMG("NINJA_2"));
+  attackAnimation->addFrame(IMG("NINJA_3"));
+  attackAnimation->addFrame(IMG("NINJA_3"));
+  attackAnimation->addFrame(IMG("NINJA_2"));
+  attackAnimation->addFrame(IMG("NINJA_2"));
   attackAnimation->setLoop(false);
   attackAnimation->setSpeed(12);
   

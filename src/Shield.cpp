@@ -12,10 +12,10 @@ typedef enum {
 Shield::Shield() {
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(getImage(IMAGES_SHIELD_1));
-  holdAnimation->addFrame(getImage(IMAGES_SHIELD_2));
-  holdAnimation->addFrame(getImage(IMAGES_SHIELD_3));
-  holdAnimation->addFrame(getImage(IMAGES_SHIELD_4));
+  holdAnimation->addFrame(IMG("SHIELD_1"));
+  holdAnimation->addFrame(IMG("SHIELD_2"));
+  holdAnimation->addFrame(IMG("SHIELD_3"));
+  holdAnimation->addFrame(IMG("SHIELD_4"));
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   

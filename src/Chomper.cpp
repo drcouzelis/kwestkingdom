@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "Chomper.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "utilities.h"
 #include "World.h"
 
@@ -21,23 +21,23 @@ Chomper::Chomper() {
   prevDirection = UP;
   
   standAnimation = new Animation();
-  standAnimation->addFrame(getImage(IMAGES_CHOMPER_STAND_1));
-  standAnimation->addFrame(getImage(IMAGES_CHOMPER_STAND_2));
-  standAnimation->addFrame(getImage(IMAGES_CHOMPER_STAND_3));
-  standAnimation->addFrame(getImage(IMAGES_CHOMPER_STAND_2));
+  standAnimation->addFrame(IMG("chomper_stand_1.bmp"));
+  standAnimation->addFrame(IMG("chomper_stand_2.bmp"));
+  standAnimation->addFrame(IMG("chomper_stand_3.bmp"));
+  standAnimation->addFrame(IMG("chomper_stand_2.bmp"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(6);
   
   attackAnimation = new Animation();
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_1));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_2));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_3));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_4));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_5));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_4));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_3));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_2));
-  attackAnimation->addFrame(getImage(IMAGES_CHOMPER_BITE_1));
+  attackAnimation->addFrame(IMG("chomper_bite_1.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_2.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_3.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_4.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_5.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_4.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_3.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_2.bmp"));
+  attackAnimation->addFrame(IMG("chomper_bite_1.bmp"));
   attackAnimation->setLoop(false);
   attackAnimation->setSpeed(20);
   

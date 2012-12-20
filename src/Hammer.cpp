@@ -11,25 +11,25 @@
 Hammer::Hammer() {
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_1));
-  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_2));
-  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_3));
-  holdAnimation->addFrame(getImage(IMAGES_HAMMER_HOLD_4));
+  holdAnimation->addFrame(IMG("HAMMER_HOLD_1"));
+  holdAnimation->addFrame(IMG("HAMMER_HOLD_2"));
+  holdAnimation->addFrame(IMG("HAMMER_HOLD_3"));
+  holdAnimation->addFrame(IMG("HAMMER_HOLD_4"));
   holdAnimation->setOffsetY(TILE_SIZE);
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   
   attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_1));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_2));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_3));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_4));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_3));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_2));
-  attackRightAnimation->addFrame(getImage(IMAGES_HAMMER_SWING_1));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_1"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_2"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_3"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_4"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_3"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_2"));
+  attackRightAnimation->addFrame(IMG("HAMMER_SWING_1"));
   attackRightAnimation->setOffsetX(TILE_SIZE);
   attackRightAnimation->setLoop(false);
   attackRightAnimation->setSpeed(24);

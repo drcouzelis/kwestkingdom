@@ -5,6 +5,7 @@
 #include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "Resources.h"
+#include "resources.h"
 #include "Shield.h"
 #include "Sword.h"
 #include "utilities.h"
@@ -43,45 +44,45 @@ Hero::Hero() {
   bow->setSpeed(speed);
   
   standAnimation = new Animation();
-  standAnimation->addFrame(getImage(IMAGES_HERO_STAND_1));
-  standAnimation->addFrame(getImage(IMAGES_HERO_STAND_2));
-  standAnimation->addFrame(getImage(IMAGES_HERO_STAND_3));
-  standAnimation->addFrame(getImage(IMAGES_HERO_STAND_2));
+  standAnimation->addFrame(IMG("hero_stand_1.bmp"));
+  standAnimation->addFrame(IMG("hero_stand_2.bmp"));
+  standAnimation->addFrame(IMG("hero_stand_3.bmp"));
+  standAnimation->addFrame(IMG("hero_stand_2.bmp"));
   standAnimation->setLoop(true);
   standAnimation->setSpeed(6);
   
   beginAttackAnimation = new Animation();
-  beginAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_1));
-  beginAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_2));
-  beginAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_3));
-  beginAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_4));
+  beginAttackAnimation->addFrame(IMG("hero_attack_1.bmp"));
+  beginAttackAnimation->addFrame(IMG("hero_attack_2.bmp"));
+  beginAttackAnimation->addFrame(IMG("hero_attack_3.bmp"));
+  beginAttackAnimation->addFrame(IMG("hero_attack_4.bmp"));
   beginAttackAnimation->setLoop(false);
   beginAttackAnimation->setSpeed(HERO_ATTACK_SPEED);
   
   endAttackAnimation = new Animation();
-  endAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_3));
-  endAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_2));
-  endAttackAnimation->addFrame(getImage(IMAGES_HERO_ATTACK_1));
+  endAttackAnimation->addFrame(IMG("hero_attack_3.bmp"));
+  endAttackAnimation->addFrame(IMG("hero_attack_2.bmp"));
+  endAttackAnimation->addFrame(IMG("hero_attack_1.bmp"));
   endAttackAnimation->setLoop(false);
   endAttackAnimation->setSpeed(HERO_ATTACK_SPEED);
   
   hurtAnimation = new Animation();
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_1));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_2));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_3));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_4));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_3));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_2));
-  hurtAnimation->addFrame(getImage(IMAGES_HERO_HURT_1));
+  hurtAnimation->addFrame(IMG("hero_hurt_1.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_2.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_3.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_4.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_3.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_2.bmp"));
+  hurtAnimation->addFrame(IMG("hero_hurt_1.bmp"));
   hurtAnimation->setLoop(false);
   hurtAnimation->setSpeed(12);
   
   deadAnimation = new Animation();
-  deadAnimation->addFrame(getImage(IMAGES_HERO_DIE_1));
-  deadAnimation->addFrame(getImage(IMAGES_HERO_DIE_2));
-  deadAnimation->addFrame(getImage(IMAGES_HERO_DIE_3));
-  deadAnimation->addFrame(getImage(IMAGES_HERO_DIE_4));
-  deadAnimation->addFrame(getImage(IMAGES_HERO_DIE_5));
+  deadAnimation->addFrame(IMG("hero_die_1.bmp"));
+  deadAnimation->addFrame(IMG("hero_die_2.bmp"));
+  deadAnimation->addFrame(IMG("hero_die_3.bmp"));
+  deadAnimation->addFrame(IMG("hero_die_4.bmp"));
+  deadAnimation->addFrame(IMG("hero_die_5.bmp"));
   deadAnimation->setLoop(false);
   deadAnimation->setSpeed(6);
   

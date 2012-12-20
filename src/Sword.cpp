@@ -23,21 +23,21 @@ typedef enum {
 Sword::Sword() {
   
   holdAnimation = new Animation();
-  holdAnimation->addFrame(getImage(IMAGES_SWORD_HOLD_1));
-  holdAnimation->addFrame(getImage(IMAGES_SWORD_HOLD_2));
-  holdAnimation->addFrame(getImage(IMAGES_SWORD_HOLD_3));
-  holdAnimation->addFrame(getImage(IMAGES_SWORD_HOLD_4));
+  holdAnimation->addFrame(IMG("SWORD_HOLD_1"));
+  holdAnimation->addFrame(IMG("SWORD_HOLD_2"));
+  holdAnimation->addFrame(IMG("SWORD_HOLD_3"));
+  holdAnimation->addFrame(IMG("SWORD_HOLD_4"));
   holdAnimation->setLoop(true);
   holdAnimation->setSpeed(6);
   
   attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_1));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_2));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_3));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_4));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_3));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_2));
-  attackRightAnimation->addFrame(getImage(IMAGES_SWORD_STAB_1));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_1"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_2"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_3"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_4"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_3"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_2"));
+  attackRightAnimation->addFrame(IMG("SWORD_STAB_1"));
   attackRightAnimation->setOffsetX(-TILE_SIZE);
   attackRightAnimation->setOffsetY(-TILE_SIZE);
   attackRightAnimation->setLoop(false);

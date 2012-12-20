@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "ForestRoom.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 
 
 ForestRoom::ForestRoom() {
@@ -14,22 +14,22 @@ ForestRoom::ForestRoom() {
   shoreInsideNEAnimation = new Animation();
   shoreOutsideNEAnimation = new Animation();
   
-  grassAnimation->addFrame(getImage(IMAGES_TERRAIN_GRASS));
-  pathAnimation->addFrame(getImage(IMAGES_TERRAIN_PATH));
-  mountainAnimation->addFrame(getImage(IMAGES_TERRAIN_OAK));
-  waterAnimation->addFrame(getImage(IMAGES_TERRAIN_WATER));
+  grassAnimation->addFrame(IMG("terrain_grass.bmp"));
+  pathAnimation->addFrame(IMG("terrain_path.bmp"));
+  mountainAnimation->addFrame(IMG("terrain_oak.bmp"));
+  waterAnimation->addFrame(IMG("terrain_water.bmp"));
   
-  shoreNorthAnimation->addFrame(getImage(IMAGES_SHORE_GRASS));
+  shoreNorthAnimation->addFrame(IMG("shore_grass.bmp"));
   shoreSouthAnimation = shoreNorthAnimation->copy()->setVerticalFlip(true);
   shoreEastAnimation = shoreNorthAnimation->copy()->setRotate(true);
   shoreWestAnimation = shoreNorthAnimation->copy()->setVerticalFlip(true)->setRotate(true);
   
-  shoreInsideNEAnimation->addFrame(getImage(IMAGES_SHORE_GRASS_INSIDECORNER));
+  shoreInsideNEAnimation->addFrame(IMG("shore_grass_insidecorner.bmp"));
   shoreInsideNWAnimation = shoreInsideNEAnimation->copy()->setHorizontalFlip(true);
   shoreInsideSEAnimation = shoreInsideNEAnimation->copy()->setVerticalFlip(true);
   shoreInsideSWAnimation = shoreInsideNEAnimation->copy()->setVerticalFlip(true)->setHorizontalFlip(true);
   
-  shoreOutsideNEAnimation->addFrame(getImage(IMAGES_SHORE_GRASS_OUTSIDECORNER));
+  shoreOutsideNEAnimation->addFrame(IMG("shore_grass_outsidecorner.bmp"));
   shoreOutsideNEAnimation->setOffsetX(-TILE_SIZE);
   shoreOutsideNEAnimation->setOffsetY(-TILE_SIZE);
   shoreOutsideNWAnimation = shoreOutsideNEAnimation->copy()->setHorizontalFlip(true);

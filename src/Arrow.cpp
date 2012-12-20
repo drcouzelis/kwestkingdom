@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "Arrow.h"
 #include "KwestKingdom.h"
-#include "Resources.h"
+#include "resources.h"
 #include "utilities.h"
 #include "World.h"
 
@@ -18,7 +18,7 @@ Arrow::Arrow() {
   this->setSpeed(getWalkSpeed() * 4);
   
   flyRightAnimation = new Animation();
-  flyRightAnimation->addFrame(getImage(IMAGES_ARROW));
+  flyRightAnimation->addFrame(IMG("arrow.bmp"));
   
   flyLeftAnimation = flyRightAnimation->copy()->setHorizontalFlip(true);
   flyDownAnimation = flyRightAnimation->copy()->setRotate(true);
