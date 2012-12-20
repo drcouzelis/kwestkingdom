@@ -49,12 +49,16 @@ kwestkingdom_SOURCES = \
   List.cpp \
   Map.h \
   Map.cpp \
+  memory.h \
+  memory.c \
   MoneyBag.h \
   MoneyBag.cpp \
   Ninja.h \
   Ninja.cpp \
   Resources.h \
   Resources.cpp \
+  resources.h \
+  resources.c \
   RoomFactory.h \
   RoomFactory.cpp \
   Room.h \

@@ -12,7 +12,7 @@
 
 typedef struct {
     char name[MAX_RESOURCE_FILENAME_SIZE];
-    ALLEGRO_BITMAP *bitmap;
+    BITMAP *bitmap;
 } BITMAP_RESOURCE;
 
 
@@ -39,8 +39,8 @@ void stop_resources()
 
     for (i = 0; i < num_bitmap_resources; i++) {
         if (bitmap_resources[i] != NULL) {
-            al_destroy_bitmap(bitmap_resources[i]->bitmap);
-            free_memory(bitmap_resources[i]);
+            destroy_bitmap(bitmap_resources[i]->bitmap);
+            free_memory("BITMAP_RESOURCE", bitmap_resources[i]);
             bitmap_resources[i] = NULL;
         }
     }
@@ -71,15 +71,18 @@ void add_resource_path(const char *path)
  * Internal function.
  * Load a bitmap and set magic pink to transparent.
  */
-ALLEGRO_BITMAP *load_bitmap_with_magic_pink(const char *filename)
+BITMAP *load_bitmap_with_magic_pink(const char *filename)
 {
-    ALLEGRO_BITMAP *bitmap;
+    BITMAP *bitmap;
+    static PALETTE palette;
 
-    bitmap = al_load_bitmap(filename);
+    bitmap = load_bitmap(filename, palette);
 
+    /*
     if (bitmap != NULL) {
         al_convert_mask_to_alpha(bitmap, al_map_rgb(255, 0, 255));
     }
+    */
 
     return bitmap;
 }
@@ -89,7 +92,7 @@ ALLEGRO_BITMAP *load_bitmap_with_magic_pink(const char *filename)
  * Internal function.
  * Create a BITMAP_RESOURCE structure.
  */
-BITMAP_RESOURCE *create_bitmap_resource(const char *name, ALLEGRO_BITMAP * bitmap)
+BITMAP_RESOURCE *create_bitmap_resource(const char *name, BITMAP * bitmap)
 {
     BITMAP_RESOURCE *resource;
 
@@ -104,9 +107,9 @@ BITMAP_RESOURCE *create_bitmap_resource(const char *name, ALLEGRO_BITMAP * bitma
 
 
 
-ALLEGRO_BITMAP *get_resource_image(const char *name)
+BITMAP *get_resource_image(const char *name)
 {
-    ALLEGRO_BITMAP *bitmap;
+    BITMAP *bitmap;
     char fullpath[MAX_RESOURCE_FILENAME_SIZE];
     int i;
 

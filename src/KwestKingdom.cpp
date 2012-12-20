@@ -73,7 +73,7 @@ void init_game()
   
   initializeResources();
   init_resources();
-  add_resource_path( PKGDATADIR "/images/")
+  add_resource_path( PKGDATADIR "/images/");
 
   if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
     exit(0);

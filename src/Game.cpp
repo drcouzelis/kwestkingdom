@@ -191,7 +191,7 @@ void Game::update() {
   case GAME_OVER_STATE:
     if (selectKey->isPressed()) {
       menuSelection = NEW_GAME_SELECTION;
-      if (high_score_pos(world->getRoomNumber(), world->getMoney()) == -1) {
+      if (high_score_pos(world->getRoomNumber(), world->getMoney()) == MAX_NUM_OF_HIGH_SCORES) {
         this->setState(GAME_MENU_STATE);
         delete world;
         world = NULL;

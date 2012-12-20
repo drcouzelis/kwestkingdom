@@ -2,7 +2,7 @@
 #define RESOURCES_HEADER
 
 
-#include <allegro5/allegro.h>
+#include <allegro.h>
 
 
 #ifdef __cplusplus
@@ -39,7 +39,7 @@ void add_resource_path(const char *path);
  * in order of the paths that you added. If the
  * resource isn't found it will return NULL.
  */
-ALLEGRO_BITMAP *get_resource_image(const char *filename);
+BITMAP *get_resource_image(const char *filename);
 
 
 #ifdef __cplusplus
