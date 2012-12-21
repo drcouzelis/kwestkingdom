@@ -4,41 +4,41 @@
 #include "key_input.h"
 
 
-KEY_INPUT *create_key_control(int key, int delay)
+void create_key_control(KEY_INPUT *key_input, int key_code, int delay)
 {
-  keyCode = key;
-  delay = delay;
-  released = ON;
-  timer = 0;
+  key_input->key_code = key_code;
+  key_input->delay = delay;
+  key_input->released = ON;
+  key_input->timer = 0;
 }
 
 
-FLAG is_key_pressed(KEY_INPUT *input)
+FLAG is_key_pressed(KEY_INPUT *key_input)
 {
   FLAF ret = OFF;
   
-  if (delay == 0 && key[keyCode]) {
+  if (key_input->delay == 0 && key[key_input->key_code]) {
     return ON;
   }
   
-  if (key[keyCode]) {
-    if (released) {
+  if (key[key_input->key_code]) {
+    if (key_input->released) {
       
       ret = ON;
-      timer = 0;
+      key_input->timer = 0;
       
     } else {
-      timer++;
+      key_input->timer++;
     }
     
-    released = OFF;
+    key_input->released = OFF;
     
-    if (timer >= delay) {
-      released = ON;
+    if (key_input->timer >= key_input->delay) {
+      key_input->released = ON;
     }
     
   } else {
-    released = ON;
+    key_input->released = ON;
   }
   
   return ret;
