@@ -3,6 +3,7 @@
 
 
 #include <allegro.h>
+#include "resources.h"
 #include "utilities.h"
 
 
@@ -11,50 +12,46 @@
 #endif
 
 
-typedef struct ANIM ANIM;
+#define MAX_FRAMES 16
 
 
-ANIM *create_anim(int speed, FLAG loop);
-void destroy_anim(ANIM *anim);
+typedef struct
+{
+  IMAGE *frames[MAX_FRAMES];
+  int len;
+  int pos;
+  int speed;
+  int fudge;
+  
+  FLAG done;
 
-/**
- * Add a frame to an animation.
- */
-void add_frame(ANIM *anim, BITMAP *frame);
+  // An animation is drawn with respect to its offset.
+  int offset_x;
+  int offset_y;
 
-/**
- * Set the visual offset of an animation.
- */
-void change_visual_offset(ANIM *anim, int x_offset, int y_offset);
+  FLAG loop;
 
-/**
- * Animate an animation.
- * If this is a non-looping animation and it is already
- * at the last frame, then nothing will happen.
- */
+  FLAG h_flip;
+  FLAG v_flip;
+  FLAG rotate;
+} ANIM;
+
+
+void init_anim(ANIM *anim);
+void copy_anim(ANIM *anim, ANIM *orig);
+
 void animate(ANIM *anim);
 
-/**
- * An animation is finished if it is completely done
- * showing its last frame.
- * A looping animation will never finish.
- */
-FLAG is_done_animating(ANIM *anim);
+IMAGE *get_frame(ANIM *anim);
+
+void add_frame(ANIM *anim, IMAGE *frame);
+
+void reset_anim(ANIM *anim);
+
+void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y);
 
 int get_anim_w(ANIM *anim);
 int get_anim_h(ANIM *anim);
-
-/**
- * Reset an animation to its first frame.
- */
-void reset_anim(ANIM *anim);
-
-/**
- * Draw an animation.
- * It will be drawn to the given position, plus
- * the offsets.
- */
-void draw_anim(ANIM *anim, BITMAP *canvas, int x, int y);
 
 
 #ifdef __cplusplus

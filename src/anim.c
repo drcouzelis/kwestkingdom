@@ -1,183 +1,204 @@
+#include <stdio.h>
 #include "anim.h"
 #include "KwestKingdom.h"
-#include "memory.h"
 
 
-#define MAX_FRAMES 20
+extern int timer;
 
 
-struct ANIM
+void init_anim(ANIM *anim)
 {
-  /**
-   * The collection of images that are part of the animation.
-   */
-  BITMAP *frames[MAX_FRAMES];
-  int length;
-  int pos;
-
-  /**
-   * If loop is true then the animation will loop.
-   */
-  FLAG loop;
-
-  /**
-   * This will be true if the animation is finished animating.
-   */
-  FLAG finished;
-
-  /**
-   * The speed of the animation.
-   */
-  int speed;
-
-  /**
-   * Used internally to make sure the animation is
-   * nice and smooth.
-   */
-  int fudge;
-
-  /**
-   * Just before the animation is drawn to the screen,
-   * the offset is added to its position.
-   */
-  int x_offset;
-  int y_offset;
-};
-
-
-ANIM *create_anim(int speed, FLAG loop)
-{
-  ANIM *anim;
   int i;
-
-  anim = alloc_memory("ANIM", sizeof(ANIM));
-
+  
   for (i = 0; i < MAX_FRAMES; i++) {
     anim->frames[i] = NULL;
   }
-
-  anim->length = 0;
+  
+  anim->len = 0;
   anim->pos = 0;
-  anim->loop = loop;
-  anim->finished = OFF;
-  anim->speed = speed;
+  anim->loop = ON;
+  anim->done = OFF;
+  anim->speed = 0;
   anim->fudge = 0;
-  anim->x_offset = 0;
-  anim->y_offset = 0;
-
-  return anim;
+  anim->offset_x = 0;
+  anim->offset_y = 0;
+  anim->h_flip = OFF;
+  anim->v_flip = OFF;
+  anim->rotate = OFF;
 }
 
 
-void destroy_anim(ANIM *anim)
+void copy_anim(ANIM *anim, ANIM *orig)
 {
-  free_memory("ANIM", anim);
-}
+  int i;
 
-
-void add_frame(ANIM *anim, BITMAP *image)
-{
-  if (anim == NULL) {
-    return;
+  init_anim(anim);
+  
+  for (i = 0; i < orig->len; i++) {
+    add_frame(anim, orig->frames[i]);
   }
-  if (image) {
-    anim->frames[anim->length] = image;
-    anim->length++;
-  }
-}
+  
+  anim->offset_x = orig->offset_x;
+  anim->offset_y = orig->offset_y;
+  anim->loop = orig->loop;
+  anim->speed = orig->speed;
+  anim->h_flip = orig->h_flip;
+  anim->v_flip = orig->v_flip;
+  anim->rotate = orig->rotate;
 
-
-void change_visual_offset(ANIM *anim, int x_offset, int y_offset)
-{
-  if (anim == NULL) {
-    return;
-  }
-  anim->x_offset = x_offset;
-  anim->y_offset = y_offset;
-}
-
-
-void animate(ANIM *anim)
-{
-  if (anim == NULL) {
-    return;
-  }
-
-  if (anim->length > 1 && anim->speed != 0) {
-
-    anim->fudge += anim->speed;
-
-    while (anim->fudge >= GAME_TICKER) {
-
-      anim->pos++;
-
-      if (anim->pos == anim->length) {
-        if (anim->loop) {
-          anim->pos = 0;
-        } else {
-          anim->pos--;
-          anim->finished = ON;
-        }
-      }
-
-      anim->fudge -= GAME_TICKER;
-    }
-
-  } else {
-
-    anim->finished = ON;
-
-  }
-}
-
-
-FLAG is_done_animating(ANIM *anim)
-{
-  if (anim == NULL) {
-    return ON;
-  }
-  return anim->finished;
-}
-
-
-int get_anim_w(ANIM *anim)
-{
-  if (anim == NULL) {
-    return 0;
-  }
-  return anim->frames[anim->pos]->w;
-}
-
-
-int get_anim_h(ANIM *anim)
-{
-  if (anim == NULL) {
-    return 0;
-  }
-  return anim->frames[anim->pos]->h;
+  reset_anim(anim);
 }
 
 
 void reset_anim(ANIM *anim)
 {
-  if (anim == NULL) {
-    return;
-  }
   anim->pos = 0;
   anim->finished = OFF;
   anim->fudge = 0;
 }
 
 
-void draw_anim(ANIM *anim, BITMAP *canvas, int x, int y)
+IMAGE *get_frame(ANIM *anim)
 {
-  if (anim == NULL || canvas == NULL) {
-    return;
+  if (anim->len == 0) {
+    return NULL;
+  }
+  return anim->frames[anim->pos];
+}
+
+
+void add_frame(ANIM *anim, IMAGE *frame)
+{
+  if (image) {
+    anim->frames[anim->len] = image;
+    anim->length++;
+  }
+}
+
+
+IMAGE *canvasStandardSize = NULL;
+IMAGE *canvasTripleSize = NULL;
+
+
+/**
+ * This silly little function provides a fix for transparency
+ * when using the rotate sprite and flip sprite functions.
+ */
+IMAGE *getCanvas(int width, int height) {
+  
+  if (width == getTileSize() && height == getTileSize()) {
+    if (canvasStandardSize == NULL) {
+      canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
+    }
+    return canvasStandardSize;
+  }
+  
+  if (width == getTileSize() * 3 && height == getTileSize() * 3) {
+    if (canvasTripleSize == NULL) {
+      canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
+    }
+    return canvasTripleSize;
   }
 
-  x += anim->x_offset;
-  y += anim->y_offset;
+  fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
+  
+  return NULL;
+}
 
-  draw_sprite(canvas, anim->frames[anim->pos], x, y);
+
+#include <stdio.h>
+
+
+void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
+{
+  IMAGE *canvas;
+
+  if (get_frame(anim) == NULL) {
+    return;
+  }
+  
+  // Write to a temporary canvas to get transparency
+  // to work correctly.
+  // Only necessary when rotating and flipping sprites.
+  if (anim->rotate || anim->h_flip || anim->v_flip) {
+    canvas = getCanvas(get_frame(anim)->w, get_frame(anim)->h);
+    if (canvas) {
+      blit(get_frame(anim), canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+    }
+  } else {
+    canvas = get_frame(anim);
+  }
+  
+  if (canvas == NULL) {
+    return;
+  }
+  
+  if (anim->rotate && anim->h_flip && anim->v_flip) {
+    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(192));
+  } else if (anim->rotate && anim->h_flip) {
+    rotate_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(192));
+  } else if (anim->rotate && anim->v_flip) {
+    rotate_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(64));
+  } else if (anim->rotate) {
+    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(64));
+  } else if (anim->h_flip && anim->v_flip) {
+    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(128));
+  } else if (anim->h_flip) {
+    draw_sprite_h_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+  } else if (anim->v_flip) {
+    draw_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+  } else {
+    draw_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+  }
+}
+
+
+// Animate the animation.
+void animate(ANIM *anim) {
+  
+  if (anim->length > 1 && anim->speed != 0) {
+    
+    anim->fudge += anim->speed;
+    
+    while (anim->fudge >= GAME_TICKER) {
+      
+      anim->pos++;
+      
+      if (anim->pos == anim->length) {
+        if (anim->loop) {
+          anim->pos = 0;
+        } else {
+          anim->pos--;
+          anim->finished = true;
+        }
+      }
+            
+      anim->fudge -= GAME_TICKER;
+      
+    }
+    
+  } else {
+    
+    anim->finished = true;
+    
+  }
+}
+
+
+int get_anim_w(ANIM *anim)
+{
+  if (get_frame(anim)) {
+    return get_frame(anim)->w;
+  }
+  return 0;
+}
+
+
+int get_anim_h(ANIM *anim)
+{
+  if (get_frame(anim)) {
+    return get_frame(anim)->h;
+  }
+  return 0;
 }
 
