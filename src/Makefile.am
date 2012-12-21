@@ -8,7 +8,7 @@ bin_PROGRAMS = kwestkingdom
 kwestkingdom_SOURCES = \
   al_screen.h \
   al_screen.c \
-  allegro_icon.cpp \
+  allegro_icon.c \
   Animation.h \
   Animation.cpp \
   Archer.h \
