@@ -20,7 +20,6 @@ class World {
 protected:
 
   Hero *hero;
-  List *enemies;
   List *rooms;
   
   RoomFactory *roomFactory;
@@ -44,42 +43,42 @@ public:
   World();
   virtual ~World();
 
-  virtual void update();
-  virtual void draw(BITMAP *buffer);
+  void update();
+  void draw(BITMAP *buffer);
 
-  virtual bool isInhabited(int x, int y);
+  bool isInhabited(int x, int y);
 
-  virtual bool isAttackable(int team, int x, int y);
-  virtual void attackFromTeam(int team, int x, int y);
-  virtual void shake();
+  bool isAttackable(int team, int x, int y);
+  void attackFromTeam(int team, int x, int y);
+  void shake();
 
-  virtual void addItem(Item *anItem);
+  void addItem(Item *anItem);
 
-  virtual Character *getTarget();
+  Character *getTarget();
 
-  virtual bool isSwimmable(int x, int y);
-  virtual bool isWalkable(int x, int y);
-  virtual bool isJumpable(int x, int y);
-  virtual bool isFlyable(int x, int y);
-  virtual bool isSoarable(int x, int y);
+  bool isSwimmable(int x, int y);
+  bool isWalkable(int x, int y);
+  bool isJumpable(int x, int y);
+  bool isFlyable(int x, int y);
+  bool isSoarable(int x, int y);
 
-  virtual void updateRoom();
-  virtual void updateItems();
-  virtual void updateTurn();
-  virtual void updateHero();
-  virtual void updateEnemies();
+  void updateRoom();
+  void updateItems();
+  void updateTurn();
+  void updateHero();
+  void updateEnemies();
 
-  virtual Room *createNextRoom();
-  virtual void changeRooms();
+  Room *createNextRoom();
+  void changeRooms();
 
-  virtual void drawTerrain(BITMAP *buffer);
-  virtual void drawCharacters(BITMAP *buffer);
-  virtual void drawUserInterface(BITMAP *buffer);
+  void drawTerrain(BITMAP *buffer);
+  void drawCharacters(BITMAP *buffer);
+  void drawUserInterface(BITMAP *buffer);
 
-  virtual int getRoomNumber();
-  virtual int getMoney();
+  int getRoomNumber();
+  int getMoney();
 
-  virtual void addHelpTile(HelpTile *aHelpTile);
+  void addHelpTile(HelpTile *aHelpTile);
 };
 
 
