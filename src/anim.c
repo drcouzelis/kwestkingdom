@@ -53,7 +53,7 @@ void copy_anim(ANIM *anim, ANIM *orig)
 void reset_anim(ANIM *anim)
 {
   anim->pos = 0;
-  anim->finished = OFF;
+  anim->done = OFF;
   anim->fudge = 0;
 }
 
@@ -169,7 +169,7 @@ void animate(ANIM *anim) {
           anim->pos = 0;
         } else {
           anim->pos--;
-          anim->finished = true;
+          anim->done = true;
         }
       }
             
@@ -179,7 +179,7 @@ void animate(ANIM *anim) {
     
   } else {
     
-    anim->finished = true;
+    anim->done = true;
     
   }
 }
