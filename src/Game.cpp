@@ -129,7 +129,6 @@ void Game::update() {
     if (init_screen(-1, -1, is_windowed_mode()) == false) {
       this->setState(GAME_QUIT_STATE);
     }
-    setPalette();
   }
   
   if (soundKey && soundKey->isPressed()) {

@@ -38,13 +38,13 @@ Ninja::Ninja() {
   dashAnimation->setSpeed(24);
   
   attackAnimation = new Animation();
-  attackAnimation->addFrame(img.bmp("NINJA_1"));
-  attackAnimation->addFrame(img.bmp("NINJA_2"));
-  attackAnimation->addFrame(img.bmp("NINJA_2"));
-  attackAnimation->addFrame(img.bmp("NINJA_3"));
-  attackAnimation->addFrame(img.bmp("NINJA_3"));
-  attackAnimation->addFrame(img.bmp("NINJA_2"));
-  attackAnimation->addFrame(img.bmp("NINJA_2"));
+  attackAnimation->addFrame(IMG("ninja_1.bmp"));
+  attackAnimation->addFrame(IMG("ninja_2.bmp"));
+  attackAnimation->addFrame(IMG("ninja_2.bmp"));
+  attackAnimation->addFrame(IMG("ninja_3.bmp"));
+  attackAnimation->addFrame(IMG("ninja_3.bmp"));
+  attackAnimation->addFrame(IMG("ninja_2.bmp"));
+  attackAnimation->addFrame(IMG("ninja_2.bmp"));
   attackAnimation->setLoop(false);
   attackAnimation->setSpeed(12);
   

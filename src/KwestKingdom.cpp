@@ -84,7 +84,6 @@ void init_game()
   xwin_set_window_name("kwestkingdom", "KwestKingdom");
 #endif
 
-  setPalette();
   set_win_size(WINDOW_WIDTH, WINDOW_HEIGHT);
   
   install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);

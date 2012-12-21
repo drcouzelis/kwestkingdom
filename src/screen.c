@@ -82,7 +82,7 @@ FLAG init_screen(int width, int height, int fullscreen)
   if (colorDepth == 0) {
     colorDepth = 8;
     PALETTE palette;
-    BITMAP *bitmap = create_bitmap( PKGDATADIR "/images/palette.bmp", palette);
+    BITMAP *bitmap = load_bitmap( PKGDATADIR "/images/palette.bmp", palette);
     set_palette(palette);
     destroy_bitmap(bitmap);
   }

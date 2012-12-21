@@ -3,6 +3,7 @@
 
 
 #include <allegro.h>
+#include "utilities.h"
 
 
 #ifdef __cplusplus
@@ -11,7 +12,7 @@
 
 
 #define IMG(name) (get_image(name))
-#define SND(name) (get_image(name))
+#define SND(name) (get_sound(name))
 
 
 typedef BITMAP IMAGE;
@@ -49,7 +50,7 @@ SOUND *get_sound(const char *name);
 
 void play_sound(SOUND *sound);
 void toggle_sound();
-bool is_sound_enabled();
+FLAG is_sound_enabled();
 
 
 #ifdef __cplusplus

@@ -181,7 +181,7 @@ SOUND *get_sound(const char *name)
 
 void play_sound(SOUND *sound)
 {
-  play_sample(fullpath, 255, 128, 1000, 0);
+  play_sample(sound, 255, 128, 1000, 0);
 }
 
 
@@ -191,7 +191,7 @@ void toggle_sound(void)
 }
 
 
-bool is_sound_enabled()
+FLAG is_sound_enabled()
 {
   return sound_enabled;
 }
