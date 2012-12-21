@@ -32,7 +32,7 @@ typedef struct
 static RESOURCE *resources[MAX_RESOURCES];
 static int num_resources = 0;
 
-static char resource_paths[MAX_FILENAME_LEN][MAX_RESOURCE_PATHS];
+static char resource_paths[MAX_RESOURCE_PATHS][MAX_FILENAME_LEN];
 static int num_resource_paths = 0;
 
 static FLAG sound_enabled = ON;
@@ -145,7 +145,7 @@ void *get_resource(const char *name, RESOURCE_TYPE type)
    */
   for (i = 0; i < num_resource_paths; i++) {
 
-    strcpy(fullpath, "");
+    fullpath[0] = '\0';
     strncat(fullpath, resource_paths[i], MAX_FILENAME_LEN);
     strncat(fullpath, name, MAX_FILENAME_LEN);
 
@@ -181,7 +181,9 @@ SOUND *get_sound(const char *name)
 
 void play_sound(SOUND *sound)
 {
-  play_sample(sound, 255, 128, 1000, 0);
+  if (sound_enabled && sound) {
+    play_sample(sound, 255, 128, 1000, 0);
+  }
 }
 
 
