@@ -41,8 +41,8 @@ kwestkingdom_SOURCES = \
   Hero.cpp \
   highscore.h \
   highscore.c \
-  KeyControl.h \
-  KeyControl.cpp \
+  key_input.h \
+  key_input.c \
   KwestKingdom.h \
   KwestKingdom.cpp \
   List.h \

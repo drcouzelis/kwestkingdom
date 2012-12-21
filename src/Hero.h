@@ -3,9 +3,9 @@
 
 
 #include "Character.h"
+#include "key_input.h"
 
 class Bow;
-class KeyControl;
 class Shield;
 class Sword;
 
@@ -27,16 +27,16 @@ protected:
   Animation *hurtAnimation;
   Animation *deadAnimation;
   
-  KeyControl *upKey;
-  KeyControl *downKey;
-  KeyControl *rightKey;
-  KeyControl *leftKey;
-  KeyControl *waitKey;
-  KeyControl *attackKey;
-  KeyControl *handKey;
-  KeyControl *shieldKey;
-  KeyControl *swordKey;
-  KeyControl *bowKey;
+  KEY_INPUT upKey;
+  KEY_INPUT downKey;
+  KEY_INPUT rightKey;
+  KEY_INPUT leftKey;
+  KEY_INPUT waitKey;
+  KEY_INPUT attackKey;
+  KEY_INPUT handKey;
+  KEY_INPUT shieldKey;
+  KEY_INPUT swordKey;
+  KEY_INPUT bowKey;
   
   int direction;
   

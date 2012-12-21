@@ -2,7 +2,6 @@
 #include "Arrow.h"
 #include "Bow.h"
 #include "Hero.h"
-#include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "Shield.h"
@@ -85,21 +84,16 @@ Hero::Hero() {
   deadAnimation->setLoop(false);
   deadAnimation->setSpeed(6);
   
-  upKey = new KeyControl(KEY_UP);
-  downKey = new KeyControl(KEY_DOWN);
-  leftKey = new KeyControl(KEY_LEFT);
-  rightKey = new KeyControl(KEY_RIGHT);
-  waitKey = new KeyControl(KEY_SPACE);
-  waitKey->setDelay(GAME_TICKER);
-  attackKey = new KeyControl(KEY_LCONTROL);
-  handKey = new KeyControl(KEY_0);
-  handKey->setDelay(GAME_TICKER);
-  shieldKey = new KeyControl(KEY_1);
-  shieldKey->setDelay(GAME_TICKER);
-  swordKey = new KeyControl(KEY_2);
-  swordKey->setDelay(GAME_TICKER);
-  bowKey = new KeyControl(KEY_3);
-  swordKey->setDelay(GAME_TICKER);
+  init_key_input(&upKey, KEY_UP, 0);
+  init_key_input(&downKey, KEY_DOWN, 0);
+  init_key_input(&leftKey, KEY_LEFT, 0);
+  init_key_input(&rightKey, KEY_RIGHT, 0);
+  init_key_input(waitKey, KEY_SPACE, GAME_TICKER);
+  init_key_input(attackKey, KEY_LCONTROL, 0);
+  init_key_input(handKey, KEY_0, GAME_TICKER);
+  init_key_input(shieldKey, KEY_1, GAME_TICKER);
+  init_key_input(swordKey, KEY_2, GAME_TICKER);
+  init_key_input(bowKey, KEY_3, GAME_TICKER);
   
   this->toStandState();
   sword->toHoldState();
@@ -115,17 +109,6 @@ Hero::~Hero() {
   delete standAnimation;
   delete beginAttackAnimation;
   delete endAttackAnimation;
-  delete upKey;
-  delete downKey;
-  delete leftKey;
-  delete rightKey;
-  delete waitKey;
-  delete attackKey;
-  delete shieldKey;
-  delete swordKey;
-  delete bowKey;
-  delete handKey;
-
 }
 
 
@@ -136,36 +119,36 @@ void Hero::updateStandState() {
   
   // Handle item key input.
   // Update the items.
-  if (shieldKey->isPressed()) {
+  if (is_key_pressed(&shieldKey)) {
     shield->toHoldState();
     sword->toAwayState();
     bow->toAwayState();
-  } else if (swordKey->isPressed()) {
+  } else if (is_key_pressed(&swordKey)) {
     shield->toAwayState();
     sword->toHoldState();
     bow->toAwayState();
-  } else if (bowKey->isPressed()) {
+  } else if (is_key_pressed(&bowKey)) {
     shield->toAwayState();
     sword->toAwayState();
     bow->toHoldState();
-  } else if (handKey->isPressed()) {
+  } else if (is_key_pressed(&handKey)) {
     shield->toAwayState();
     sword->toAwayState();
     bow->toAwayState();
   }
   
-  if (attackKey->isPressed()) {
+  if (is_key_pressed(&attackKey)) {
     
-    if (upKey->isPressed()) {
+    if (is_key_pressed(&upKey)) {
       direction = UP;
       this->toAttackState();
-    } else if (downKey->isPressed()) {
+    } else if (is_key_pressed(&downKey)) {
       direction = DOWN;
       this->toAttackState();
-    } else if (leftKey->isPressed()) {
+    } else if (is_key_pressed(&leftKey)) {
       direction = LEFT;
       this->toAttackState();
-    } else if (rightKey->isPressed()) {
+    } else if (is_key_pressed(&rightKey)) {
       direction = RIGHT;
       this->toAttackState();
     }
@@ -178,25 +161,25 @@ void Hero::updateStandState() {
     toX = x;
     toY = y;
     
-    if (upKey->isPressed()) {
+    if (is_key_pressed(&upKey)) {
       toY--;
       if (sword->held() && world->isAttackable(team, x, y - 1)) {
         direction = UP;
         this->toAttackState();
       }
-    } else if (downKey->isPressed()) {
+    } else if (is_key_pressed(&downKey)) {
       toY++;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = DOWN;
         this->toAttackState();
       }
-    } else if (leftKey->isPressed()) {
+    } else if (is_key_pressed(&leftKey)) {
       toX--;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = LEFT;
         this->toAttackState();
       }
-    } else if (rightKey->isPressed()) {
+    } else if (is_key_pressed(&rightKey)) {
       toX++;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = RIGHT;
@@ -237,7 +220,7 @@ void Hero::update() {
     return;
   }
   
-  if (waitKey->isPressed()) {
+  if (is_key_pressed(&waitKey)) {
     this->wait();
   }
   

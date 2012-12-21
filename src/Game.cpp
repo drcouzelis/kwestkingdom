@@ -4,7 +4,6 @@
 #include "EndlessWorld.h"
 #include "Game.h"
 #include "highscore.h"
-#include "KeyControl.h"
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "RoomFactory.h"
@@ -51,18 +50,13 @@ Game::Game() {
   gameOverAnimation = new Animation();
   gameOverAnimation->addFrame(IMG("gameover.bmp"));
   
-  escapeKey = new KeyControl(KEY_ESC);
-  escapeKey->setDelay(GAME_TICKER);
-  // The keys to toggle fullscreen and sound are loaded in "setState".
-  fullscreenKey = NULL;
-  soundKey = NULL;
+  init_key_control(&escapeKey, KEY_ESC, GAME_TICKER);
+  init_key_control(&fullscreenKey, KEY_ESC, GAME_TICKER);
+  init_key_control(&soundKey, KEY_ESC, GAME_TICKER);
   
-  upKey = new KeyControl(KEY_UP);
-  downKey = new KeyControl(KEY_DOWN);
-  selectKey = new KeyControl(KEY_ENTER);
-  upKey->setDelay(GAME_TICKER);
-  downKey->setDelay(GAME_TICKER);
-  selectKey->setDelay(GAME_TICKER);
+  init_key_control(&upKey, KEY_UP, GAME_TICKER);
+  init_key_control(&downKey, KEY_DOWN, GAME_TICKER);
+  init_key_control(&selectKey, KEY_ENTER, GAME_TICKER);
   
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();
@@ -84,12 +78,6 @@ Game::~Game() {
   delete world;
   delete titleAnimation;
   delete gameOverAnimation;
-  delete fullscreenKey;
-  delete soundKey;
-  delete escapeKey;
-  delete upKey;
-  delete downKey;
-  delete selectKey;
   delete menuBackground;
   delete highScoresBackground;
   delete menuPointer;
@@ -117,30 +105,27 @@ void Game::readPlayerInitials() {
       }
     }
   }
-  
-
-  
 }
 
 
 void Game::update() {
   
-  if (fullscreenKey && fullscreenKey->isPressed()) {
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&fullscreenKey)) {
     if (init_screen(-1, -1, is_windowed_mode()) == false) {
       this->setState(GAME_QUIT_STATE);
     }
   }
   
-  if (soundKey && soundKey->isPressed()) {
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&soundKey)) {
     toggle_sound();
   }
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    if (escapeKey->isPressed()) {
+    if (is_key_pressed(&escapeKey)) {
       this->setState(GAME_QUIT_STATE);
-    } else if (upKey->isPressed()) {
+    } else if (is_key_pressed(&upKey)) {
       menuSelection--;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection--;
@@ -148,7 +133,7 @@ void Game::update() {
       if (menuSelection < 0) {
         menuSelection++;
       }
-    } else if (downKey->isPressed()) {
+    } else if (is_key_pressed(&downKey)) {
       menuSelection++;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection++;
@@ -156,28 +141,28 @@ void Game::update() {
       if (menuSelection == MAX_MENU_SELECTIONS) {
         menuSelection--;
       }
-    } else if (selectKey->isPressed()) {
+    } else if (is_key_pressed(&selectKey)) {
       this->activateMenuSelection();
     }
     menuPointer->update();
     break;
   
   case GAME_PLAY_STATE:
-    if (escapeKey->isPressed()) {
+    if (is_key_pressed(&escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     world->update();
     break;
   
   case GAME_HIGH_SCORES_STATE:
-    if (escapeKey->isPressed()) {
+    if (is_key_pressed(&escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     break;
   
   case GAME_ENTER_INITIALS_STATE:
     this->readPlayerInitials();
-    if (strlen(playerInitials) > 0 && selectKey->isPressed()) {
+    if (strlen(playerInitials) > 0 && is_key_pressed(&selectKey)) {
       this->setState(GAME_MENU_STATE);
       add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
       delete world;
@@ -187,7 +172,7 @@ void Game::update() {
     break;
   
   case GAME_OVER_STATE:
-    if (selectKey->isPressed()) {
+    if (is_key_pressed(&selectKey)) {
       menuSelection = NEW_GAME_SELECTION;
       if (high_score_pos(world->getRoomNumber(), world->getMoney()) == MAX_NUM_OF_HIGH_SCORES) {
         this->setState(GAME_MENU_STATE);
@@ -433,16 +418,6 @@ void Game::setState(int aState) {
     tempRoom->draw(menuBackground->getCanvas());
     delete tempRoom;
     delete roomFactory;
-    // Load the fullscreen and sound keys.
-    // They are disabled so the player could enter initials.
-    if (fullscreenKey == NULL) {
-      fullscreenKey = new KeyControl(KEY_F);
-      fullscreenKey->setDelay(GAME_TICKER);
-    }
-    if (soundKey == NULL) {
-      soundKey = new KeyControl(KEY_S);
-      soundKey->setDelay(GAME_TICKER);
-    }
     break;
     
   case GAME_HIGH_SCORES_STATE:
@@ -457,11 +432,6 @@ void Game::setState(int aState) {
     
   case GAME_ENTER_INITIALS_STATE:
     clear_keybuf();
-    // Disable the fullscreen and sound keys so the player could enter initials.
-    delete fullscreenKey;
-    fullscreenKey = NULL;
-    delete soundKey;
-    soundKey = NULL;
     break;
   }
 }
