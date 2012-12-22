@@ -675,6 +675,8 @@ void World::drawUserInterface(BITMAP * buffer) {
 
 
 void World::draw(BITMAP * buffer) {
+
+  char text[9];
   
   switch (state) {
   
@@ -700,6 +702,7 @@ void World::draw(BITMAP * buffer) {
   }
   
   // Put the current room number on the screen.
-  textprintf_ex(buffer, font, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), WHITE, -1, "Room %d", room->getNumber());
+  sprintf(text, "Room %d", room->getNumber());
+  draw_text(buffer, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), 1, WHITE, text);
 }
 
