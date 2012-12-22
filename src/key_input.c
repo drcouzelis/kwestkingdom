@@ -4,7 +4,7 @@
 #include "key_input.h"
 
 
-void create_key_control(KEY_INPUT *key_input, int key_code, int delay)
+void init_key_input(KEY_INPUT *key_input, int key_code, int delay)
 {
   key_input->key_code = key_code;
   key_input->delay = delay;
@@ -15,7 +15,7 @@ void create_key_control(KEY_INPUT *key_input, int key_code, int delay)
 
 FLAG is_key_pressed(KEY_INPUT *key_input)
 {
-  FLAF ret = OFF;
+  FLAG ret = OFF;
   
   if (key_input->delay == 0 && key[key_input->key_code]) {
     return ON;

@@ -50,13 +50,13 @@ Game::Game() {
   gameOverAnimation = new Animation();
   gameOverAnimation->addFrame(IMG("gameover.bmp"));
   
-  init_key_control(&escapeKey, KEY_ESC, GAME_TICKER);
-  init_key_control(&fullscreenKey, KEY_ESC, GAME_TICKER);
-  init_key_control(&soundKey, KEY_ESC, GAME_TICKER);
-  
-  init_key_control(&upKey, KEY_UP, GAME_TICKER);
-  init_key_control(&downKey, KEY_DOWN, GAME_TICKER);
-  init_key_control(&selectKey, KEY_ENTER, GAME_TICKER);
+  init_key_input(&escapeKey, KEY_ESC, GAME_TICKER);
+  init_key_input(&fullscreenKey, KEY_F, GAME_TICKER);
+  init_key_input(&soundKey, KEY_S, GAME_TICKER);
+
+  init_key_input(&upKey, KEY_UP, GAME_TICKER);
+  init_key_input(&downKey, KEY_DOWN, GAME_TICKER);
+  init_key_input(&selectKey, KEY_ENTER, GAME_TICKER);
   
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();

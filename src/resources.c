@@ -6,7 +6,7 @@
 #include "utilities.h"
 
 
-#define MAX_RESOURCES 50
+#define MAX_RESOURCES 256
 #define MAX_RESOURCE_PATHS 4
 #define MAX_FILENAME_LEN 256
 
@@ -135,9 +135,18 @@ void *get_resource(const char *name, RESOURCE_TYPE type)
    * Check the loaded resource
    */
   for (i = 0; i < num_resources; i++) {
+    if (resources[i] == NULL) {
+      printf("Resource %d is NULL\n", i);
+    }
     if (strncmp(resources[i]->name, name, MAX_FILENAME_LEN) == 0) {
       return resources[i]->data;
     }
+  }
+
+  if (num_resources == MAX_RESOURCES) {
+    fprintf(stderr, "RESOURCES: Failed to load resource.\n");
+    fprintf(stderr, "RESOURCES: Try increasing MAX_RESOURCES.\n");
+    return NULL;
   }
 
   /**

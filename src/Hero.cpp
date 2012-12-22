@@ -88,12 +88,12 @@ Hero::Hero() {
   init_key_input(&downKey, KEY_DOWN, 0);
   init_key_input(&leftKey, KEY_LEFT, 0);
   init_key_input(&rightKey, KEY_RIGHT, 0);
-  init_key_input(waitKey, KEY_SPACE, GAME_TICKER);
-  init_key_input(attackKey, KEY_LCONTROL, 0);
-  init_key_input(handKey, KEY_0, GAME_TICKER);
-  init_key_input(shieldKey, KEY_1, GAME_TICKER);
-  init_key_input(swordKey, KEY_2, GAME_TICKER);
-  init_key_input(bowKey, KEY_3, GAME_TICKER);
+  init_key_input(&waitKey, KEY_SPACE, GAME_TICKER);
+  init_key_input(&attackKey, KEY_LCONTROL, 0);
+  init_key_input(&handKey, KEY_0, GAME_TICKER);
+  init_key_input(&shieldKey, KEY_1, GAME_TICKER);
+  init_key_input(&swordKey, KEY_2, GAME_TICKER);
+  init_key_input(&bowKey, KEY_3, GAME_TICKER);
   
   this->toStandState();
   sword->toHoldState();
