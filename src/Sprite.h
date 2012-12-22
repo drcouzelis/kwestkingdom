@@ -4,6 +4,7 @@
 
 #include <allegro.h>
 
+class Animation;
 class World;
 
 

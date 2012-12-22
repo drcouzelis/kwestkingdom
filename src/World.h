@@ -3,8 +3,8 @@
 
 
 #include <allegro.h>
+#include "anim.h"
 
-class Animation;
 class Character;
 class HelpTile;
 class Hero;
@@ -25,9 +25,9 @@ protected:
   RoomFactory *roomFactory;
   Room *room;
   
-  Animation *heartAnimation;
-  Animation *heartEmptyAnimation;
-  Animation *helpTileAnimation;
+  ANIM heart_anim;
+  ANIM heart_empty_anim;
+  ANIM help_tile_anim;
   
   Character *currentCharacter;
   

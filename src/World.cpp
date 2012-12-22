@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#include "Animation.h"
 #include "Enemy.h"
 #include "HelpTile.h"
 #include "Hero.h"
@@ -51,12 +50,12 @@ World::World() {
   rooms = new List();
   rooms->append(room);
   
-  heartAnimation = new Animation();
-  heartAnimation->addFrame(IMG("heart.bmp"));
-  heartEmptyAnimation = new Animation();
-  heartEmptyAnimation->addFrame(IMG("emptyheart.bmp"));
-  helpTileAnimation = new Animation();
-  helpTileAnimation->addFrame(IMG("help.bmp"));
+  init_anim(&heart_anim);
+  add_frame(&heart_anim, IMG("heart.bmp"));
+  init_anim(&heart_empty_anim);
+  add_frame(&heart_empty_anim, IMG("emptyheart.bmp"));
+  init_anim(&help_tile_anim);
+  add_frame(&help_tile_anim, IMG("help.bmp"));
   
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();
@@ -71,9 +70,6 @@ World::~World() {
   delete rooms;
   delete roomFactory;
   delete hero;
-  delete heartAnimation;
-  delete heartEmptyAnimation;
-  delete helpTileAnimation;
   delete prevRoomSnapshot;
   delete nextRoomSnapshot;
 }
@@ -618,7 +614,7 @@ void World::drawTerrain(BITMAP * buffer) {
   // Draw help tiles.
   helpTiles->iterate();
   while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
-    helpTileAnimation->drawTo(buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
+    draw_anim(&help_tile_anim, buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
 }
 
@@ -654,9 +650,9 @@ void World::drawUserInterface(BITMAP * buffer) {
   // Put the hero's health on the screen.
   for (i = 0; i < hero->getMaxHealth(); i++) {
     if (i < hero->getHealth()) {
-      heartAnimation->drawTo(buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_anim, buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     } else {
-      heartEmptyAnimation->drawTo(buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_empty_anim, buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     }
   }
   
