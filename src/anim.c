@@ -69,35 +69,37 @@ IMAGE *get_frame(ANIM *anim)
 
 void add_frame(ANIM *anim, IMAGE *frame)
 {
-  if (image) {
-    anim->frames[anim->len] = image;
-    anim->length++;
+  if (frame) {
+    anim->frames[anim->len] = frame;
+    anim->len++;
   }
 }
 
 
-IMAGE *canvasStandardSize = NULL;
-IMAGE *canvasTripleSize = NULL;
+static IMAGE *canvas_standard_size = NULL;
+static IMAGE *canvas_triple_size = NULL;
 
 
 /**
  * This silly little function provides a fix for transparency
  * when using the rotate sprite and flip sprite functions.
  */
-IMAGE *getCanvas(int width, int height) {
+IMAGE *get_canvas(int width, int height)
+{
+  int tile_size = 20;
   
-  if (width == getTileSize() && height == getTileSize()) {
-    if (canvasStandardSize == NULL) {
-      canvasStandardSize = create_bitmap(getTileSize(), getTileSize());
+  if (width == tile_size && height == tile_size) {
+    if (canvas_standard_size == NULL) {
+      canvas_standard_size = create_bitmap(tile_size, tile_size);
     }
-    return canvasStandardSize;
+    return canvas_standard_size;
   }
   
-  if (width == getTileSize() * 3 && height == getTileSize() * 3) {
-    if (canvasTripleSize == NULL) {
-      canvasTripleSize = create_bitmap(getTileSize() * 3, getTileSize() * 3);
+  if (width == tile_size * 3 && height == tile_size * 3) {
+    if (canvas_triple_size == NULL) {
+      canvas_triple_size = create_bitmap(tile_size * 3, tile_size * 3);
     }
-    return canvasTripleSize;
+    return canvas_triple_size;
   }
 
   fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
@@ -121,7 +123,7 @@ void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
   // to work correctly.
   // Only necessary when rotating and flipping sprites.
   if (anim->rotate || anim->h_flip || anim->v_flip) {
-    canvas = getCanvas(get_frame(anim)->w, get_frame(anim)->h);
+    canvas = get_canvas(get_frame(anim)->w, get_frame(anim)->h);
     if (canvas) {
       blit(get_frame(anim), canvas, 0, 0, 0, 0, canvas->w, canvas->h);
     }
@@ -134,21 +136,21 @@ void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
   }
   
   if (anim->rotate && anim->h_flip && anim->v_flip) {
-    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(192));
+    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->h_flip) {
-    rotate_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(192));
+    rotate_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->v_flip) {
-    rotate_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(64));
+    rotate_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->rotate) {
-    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(64));
+    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->h_flip && anim->v_flip) {
-    rotate_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y, itofix(128));
+    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(128));
   } else if (anim->h_flip) {
-    draw_sprite_h_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+    draw_sprite_h_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
   } else if (anim->v_flip) {
-    draw_sprite_v_flip(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+    draw_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
   } else {
-    draw_sprite(buffer, canvas, anim->x + anim->offset_x, anim->y + anim->offset_y);
+    draw_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
   }
 }
 
@@ -156,7 +158,7 @@ void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
 // Animate the animation.
 void animate(ANIM *anim) {
   
-  if (anim->length > 1 && anim->speed != 0) {
+  if (anim->len > 1 && anim->speed != 0) {
     
     anim->fudge += anim->speed;
     
@@ -164,12 +166,12 @@ void animate(ANIM *anim) {
       
       anim->pos++;
       
-      if (anim->pos == anim->length) {
+      if (anim->pos == anim->len) {
         if (anim->loop) {
           anim->pos = 0;
         } else {
           anim->pos--;
-          anim->done = true;
+          anim->done = ON;
         }
       }
             
@@ -179,7 +181,7 @@ void animate(ANIM *anim) {
     
   } else {
     
-    anim->done = true;
+    anim->done = ON;
     
   }
 }

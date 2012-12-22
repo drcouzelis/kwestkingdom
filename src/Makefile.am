@@ -11,6 +11,8 @@ kwestkingdom_SOURCES = \
   allegro_icon.c \
   Animation.h \
   Animation.cpp \
+  anim.h \
+  anim.c \
   Archer.h \
   Archer.cpp \
   Arrow.h \
