@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "KwestKingdom.h"
 #include "Sprite.h"
 

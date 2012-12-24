@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Arrow.h"
 #include "Bow.h"
 #include "resources.h"
@@ -8,9 +7,6 @@ typedef enum {
   BOW_HOLD_STATE,
   BOW_AWAY_STATE
 } BOW_STATE;
-
-
-
 
 
 Bow::Bow() {

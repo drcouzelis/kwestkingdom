@@ -2,6 +2,7 @@
 #define HERO_HEADER
 
 
+#include "anim.h"
 #include "Character.h"
 #include "key_input.h"
 
@@ -21,11 +22,11 @@ protected:
   Sword *sword;
   Bow *bow;
   
-  Animation *standAnimation;
-  Animation *beginAttackAnimation;
-  Animation *endAttackAnimation;
-  Animation *hurtAnimation;
-  Animation *deadAnimation;
+  ANIM stand_anim;
+  ANIM begin_attack_anim;
+  ANIM end_attack_anim;
+  ANIM hurt_anim;
+  ANIM dead_anim;
   
   KEY_INPUT upKey;
   KEY_INPUT downKey;

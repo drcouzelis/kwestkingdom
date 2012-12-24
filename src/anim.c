@@ -6,7 +6,7 @@
 extern int timer;
 
 
-void init_anim(ANIM *anim)
+void init_anim(ANIM *anim, FLAG loop, int speed)
 {
   int i;
   
@@ -16,9 +16,9 @@ void init_anim(ANIM *anim)
   
   anim->len = 0;
   anim->pos = 0;
-  anim->loop = ON;
+  anim->loop = loop;
   anim->done = OFF;
-  anim->speed = 0;
+  anim->speed = speed;
   anim->fudge = 0;
   anim->offset_x = 0;
   anim->offset_y = 0;
@@ -32,7 +32,7 @@ void copy_anim(ANIM *anim, ANIM *orig)
 {
   int i;
 
-  init_anim(anim);
+  init_anim(anim, orig->loop, orig->speed);
   
   for (i = 0; i < orig->len; i++) {
     add_frame(anim, orig->frames[i]);
@@ -40,8 +40,6 @@ void copy_anim(ANIM *anim, ANIM *orig)
   
   anim->offset_x = orig->offset_x;
   anim->offset_y = orig->offset_y;
-  anim->loop = orig->loop;
-  anim->speed = orig->speed;
   anim->h_flip = orig->h_flip;
   anim->v_flip = orig->v_flip;
   anim->rotate = orig->rotate;

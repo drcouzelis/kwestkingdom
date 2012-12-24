@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Arrow.h"
 #include "Bow.h"
 #include "Hero.h"
@@ -41,48 +40,38 @@ Hero::Hero() {
   sword->setSpeed(speed);
   bow->setSpeed(speed);
   
-  standAnimation = new Animation();
-  standAnimation->addFrame(IMG("hero_stand_1.bmp"));
-  standAnimation->addFrame(IMG("hero_stand_2.bmp"));
-  standAnimation->addFrame(IMG("hero_stand_3.bmp"));
-  standAnimation->addFrame(IMG("hero_stand_2.bmp"));
-  standAnimation->setLoop(true);
-  standAnimation->setSpeed(6);
+  init_anim(&stand_anim, ON, 6);
+  add_frame(&stand_anim, IMG("hero_stand_1.bmp"));
+  add_frame(&stand_anim, IMG("hero_stand_2.bmp"));
+  add_frame(&stand_anim, IMG("hero_stand_3.bmp"));
+  add_frame(&stand_anim, IMG("hero_stand_2.bmp"));
   
-  beginAttackAnimation = new Animation();
-  beginAttackAnimation->addFrame(IMG("hero_attack_1.bmp"));
-  beginAttackAnimation->addFrame(IMG("hero_attack_2.bmp"));
-  beginAttackAnimation->addFrame(IMG("hero_attack_3.bmp"));
-  beginAttackAnimation->addFrame(IMG("hero_attack_4.bmp"));
-  beginAttackAnimation->setLoop(false);
-  beginAttackAnimation->setSpeed(HERO_ATTACK_SPEED);
+  init_anim(&begin_attack_anim, OFF, HERO_ATTACK_SPEED);
+  add_frame(&begin_attack_anim, IMG("hero_attack_1.bmp"));
+  add_frame(&begin_attack_anim, IMG("hero_attack_2.bmp"));
+  add_frame(&begin_attack_anim, IMG("hero_attack_3.bmp"));
+  add_frame(&begin_attack_anim, IMG("hero_attack_4.bmp"));
   
-  endAttackAnimation = new Animation();
-  endAttackAnimation->addFrame(IMG("hero_attack_3.bmp"));
-  endAttackAnimation->addFrame(IMG("hero_attack_2.bmp"));
-  endAttackAnimation->addFrame(IMG("hero_attack_1.bmp"));
-  endAttackAnimation->setLoop(false);
-  endAttackAnimation->setSpeed(HERO_ATTACK_SPEED);
+  init_anim(&end_attack_anim, OFF, HERO_ATTACK_SPEED);
+  add_frame(&end_attack_anim, IMG("hero_attack_3.bmp"));
+  add_frame(&end_attack_anim, IMG("hero_attack_2.bmp"));
+  add_frame(&end_attack_anim, IMG("hero_attack_1.bmp"));
   
-  hurtAnimation = new Animation();
-  hurtAnimation->addFrame(IMG("hero_hurt_1.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_2.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_3.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_4.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_3.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_2.bmp"));
-  hurtAnimation->addFrame(IMG("hero_hurt_1.bmp"));
-  hurtAnimation->setLoop(false);
-  hurtAnimation->setSpeed(12);
+  init_anim(&hurt_anim, OFF, HERO_ATTACK_SPEED);
+  add_frame(&hurt_anim, IMG("hero_hurt_1.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_2.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_3.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_4.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_3.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_2.bmp"));
+  add_frame(&hurt_anim, IMG("hero_hurt_1.bmp"));
   
-  deadAnimation = new Animation();
-  deadAnimation->addFrame(IMG("hero_die_1.bmp"));
-  deadAnimation->addFrame(IMG("hero_die_2.bmp"));
-  deadAnimation->addFrame(IMG("hero_die_3.bmp"));
-  deadAnimation->addFrame(IMG("hero_die_4.bmp"));
-  deadAnimation->addFrame(IMG("hero_die_5.bmp"));
-  deadAnimation->setLoop(false);
-  deadAnimation->setSpeed(6);
+  init_anim(&dead_anim, OFF, 6);
+  add_frame(&dead_anim, IMG("hero_die_1.bmp"));
+  add_frame(&dead_anim, IMG("hero_die_2.bmp"));
+  add_frame(&dead_anim, IMG("hero_die_3.bmp"));
+  add_frame(&dead_anim, IMG("hero_die_4.bmp"));
+  add_frame(&dead_anim, IMG("hero_die_5.bmp"));
   
   init_key_input(&upKey, KEY_UP, 0);
   init_key_input(&downKey, KEY_DOWN, 0);
@@ -106,9 +95,6 @@ Hero::~Hero() {
   delete shield;
   delete sword;
   delete bow;
-  delete standAnimation;
-  delete beginAttackAnimation;
-  delete endAttackAnimation;
 }
 
 
@@ -248,7 +234,7 @@ void Hero::update() {
     break;
   
   case HERO_HURT_STATE:
-    if (animation->isFinished()) {
+    if (animation->done) {
       if (health == 0) {
         shield->toAwayState();
         sword->toAwayState();
@@ -266,7 +252,7 @@ void Hero::update() {
     break;
       
   case HERO_PUSH_SWORD_STATE:
-    if (animation->isFinished()) {
+    if (animation->done) {
       switch (direction) {
       case UP:
         world->attackFromTeam(team, x, y - 1);
@@ -286,7 +272,7 @@ void Hero::update() {
     break;
     
   case HERO_PULL_SWORD_STATE:
-    if (animation->isFinished()) {
+    if (animation->done) {
       this->toStandState();
       sword->toHoldState();
       this->wait();
@@ -294,14 +280,14 @@ void Hero::update() {
     break;
     
   case HERO_DRAW_BOW_STATE:
-    if (animation->isFinished()) {
+    if (animation->done) {
       this->toShootArrowState();
     }
     break;
     
   case HERO_SHOOT_ARROW_STATE:
-    if (animation->isFinished()) {
-      animation = standAnimation;
+    if (animation->done) {
+      animation = &stand_anim;
       bow->toHoldState();
     }
     if (bow->getArrow()->stopped()) {
@@ -311,11 +297,7 @@ void Hero::update() {
       this->wait();
     }
     break;
-    
   }
-  
-
-  
 }
 
 
@@ -324,7 +306,6 @@ void Hero::draw(BITMAP * buffer) {
   shield->draw(buffer);
   sword->draw(buffer);
   bow->draw(buffer);
-
 }
 
 
@@ -338,30 +319,27 @@ void Hero::emptyHands() {
 
 void Hero::toStandState() {
   state = HERO_STAND_STATE;
-  animation = standAnimation;
-
+  animation = &stand_anim;
 }
 
 
 void Hero::toMoveState() {
   state = HERO_MOVE_STATE;
-  animation = standAnimation;
-
+  animation = &stand_anim;
 }
 
 
 void Hero::toAttackState() {
   state = HERO_ATTACK_STATE;
-  animation = standAnimation;
-
+  animation = &stand_anim;
 }
 
 
 void Hero::toHurtState() {
   
   state = HERO_HURT_STATE;
-  animation = hurtAnimation;
-  animation->reset();
+  animation = &hurt_anim;
+  reset_anim(animation);
   
   // You can't shoot an arrow if you get
   // hurt whil trying to do it.
@@ -377,16 +355,15 @@ void Hero::toHurtState() {
 
 void Hero::toDeadState() {
   state = HERO_DEAD_STATE;
-  animation = deadAnimation;
-  animation->reset();
-
+  animation = &dead_anim;
+  reset_anim(animation);
 }
 
 
 void Hero::toPushSwordState() {
   state = HERO_PUSH_SWORD_STATE;
-  animation = beginAttackAnimation;
-  animation->reset();
+  animation = &begin_attack_anim;
+  reset_anim(animation);
   switch (direction) {
   case UP:
     sword->toAttackUpState();
@@ -401,23 +378,21 @@ void Hero::toPushSwordState() {
     sword->toAttackRightState();
     break;
   }
-
 }
 
 
 void Hero::toPullSwordState() {
   state = HERO_PULL_SWORD_STATE;
-  animation = endAttackAnimation;
-  animation->reset();
-
+  animation = &end_attack_anim;
+  reset_anim(animation);
 }
 
 
 void Hero::toDrawBowState() {
   
   state = HERO_DRAW_BOW_STATE;
-  animation = beginAttackAnimation;
-  animation->reset();
+  animation = &begin_attack_anim;
+  reset_anim(animation);
   
   switch (direction) {
   case UP:
@@ -443,8 +418,8 @@ void Hero::toDrawBowState() {
 
 void Hero::toShootArrowState() {
   state = HERO_SHOOT_ARROW_STATE;
-  animation = endAttackAnimation;
-  animation->reset();
+  animation = &end_attack_anim;
+  reset_anim(animation);
   bow->getArrow()->toFlyingState();
   bow->toHoldState();
 
@@ -461,7 +436,7 @@ void Hero::hurt() {
 
 
 bool Hero::isDead() {
-  if (state == HERO_DEAD_STATE && animation->isFinished()) {
+  if (state == HERO_DEAD_STATE && animation->done) {
     return true;
   }
   return false;

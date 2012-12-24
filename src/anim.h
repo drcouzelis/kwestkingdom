@@ -37,7 +37,7 @@ typedef struct
 } ANIM;
 
 
-void init_anim(ANIM *anim);
+void init_anim(ANIM *anim, FLAG loop, int speed);
 void copy_anim(ANIM *anim, ANIM *orig);
 
 void animate(ANIM *anim);

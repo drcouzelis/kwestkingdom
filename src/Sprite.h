@@ -3,8 +3,8 @@
 
 
 #include <allegro.h>
+#include "anim.h"
 
-class Animation;
 class World;
 
 
@@ -25,7 +25,7 @@ protected:
   
   int speed; // In FPS
   
-  Animation *animation;
+  ANIM *anim;
   
   World *world;
   
