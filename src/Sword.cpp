@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "Sword.h"
@@ -9,6 +8,7 @@ typedef enum {
   SWORD_AWAY_STATE
 } SWORD_STATE;
 
+
 typedef enum {
   SWORD_ATTACK_UP_STATE,
   SWORD_ATTACK_DOWN_STATE,
@@ -17,85 +17,79 @@ typedef enum {
 } SWORD_ATTACK_STATE;
 
 
-
-
-
 Sword::Sword() {
   
-  holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("sword_hold_1.bmp"));
-  holdAnimation->addFrame(IMG("sword_hold_2.bmp"));
-  holdAnimation->addFrame(IMG("sword_hold_3.bmp"));
-  holdAnimation->addFrame(IMG("sword_hold_4.bmp"));
-  holdAnimation->setLoop(true);
-  holdAnimation->setSpeed(6);
+  init_anim(&hold_anim, ON, 6);
+  add_frame(&hold_anim, IMG("sword_hold_1.bmp"));
+  add_frame(&hold_anim, IMG("sword_hold_2.bmp"));
+  add_frame(&hold_anim, IMG("sword_hold_3.bmp"));
+  add_frame(&hold_anim, IMG("sword_hold_4.bmp"));
   
-  attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(IMG("sword_stab_1.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_2.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_3.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_4.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_3.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_2.bmp"));
-  attackRightAnimation->addFrame(IMG("sword_stab_1.bmp"));
-  attackRightAnimation->setOffsetX(-TILE_SIZE);
-  attackRightAnimation->setOffsetY(-TILE_SIZE);
-  attackRightAnimation->setLoop(false);
-  attackRightAnimation->setSpeed(12);
+  init_anim(&attack_right_anim, OFF, 12);
+  add_frame(&attack_right_anim, IMG("sword_stab_1.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_2.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_3.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_4.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_3.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_2.bmp"));
+  add_frame(&attack_right_anim, IMG("sword_stab_1.bmp"));
+  attack_right_anim.offset_x = -TILE_SIZE;
+  attack_right_anim.offset_y = -TILE_SIZE;
   
-  attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
-  attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
-  attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
+  copy_anim(&attack_left_anim, &attack_right_anim);
+  attack_left_anim.h_flip = ON;
+
+  copy_anim(&attack_down_anim, &attack_right_anim);
+  attack_down_anim.rotate = ON;
+
+  copy_anim(&attack_up_anim, &attack_right_anim);
+  attack_up_anim.h_flip = ON;
+  attack_up_anim.rotate = ON;
   
   this->toAwayState();
 }
 
 
 Sword::~Sword() {
-  delete holdAnimation;
-  delete attackUpAnimation;
-  delete attackDownAnimation;
-  delete attackLeftAnimation;
-  delete attackRightAnimation;
 }
 
 
 void Sword::toHoldState() {
   state = SWORD_HOLD_STATE;
-  animation = holdAnimation;
+  anim = &hold_anim;
 }
 
 
 void Sword::toAwayState() {
   state = SWORD_AWAY_STATE;
-  animation = NULL;
+  anim = NULL;
 }
 
 
 void Sword::toAttackUpState() {
-  animation = attackUpAnimation;
-  animation->reset();
+  anim = &attack_up_anim;
+  reset_anim(anim);
   play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackDownState() {
-  animation = attackDownAnimation;
-  animation->reset();
+  anim = &attack_down_anim;
+  reset_anim(anim);
   play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackLeftState() {
-  animation = attackLeftAnimation;
-  animation->reset();
+  anim = &attack_left_anim;
+  reset_anim(anim);
   play_sound(SND("sword.wav"));
 }
 
 
 void Sword::toAttackRightState() {
-  animation = attackRightAnimation;
-  animation->reset();
+  anim = &attack_right_anim;
+  reset_anim(anim);
   play_sound(SND("sword.wav"));
 }
 

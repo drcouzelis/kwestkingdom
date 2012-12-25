@@ -9,7 +9,7 @@ class Shield : public Sprite {
 
 protected:
   
-  Animation *holdAnimation;
+  ANIM hold_anim;
   
 public:
 

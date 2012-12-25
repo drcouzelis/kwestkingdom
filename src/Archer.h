@@ -13,9 +13,9 @@ protected:
 
   Bow *bow;
   
-  Animation *standAnimation;
-  Animation *beginAttackAnimation;
-  Animation *endAttackAnimation;
+  ANIM stand_anim;
+  ANIM begin_attack_anim;
+  ANIM end_attack_anim;
   
   int direction;
   

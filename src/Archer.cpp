@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Archer.h"
 #include "Arrow.h"
 #include "Bow.h"
@@ -29,30 +28,24 @@ Archer::Archer() {
   bow->setSpeed(speed);
   bow->toHoldState();
   
-  standAnimation = new Animation();
-  standAnimation->addFrame(IMG("archer_1.bmp"));
-  standAnimation->addFrame(IMG("archer_2.bmp"));
-  standAnimation->addFrame(IMG("archer_3.bmp"));
-  standAnimation->addFrame(IMG("archer_2.bmp"));
-  standAnimation->setLoop(true);
-  standAnimation->setSpeed(3);
+  init_anim(&stand_anim, ON, 3);
+  add_frame(&stand_anim, IMG("archer_1.bmp"));
+  add_frame(&stand_anim, IMG("archer_2.bmp"));
+  add_frame(&stand_anim, IMG("archer_3.bmp"));
+  add_frame(&stand_anim, IMG("archer_2.bmp"));
   
-  beginAttackAnimation = new Animation();
-  beginAttackAnimation->addFrame(IMG("archer_1.bmp"));
-  beginAttackAnimation->addFrame(IMG("archer_2.bmp"));
-  beginAttackAnimation->addFrame(IMG("archer_2.bmp"));
-  beginAttackAnimation->addFrame(IMG("archer_3.bmp"));
-  beginAttackAnimation->setLoop(false);
-  beginAttackAnimation->setSpeed(12);
+  init_anim(&begin_attack_anim, OFF, 12);
+  add_frame(&begin_attack_anim, IMG("archer_1.bmp"));
+  add_frame(&begin_attack_anim, IMG("archer_2.bmp"));
+  add_frame(&begin_attack_anim, IMG("archer_2.bmp"));
+  add_frame(&begin_attack_anim, IMG("archer_3.bmp"));
   
-  endAttackAnimation = new Animation();
-  endAttackAnimation->addFrame(IMG("archer_3.bmp"));
-  endAttackAnimation->addFrame(IMG("archer_2.bmp"));
-  endAttackAnimation->addFrame(IMG("archer_2.bmp"));
-  endAttackAnimation->setLoop(false);
-  endAttackAnimation->setSpeed(12);
+  init_anim(&end_attack_anim, OFF, 12);
+  add_frame(&end_attack_anim, IMG("archer_3.bmp"));
+  add_frame(&end_attack_anim, IMG("archer_2.bmp"));
+  add_frame(&end_attack_anim, IMG("archer_2.bmp"));
   
-  animation = standAnimation;
+  anim = &stand_anim;
   state = ARCHER_STAND_STATE;
   direction = UP;
   this->wait();
@@ -61,9 +54,6 @@ Archer::Archer() {
 
 Archer::~Archer() {
   delete bow;
-  delete standAnimation;
-  delete beginAttackAnimation;
-  delete endAttackAnimation;
 }
 
 
@@ -175,14 +165,14 @@ Archer::update() {
     break;
     
   case ARCHER_DRAW_BOW_STATE:
-    if (animation->isFinished()) {
+    if (anim->done) {
       this->toShootArrowState();
     }
     break;
     
   case ARCHER_SHOOT_ARROW_STATE:
-    if (animation->isFinished()) {
-      animation = standAnimation;
+    if (anim->done) {
+      anim = &stand_anim;
       bow->toHoldState();
     }
     if (bow->getArrow()->stopped()) {
@@ -206,14 +196,14 @@ Archer::draw(BITMAP *buffer) {
 void
 Archer::toStandState() {
   state = ARCHER_STAND_STATE;
-  animation = standAnimation;
+  anim = &stand_anim;
 }
 
 
 void
 Archer::toMoveState() {
   state = ARCHER_MOVE_STATE;
-  animation = standAnimation;
+  anim = &stand_anim;
 }
 
 
@@ -221,8 +211,8 @@ void
 Archer::toDrawBowState() {
   
   state = ARCHER_DRAW_BOW_STATE;
-  animation = beginAttackAnimation;
-  animation->reset();
+  anim = &begin_attack_anim;
+  reset_anim(anim);
   
   switch (direction) {
   case UP:
@@ -246,8 +236,8 @@ Archer::toDrawBowState() {
 void
 Archer::toShootArrowState() {
   state = ARCHER_SHOOT_ARROW_STATE;
-  animation = endAttackAnimation;
-  animation->reset();
+  anim = &end_attack_anim;
+  reset_anim(anim);
   bow->getArrow()->toFlyingState();
   bow->toHoldState();
 }

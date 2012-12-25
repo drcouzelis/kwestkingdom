@@ -9,10 +9,10 @@ class Arrow : public Character {
  
 protected:
 
-  Animation *flyUpAnimation;
-  Animation *flyDownAnimation;
-  Animation *flyLeftAnimation;
-  Animation *flyRightAnimation;
+  ANIM fly_up_anim;
+  ANIM fly_down_anim;
+  ANIM fly_left_anim;
+  ANIM fly_right_anim;
   
   int direction;
   

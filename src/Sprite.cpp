@@ -12,7 +12,7 @@ Sprite::Sprite() {
   visualY = 0;
   fudge = 0;
   speed = 0;
-  animation = NULL;
+  anim = NULL;
   world = NULL;
   state = 0;
 }
@@ -20,8 +20,8 @@ Sprite::Sprite() {
 
 void Sprite::update() {
   
-  if (animation != NULL) {
-    animation->update();
+  if (anim != NULL) {
+    animate(anim);
   }
   
   // This will make the visual position of the sprite match up
@@ -74,8 +74,8 @@ void Sprite::draw(BITMAP * buffer) {
   hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
   
-  if (animation != NULL) {
-    animation->drawTo(buffer, visualX, visualY);
+  if (anim != NULL) {
+    draw_anim(anim, buffer, visualX, visualY);
   }
 }
 

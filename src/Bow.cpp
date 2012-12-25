@@ -13,35 +13,32 @@ Bow::Bow() {
   
   arrow = NULL;
   
-  holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("bow_hold_1.bmp"));
-  holdAnimation->addFrame(IMG("bow_hold_2.bmp"));
-  holdAnimation->addFrame(IMG("bow_hold_3.bmp"));
-  holdAnimation->addFrame(IMG("bow_hold_4.bmp"));
-  holdAnimation->setLoop(true);
-  holdAnimation->setSpeed(6);
+  init_anim(&hold_anim, ON, 6);
+  add_frame(&hold_anim, IMG("bow_hold_1.bmp"));
+  add_frame(&hold_anim, IMG("bow_hold_2.bmp"));
+  add_frame(&hold_anim, IMG("bow_hold_3.bmp"));
+  add_frame(&hold_anim, IMG("bow_hold_4.bmp"));
   
-  attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(IMG("bow_draw_1.bmp"));
-  attackRightAnimation->addFrame(IMG("bow_draw_2.bmp"));
-  attackRightAnimation->addFrame(IMG("bow_draw_3.bmp"));
-  attackRightAnimation->setLoop(false);
-  attackRightAnimation->setSpeed(12);
+  init_anim(&attack_right_anim, OFF, 12);
+  add_frame(&attack_right_anim, IMG("bow_draw_1.bmp"));
+  add_frame(&attack_right_anim, IMG("bow_draw_2.bmp"));
+  add_frame(&attack_right_anim, IMG("bow_draw_3.bmp"));
   
-  attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
-  attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
-  attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
+  copy_anim(&attack_left_anim, &attack_right_anim);
+  attack_left_anim.h_flip = ON;
+
+  copy_anim(&attack_down_anim, &attack_right_anim);
+  attack_down_anim.rotate = ON;
+
+  copy_anim(&attack_up_anim, &attack_right_anim);
+  attack_up_anim.h_flip = ON;
+  attack_up_anim.rotate = ON;
 
   this->toAwayState();
 }
 
 
 Bow::~Bow() {
-  delete holdAnimation;
-  delete attackUpAnimation;
-  delete attackDownAnimation;
-  delete attackLeftAnimation;
-  delete attackRightAnimation;
   delete arrow;
 }
 
@@ -88,37 +85,37 @@ void Bow::setArrow(int newX, int newY, int aDirection, int aTeam, World *aWorld)
 
 void Bow::toHoldState() {
   state = BOW_HOLD_STATE;
-  animation = holdAnimation;
+  anim = &hold_anim;
 }
 
 
 void Bow::toAwayState() {
   state = BOW_AWAY_STATE;
-  animation = NULL;
+  anim = NULL;
 }
 
 
 void Bow::toAttackUpState() {
-  animation = attackUpAnimation;
-  animation->reset();
+  anim = &attack_up_anim;
+  reset_anim(anim);
 }
 
 
 void Bow::toAttackDownState() {
-  animation = attackDownAnimation;
-  animation->reset();
+  anim = &attack_down_anim;
+  reset_anim(anim);
 }
 
 
 void Bow::toAttackLeftState() {
-  animation = attackLeftAnimation;
-  animation->reset();
+  anim = &attack_left_anim;
+  reset_anim(anim);
 }
 
 
 void Bow::toAttackRightState() {
-  animation = attackRightAnimation;
-  animation->reset();
+  anim = &attack_right_anim;
+  reset_anim(anim);
 }
 
 
@@ -128,7 +125,4 @@ bool Bow::held() {
   }
   return false;
 }
-
-
-
 

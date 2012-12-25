@@ -1,58 +1,52 @@
-#include "Animation.h"
 #include "Hammer.h"
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "World.h"
 
 
-
-
-
 Hammer::Hammer() {
   
-  holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("hammer_hold_1.bmp"));
-  holdAnimation->addFrame(IMG("hammer_hold_2.bmp"));
-  holdAnimation->addFrame(IMG("hammer_hold_3.bmp"));
-  holdAnimation->addFrame(IMG("hammer_hold_4.bmp"));
-  holdAnimation->setOffsetY(TILE_SIZE);
-  holdAnimation->setLoop(true);
-  holdAnimation->setSpeed(6);
+  init_anim(&hold_anim, ON, 6);
+  add_frame(&hold_anim, IMG("hammer_hold_1.bmp"));
+  add_frame(&hold_anim, IMG("hammer_hold_2.bmp"));
+  add_frame(&hold_anim, IMG("hammer_hold_3.bmp"));
+  add_frame(&hold_anim, IMG("hammer_hold_4.bmp"));
+  hold_anim.offset_y = TILE_SIZE;
   
-  attackRightAnimation = new Animation();
-  attackRightAnimation->addFrame(IMG("hammer_swing_1.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_2.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_3.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_4.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_3.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_2.bmp"));
-  attackRightAnimation->addFrame(IMG("hammer_swing_1.bmp"));
-  attackRightAnimation->setOffsetX(TILE_SIZE);
-  attackRightAnimation->setLoop(false);
-  attackRightAnimation->setSpeed(24);
+  init_anim(&attack_right_anim, OFF, 24);
+  add_frame(&attack_right_anim, IMG("hammer_swing_1.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_2.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_3.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_4.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_4.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_4.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_4.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_3.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_2.bmp"));
+  add_frame(&attack_right_anim, IMG("hammer_swing_1.bmp"));
+  attack_right_anim.offset_x = TILE_SIZE;
   
-  attackLeftAnimation = attackRightAnimation->copy()->setHorizontalFlip(true);
-  attackLeftAnimation->setOffsetX(-TILE_SIZE * 2);
-  attackDownAnimation = attackRightAnimation->copy()->setRotate(true);
-  attackDownAnimation->setOffsetX(0);
-  attackDownAnimation->setOffsetY(TILE_SIZE);
-  attackUpAnimation = attackRightAnimation->copy()->setHorizontalFlip(true)->setVerticalFlip(true)->setRotate(true);
-  attackUpAnimation->setOffsetX(-TILE_SIZE);
-  attackUpAnimation->setOffsetY(-TILE_SIZE * 2);
+  copy_anim(&attack_left_anim, &attack_right_anim);
+  attack_left_anim.h_flip = ON;
+  attack_left_anim.offset_x = -TILE_SIZE * 2;
+
+  copy_anim(&attack_down_anim, &attack_right_anim);
+  attack_down_anim.rotate = ON;
+  attack_down_anim.offset_x = 0;
+  attack_down_anim.offset_y = TILE_SIZE;
+
+  copy_anim(&attack_up_anim, &attack_right_anim);
+  attack_up_anim.h_flip = ON;
+  attack_up_anim.v_flip = ON;
+  attack_up_anim.rotate = ON;
+  attack_up_anim.offset_x = -TILE_SIZE;
+  attack_up_anim.offset_y = -TILE_SIZE * 2;
   
   this->setState(HAMMER_AWAY_STATE);
 }
 
 
 Hammer::~Hammer() {
-  delete holdAnimation;
-  delete attackUpAnimation;
-  delete attackDownAnimation;
-  delete attackLeftAnimation;
-  delete attackRightAnimation;
 }
 
 
@@ -65,7 +59,7 @@ void Hammer::update() {
   case HAMMER_ATTACK_DOWN_STATE:
   case HAMMER_ATTACK_LEFT_STATE:
   case HAMMER_ATTACK_RIGHT_STATE:
-    if (animation->currentFrameNumber() == 3) {
+    if (anim->pos == 3) {
       this->setState(HAMMER_END_ATTACK_STATE);
     }
     break;
@@ -81,31 +75,31 @@ void Hammer::setState(int aState) {
   switch (state) {
   
   case HAMMER_HOLD_STATE:
-    animation = holdAnimation;
+    anim = &hold_anim;
     break;
     
   case HAMMER_AWAY_STATE:
-    animation = NULL;
+    anim = NULL;
     break;
     
   case HAMMER_ATTACK_UP_STATE:
-    animation = attackUpAnimation;
-    animation->reset();
+    anim = &attack_up_anim;
+    reset_anim(anim);
     break;
     
   case HAMMER_ATTACK_DOWN_STATE:
-    animation = attackDownAnimation;
-    animation->reset();
+    anim = &attack_down_anim;
+    reset_anim(anim);
     break;
     
   case HAMMER_ATTACK_LEFT_STATE:
-    animation = attackLeftAnimation;
-    animation->reset();
+    anim = &attack_left_anim;
+    reset_anim(anim);
     break;
     
   case HAMMER_ATTACK_RIGHT_STATE:
-    animation = attackRightAnimation;
-    animation->reset();
+    anim = &attack_right_anim;
+    reset_anim(anim);
     break;
     
   case HAMMER_END_ATTACK_STATE:

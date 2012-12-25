@@ -2,6 +2,7 @@
 #define HAMMER_HEADER
 
 
+#include "anim.h"
 #include "Sprite.h"
 
 
@@ -22,11 +23,11 @@ typedef enum {
 
 class Hammer : public Sprite {
   
-  Animation *holdAnimation;
-  Animation *attackUpAnimation;
-  Animation *attackDownAnimation;
-  Animation *attackLeftAnimation;
-  Animation *attackRightAnimation;
+  ANIM hold_anim;
+  ANIM attack_up_anim;
+  ANIM attack_down_anim;
+  ANIM attack_left_anim;
+  ANIM attack_right_anim;
   
 public:
 

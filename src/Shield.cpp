@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "resources.h"
 #include "Shield.h"
 
@@ -11,32 +10,30 @@ typedef enum {
 
 Shield::Shield() {
   
-  holdAnimation = new Animation();
-  holdAnimation->addFrame(IMG("shield_1.bmp"));
-  holdAnimation->addFrame(IMG("shield_2.bmp"));
-  holdAnimation->addFrame(IMG("shield_3.bmp"));
-  holdAnimation->addFrame(IMG("shield_4.bmp"));
-  holdAnimation->setLoop(true);
-  holdAnimation->setSpeed(6);
+  init_anim(&hold_anim, ON, 6);
+  add_frame(&hold_anim, IMG("shield_1.bmp"));
+  add_frame(&hold_anim, IMG("shield_2.bmp"));
+  add_frame(&hold_anim, IMG("shield_3.bmp"));
+  add_frame(&hold_anim, IMG("shield_4.bmp"));
   
   this->toAwayState();
 }
 
 
 Shield::~Shield() {
-  delete holdAnimation;
 }
 
 
 void Shield::toHoldState() {
   state = SHIELD_HOLD_STATE;
-  animation = holdAnimation;
+  anim = &hold_anim;
+  reset_anim(anim);
 }
 
 
 void Shield::toAwayState() {
   state = SHIELD_AWAY_STATE;
-  animation = NULL;
+  anim = NULL;
 }
 
 

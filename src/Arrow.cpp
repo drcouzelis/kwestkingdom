@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Arrow.h"
 #include "KwestKingdom.h"
 #include "resources.h"
@@ -17,12 +16,18 @@ Arrow::Arrow() {
   
   this->setSpeed(getWalkSpeed() * 4);
   
-  flyRightAnimation = new Animation();
-  flyRightAnimation->addFrame(IMG("arrow.bmp"));
+  init_anim(&fly_right_anim, OFF, 0);
+  add_frame(&fly_right_anim, IMG("arrow.bmp"));
   
-  flyLeftAnimation = flyRightAnimation->copy()->setHorizontalFlip(true);
-  flyDownAnimation = flyRightAnimation->copy()->setRotate(true);
-  flyUpAnimation = flyRightAnimation->copy()->setHorizontalFlip(true)->setRotate(true);
+  copy_anim(&fly_left_anim, &fly_right_anim);
+  fly_left_anim.h_flip = ON;
+
+  copy_anim(&fly_down_anim, &fly_right_anim);
+  fly_down_anim.rotate = ON;
+
+  copy_anim(&fly_right_anim, &fly_right_anim);
+  fly_right_anim.h_flip = ON;
+  fly_right_anim.rotate = ON;
   
   direction = UP;
   
@@ -31,11 +36,6 @@ Arrow::Arrow() {
 
 
 Arrow::~Arrow() {
-  delete flyUpAnimation;
-  delete flyDownAnimation;
-  delete flyLeftAnimation;
-  delete flyRightAnimation;
-
 }
 
 
@@ -114,15 +114,14 @@ void Arrow::findTarget() {
 void Arrow::setDirection(int aDirection) {
   direction = aDirection;
   if (direction == UP) {
-    animation = flyUpAnimation;
+    anim = &fly_up_anim;
   } else if (direction == DOWN) {
-    animation = flyDownAnimation;
+    anim = &fly_down_anim;
   } else if (direction == LEFT) {
-    animation = flyLeftAnimation;
+    anim = &fly_left_anim;
   } else {
-    animation = flyRightAnimation;
+    anim = &fly_right_anim;
   }
-
 }
 
 
@@ -136,18 +135,16 @@ void Arrow::toHoldState() {
   
   this->setDirection(direction);
   
-  // Offset the animation a little bit to make it look like
+  // Offset the anim a little bit to make it look like
   // the arrow is in the bow string.
-  flyUpAnimation->setOffsetX(0);
-  flyUpAnimation->setOffsetY(visualOffset);
-  flyDownAnimation->setOffsetX(0);
-  flyDownAnimation->setOffsetY(-visualOffset);
-  flyLeftAnimation->setOffsetX(visualOffset);
-  flyLeftAnimation->setOffsetY(0);
-  flyRightAnimation->setOffsetX(-visualOffset);
-  flyRightAnimation->setOffsetY(0);
-  
-
+  fly_up_anim.offset_x = 0;
+  fly_up_anim.offset_y = visualOffset;
+  fly_down_anim.offset_x = 0;
+  fly_down_anim.offset_y = -visualOffset;
+  fly_left_anim.offset_x = visualOffset;
+  fly_left_anim.offset_y = 0;
+  fly_right_anim.offset_x = -visualOffset;
+  fly_right_anim.offset_y = 0;
 }
 
 
@@ -155,15 +152,15 @@ void Arrow::toFlyingState() {
   state = ARROW_FLYING_STATE;
   this->setDirection(direction);
   this->findTarget();
-  // Put the animation back to where it's supposed to be.
-  flyUpAnimation->setOffsetX(0);
-  flyUpAnimation->setOffsetY(0);
-  flyDownAnimation->setOffsetX(0);
-  flyDownAnimation->setOffsetY(0);
-  flyLeftAnimation->setOffsetX(0);
-  flyLeftAnimation->setOffsetY(0);
-  flyRightAnimation->setOffsetX(0);
-  flyRightAnimation->setOffsetY(0);
+  // Put the anim back to where it's supposed to be.
+  fly_up_anim.offset_x = 0;
+  fly_up_anim.offset_y = 0;
+  fly_down_anim.offset_x = 0;
+  fly_down_anim.offset_y = 0;
+  fly_left_anim.offset_x = 0;
+  fly_left_anim.offset_y = 0;
+  fly_right_anim.offset_x = 0;
+  fly_right_anim.offset_y = 0;
   play_sound(SND("arrow_fly.wav"));
 }
 

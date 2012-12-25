@@ -1,13 +1,8 @@
-#include "Animation.h"
 #include "Character.h"
 #include "KwestKingdom.h"
 
 
-
-
-
 Character::Character() {
-  
   turns = 0;
   health = 1;
   maxHealth = 3;
