@@ -78,7 +78,8 @@ Hero::Hero() {
   init_key_input(&leftKey, KEY_LEFT, 0);
   init_key_input(&rightKey, KEY_RIGHT, 0);
   init_key_input(&waitKey, KEY_SPACE, GAME_TICKER);
-  init_key_input(&attackKey, KEY_LCONTROL, 0);
+  init_key_input(&attackKey1, KEY_LCONTROL, 0);
+  init_key_input(&attackKey2, KEY_RCONTROL, 0);
   init_key_input(&handKey, KEY_0, GAME_TICKER);
   init_key_input(&shieldKey, KEY_1, GAME_TICKER);
   init_key_input(&swordKey, KEY_2, GAME_TICKER);
@@ -123,7 +124,7 @@ void Hero::updateStandState() {
     bow->toAwayState();
   }
   
-  if (is_key_pressed(&attackKey)) {
+  if (is_key_pressed(&attackKey1) || is_key_pressed(&attackKey2)) {
     
     if (is_key_pressed(&upKey)) {
       direction = UP;

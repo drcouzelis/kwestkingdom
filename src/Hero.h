@@ -33,7 +33,8 @@ protected:
   KEY_INPUT rightKey;
   KEY_INPUT leftKey;
   KEY_INPUT waitKey;
-  KEY_INPUT attackKey;
+  KEY_INPUT attackKey1;
+  KEY_INPUT attackKey2;
   KEY_INPUT handKey;
   KEY_INPUT shieldKey;
   KEY_INPUT swordKey;
