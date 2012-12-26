@@ -25,8 +25,6 @@ kwestkingdom_SOURCES = \
   EndlessWorld.cpp \
   Enemy.h \
   Enemy.cpp \
-  ForestRoom.h \
-  ForestRoom.cpp \
   Game.h \
   Game.cpp \
   Giant.h \
@@ -69,8 +67,6 @@ kwestkingdom_SOURCES = \
   simclist.c \
   Snapshot.h \
   Snapshot.cpp \
-  SnowRoom.h \
-  SnowRoom.cpp \
   Sprite.h \
   Sprite.cpp \
   StoryWorld.h \
@@ -79,8 +75,6 @@ kwestkingdom_SOURCES = \
   Sword.cpp \
   text.h \
   text.c \
-  UndergroundRoom.h \
-  UndergroundRoom.cpp \
   utilities.h \
   utilities.c \
   World.h \

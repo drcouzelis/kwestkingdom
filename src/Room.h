@@ -16,12 +16,12 @@ class Map;
 #define EXIT_TERRAIN 4
 
 #define MAX_NUM_OF_STEPS (ROWS * COLS)
-#define NO_STEP  1
+#define NO_STEP 1
 
 
 class Room {
  
-protected:
+public:
 
   // Add a terrain map, item map, character map...
   Map *terrainMap;

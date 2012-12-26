@@ -1,17 +1,114 @@
 #include "Archer.h"
 #include "Character.h"
 #include "Chomper.h"
-#include "ForestRoom.h"
 #include "Giant.h"
 #include "Heart.h"
 #include "List.h"
 #include "Map.h"
 #include "Ninja.h"
 #include "RoomFactory.h"
-#include "SnowRoom.h"
-#include "UndergroundRoom.h"
 #include "utilities.h"
 #include "World.h"
+
+
+void init_forest_room(Room *room)
+{
+  add_frame(&room->grass_anim, IMG("terrain_grass.bmp"));
+  add_frame(&room->path_anim, IMG("terrain_path.bmp"));
+  add_frame(&room->mountain_anim, IMG("terrain_oak.bmp"));
+  add_frame(&room->water_anim, IMG("terrain_water.bmp"));
+  
+  add_frame(&room->shore_north_anim, IMG("shore_grass.bmp"));
+
+  copy_anim(&room->shore_south_anim, &room->shore_north_anim);
+  room->shore_south_anim.v_flip = ON;
+
+  copy_anim(&room->shore_east_anim, &room->shore_north_anim);
+  room->shore_east_anim.rotate = ON;
+
+  copy_anim(&room->shore_west_anim, &room->shore_north_anim);
+  room->shore_west_anim.v_flip = ON;
+  room->shore_west_anim.rotate = ON;
+  
+  add_frame(&room->shore_inside_ne_anim, IMG("shore_grass_insidecorner.bmp"));
+
+  copy_anim(&room->shore_inside_nw_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_nw_anim.h_flip = ON;
+
+  copy_anim(&room->shore_inside_se_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_se_anim.v_flip = ON;
+
+  copy_anim(&room->shore_inside_sw_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_sw_anim.v_flip = ON;
+  room->shore_inside_sw_anim.h_flip = ON;
+  
+  add_frame(&room->shore_outside_ne_anim, IMG("shore_grass_outsidecorner.bmp"));
+  room->shore_outside_ne_anim.offset_x = -TILE_SIZE;
+  room->shore_outside_ne_anim.offset_y = -TILE_SIZE;
+
+  copy_anim(&room->shore_outside_nw_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_nw_anim.h_flip = ON;
+
+  copy_anim(&room->shore_outside_se_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_se_anim.v_flip = ON;
+
+  copy_anim(&room->shore_outside_sw_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_sw_anim.v_flip = ON;
+  room->shore_outside_sw_anim.h_flip = ON;
+}
+
+
+void init_snow_room(Room *room)
+{
+  add_frame(&room->grass_anim, IMG("terrain_snow.bmp"));
+  add_frame(&room->mountain_anim, IMG("terrain_evergreen.bmp"));
+  add_frame(&room->water_anim, IMG("terrain_ice.bmp"));
+  
+  add_frame(&room->shore_north_anim, IMG("shore_snow.bmp"));
+
+  copy_anim(&room->shore_south_anim, &room->shore_north_anim);
+  room->shore_south_anim.v_flip = ON;
+
+  copy_anim(&room->shore_east_anim, &room->shore_north_anim);
+  room->shore_east_anim.rotate = ON;
+
+  copy_anim(&room->shore_west_anim, &room->shore_north_anim);
+  room->shore_west_anim.v_flip = ON;
+  room->shore_west_anim.rotate = ON;
+  
+  add_frame(&room->shore_inside_ne_anim, IMG("shore_snow_insidecorner.bmp"));
+
+  copy_anim(&room->shore_inside_nw_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_nw_anim.h_flip = ON;
+
+  copy_anim(&room->shore_inside_se_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_se_anim.v_flip = ON;
+
+  copy_anim(&room->shore_inside_sw_anim, &room->shore_inside_ne_anim);
+  room->shore_inside_sw_anim.v_flip = ON;
+  room->shore_inside_sw_anim.h_flip = ON;
+
+  add_frame(&room->shore_outside_ne_anim, IMG("shore_snow_outsidecorner.bmp"));
+  room->shore_outside_ne_anim.offset_x = -TILE_SIZE;
+  room->shore_outside_ne_anim.offset_y = -TILE_SIZE;
+
+  copy_anim(&room->shore_outside_nw_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_nw_anim.h_flip = ON;
+
+  copy_anim(&room->shore_outside_se_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_se_anim.v_flip = ON;
+
+  copy_anim(&room->shore_outside_sw_anim, &room->shore_outside_ne_anim);
+  room->shore_outside_sw_anim.v_flip = ON;
+  room->shore_outside_sw_anim.h_flip = ON;
+}
+
+
+void init_underground_room(Room *room)
+{
+  add_frame(&room->grass_anim, IMG("terrain_dirt.bmp"));
+  add_frame(&room->mountain_anim, IMG("terrain_spire.bmp"));
+}
 
 
 #define STRAIGHT 0
@@ -53,14 +150,17 @@ Room * RoomFactory::createRoom() {
   
   Room *room;
   int i;
+
+  room = new Room();
   
   if (type == ROOM_FOREST) {
-    room = new ForestRoom();
+    init_forest_room(room);
   } else if (type == ROOM_SNOW) {
-    room = new SnowRoom();
+    init_snow_room(room);
   } else if (type == ROOM_UNDERGROUND) {
-    room = new UndergroundRoom();
+    init_underground_room(room);
   } else {
+    delete room;
     return NULL;
   }
   
