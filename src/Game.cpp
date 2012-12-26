@@ -284,9 +284,6 @@ void Game::drawHighScores(BITMAP * buffer) {
   
   // Return
   draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
-  
-
-  
 }
 
 
@@ -349,11 +346,7 @@ void Game::draw(BITMAP * buffer) {
   case GAME_QUIT_STATE:
     // Do nothing.
     break;
-    
   }
-  
-
-  
 }
 
 
@@ -380,7 +373,6 @@ void Game::activateMenuSelection() {
     this->setState(GAME_HIGH_SCORES_STATE);
     break;
   }
-
 }
 
 
@@ -432,6 +424,4 @@ void Game::gameOver() {
   this->setState(GAME_OVER_STATE);
 
 }
-
-
 

@@ -43,7 +43,7 @@ public:
   World();
   virtual ~World();
 
-  void update();
+  virtual void update();
   void draw(BITMAP *buffer);
 
   bool isInhabited(int x, int y);
@@ -69,7 +69,7 @@ public:
   void updateEnemies();
 
   Room *createNextRoom();
-  void changeRooms();
+  virtual void changeRooms();
 
   void drawTerrain(BITMAP *buffer);
   void drawCharacters(BITMAP *buffer);

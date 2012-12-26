@@ -134,8 +134,6 @@ void StoryWorld::update() {
     //play_sound(SND("sound.wav"));
     game_over();
   }
-  
-
 }
 
 
