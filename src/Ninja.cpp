@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "KwestKingdom.h"
 #include "Ninja.h"
 #include "resources.h"
@@ -26,29 +25,25 @@ Ninja::Ninja() {
   sword->setSpeed(speed);
   sword->toHoldState();
   
-  standAnimation = new Animation();
-  standAnimation->addFrame(IMG("ninja_1.bmp"));
-  standAnimation->addFrame(IMG("ninja_2.bmp"));
-  standAnimation->addFrame(IMG("ninja_3.bmp"));
-  standAnimation->addFrame(IMG("ninja_2.bmp"));
-  standAnimation->setLoop(true);
-  standAnimation->setSpeed(6);
+  init_anim(&stand_anim, ON, 6);
+  add_frame(&stand_anim, IMG("ninja_1.bmp"));
+  add_frame(&stand_anim, IMG("ninja_2.bmp"));
+  add_frame(&stand_anim, IMG("ninja_3.bmp"));
+  add_frame(&stand_anim, IMG("ninja_2.bmp"));
   
-  dashAnimation = standAnimation->copy();
-  dashAnimation->setSpeed(24);
+  copy_anim(&dash_anim, &stand_anim);
+  dash_anim.speed = 24;
   
-  attackAnimation = new Animation();
-  attackAnimation->addFrame(IMG("ninja_1.bmp"));
-  attackAnimation->addFrame(IMG("ninja_2.bmp"));
-  attackAnimation->addFrame(IMG("ninja_2.bmp"));
-  attackAnimation->addFrame(IMG("ninja_3.bmp"));
-  attackAnimation->addFrame(IMG("ninja_3.bmp"));
-  attackAnimation->addFrame(IMG("ninja_2.bmp"));
-  attackAnimation->addFrame(IMG("ninja_2.bmp"));
-  attackAnimation->setLoop(false);
-  attackAnimation->setSpeed(12);
+  init_anim(&attack_anim, OFF, 12);
+  add_frame(&attack_anim, IMG("ninja_1.bmp"));
+  add_frame(&attack_anim, IMG("ninja_2.bmp"));
+  add_frame(&attack_anim, IMG("ninja_2.bmp"));
+  add_frame(&attack_anim, IMG("ninja_3.bmp"));
+  add_frame(&attack_anim, IMG("ninja_3.bmp"));
+  add_frame(&attack_anim, IMG("ninja_2.bmp"));
+  add_frame(&attack_anim, IMG("ninja_2.bmp"));
   
-  animation = standAnimation;
+  anim = &stand_anim;
   state = NINJA_STAND_STATE;
   this->setSpeed(getWalkSpeed());
   this->wait();
@@ -57,10 +52,6 @@ Ninja::Ninja() {
 
 Ninja::~Ninja() {
   delete sword;
-  delete standAnimation;
-  delete dashAnimation;
-  delete attackAnimation;
-
 }
 
 
@@ -92,8 +83,8 @@ void Ninja::update() {
     if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
       
       state = NINJA_ATTACK_STATE;
-      animation = attackAnimation;
-      animation->reset();
+      anim = &attack_anim;
+      reset_anim(anim);
       // Change the state of the sword.
       if (x == target->getX() && y == target->getY() + 1) { // Up
         sword->toAttackUpState();
@@ -119,8 +110,8 @@ void Ninja::update() {
       
       state = NINJA_DASH_STATE;
       this->setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
-      animation = dashAnimation;
-      animation->reset();
+      anim = &dash_anim;
+      reset_anim(anim);
       
     } else if (y == target->getY()) {
       
@@ -136,8 +127,8 @@ void Ninja::update() {
       
       state = NINJA_DASH_STATE;
       this->setSpeed(getWalkSpeed() + (getWalkSpeed() / 5));
-      animation = dashAnimation;
-      animation->reset();
+      anim = &dash_anim;
+      reset_anim(anim);
       
     } else {
       
@@ -184,8 +175,8 @@ void Ninja::update() {
       // If the target has a walking distance of one...
       if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
         state = NINJA_ATTACK_STATE;
-        animation = attackAnimation;
-        animation->reset();
+        anim = &attack_anim;
+        reset_anim(anim);
         // Change the state of the sword.
         if (x == target->getX() && y == target->getY() + 1) { // Up
           sword->toAttackUpState();
@@ -198,19 +189,19 @@ void Ninja::update() {
         }
       } else {
         state = NINJA_STAND_STATE;
-        animation = standAnimation;
-        animation->reset();
+        anim = &stand_anim;
+        reset_anim(anim);
         this->wait();
       }
     }
     break;
     
   case NINJA_ATTACK_STATE:
-    if (animation->isFinished()) {
+    if (anim->done) {
       world->attackFromTeam(team, target->getX(), target->getY());
       state = NINJA_STAND_STATE;
-      animation = standAnimation;
-      animation->reset();
+      anim = &stand_anim;
+      reset_anim(anim);
       sword->toHoldState();
       this->wait();
     }

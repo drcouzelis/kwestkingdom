@@ -2,9 +2,9 @@
 #define ROOM_HEADER
 
 
+#include "anim.h"
 #include "KwestKingdom.h"
 
-class Animation;
 class List;
 class Map;
 
@@ -43,22 +43,22 @@ protected:
   
   int number;
   
-  Animation *grassAnimation;
-  Animation *pathAnimation;
-  Animation *mountainAnimation;
-  Animation *waterAnimation;
-  Animation *shoreNorthAnimation;
-  Animation *shoreSouthAnimation;
-  Animation *shoreEastAnimation;
-  Animation *shoreWestAnimation;
-  Animation *shoreInsideNEAnimation;
-  Animation *shoreInsideNWAnimation;
-  Animation *shoreInsideSEAnimation;
-  Animation *shoreInsideSWAnimation;
-  Animation *shoreOutsideNEAnimation;
-  Animation *shoreOutsideNWAnimation;
-  Animation *shoreOutsideSEAnimation;
-  Animation *shoreOutsideSWAnimation;
+  ANIM grass_anim;
+  ANIM path_anim;
+  ANIM mountain_anim;
+  ANIM water_anim;
+  ANIM shore_north_anim;
+  ANIM shore_south_anim;
+  ANIM shore_east_anim;
+  ANIM shore_west_anim;
+  ANIM shore_inside_ne_anim;
+  ANIM shore_inside_nw_anim;
+  ANIM shore_inside_se_anim;
+  ANIM shore_inside_sw_anim;
+  ANIM shore_outside_ne_anim;
+  ANIM shore_outside_nw_anim;
+  ANIM shore_outside_se_anim;
+  ANIM shore_outside_sw_anim;
   
   int path[MAX_NUM_OF_STEPS];
   int steps;

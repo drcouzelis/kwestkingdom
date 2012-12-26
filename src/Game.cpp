@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#include "Animation.h"
 #include "EndlessWorld.h"
 #include "Game.h"
 #include "highscore.h"
@@ -35,20 +34,17 @@ typedef enum {
 } MENU_SELECTION;
 
 
-
-
-
 Game::Game() {
   
   world = NULL;
   menuSelection = NEW_GAME_SELECTION;
   strcpy(playerInitials, "\0");
   
-  titleAnimation = new Animation();
-  titleAnimation->addFrame(IMG("title.bmp"));
+  init_anim(&title_anim, OFF, 0);
+  add_frame(&title_anim, IMG("title.bmp"));
   
-  gameOverAnimation = new Animation();
-  gameOverAnimation->addFrame(IMG("gameover.bmp"));
+  init_anim(&game_over_anim, OFF, 1);
+  add_frame(&game_over_anim, IMG("gameover.bmp"));
   
   init_key_input(&escapeKey, KEY_ESC, GAME_TICKER);
   init_key_input(&fullscreenKey, KEY_F, GAME_TICKER);
@@ -61,14 +57,12 @@ Game::Game() {
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();
   
-  menuPointer = new Animation();
-  menuPointer->addFrame(IMG("sword_hold_1.bmp"));
-  menuPointer->addFrame(IMG("sword_hold_2.bmp"));
-  menuPointer->addFrame(IMG("sword_hold_3.bmp"));
-  menuPointer->addFrame(IMG("sword_hold_4.bmp"));
-  menuPointer->setRotate(true);
-  menuPointer->setLoop(true);
-  menuPointer->setSpeed(6);
+  init_anim(&menu_pointer, ON, 6);
+  add_frame(&menu_pointer, IMG("sword_hold_1.bmp"));
+  add_frame(&menu_pointer, IMG("sword_hold_2.bmp"));
+  add_frame(&menu_pointer, IMG("sword_hold_3.bmp"));
+  add_frame(&menu_pointer, IMG("sword_hold_4.bmp"));
+  menu_pointer.rotate = ON;
   
   this->setState(GAME_MENU_STATE);
 }
@@ -76,11 +70,8 @@ Game::Game() {
 
 Game::~Game() {
   delete world;
-  delete titleAnimation;
-  delete gameOverAnimation;
   delete menuBackground;
   delete highScoresBackground;
-  delete menuPointer;
 }
 
 
@@ -144,7 +135,7 @@ void Game::update() {
     } else if (is_key_pressed(&selectKey)) {
       this->activateMenuSelection();
     }
-    menuPointer->update();
+    animate(&menu_pointer);
     break;
   
   case GAME_PLAY_STATE:
@@ -213,11 +204,7 @@ void Game::drawMenu(BITMAP * buffer) {
   draw_box(buffer, x, y, w, h);
 
   // Draw the title of the game
-  titleAnimation->drawTo(
-    buffer,
-    (get_win_w() / 2) - (titleAnimation->width() / 2),
-    (get_win_w() - titleAnimation->width()) / 2
-  );
+  draw_anim(&title_anim, buffer, (get_win_w() / 2) - (get_anim_w(&title_anim) / 2), (get_win_w() - get_anim_w(&title_anim)) / 2);
   
   // New Game
   draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
@@ -252,7 +239,7 @@ void Game::drawMenu(BITMAP * buffer) {
     draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
   }
   
-  menuPointer->drawTo(buffer, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
+  draw_anim(&menu_pointer, buffer, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
 }
 
 
@@ -348,11 +335,7 @@ void Game::draw(BITMAP * buffer) {
   
   case GAME_OVER_STATE:
     world->draw(buffer);
-    gameOverAnimation->drawTo(
-      buffer,
-      (get_win_w() / 2) - (gameOverAnimation->width() / 2),
-      (get_win_h() / 2) - (gameOverAnimation->height() / 2)
-    );
+    draw_anim(&game_over_anim, buffer, (get_win_w() / 2) - (get_anim_w(&game_over_anim) / 2), (get_win_h() / 2) - (get_anim_h(&game_over_anim) / 2));
     break;
     
   case GAME_ENTER_INITIALS_STATE:

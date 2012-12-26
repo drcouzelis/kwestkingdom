@@ -9,6 +9,7 @@ class MoneyBag : public Item {
 
 protected:
 
+  ANIM money_bag_anim;
   int amount;
 
 public:

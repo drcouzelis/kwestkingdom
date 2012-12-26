@@ -13,8 +13,8 @@ protected:
 
   Hammer *hammer;
   
-  Animation *standAnimation;
-  Animation *attackAnimation;
+  ANIM stand_anim;
+  ANIM attack_anim;
   
 public:
 

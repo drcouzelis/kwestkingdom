@@ -9,8 +9,8 @@ class Chomper : public Enemy {
 
 protected:
   
-  Animation *standAnimation;
-  Animation *attackAnimation;
+  ANIM stand_anim;
+  ANIM attack_anim;
   
   int prevDirection;
   

@@ -3,9 +3,9 @@
 
 
 #include <allegro.h>
+#include "anim.h"
 #include "key_input.h"
 
-class Animation;
 class Snapshot;
 class World;
 
@@ -16,8 +16,8 @@ class Game {
   
   int state;
   
-  Animation *titleAnimation;
-  Animation *gameOverAnimation;
+  ANIM title_anim;
+  ANIM game_over_anim;
   
   KEY_INPUT fullscreenKey;
   KEY_INPUT soundKey;
@@ -30,8 +30,8 @@ class Game {
   int menuSelection;
   Snapshot *menuBackground;
   Snapshot *highScoresBackground;
-  Animation *menuPointer;
-  
+  ANIM menu_pointer;
+
   char playerInitials[4];
   
 public:

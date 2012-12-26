@@ -13,9 +13,9 @@ protected:
 
   Sword *sword;
   
-  Animation *standAnimation;
-  Animation *attackAnimation;
-  Animation *dashAnimation;
+  ANIM stand_anim;
+  ANIM attack_anim;
+  ANIM dash_anim;
   
 public:
 

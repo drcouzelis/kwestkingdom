@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "HelpTile.h"
 #include "Hero.h"
 #include "RoomFactory.h"

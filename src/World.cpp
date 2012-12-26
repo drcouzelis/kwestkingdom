@@ -50,11 +50,11 @@ World::World() {
   rooms = new List();
   rooms->append(room);
   
-  init_anim(&heart_anim);
+  init_anim(&heart_anim, OFF, 0);
   add_frame(&heart_anim, IMG("heart.bmp"));
-  init_anim(&heart_empty_anim);
+  init_anim(&heart_empty_anim, OFF, 0);
   add_frame(&heart_empty_anim, IMG("emptyheart.bmp"));
-  init_anim(&help_tile_anim);
+  init_anim(&help_tile_anim, OFF, 0);
   add_frame(&help_tile_anim, IMG("help.bmp"));
   
   prevRoomSnapshot = new Snapshot();

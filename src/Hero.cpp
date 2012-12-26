@@ -234,7 +234,7 @@ void Hero::update() {
     break;
   
   case HERO_HURT_STATE:
-    if (animation->done) {
+    if (anim->done) {
       if (health == 0) {
         shield->toAwayState();
         sword->toAwayState();
@@ -252,7 +252,7 @@ void Hero::update() {
     break;
       
   case HERO_PUSH_SWORD_STATE:
-    if (animation->done) {
+    if (anim->done) {
       switch (direction) {
       case UP:
         world->attackFromTeam(team, x, y - 1);
@@ -272,7 +272,7 @@ void Hero::update() {
     break;
     
   case HERO_PULL_SWORD_STATE:
-    if (animation->done) {
+    if (anim->done) {
       this->toStandState();
       sword->toHoldState();
       this->wait();
@@ -280,14 +280,14 @@ void Hero::update() {
     break;
     
   case HERO_DRAW_BOW_STATE:
-    if (animation->done) {
+    if (anim->done) {
       this->toShootArrowState();
     }
     break;
     
   case HERO_SHOOT_ARROW_STATE:
-    if (animation->done) {
-      animation = &stand_anim;
+    if (anim->done) {
+      anim = &stand_anim;
       bow->toHoldState();
     }
     if (bow->getArrow()->stopped()) {
@@ -319,27 +319,27 @@ void Hero::emptyHands() {
 
 void Hero::toStandState() {
   state = HERO_STAND_STATE;
-  animation = &stand_anim;
+  anim = &stand_anim;
 }
 
 
 void Hero::toMoveState() {
   state = HERO_MOVE_STATE;
-  animation = &stand_anim;
+  anim = &stand_anim;
 }
 
 
 void Hero::toAttackState() {
   state = HERO_ATTACK_STATE;
-  animation = &stand_anim;
+  anim = &stand_anim;
 }
 
 
 void Hero::toHurtState() {
   
   state = HERO_HURT_STATE;
-  animation = &hurt_anim;
-  reset_anim(animation);
+  anim = &hurt_anim;
+  reset_anim(anim);
   
   // You can't shoot an arrow if you get
   // hurt whil trying to do it.
@@ -355,15 +355,15 @@ void Hero::toHurtState() {
 
 void Hero::toDeadState() {
   state = HERO_DEAD_STATE;
-  animation = &dead_anim;
-  reset_anim(animation);
+  anim = &dead_anim;
+  reset_anim(anim);
 }
 
 
 void Hero::toPushSwordState() {
   state = HERO_PUSH_SWORD_STATE;
-  animation = &begin_attack_anim;
-  reset_anim(animation);
+  anim = &begin_attack_anim;
+  reset_anim(anim);
   switch (direction) {
   case UP:
     sword->toAttackUpState();
@@ -383,16 +383,16 @@ void Hero::toPushSwordState() {
 
 void Hero::toPullSwordState() {
   state = HERO_PULL_SWORD_STATE;
-  animation = &end_attack_anim;
-  reset_anim(animation);
+  anim = &end_attack_anim;
+  reset_anim(anim);
 }
 
 
 void Hero::toDrawBowState() {
   
   state = HERO_DRAW_BOW_STATE;
-  animation = &begin_attack_anim;
-  reset_anim(animation);
+  anim = &begin_attack_anim;
+  reset_anim(anim);
   
   switch (direction) {
   case UP:
@@ -418,8 +418,8 @@ void Hero::toDrawBowState() {
 
 void Hero::toShootArrowState() {
   state = HERO_SHOOT_ARROW_STATE;
-  animation = &end_attack_anim;
-  reset_anim(animation);
+  anim = &end_attack_anim;
+  reset_anim(anim);
   bow->getArrow()->toFlyingState();
   bow->toHoldState();
 
@@ -436,7 +436,7 @@ void Hero::hurt() {
 
 
 bool Hero::isDead() {
-  if (state == HERO_DEAD_STATE && animation->done) {
+  if (state == HERO_DEAD_STATE && anim->done) {
     return true;
   }
   return false;

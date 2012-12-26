@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Chomper.h"
 #include "KwestKingdom.h"
 #include "resources.h"
@@ -13,49 +12,35 @@ typedef enum {
 } CHOMPER_STATE;
 
 
-
-
-
 Chomper::Chomper() {
   
   prevDirection = UP;
   
-  standAnimation = new Animation();
-  standAnimation->addFrame(IMG("chomper_stand_1.bmp"));
-  standAnimation->addFrame(IMG("chomper_stand_2.bmp"));
-  standAnimation->addFrame(IMG("chomper_stand_3.bmp"));
-  standAnimation->addFrame(IMG("chomper_stand_2.bmp"));
-  standAnimation->setLoop(true);
-  standAnimation->setSpeed(6);
+  init_anim(&stand_anim, ON, 6);
+  add_frame(&stand_anim, IMG("chomper_stand_1.bmp"));
+  add_frame(&stand_anim, IMG("chomper_stand_2.bmp"));
+  add_frame(&stand_anim, IMG("chomper_stand_3.bmp"));
+  add_frame(&stand_anim, IMG("chomper_stand_2.bmp"));
   
-  attackAnimation = new Animation();
-  attackAnimation->addFrame(IMG("chomper_bite_1.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_2.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_3.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_4.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_5.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_4.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_3.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_2.bmp"));
-  attackAnimation->addFrame(IMG("chomper_bite_1.bmp"));
-  attackAnimation->setLoop(false);
-  attackAnimation->setSpeed(20);
+  init_anim(&attack_anim, OFF, 20);
+  add_frame(&attack_anim, IMG("chomper_bite_1.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_2.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_3.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_4.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_5.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_4.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_3.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_2.bmp"));
+  add_frame(&attack_anim, IMG("chomper_bite_1.bmp"));
   
-  animation = standAnimation;
+  anim = &stand_anim;
   state = CHOMPER_STAND_STATE;
   this->wait();
   
 }
 
 
-
-
-
-
 Chomper::~Chomper() {
-  delete standAnimation;
-  delete attackAnimation;
-
 }
 
 
@@ -86,8 +71,8 @@ void Chomper::update() {
     if (abs(x - target->getX()) + abs(y - target->getY()) == 1) {
 	  
       state = CHOMPER_ATTACK_STATE;
-      animation = attackAnimation;
-      animation->reset();
+      anim = &attack_anim;
+      reset_anim(anim);
       play_sound(SND("chomp.wav"));
       
     } else {
@@ -173,11 +158,11 @@ void Chomper::update() {
     break;
     
   case CHOMPER_ATTACK_STATE:
-    if (animation->isFinished()) {
+    if (anim->done) {
       world->attackFromTeam(team, target->getX(), target->getY());
       state = CHOMPER_STAND_STATE;
-      animation = standAnimation;
-      animation->reset();
+      anim = &stand_anim;
+      reset_anim(anim);
       this->wait();
     }
 	break;

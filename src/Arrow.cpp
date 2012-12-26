@@ -25,9 +25,9 @@ Arrow::Arrow() {
   copy_anim(&fly_down_anim, &fly_right_anim);
   fly_down_anim.rotate = ON;
 
-  copy_anim(&fly_right_anim, &fly_right_anim);
-  fly_right_anim.h_flip = ON;
-  fly_right_anim.rotate = ON;
+  copy_anim(&fly_up_anim, &fly_right_anim);
+  fly_up_anim.h_flip = ON;
+  fly_up_anim.rotate = ON;
   
   direction = UP;
   

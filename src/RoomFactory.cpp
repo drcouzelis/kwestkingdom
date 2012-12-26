@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Archer.h"
 #include "Character.h"
 #include "Chomper.h"

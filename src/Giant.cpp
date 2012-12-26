@@ -1,4 +1,3 @@
-#include "Animation.h"
 #include "Giant.h"
 #include "Hammer.h"
 #include "KwestKingdom.h"
@@ -12,9 +11,6 @@ typedef enum {
   GIANT_ATTACK_STATE,
   GIANT_MOVE_STATE
 } GIANT_STATE;
-
-
-
 
 
 Giant::Giant() {
@@ -34,29 +30,25 @@ Giant::Giant() {
   hammer->setSpeed(speed);
   hammer->setState(HAMMER_HOLD_STATE);
   
-  standAnimation = new Animation();
-  standAnimation->addFrame(IMG("giant_1.bmp"));
-  standAnimation->addFrame(IMG("giant_2.bmp"));
-  standAnimation->addFrame(IMG("giant_3.bmp"));
-  standAnimation->addFrame(IMG("giant_2.bmp"));
-  standAnimation->setLoop(true);
-  standAnimation->setSpeed(3);
+  init_anim(&stand_anim, ON, 3);
+  add_frame(&stand_anim, IMG("giant_1.bmp"));
+  add_frame(&stand_anim, IMG("giant_2.bmp"));
+  add_frame(&stand_anim, IMG("giant_3.bmp"));
+  add_frame(&stand_anim, IMG("giant_2.bmp"));
   
-  attackAnimation = new Animation();
-  attackAnimation->addFrame(IMG("giant_1.bmp"));
-  attackAnimation->addFrame(IMG("giant_2.bmp"));
-  attackAnimation->addFrame(IMG("giant_2.bmp"));
-  attackAnimation->addFrame(IMG("giant_3.bmp"));
-  attackAnimation->addFrame(IMG("giant_3.bmp"));
-  attackAnimation->addFrame(IMG("giant_3.bmp"));
-  attackAnimation->addFrame(IMG("giant_3.bmp"));
-  attackAnimation->addFrame(IMG("giant_3.bmp"));
-  attackAnimation->addFrame(IMG("giant_2.bmp"));
-  attackAnimation->addFrame(IMG("giant_2.bmp"));
-  attackAnimation->setLoop(false);
-  attackAnimation->setSpeed(24);
+  init_anim(&attack_anim, OFF, 24);
+  add_frame(&attack_anim, IMG("giant_1.bmp"));
+  add_frame(&attack_anim, IMG("giant_2.bmp"));
+  add_frame(&attack_anim, IMG("giant_2.bmp"));
+  add_frame(&attack_anim, IMG("giant_3.bmp"));
+  add_frame(&attack_anim, IMG("giant_3.bmp"));
+  add_frame(&attack_anim, IMG("giant_3.bmp"));
+  add_frame(&attack_anim, IMG("giant_3.bmp"));
+  add_frame(&attack_anim, IMG("giant_3.bmp"));
+  add_frame(&attack_anim, IMG("giant_2.bmp"));
+  add_frame(&attack_anim, IMG("giant_2.bmp"));
   
-  animation = standAnimation;
+  anim = &stand_anim;
   state = GIANT_STAND_STATE;
   this->setMoney(5);
   this->wait();
@@ -65,8 +57,6 @@ Giant::Giant() {
 
 Giant::~Giant() {
   delete hammer;
-  delete standAnimation;
-  delete attackAnimation;
 }
 
 
@@ -192,8 +182,8 @@ void Giant::update() {
     if (this->target(target, 1)) {
       
       state = GIANT_ATTACK_STATE;
-      animation = attackAnimation;
-      animation->reset();
+      anim = &attack_anim;
+      reset_anim(anim);
       
       // Change the state of the hammer.
       if (this->directionToTarget(target) == UP) {
@@ -253,13 +243,13 @@ void Giant::update() {
     break;
     
   case GIANT_ATTACK_STATE:
-    if (animation->isFinished()) {
+    if (anim->done) {
       // Send the hero soaring!
       world->attackFromTeam(team, target->getX(), target->getY());
       
       state = GIANT_STAND_STATE;
-      animation = standAnimation;
-      animation->reset();
+      anim = &stand_anim;
+      reset_anim(anim);
       hammer->setState(HAMMER_HOLD_STATE);
       this->wait();
     }

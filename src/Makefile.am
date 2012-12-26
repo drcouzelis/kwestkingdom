@@ -9,8 +9,6 @@ kwestkingdom_SOURCES = \
   al_screen.h \
   al_screen.c \
   allegro_icon.c \
-  Animation.h \
-  Animation.cpp \
   anim.h \
   anim.c \
   Archer.h \

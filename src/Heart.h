@@ -6,9 +6,14 @@
 
 
 class Heart : public Item {
-public:
-  Heart();
 
+protected:
+
+  ANIM heart_anim;
+
+public:
+
+  Heart();
   void collectedBy(Character *character);
 };
 
