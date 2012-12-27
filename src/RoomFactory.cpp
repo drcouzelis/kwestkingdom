@@ -328,7 +328,7 @@ void RoomFactory::generateEnemies(Room *room) {
       } else {
         
         if (
-          terrain_map[x][y] == GRASS_TERRAIN &&
+          room->terrain_map[x][y] == GRASS_TERRAIN &&
           random_number(0, 99) < chanceOfEnemy &&
           this->characterExists(list, x, y, 1, 1) == false
         ) {
@@ -345,9 +345,9 @@ void RoomFactory::generateEnemies(Room *room) {
             enemy = new Ninja();
           } else if (randomNum > lowerGiant && randomNum <= upperGiant) { // Giant
             if (
-              terrain_map[x + 1][y] == GRASS_TERRAIN &&
-              terrain_map[x][y + 1] == GRASS_TERRAIN &&
-              terrain_map[x + 1][y + 1] == GRASS_TERRAIN &&
+              room->terrain_map[x + 1][y] == GRASS_TERRAIN &&
+              room->terrain_map[x][y + 1] == GRASS_TERRAIN &&
+              room->terrain_map[x + 1][y + 1] == GRASS_TERRAIN &&
               this->characterExists(list, x, y, 2, 2) == false
             ) {
               enemy = new Giant();
@@ -403,7 +403,7 @@ void RoomFactory::generateItems(Room *room) {
     
     for (y = 1; heart == NULL && y < ROWS - 1; y++) {
       for (x = 1; heart == NULL && x < COLS - 1; x++) {
-        if (path_map[x][y]) {
+        if (room->path_map[x][y]) {
           backupX = x;
           backupY = y;
           if (random_number(1, 5) == 1) {
@@ -628,7 +628,7 @@ void RoomFactory::generateTerrain(Room *room) {
       
       room->terrain_map[x][y] = GRASS_TERRAIN;
       
-      if (path_map[x][y] != PATH) {
+      if (room->path_map[x][y] != PATH) {
         
         // Make a border of mountains.
         if (x == 0 || x == COLS - 1 || y == 0 || y == ROWS - 1) {
@@ -641,19 +641,19 @@ void RoomFactory::generateTerrain(Room *room) {
           // If this spot has any water around it
           // then increase its chance of being water.
           if (
-            terrain_map[x][y - 1] == WATER_TERRAIN ||
-            terrain_map[x][y + 1] == WATER_TERRAIN ||
-            terrain_map[x - 1][y] == WATER_TERRAIN ||
-            terrain_map[x + 1][y] == WATER_TERRAIN
+            room->terrain_map[x][y - 1] == WATER_TERRAIN ||
+            room->terrain_map[x][y + 1] == WATER_TERRAIN ||
+            room->terrain_map[x - 1][y] == WATER_TERRAIN ||
+            room->terrain_map[x + 1][y] == WATER_TERRAIN
           ) {
             actualChanceOfWater = chanceOfClumpedWater;
           }
           
           if (
-            terrain_map[x][y - 1] == TREE_TERRAIN ||
-            terrain_map[x][y + 1] == TREE_TERRAIN ||
-            terrain_map[x - 1][y] == TREE_TERRAIN ||
-            terrain_map[x + 1][y] == TREE_TERRAIN
+            room->terrain_map[x][y - 1] == TREE_TERRAIN ||
+            room->terrain_map[x][y + 1] == TREE_TERRAIN ||
+            room->terrain_map[x - 1][y] == TREE_TERRAIN ||
+            room->terrain_map[x + 1][y] == TREE_TERRAIN
           ) {
             actualChanceOfTrees = chanceOfClumpedTrees;
           }
