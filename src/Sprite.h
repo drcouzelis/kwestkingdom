@@ -12,7 +12,7 @@ class Sprite {
   
 protected:
 
-  // Position on the map
+  // Position in the room
   int x; // Horizontal, from 0 to COLS   1
   int y; // Vertical, from 0 to ROWS   1
   int w; // Width of the sprite, or, how many square it occupies horizontally

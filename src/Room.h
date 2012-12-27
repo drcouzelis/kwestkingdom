@@ -6,7 +6,6 @@
 #include "KwestKingdom.h"
 
 class List;
-class Map;
 
 
 #define GRASS_TERRAIN 0
@@ -23,9 +22,8 @@ class Room {
  
 public:
 
-  // Add a terrain map, item map, character map...
-  Map *terrainMap;
-  Map *pathMap;
+  int terrain_map[COLS][ROWS];
+  int path_map[COLS][ROWS];
   
   List *enemies;
   List *items;
@@ -81,9 +79,6 @@ public:
   virtual List *getItems();
   virtual List *getHelpTiles();
 
-  virtual void setPathMap(Map *aPathMap);
-  virtual void setTerrainMap(Map *aTerrainMap);
-
   virtual void addStep(int aStep);
   virtual int getSizeOfPath();
   virtual int getXOfStepNumber(int aStep);
@@ -111,8 +106,6 @@ public:
   virtual int getNumber();
 
   virtual void removeExitToPrevRoom();
-
-  virtual Map *getPathMap();
 };
 
 

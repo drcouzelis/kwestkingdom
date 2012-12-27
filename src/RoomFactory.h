@@ -5,7 +5,6 @@
 #include "Room.h"
 
 class List;
-class Map;
 class World;
 
 
@@ -49,10 +48,6 @@ class RoomFactory {
   // These are created internally.
   int pathStopX;
   int pathStopY;
-  Map *pathMap;
-  Map *terrainMap;
-  List *enemies;
-  List *items;
   
   int path[MAX_NUM_OF_STEPS];
   int steps;
@@ -63,8 +58,8 @@ public:
 
   Room *createRoom();
 
-  Map *generatePathToEdge();
-  Map *generateTerrain();
+  void generatePath(Room *room);
+  void generateTerrain(Room *room);
   void generateEnemies(Room *room);
   void generateItems(Room *room);
 

@@ -1,14 +1,24 @@
 #include "List.h"
-#include "Map.h"
 #include "Room.h"
 
 
 Room::Room() {
   
+  int x;
+  int y;
   int i;
   
-  pathMap = NULL;
-  terrainMap = NULL;
+  for (y = 0; y < ROWS; y++) {
+    for (x = 0; x < COLS; x++) {
+      path_map[x][y] = 0;
+    }
+  }
+
+  for (y = 0; y < ROWS; y++) {
+    for (x = 0; x < COLS; x++) {
+      terrain_map[x][y] = 0;
+    }
+  }
   
   enemies = new List();
   items = new List();
@@ -50,9 +60,6 @@ Room::Room() {
 
 
 Room::~Room() {
-  delete pathMap;
-  delete terrainMap;
-
   delete enemies;
   delete items;
   delete helpTiles;
@@ -87,28 +94,28 @@ void Room::draw(BITMAP * buffer) {
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
       
-      //if (pathMap->getValue(x, y) == true) { // Draw the path
+      //if (path_map[x][y]) { // Draw the path
         //draw_anim(&path_anim, buffer, x * getTileSize(), y * getTileSize());
       //} else
-      if (terrainMap->getValue(x, y) == GRASS_TERRAIN) {
+      if (terrain_map[x][y] == GRASS_TERRAIN) {
         draw_anim(&grass_anim, buffer, x * getTileSize(), y * getTileSize());
-      } else if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
+      } else if (terrain_map[x][y] == TREE_TERRAIN) {
         draw_anim(&mountain_anim, buffer, x * getTileSize(), y * getTileSize());
-      } else if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
+      } else if (terrain_map[x][y] == WATER_TERRAIN) {
         
         draw_anim(&water_anim, buffer, x * getTileSize(), y * getTileSize());
         
         // Add the shore borders
-        if (terrainMap->getValue(x, y - 1) != WATER_TERRAIN) { // North
+        if (terrain_map[x][y - 1] != WATER_TERRAIN) { // North
           draw_anim(&shore_north_anim, buffer, x * getTileSize(), y * getTileSize());
         }
-        if (terrainMap->getValue(x, y + 1) != WATER_TERRAIN) { // South
+        if (terrain_map[x][y + 1] != WATER_TERRAIN) { // South
           draw_anim(&shore_south_anim, buffer, x * getTileSize(), y * getTileSize());
         }
-        if (terrainMap->getValue(x + 1, y) != WATER_TERRAIN) { // East
+        if (terrain_map[x + 1][y] != WATER_TERRAIN) { // East
           draw_anim(&shore_east_anim, buffer, x * getTileSize(), y * getTileSize());
         }
-        if (terrainMap->getValue(x - 1, y) != WATER_TERRAIN) { // West
+        if (terrain_map[x - 1][y] != WATER_TERRAIN) { // West
           draw_anim(&shore_west_anim, buffer, x * getTileSize(), y * getTileSize());
         }
           
@@ -121,60 +128,60 @@ void Room::draw(BITMAP * buffer) {
   for (y = 0; y < ROWS; y++) {
     for (x = 0; x < COLS; x++) {
       
-      if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
+      if (terrain_map[x][y] == WATER_TERRAIN) {
         
         // Add the shore inside corners
         if (
-          terrainMap->getValue(x, y - 1) != WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y) != WATER_TERRAIN
+          terrain_map[x][y - 1] != WATER_TERRAIN &&
+          terrain_map[x + 1][y] != WATER_TERRAIN
         ) { // North East
           draw_anim(&shore_inside_ne_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y + 1) != WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y) != WATER_TERRAIN
+          terrain_map[x][y + 1] != WATER_TERRAIN &&
+          terrain_map[x + 1][y] != WATER_TERRAIN
         ) { // South East
           draw_anim(&shore_inside_se_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y - 1) != WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y) != WATER_TERRAIN
+          terrain_map[x][y - 1] != WATER_TERRAIN &&
+          terrain_map[x - 1][y] != WATER_TERRAIN
         ) { // North West
           draw_anim(&shore_inside_nw_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y + 1) != WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y) != WATER_TERRAIN
+          terrain_map[x][y + 1] != WATER_TERRAIN &&
+          terrain_map[x - 1][y] != WATER_TERRAIN
         ) { // South West
           draw_anim(&shore_inside_sw_anim, buffer, x * getTileSize(), y * getTileSize());
         }
           
         // Add the shore outside corners.
         if (
-          terrainMap->getValue(x, y - 1) == WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y) == WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y - 1) != WATER_TERRAIN
+          terrain_map[x][y - 1] == WATER_TERRAIN &&
+          terrain_map[x + 1][y] == WATER_TERRAIN &&
+          terrain_map[x + 1][y - 1] != WATER_TERRAIN
         ) { // North East
           draw_anim(&shore_outside_ne_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y + 1) == WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y) == WATER_TERRAIN &&
-          terrainMap->getValue(x + 1, y + 1) != WATER_TERRAIN
+          terrain_map[x][y + 1] == WATER_TERRAIN &&
+          terrain_map[x + 1][y] == WATER_TERRAIN &&
+          terrain_map[x + 1][y + 1] != WATER_TERRAIN
         ) { // South East
           draw_anim(&shore_outside_se_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y - 1) == WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y) == WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y - 1) != WATER_TERRAIN
+          terrain_map[x][y - 1] == WATER_TERRAIN &&
+          terrain_map[x - 1][y] == WATER_TERRAIN &&
+          terrain_map[x - 1][y - 1] != WATER_TERRAIN
         ) { // North West
           draw_anim(&shore_outside_nw_anim, buffer, x * getTileSize(), y * getTileSize());
         }
         if (
-          terrainMap->getValue(x, y + 1) == WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y) == WATER_TERRAIN &&
-          terrainMap->getValue(x - 1, y + 1) != WATER_TERRAIN
+          terrain_map[x][y + 1] == WATER_TERRAIN &&
+          terrain_map[x - 1][y] == WATER_TERRAIN &&
+          terrain_map[x - 1][y + 1] != WATER_TERRAIN
         ) { // South West
           draw_anim(&shore_outside_sw_anim, buffer, x * getTileSize(), y * getTileSize());
         }
@@ -211,12 +218,6 @@ int Room::getNumber() {
 }
 
 
-void Room::setPathMap(Map * aPathMap) {
-  pathMap = aPathMap;
-
-}
-
-
 void Room::addStep(int aStep) {
   path[steps] = aStep;
   steps++;
@@ -245,19 +246,8 @@ int Room::getYOfStepNumber(int aStep) {
 }
 
 
-Map * Room::getPathMap() {
-  return pathMap;
-}
-
-
-void Room::setTerrainMap(Map * aTerrainMap) {
-  terrainMap = aTerrainMap;
-
-}
-
-
 bool Room::isSwimmable(int x, int y) {
-  if (terrainMap->getValue(x, y) == WATER_TERRAIN) {
+  if (terrain_map[x][y] == WATER_TERRAIN) {
     return true;
   }
   return false;
@@ -265,7 +255,7 @@ bool Room::isSwimmable(int x, int y) {
 
 
 bool Room::isWalkable(int x, int y) {
-  if (terrainMap->getValue(x, y) == GRASS_TERRAIN) {
+  if (terrain_map[x][y] == GRASS_TERRAIN) {
     return true;
   }
   return false;
@@ -273,7 +263,7 @@ bool Room::isWalkable(int x, int y) {
 
 
 bool Room::isJumpable(int x, int y) {
-  if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
+  if (terrain_map[x][y] == TREE_TERRAIN) {
     return false;
   }
   return true;
@@ -281,7 +271,7 @@ bool Room::isJumpable(int x, int y) {
 
 
 bool Room::isFlyable(int x, int y) {
-  if (terrainMap->getValue(x, y) == TREE_TERRAIN) {
+  if (terrain_map[x][y] == TREE_TERRAIN) {
     return false;
   }
   return true;
@@ -295,7 +285,7 @@ bool Room::isSoarable(int x, int y) {
 
 
 void Room::removeExitToPrevRoom() {
-  terrainMap->set(entranceFromPrevRoomX, entranceFromPrevRoomY, TREE_TERRAIN);
+  terrain_map[entranceFromPrevRoomX][entranceFromPrevRoomY] = TREE_TERRAIN;
   this->setExitToPrevRoomX(-1);
   this->setExitToPrevRoomY(-1);
 

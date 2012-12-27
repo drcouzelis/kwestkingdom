@@ -4,7 +4,6 @@
 #include "Giant.h"
 #include "Heart.h"
 #include "List.h"
-#include "Map.h"
 #include "Ninja.h"
 #include "RoomFactory.h"
 #include "utilities.h"
@@ -138,11 +137,6 @@ RoomFactory::RoomFactory() {
   chanceOfNinja = DEFAULT_CHANCE_OF_NINJA;
   chanceOfArcher = DEFAULT_CHANCE_OF_ARCHER;
   chanceOfGiant = DEFAULT_CHANCE_OF_GIANT;
-  
-  pathMap = NULL;
-  terrainMap = NULL;
-  enemies = NULL;
-  items = NULL;
 }
 
 
@@ -174,14 +168,10 @@ Room * RoomFactory::createRoom() {
   steps = 0;
   
   // Create a path from the entrance to a random exit.
-  if (pathStartX == -1 && pathStartY == -1) {
-    pathMap = new Map();
-  } else {
-    pathMap = this->generatePathToEdge();
-  }
+  this->generatePath(room);
   
   // Create the terrain, enemies, and items.
-  terrainMap = this->generateTerrain();
+  this->generateTerrain(room);
   this->generateEnemies(room);
   this->generateItems(room);
   
@@ -238,8 +228,6 @@ Room * RoomFactory::createRoom() {
   
   // Set other information.
   room->setNumber(number);
-  room->setPathMap(pathMap);
-  room->setTerrainMap(terrainMap);
   
   for (i = 0; path[i] != NO_STEP; i++) {
     room->addStep(path[i]);
@@ -340,7 +328,7 @@ void RoomFactory::generateEnemies(Room *room) {
       } else {
         
         if (
-          terrainMap->getValue(x, y) == GRASS_TERRAIN &&
+          terrain_map[x][y] == GRASS_TERRAIN &&
           random_number(0, 99) < chanceOfEnemy &&
           this->characterExists(list, x, y, 1, 1) == false
         ) {
@@ -357,9 +345,9 @@ void RoomFactory::generateEnemies(Room *room) {
             enemy = new Ninja();
           } else if (randomNum > lowerGiant && randomNum <= upperGiant) { // Giant
             if (
-              terrainMap->getValue(x + 1, y) == GRASS_TERRAIN &&
-              terrainMap->getValue(x, y + 1) == GRASS_TERRAIN &&
-              terrainMap->getValue(x + 1, y + 1) == GRASS_TERRAIN &&
+              terrain_map[x + 1][y] == GRASS_TERRAIN &&
+              terrain_map[x][y + 1] == GRASS_TERRAIN &&
+              terrain_map[x + 1][y + 1] == GRASS_TERRAIN &&
               this->characterExists(list, x, y, 2, 2) == false
             ) {
               enemy = new Giant();
@@ -415,7 +403,7 @@ void RoomFactory::generateItems(Room *room) {
     
     for (y = 1; heart == NULL && y < ROWS - 1; y++) {
       for (x = 1; heart == NULL && x < COLS - 1; x++) {
-        if (pathMap->getValue(x, y) == true) {
+        if (path_map[x][y]) {
           backupX = x;
           backupY = y;
           if (random_number(1, 5) == 1) {
@@ -445,9 +433,7 @@ void RoomFactory::generateItems(Room *room) {
 #define MIN_NUM_OF_STEPS_IN_PATH 15
 
 
-Map * RoomFactory::generatePathToEdge() {
-  
-  Map *map;
+void RoomFactory::generatePath(Room *room) {
   
   int pathX;
   int pathY;
@@ -464,7 +450,11 @@ Map * RoomFactory::generatePathToEdge() {
   int num;
   int i;
   
-  map = new Map();
+  if (pathStartX == -1 && pathStartY == -1) {
+    // This room doesn't need a path
+    return;
+  }
+
   pathX = pathStartX;
   pathY = pathStartY;
   direction = UP;
@@ -474,7 +464,7 @@ Map * RoomFactory::generatePathToEdge() {
   // Clear the pathway grid.
   for (x = 0; x < COLS; x++) {
     for (y = 0; y < ROWS; y++) {
-      map->set(x, y, OPEN);
+      room->path_map[x][y] = OPEN;
     }
   }
   
@@ -485,7 +475,7 @@ Map * RoomFactory::generatePathToEdge() {
   steps = 0;
   
   // Mark the starting location as part of the path
-  map->set(pathX, pathY, PATH);
+  room->path_map[pathX][pathY] = PATH;
   path[steps] = (pathY * COLS) + pathX;
   steps++;
   
@@ -541,7 +531,7 @@ Map * RoomFactory::generatePathToEdge() {
       }
     }
     
-    // Add the new random X steps to the path map.
+    // Add the new random X steps to the path
     for (i = 0; i < abs(changeX); i++) {
       pathX += changeX / abs(changeX);
       if (pathX < 0) {
@@ -549,7 +539,7 @@ Map * RoomFactory::generatePathToEdge() {
       } else if (pathX > COLS - 1) {
         pathX = COLS - 1;
       }
-      map->set(pathX, pathY, PATH);
+      room->path_map[pathX][pathY] = PATH;
       stepsTaken++;
       path[steps] = (pathY * COLS) + pathX;
       steps++;
@@ -563,7 +553,7 @@ Map * RoomFactory::generatePathToEdge() {
       } else if (pathY > ROWS - 1) {
         pathY = ROWS - 1;
       }
-      map->set(pathX, pathY, PATH);
+      room->path_map[pathX][pathY] = PATH;
       stepsTaken++;
       path[steps] = (pathY * COLS) + pathX;
       steps++;
@@ -580,24 +570,10 @@ Map * RoomFactory::generatePathToEdge() {
   
   pathStopX = pathX;
   pathStopY = pathY;
-  
-  // Let's see what the newly created pathway looks like!
-  /*
-  for (y = 0; y < ROWS; y++) {
-    for (x = 0; x < COLS; x++) {
-      printf("%d", map->getValue(x, y));
-    }
-    printf("\n");
-  }
-  */
-  
-  return map;
 }
 
 
-Map * RoomFactory::generateTerrain() {
-  
-  Map *map;
+void RoomFactory::generateTerrain(Room *room) {
   
   int chanceOfWater;
   int chanceOfTrees;
@@ -609,8 +585,6 @@ Map * RoomFactory::generateTerrain() {
   
   int x;
   int y;
-  
-  map = new Map();
   
   if (terrain == ROOM_NO_WATER_AND_NO_TREES) {
     chanceOfWater = 0;
@@ -652,13 +626,13 @@ Map * RoomFactory::generateTerrain() {
   for (x = 0; x < COLS; x++) {
     for (y = 0; y < ROWS; y++) {
       
-      map->set(x, y, GRASS_TERRAIN);
+      room->terrain_map[x][y] = GRASS_TERRAIN;
       
-      if (pathMap->getValue(x, y) != PATH) {
+      if (path_map[x][y] != PATH) {
         
         // Make a border of mountains.
         if (x == 0 || x == COLS - 1 || y == 0 || y == ROWS - 1) {
-          map->set(x, y, TREE_TERRAIN);
+          room->terrain_map[x][y] = TREE_TERRAIN;
         } else {
           
           actualChanceOfWater = chanceOfWater;
@@ -667,27 +641,27 @@ Map * RoomFactory::generateTerrain() {
           // If this spot has any water around it
           // then increase its chance of being water.
           if (
-            map->getValue(x, y - 1) == WATER_TERRAIN ||
-            map->getValue(x, y + 1) == WATER_TERRAIN ||
-            map->getValue(x - 1, y) == WATER_TERRAIN ||
-            map->getValue(x + 1, y) == WATER_TERRAIN
+            terrain_map[x][y - 1] == WATER_TERRAIN ||
+            terrain_map[x][y + 1] == WATER_TERRAIN ||
+            terrain_map[x - 1][y] == WATER_TERRAIN ||
+            terrain_map[x + 1][y] == WATER_TERRAIN
           ) {
             actualChanceOfWater = chanceOfClumpedWater;
           }
           
           if (
-            map->getValue(x, y - 1) == TREE_TERRAIN ||
-            map->getValue(x, y + 1) == TREE_TERRAIN ||
-            map->getValue(x - 1, y) == TREE_TERRAIN ||
-            map->getValue(x + 1, y) == TREE_TERRAIN
+            terrain_map[x][y - 1] == TREE_TERRAIN ||
+            terrain_map[x][y + 1] == TREE_TERRAIN ||
+            terrain_map[x - 1][y] == TREE_TERRAIN ||
+            terrain_map[x + 1][y] == TREE_TERRAIN
           ) {
             actualChanceOfTrees = chanceOfClumpedTrees;
           }
           
           if (random_number(1, 100) <= actualChanceOfWater) {
-            map->set(x, y, WATER_TERRAIN);
+            room->terrain_map[x][y] = WATER_TERRAIN;
           } else if (random_number(1, 100) <= actualChanceOfTrees) {
-            map->set(x, y, TREE_TERRAIN);
+            room->terrain_map[x][y] = TREE_TERRAIN;
           }
           
         }
@@ -696,8 +670,6 @@ Map * RoomFactory::generateTerrain() {
       
     }
   }
-  
-  return map;
 }
 
 

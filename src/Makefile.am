@@ -45,8 +45,6 @@ kwestkingdom_SOURCES = \
   KwestKingdom.cpp \
   List.h \
   List.cpp \
-  Map.h \
-  Map.cpp \
   memory.h \
   memory.c \
   MoneyBag.h \
