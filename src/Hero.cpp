@@ -186,13 +186,9 @@ void Hero::updateStandState() {
       if (shield->held()) {
         this->wait();
       }
-      
     }
     
   }
-  
-
-  
 }
 
 

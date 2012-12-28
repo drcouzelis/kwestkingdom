@@ -246,41 +246,29 @@ int Room::getYOfStepNumber(int aStep) {
 }
 
 
-bool Room::isSwimmable(int x, int y) {
-  if (terrain_map[x][y] == WATER_TERRAIN) {
-    return true;
-  }
-  return false;
+FLAG Room::isSwimmable(int x, int y) {
+  return terrain_map[x][y] == WATER_TERRAIN ? ON : OFF;
 }
 
 
-bool Room::isWalkable(int x, int y) {
-  if (terrain_map[x][y] == GRASS_TERRAIN) {
-    return true;
-  }
-  return false;
+FLAG Room::isWalkable(int x, int y) {
+  return terrain_map[x][y] == GRASS_TERRAIN ? ON : OFF;
 }
 
 
-bool Room::isJumpable(int x, int y) {
-  if (terrain_map[x][y] == TREE_TERRAIN) {
-    return false;
-  }
-  return true;
+FLAG Room::isJumpable(int x, int y) {
+  return !(terrain_map[x][y] == TREE_TERRAIN) ? ON : OFF;
 }
 
 
-bool Room::isFlyable(int x, int y) {
-  if (terrain_map[x][y] == TREE_TERRAIN) {
-    return false;
-  }
-  return true;
+FLAG Room::isFlyable(int x, int y) {
+  return !(terrain_map[x][y] == TREE_TERRAIN) ? ON : OFF;
 }
 
 
-bool Room::isSoarable(int x, int y) {
+FLAG Room::isSoarable(int x, int y) {
   // You can soar above any type of terrain.
-  return true;
+  return ON;
 }
 
 

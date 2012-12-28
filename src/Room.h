@@ -4,6 +4,7 @@
 
 #include "anim.h"
 #include "KwestKingdom.h"
+#include "utilities.h"
 
 class List;
 
@@ -69,11 +70,11 @@ public:
   virtual void update();
   virtual void draw(BITMAP *buffer);
 
-  virtual bool isSwimmable(int x, int y);
-  virtual bool isWalkable(int x, int y);
-  virtual bool isJumpable(int x, int y);
-  virtual bool isFlyable(int x, int y);
-  virtual bool isSoarable(int x, int y);
+  virtual FLAG isSwimmable(int x, int y);
+  virtual FLAG isWalkable(int x, int y);
+  virtual FLAG isJumpable(int x, int y);
+  virtual FLAG isFlyable(int x, int y);
+  virtual FLAG isSoarable(int x, int y);
 
   virtual List *getEnemies();
   virtual List *getItems();

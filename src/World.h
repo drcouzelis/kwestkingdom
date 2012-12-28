@@ -4,6 +4,7 @@
 
 #include <allegro.h>
 #include "anim.h"
+#include "utilities.h"
 
 class Character;
 class HelpTile;
@@ -46,9 +47,9 @@ public:
   virtual void update();
   void draw(BITMAP *buffer);
 
-  bool isInhabited(int x, int y);
+  FLAG isInhabited(int x, int y);
 
-  bool isAttackable(int team, int x, int y);
+  FLAG isAttackable(int team, int x, int y);
   void attackFromTeam(int team, int x, int y);
   void shake();
 
@@ -56,11 +57,11 @@ public:
 
   Character *getTarget();
 
-  bool isSwimmable(int x, int y);
-  bool isWalkable(int x, int y);
-  bool isJumpable(int x, int y);
-  bool isFlyable(int x, int y);
-  bool isSoarable(int x, int y);
+  FLAG isSwimmable(int x, int y);
+  FLAG isWalkable(int x, int y);
+  FLAG isJumpable(int x, int y);
+  FLAG isFlyable(int x, int y);
+  FLAG isSoarable(int x, int y);
 
   void updateRoom();
   void updateItems();

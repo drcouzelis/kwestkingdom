@@ -285,7 +285,7 @@ Character * World::getTarget() {
 }
 
 
-bool World::isAttackable(int team, int x, int y) {
+FLAG World::isAttackable(int team, int x, int y) {
   
   List *enemies = room->getEnemies();
   Enemy *enemy;
@@ -304,7 +304,7 @@ bool World::isAttackable(int team, int x, int y) {
         for (n = 0; n < hero->getHeight(); n++) {
           
           if (team != hero->getTeam() && x + i == hero->getX() + m && y + j == hero->getY() + n) {
-            return true;
+            return ON;
           }
           
         }
@@ -315,7 +315,7 @@ bool World::isAttackable(int team, int x, int y) {
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (team != enemy->getTeam() && x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
-              return true;
+              return ON;
             }
           }
         }
@@ -324,7 +324,7 @@ bool World::isAttackable(int team, int x, int y) {
     }
   }
   
-  return false;
+  return OFF;
 }
 
 
@@ -355,32 +355,49 @@ void World::attackFromTeam(int team, int x, int y) {
 }
 
 
-bool World::isSwimmable(int x, int y) {
-  return room->isSwimmable(x, y);
+FLAG World::isSwimmable(int x, int y) {
+  if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
+    return room->isSwimmable(x, y);
+  }
+  return OFF;
 }
 
 
-bool World::isWalkable(int x, int y) {
-  return room->isWalkable(x, y);
+FLAG World::isWalkable(int x, int y) {
+  if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
+    return room->isWalkable(x, y);
+  }
+  // Areas outside of the room are walkable
+  // This allows the hero to walk to the door
+  return ON;
 }
 
 
-bool World::isJumpable(int x, int y) {
-  return room->isJumpable(x, y);
+FLAG World::isJumpable(int x, int y) {
+  if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
+    return room->isJumpable(x, y);
+  }
+  return ON;
 }
 
 
-bool World::isFlyable(int x, int y) {
-  return room->isFlyable(x, y);
+FLAG World::isFlyable(int x, int y) {
+  if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
+    return room->isFlyable(x, y);
+  }
+  return ON;
 }
 
 
-bool World::isSoarable(int x, int y) {
-  return room->isSoarable(x, y);
+FLAG World::isSoarable(int x, int y) {
+  if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
+    return room->isSoarable(x, y);
+  }
+  return ON;
 }
 
 
-bool World::isInhabited(int x, int y) {
+FLAG World::isInhabited(int x, int y) {
   
   List *enemies = room->getEnemies();
   Enemy *enemy;
@@ -399,7 +416,7 @@ bool World::isInhabited(int x, int y) {
         for (n = 0; n < hero->getHeight(); n++) {
           
           if (x + i == hero->getX() + m && y + j == hero->getY() + n) {
-            return true;
+            return ON;
           }
           
         }
@@ -410,7 +427,7 @@ bool World::isInhabited(int x, int y) {
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
-              return true;
+              return ON;
             }
           }
         }
@@ -419,7 +436,7 @@ bool World::isInhabited(int x, int y) {
     }
   }
   
-  return false;
+  return OFF;
 }
 
 
@@ -582,7 +599,6 @@ void World::changeRooms() {
         firstRoom = (Room *)rooms->getHead();
         firstRoom->removeExitToPrevRoom();
       }
-      
     }
     
     hero->setX(room->getEntranceFromPrevRoomX());

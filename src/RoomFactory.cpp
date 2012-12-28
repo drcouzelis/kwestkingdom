@@ -139,7 +139,6 @@ RoomFactory::RoomFactory() {
   chanceOfGiant = DEFAULT_CHANCE_OF_GIANT;
 }
 
-
 Room * RoomFactory::createRoom() {
   
   Room *room;
@@ -214,27 +213,14 @@ Room * RoomFactory::createRoom() {
     room->setExitToNextRoomY(room->getEntranceFromNextRoomY());
   }
   
-  /*
-  printf("Entrance from prev %d %d; next %d %d; Exit to prev %d %d; next %d %d \n",
-    room->getEntranceFromPrevRoomX(),
-    room->getEntranceFromPrevRoomY(),
-    room->getEntranceFromNextRoomX(),
-    room->getEntranceFromNextRoomY(),
-    room->getExitToPrevRoomX(),
-    room->getExitToPrevRoomY(),
-    room->getExitToNextRoomX(),
-    room->getExitToNextRoomY());
-  */
-  
   // Set other information.
   room->setNumber(number);
   
   for (i = 0; path[i] != NO_STEP; i++) {
     room->addStep(path[i]);
   }
-  
+
   return room;
-  
 }
 
 
