@@ -30,7 +30,7 @@ protected:
   ANIM heart_empty_anim;
   ANIM help_tile_anim;
   
-  Character *currentCharacter;
+  int whose_turn;
   
   int difficulty;
   

@@ -21,6 +21,13 @@ typedef enum {
 } WORLD_STATE;
 
 
+typedef enum
+{
+  HERO_TURN = 0,
+  ENEMY_TURN = 4
+} CHARACTER_TURN;
+
+
 World::World() {
   
   difficulty = 0;
@@ -60,7 +67,7 @@ World::World() {
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();
   
-  currentCharacter = NULL;
+  whose_turn = HEROS_TURN;
   
   state = WORLD_UPDATE_STATE;
 }
@@ -135,35 +142,38 @@ void World::updateItems() {
 }
 
 
+Character *get_active_character(World *world)
+{
+  if (world->whose_turn == HERO_TURN) {
+    return world->hero;
+  } else {
+    return (Character *)world->room->getEnemies()->getIndex(world->whose_turn - ENEMY_TURN);
+  }
+}
+
+
+void cycle_active_character(World *world)
+{
+  if (world->whose_turn == HERO_TURN) {
+    if (world->room->getEnemies()->getSize() > 0) {
+      world->whose_turn = ENEMY_TURN;
+    }
+  } else {
+    // Cycle through the list of enemies
+    world->whose_turn++;
+    if (world->whose_turn - ENEMY_TURN == world->room->getEnemies()->getSize()) {
+      world->whose_turn = HERO_TURN;
+    }
+  }
+}
+
+
 void World::updateTurn() {
   
-  List *enemies = room->getEnemies();
-  int index;
-  
   // Determine whose turn it is next and tell them to go.
-  if (currentCharacter == NULL || currentCharacter->waiting()) {
-    
-    if (currentCharacter == NULL) {
-      currentCharacter = hero;
-    } else if (currentCharacter == hero) {
-      currentCharacter = (Character *)enemies->getIndex(0);
-      if (currentCharacter == NULL) {
-        currentCharacter = hero;
-      }
-    } else {
-      index = enemies->findIndex(currentCharacter);
-      if (index >= 0) {
-        currentCharacter = (Character *)enemies->getIndex(index + 1);
-      } else {
-        currentCharacter = NULL;
-      }
-      if (currentCharacter == NULL) {
-        currentCharacter = hero;
-      }
-    }
-    
-    currentCharacter->go();
-    
+  if (get_active_character(this)->waiting()) {
+    cycle_active_character(this);
+    get_active_character(this)->go();
   }
 }
 
@@ -187,7 +197,7 @@ void World::updateHero() {
     
     if (!hero->moving()) {
       this->changeRooms();
-      currentCharacter = hero;
+      whose_turn = HERO_TURN;
     }
     
   }
