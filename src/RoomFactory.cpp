@@ -3,7 +3,6 @@
 #include "Chomper.h"
 #include "Giant.h"
 #include "Heart.h"
-#include "List.h"
 #include "Ninja.h"
 #include "RoomFactory.h"
 #include "utilities.h"

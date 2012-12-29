@@ -4,7 +4,6 @@
 
 #include "Room.h"
 
-class List;
 class World;
 
 
