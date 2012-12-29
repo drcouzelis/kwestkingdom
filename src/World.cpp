@@ -67,7 +67,7 @@ World::World() {
   prevRoomSnapshot = new Snapshot();
   nextRoomSnapshot = new Snapshot();
   
-  whose_turn = HEROS_TURN;
+  whose_turn = HERO_TURN;
   
   state = WORLD_UPDATE_STATE;
 }

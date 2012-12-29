@@ -18,7 +18,7 @@ class Snapshot;
 
 class World {
   
-protected:
+public:
 
   Hero *hero;
   List *rooms;
