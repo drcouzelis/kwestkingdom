@@ -274,7 +274,7 @@ void RoomFactory::generateEnemies(Room *room) {
   
   int randomNum;
   
-  list = room->getEnemies();
+  list = room->enemies;
   
   if (difficulty == 0) {
     return;
@@ -376,7 +376,7 @@ void RoomFactory::generateItems(Room *room) {
   int backupX;
   int backupY;
   
-  list = room->getItems();
+  list = room->items;
   
   heart = NULL;
   

@@ -76,10 +76,6 @@ public:
   virtual FLAG isFlyable(int x, int y);
   virtual FLAG isSoarable(int x, int y);
 
-  virtual List *getEnemies();
-  virtual List *getItems();
-  virtual List *getHelpTiles();
-
   virtual void addStep(int aStep);
   virtual int getSizeOfPath();
   virtual int getXOfStepNumber(int aStep);

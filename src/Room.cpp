@@ -192,21 +192,6 @@ void Room::draw(BITMAP * buffer) {
 }
 
 
-List * Room::getEnemies() {
-  return enemies;
-}
-
-
-List * Room::getItems() {
-  return items;
-}
-
-
-List * Room::getHelpTiles() {
-  return helpTiles;
-}
-
-
 void Room::setNumber(int aNumber) {
   number = aNumber;
 
