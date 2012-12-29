@@ -3,10 +3,11 @@
 
 
 #include "anim.h"
+#include "Enemy.h"
+#include "HelpTile.h"
+#include "Item.h"
 #include "KwestKingdom.h"
 #include "utilities.h"
-
-class List;
 
 
 #define GRASS_TERRAIN 0
@@ -15,7 +16,7 @@ class List;
 #define ENTRANCE_TERRAIN 3
 #define EXIT_TERRAIN 4
 
-#define MAX_NUM_OF_STEPS (ROWS * COLS)
+#define MAX_TILES (ROWS * COLS)
 #define NO_STEP 1
 
 
@@ -26,9 +27,14 @@ public:
   int terrain_map[COLS][ROWS];
   int path_map[COLS][ROWS];
   
-  List *enemies;
-  List *items;
-  List *helpTiles;
+  Enemy *enemies[MAX_TILES];
+  int num_enemies;
+
+  Item *items[MAX_TILES];
+  int num_items;
+
+  HelpTile *helps[MAX_TILES];
+  int num_helps;
   
   int entranceFromNextRoomX;
   int entranceFromNextRoomY;
@@ -59,7 +65,7 @@ public:
   ANIM shore_outside_se_anim;
   ANIM shore_outside_sw_anim;
   
-  int path[MAX_NUM_OF_STEPS];
+  int path[MAX_TILES];
   int steps;
   
 public:
@@ -104,6 +110,14 @@ public:
 
   virtual void removeExitToPrevRoom();
 };
+
+
+void add_enemy(Room *room, Enemy *enemy);
+void add_item(Room *room, Item *item);
+void add_help(Room *room, HelpTile *help);
+
+void remove_enemy(Room *room, int index);
+void remove_item(Room *room, int index);
 
 
 #endif

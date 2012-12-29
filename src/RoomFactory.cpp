@@ -161,7 +161,7 @@ Room * RoomFactory::createRoom() {
     terrain = random_number(ROOM_RANDOM, ROOM_DENSE_FOREST);
   }
   
-  for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
+  for (i = 0; i < MAX_TILES; i++) {
     path[i] = NO_STEP;
   }
   steps = 0;
@@ -224,17 +224,18 @@ Room * RoomFactory::createRoom() {
 }
 
 
-bool RoomFactory::characterExists(List *list, int x, int y, int w, int h) {
+bool RoomFactory::characterExists(Room *room, int x, int y, int w, int h) {
   
   Character *character;
+  int enemy_counter;
   int i, j;
   int m, n;
   
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       
-      list->iterate();
-      while ((character = (Character *)list->getNext()) != NULL) {
+      for (enemy_counter = 0; enemy_counter < room->num_enemies; enemy_counter++) {
+        character = room->enemies[enemy_counter];
         for (m = 0; m < character->getWidth(); m++) {
           for (n = 0; n < character->getHeight(); n++) {
             if (x + i == character->getX() + m && y + j == character->getY() + n) {
@@ -254,8 +255,7 @@ bool RoomFactory::characterExists(List *list, int x, int y, int w, int h) {
 
 void RoomFactory::generateEnemies(Room *room) {
   
-  List *list;
-  Character *enemy;
+  Enemy *enemy;
   int x;
   int y;
   
@@ -273,8 +273,6 @@ void RoomFactory::generateEnemies(Room *room) {
   int maxEnemies;
   
   int randomNum;
-  
-  list = room->enemies;
   
   if (difficulty == 0) {
     return;
@@ -301,8 +299,8 @@ void RoomFactory::generateEnemies(Room *room) {
   lowerGiant = upperNinja;
   upperGiant = upperNinja + chanceOfGiant;
   
-  for (y = 1; y < ROWS - 1 && list->getSize() <= maxEnemies; y++) {
-    for (x = 1; x < COLS - 1 && list->getSize() <= maxEnemies; x++) {
+  for (y = 1; y < ROWS - 1 && room->num_enemies <= maxEnemies; y++) {
+    for (x = 1; x < COLS - 1 && room->num_enemies <= maxEnemies; x++) {
       
       if (
         x > pathStartX - 3 && x < pathStartX + 3 &&
@@ -316,7 +314,7 @@ void RoomFactory::generateEnemies(Room *room) {
         if (
           room->terrain_map[x][y] == GRASS_TERRAIN &&
           random_number(0, 99) < chanceOfEnemy &&
-          this->characterExists(list, x, y, 1, 1) == false
+          this->characterExists(room, x, y, 1, 1) == false
         ) {
           
           enemy = NULL;
@@ -334,7 +332,7 @@ void RoomFactory::generateEnemies(Room *room) {
               room->terrain_map[x + 1][y] == GRASS_TERRAIN &&
               room->terrain_map[x][y + 1] == GRASS_TERRAIN &&
               room->terrain_map[x + 1][y + 1] == GRASS_TERRAIN &&
-              this->characterExists(list, x, y, 2, 2) == false
+              this->characterExists(room, x, y, 2, 2) == false
             ) {
               enemy = new Giant();
             } else {
@@ -353,7 +351,7 @@ void RoomFactory::generateEnemies(Room *room) {
             enemy->setWorld(world);
             enemy->setX(x);
             enemy->setY(y);
-            list->append(enemy);
+            add_enemy(room, enemy);
           }
           
         }
@@ -362,21 +360,16 @@ void RoomFactory::generateEnemies(Room *room) {
       
     }
   }
-  
-  return;
 }
 
 
 void RoomFactory::generateItems(Room *room) {
   
-  List *list;
   Heart *heart;
   int x;
   int y;
   int backupX;
   int backupY;
-  
-  list = room->items;
   
   heart = NULL;
   
@@ -408,11 +401,8 @@ void RoomFactory::generateItems(Room *room) {
       heart->setY(backupY);
     }
     
-    list->append(heart);
-    
+    add_item(room, heart);
   }
-  
-  return;
 }
 
 
@@ -455,7 +445,7 @@ void RoomFactory::generatePath(Room *room) {
   }
   
   // Clear the list of ordered steps.
-  for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
+  for (i = 0; i < MAX_TILES; i++) {
     path[i] = NO_STEP;
   }
   steps = 0;

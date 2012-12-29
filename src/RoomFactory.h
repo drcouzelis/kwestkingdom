@@ -49,7 +49,7 @@ class RoomFactory {
   int pathStopX;
   int pathStopY;
   
-  int path[MAX_NUM_OF_STEPS];
+  int path[MAX_TILES];
   int steps;
   
 public:
@@ -63,7 +63,7 @@ public:
   void generateEnemies(Room *room);
   void generateItems(Room *room);
 
-  bool characterExists(List *list, int x, int y, int w, int h);
+  bool characterExists(Room *room, int x, int y, int w, int h);
 
   void setWorld(World *aWorld);
   void setType(int theType);

@@ -1,4 +1,4 @@
-#include "List.h"
+#include <stdio.h>
 #include "Room.h"
 
 
@@ -19,10 +19,6 @@ Room::Room() {
       terrain_map[x][y] = 0;
     }
   }
-  
-  enemies = new List();
-  items = new List();
-  helpTiles = new List();
   
   entranceFromNextRoomX = 0;
   entranceFromNextRoomY = 0;
@@ -52,17 +48,21 @@ Room::Room() {
   init_anim(&shore_outside_se_anim, OFF, 0);
   init_anim(&shore_outside_sw_anim, OFF, 0);
   
-  for (i = 0; i < MAX_NUM_OF_STEPS; i++) {
+  for (i = 0; i < MAX_TILES; i++) {
     path[i] = NO_STEP;
+    enemies[i] = NULL;
+    items[i] = NULL;
+    helps[i] = NULL;
   }
+
   steps = 0;
+  num_enemies = 0;
+  num_items = 0;
+  num_helps = 0;
 }
 
 
 Room::~Room() {
-  delete enemies;
-  delete items;
-  delete helpTiles;
 }
 
 
@@ -350,5 +350,74 @@ void Room::setExitToPrevRoomX(int newX) {
 void Room::setExitToPrevRoomY(int newY) {
   exitToPrevRoomY = newY;
 
+}
+
+
+void add_enemy(Room *room, Enemy *enemy)
+{
+  if (room->num_enemies == MAX_TILES) {
+    fprintf(stderr, "ROOM: Failed to add enemy.\n");
+    fprintf(stderr, "ROOM: Try increasing MAX_TILES.\n");
+    return;
+  }
+
+  room->enemies[room->num_enemies] = enemy;
+  room->num_enemies++;
+}
+
+
+void add_item(Room *room, Item *item)
+{
+  if (room->num_items == MAX_TILES) {
+    fprintf(stderr, "ROOM: Failed to add item.\n");
+    fprintf(stderr, "ROOM: Try increasing MAX_TILES.\n");
+    return;
+  }
+
+  room->items[room->num_items] = item;
+  room->num_items++;
+}
+
+
+void add_help(Room *room, HelpTile *help)
+{
+  if (room->num_helps == MAX_TILES) {
+    fprintf(stderr, "ROOM: Failed to add help tile.\n");
+    fprintf(stderr, "ROOM: Try increasing MAX_TILES.\n");
+    return;
+  }
+
+  room->helps[room->num_helps] = help;
+  room->num_helps++;
+}
+
+
+void remove_enemy(Room *room, int index)
+{
+  if (index < room->num_enemies) {
+    delete room->enemies[index];
+
+    while (index < room->num_enemies - 1) {
+      room->enemies[index] = room->enemies[index + 1];
+      index++;
+    }
+
+    room->num_enemies--;
+  }
+}
+
+
+void remove_item(Room *room, int index)
+{
+  if (index < room->num_items) {
+    delete room->items[index];
+
+    while (index < room->num_items - 1) {
+      room->items[index] = room->items[index + 1];
+      index++;
+    }
+
+    room->num_items--;
+  }
 }
 

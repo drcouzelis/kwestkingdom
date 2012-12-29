@@ -89,14 +89,14 @@ void World::updateRoom() {
 
 void World::updateItems() {
   
-  List *items = room->items;
   Item *item;
-  //Enemy *enemy;
+  int item_counter;
   int x;
   int y;
   
-  items->iterate();
-  while ((item = (Item *)items->getNext()) != NULL) {
+  for (item_counter = 0; item_counter < room->num_items; item_counter++) {
+
+    item = room->items[item_counter];
     
     item->update();
     
@@ -108,37 +108,13 @@ void World::updateItems() {
         // Hero is standing on the item
         if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
           item->collectedBy(hero);
-          items->remove(item);
-          return;
+          remove_item(room, item_counter);
+          item_counter--;
         }
         
       }
     }
   }
-    
-  /*
-  // Enemies can not collect items.
-  List *enemies = room->enemies;
-  enemies->iterate();
-  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
-    
-    // For the entire size of the hero
-    // see if he is standing on an item
-    for (x = 0; x < enemy->getWidth(); x++) {
-      for (y = 0; y < enemy->getHeight(); y++) {
-        
-        // If an enemy is standing on the item
-        if (item->getX() == enemy->getX() + x && item->getY() == enemy->getY() + y) {
-          item->collectedBy(enemy);
-          items->remove(item);
-          return;
-        }
-        
-      }
-    }
-    
-  }
-  */
 }
 
 
@@ -147,7 +123,7 @@ Character *get_active_character(World *world)
   if (world->whose_turn == HERO_TURN) {
     return world->hero;
   } else {
-    return (Character *)world->room->enemies->getIndex(world->whose_turn - ENEMY_TURN);
+    return world->room->enemies[world->whose_turn - ENEMY_TURN];
   }
 }
 
@@ -155,13 +131,13 @@ Character *get_active_character(World *world)
 void cycle_active_character(World *world)
 {
   if (world->whose_turn == HERO_TURN) {
-    if (world->room->enemies->getSize() > 0) {
+    if (world->room->num_enemies > 0) {
       world->whose_turn = ENEMY_TURN;
     }
   } else {
     // Cycle through the list of enemies
     world->whose_turn++;
-    if (world->whose_turn - ENEMY_TURN == world->room->enemies->getSize()) {
+    if (world->whose_turn - ENEMY_TURN == world->room->num_enemies) {
       world->whose_turn = HERO_TURN;
     }
   }
@@ -180,8 +156,6 @@ void World::updateTurn() {
 
 void World::updateHero() {
   
-  List *enemies = room->enemies;
-
   hero->update();
   
   // If the hero is at an exit...
@@ -210,18 +184,19 @@ void World::updateHero() {
 
 void World::updateEnemies() {
   
-  List *enemies = room->enemies;
   Enemy *enemy;
+  int enemy_counter;
   
   // Update the enemies and remove any that are dead.
-  enemies->iterate();
-  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+  for (enemy_counter = 0; enemy_counter < room->num_enemies; enemy_counter++) {
     
+    enemy = room->enemies[enemy_counter];
     enemy->update();
     
     if (enemy->isDead()) {
       enemy->dropItem();
-      enemies->remove(enemy);
+      remove_enemy(room, enemy_counter);
+      enemy_counter--;
     }
     
   }
@@ -278,14 +253,14 @@ void World::update() {
 
 void World::addItem(Item *anItem) {
   if (anItem != NULL) {
-    room->items->append(anItem);
+    add_item(room, anItem);
   }
 }
 
 
 void World::addHelpTile(HelpTile *aHelpTile) {
   if (aHelpTile != NULL) {
-    room->helpTiles->append(aHelpTile);
+    add_help(room, aHelpTile);
   }
 }
 
@@ -297,8 +272,8 @@ Character * World::getTarget() {
 
 FLAG World::isAttackable(int team, int x, int y) {
   
-  List *enemies = room->enemies;
   Enemy *enemy;
+  int enemy_counter;
   int i, j;
   int m, n;
   
@@ -320,8 +295,8 @@ FLAG World::isAttackable(int team, int x, int y) {
         }
       }
       
-      enemies->iterate();
-      while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+      for (enemy_counter = 0; enemy_counter < room->num_enemies; enemy_counter++) {
+        enemy = room->enemies[enemy_counter];
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (team != enemy->getTeam() && x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
@@ -340,8 +315,8 @@ FLAG World::isAttackable(int team, int x, int y) {
 
 void World::attackFromTeam(int team, int x, int y) {
   
-  List *enemies = room->enemies;
   Enemy *enemy;
+  int enemy_counter;
   int m, n;
   
   for (m = 0; m < hero->getWidth(); m++) {
@@ -352,8 +327,8 @@ void World::attackFromTeam(int team, int x, int y) {
     }
   }
   
-  enemies->iterate();
-  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+  for (enemy_counter = 0; enemy_counter < room->num_enemies; enemy_counter++) {
+    enemy = room->enemies[enemy_counter];
     for (m = 0; m < enemy->getWidth(); m++) {
       for (n = 0; n < enemy->getHeight(); n++) {
         if (team != enemy->getTeam() && x == enemy->getX() + m && y == enemy->getY() + n) {
@@ -409,8 +384,8 @@ FLAG World::isSoarable(int x, int y) {
 
 FLAG World::isInhabited(int x, int y) {
   
-  List *enemies = room->enemies;
   Enemy *enemy;
+  int enemy_counter;
   int i, j;
   int m, n;
   
@@ -432,8 +407,8 @@ FLAG World::isInhabited(int x, int y) {
         }
       }
       
-      enemies->iterate();
-      while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+      for (enemy_counter = 0; enemy_counter < room->num_enemies; enemy_counter++) {
+        enemy = room->enemies[enemy_counter];
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
@@ -632,14 +607,14 @@ void World::changeRooms() {
 
 void World::drawTerrain(BITMAP * buffer) {
   
-  List *helpTiles = room->helpTiles;
   HelpTile *helpTile;
+  int i;
   
   room->draw(buffer);
   
   // Draw help tiles.
-  helpTiles->iterate();
-  while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
+  for (i = 0; i < room->num_helps; i++) {
+    helpTile = room->helps[i];
     draw_anim(&help_tile_anim, buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
 }
@@ -647,18 +622,17 @@ void World::drawTerrain(BITMAP * buffer) {
 
 void World::drawCharacters(BITMAP *buffer) {
   
-  List *items = room->items;
-  List *enemies = room->enemies;
   Enemy *enemy;
   Item *item;
+  int counter;
   
-  items->iterate();
-  while ((item = (Item *)items->getNext()) != NULL) {
+  for (counter = 0; counter < room->num_items; counter++) {
+    item = room->items[counter];
     item->draw(buffer);
   }
   
-  enemies->iterate();
-  while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
+  for (counter = 0; counter < room->num_enemies; counter++) {
+    enemy = room->enemies[counter];
     enemy->draw(buffer);
   }
   
@@ -668,8 +642,8 @@ void World::drawCharacters(BITMAP *buffer) {
 
 void World::drawUserInterface(BITMAP * buffer) {
   
-  List *helpTiles = room->helpTiles;
   HelpTile *helpTile;
+  int counter;
   char moneyLine[256];
   int i;
   
@@ -686,9 +660,8 @@ void World::drawUserInterface(BITMAP * buffer) {
   draw_text(buffer, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  helpTiles->iterate();
-  
-  while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
+  for (counter = 0; counter < room->num_helps; counter++) {
+    helpTile = room->helps[counter];
     if (helpTile->getX() == hero->getX() && helpTile->getY() == hero->getY()) {
       helpTile->draw(buffer);
     }
