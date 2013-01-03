@@ -2,7 +2,6 @@
 #define ANIM_HEADER
 
 
-#include <allegro.h>
 #include "resources.h"
 #include "utilities.h"
 
@@ -48,7 +47,7 @@ void add_frame(ANIM *anim, IMAGE *frame);
 
 void reset_anim(ANIM *anim);
 
-void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y);
+void draw_anim(ANIM *anim, IMAGE *canvas, int x, int y);
 
 int get_anim_w(ANIM *anim);
 int get_anim_h(ANIM *anim);

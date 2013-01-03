@@ -90,9 +90,9 @@ void add_resource_path(const char *path)
 /**
  * Load a bitmap and set magic pink to transparent.
  */
-BITMAP *load_bitmap_with_magic_pink(const char *filename)
+IMAGE *load_bitmap_with_magic_pink(const char *filename)
 {
-  BITMAP *bitmap;
+  IMAGE *bitmap;
   static PALETTE palette;
 
   bitmap = load_bitmap(filename, palette);

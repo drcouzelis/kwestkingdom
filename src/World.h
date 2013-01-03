@@ -2,7 +2,6 @@
 #define WORLD_HEADER
 
 
-#include <allegro.h>
 #include "anim.h"
 #include "utilities.h"
 
@@ -45,7 +44,7 @@ public:
   virtual ~World();
 
   virtual void update();
-  void draw(BITMAP *buffer);
+  void draw(IMAGE *canvas);
 
   FLAG isInhabited(int x, int y);
 
@@ -72,9 +71,9 @@ public:
   Room *createNextRoom();
   virtual void changeRooms();
 
-  void drawTerrain(BITMAP *buffer);
-  void drawCharacters(BITMAP *buffer);
-  void drawUserInterface(BITMAP *buffer);
+  void drawTerrain(IMAGE *canvas);
+  void drawCharacters(IMAGE *canvas);
+  void drawUserInterface(IMAGE *canvas);
 
   int getRoomNumber();
   int getMoney();

@@ -24,7 +24,7 @@ public:
   ~Bow();
 
   void update();
-  void draw(BITMAP *buffer);
+  void draw(IMAGE *canvas);
 
   void setArrow(Arrow *anArrow);
   Arrow *getArrow();

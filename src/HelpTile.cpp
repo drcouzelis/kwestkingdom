@@ -17,7 +17,7 @@ HelpTile::HelpTile() {
 }
 
 
-void HelpTile::draw(BITMAP * buffer) {
+void HelpTile::draw(IMAGE * canvas) {
   
   int leftSide;
   int upperSide;
@@ -38,30 +38,30 @@ void HelpTile::draw(BITMAP * buffer) {
   //width = get_win_w() - (getTileSize() * 2);
   //height = (numOfLines + 2) * lineSpacing;
   
-  //draw_box(buffer, leftSide, upperSide, leftSide + width, upperSide + height);
+  //draw_box(canvas, leftSide, upperSide, leftSide + width, upperSide + height);
   
   if (line1) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 1), 1, WHITE, line1);
   }
   
   if (line2) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 2), 1, WHITE, line2);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 2), 1, WHITE, line2);
   }
   
   if (line3) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 3), 1, WHITE, line3);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 3), 1, WHITE, line3);
   }
   
   if (line4) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 4), 1, WHITE, line4);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 4), 1, WHITE, line4);
   }
   
   if (line5) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 5), 1, WHITE, line5);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 5), 1, WHITE, line5);
   }
   
   if (line6) {
-    draw_text(buffer, leftSide + lineSpacing, upperSide + (lineSpacing * 6), 1, WHITE, line6);
+    draw_text(canvas, leftSide + lineSpacing, upperSide + (lineSpacing * 6), 1, WHITE, line6);
   }
   
   

@@ -56,13 +56,13 @@ void Snapshot::update() {
 }
 
 
-void Snapshot::draw(BITMAP * buffer) {
-  draw_sprite(buffer, this->getCanvas(), visualX, visualY);
+void Snapshot::draw(IMAGE * canvas) {
+  draw_sprite(canvas, this->getCanvas(), visualX, visualY);
 
 }
 
 
-BITMAP * Snapshot::getCanvas() {
+IMAGE * Snapshot::getCanvas() {
   return canvas;
 }
 

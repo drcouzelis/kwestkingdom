@@ -1,4 +1,3 @@
-#include <allegro.h>
 #include <stdio.h>
 
 #include "al_screen.h"
@@ -7,7 +6,7 @@
 
 
 /* The window is the area inside the screen that the game is drawn on */
-static BITMAP *window = NULL;
+static IMAGE *window = NULL;
 
 /* The scale is used to know how big to multiply the window */
 static int scale = DEFAULT_SCREEN_RATIO;
@@ -18,13 +17,13 @@ FLAG select_best_screen()
   enable_vsync();
   
   if (initialize_screen_updating(UPDATE_TRIPLE_BUFFER)) {
-    // Using triple buffer.
+    // Using triple canvas.
   } else if (initialize_screen_updating(UPDATE_PAGE_FLIP)) {
     // Using page flip.
   } else if (initialize_screen_updating(UPDATE_SYSTEM_BUFFER)) {
-    // Using system buffer.
+    // Using system canvas.
   } else if (initialize_screen_updating(UPDATE_DOUBLE_BUFFER)) {
-    // Using double buffer.
+    // Using double canvas.
   } else {
     printf("Failed to initialize screen updating. \n");
     return OFF;
@@ -82,7 +81,7 @@ FLAG init_screen(int width, int height, int fullscreen)
   if (colorDepth == 0) {
     colorDepth = 8;
     PALETTE palette;
-    BITMAP *bitmap = load_bitmap( PKGDATADIR "/images/palette.bmp", palette);
+    IMAGE *bitmap = load_bitmap( PKGDATADIR "/images/palette.bmp", palette);
     set_palette(palette);
     destroy_bitmap(bitmap);
   }
@@ -191,7 +190,7 @@ FLAG show_screen()
   /* Scale the window onto the screen */
   stretch_blit(
     get_win(),
-    get_buffer(),
+    get_canvas(),
     0,
     0,
     get_win_w(),
@@ -208,7 +207,7 @@ FLAG show_screen()
 }
  
 
-BITMAP *get_win() {
+IMAGE *get_win() {
   return window;
 }
 

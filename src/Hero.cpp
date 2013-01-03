@@ -298,11 +298,11 @@ void Hero::update() {
 }
 
 
-void Hero::draw(BITMAP * buffer) {
-  Character::draw(buffer);
-  shield->draw(buffer);
-  sword->draw(buffer);
-  bow->draw(buffer);
+void Hero::draw(IMAGE * canvas) {
+  Character::draw(canvas);
+  shield->draw(canvas);
+  sword->draw(canvas);
+  bow->draw(canvas);
 }
 
 

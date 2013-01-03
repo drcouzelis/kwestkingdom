@@ -187,9 +187,9 @@ Archer::update() {
 
 
 void
-Archer::draw(BITMAP *buffer) {
-  Enemy::draw(buffer);
-  bow->draw(buffer);
+Archer::draw(IMAGE *canvas) {
+  Enemy::draw(canvas);
+  bow->draw(canvas);
 }
 
 

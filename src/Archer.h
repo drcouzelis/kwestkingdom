@@ -25,7 +25,7 @@ public:
   ~Archer();
 
   virtual void update();
-  virtual void draw(BITMAP *buffer);
+  virtual void draw(IMAGE *canvas);
 
   virtual void setX(int newX);
   virtual void setY(int newY);

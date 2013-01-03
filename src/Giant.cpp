@@ -262,9 +262,9 @@ void Giant::update() {
 }
 
 
-void Giant::draw(BITMAP * buffer) {
-  Enemy::draw(buffer);
-  hammer->draw(buffer);
+void Giant::draw(IMAGE * canvas) {
+  Enemy::draw(canvas);
+  hammer->draw(canvas);
 }
 
 

@@ -630,22 +630,22 @@ void World::changeRooms() {
 }
 
 
-void World::drawTerrain(BITMAP * buffer) {
+void World::drawTerrain(IMAGE * canvas) {
   
   List *helpTiles = room->getHelpTiles();
   HelpTile *helpTile;
   
-  room->draw(buffer);
+  room->draw(canvas);
   
   // Draw help tiles.
   helpTiles->iterate();
   while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
-    draw_anim(&help_tile_anim, buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
+    draw_anim(&help_tile_anim, canvas, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
 }
 
 
-void World::drawCharacters(BITMAP *buffer) {
+void World::drawCharacters(IMAGE *canvas) {
   
   List *items = room->getItems();
   List *enemies = room->getEnemies();
@@ -654,19 +654,19 @@ void World::drawCharacters(BITMAP *buffer) {
   
   items->iterate();
   while ((item = (Item *)items->getNext()) != NULL) {
-    item->draw(buffer);
+    item->draw(canvas);
   }
   
   enemies->iterate();
   while ((enemy = (Enemy *)enemies->getNext()) != NULL) {
-    enemy->draw(buffer);
+    enemy->draw(canvas);
   }
   
-  hero->draw(buffer);
+  hero->draw(canvas);
 }
 
 
-void World::drawUserInterface(BITMAP * buffer) {
+void World::drawUserInterface(IMAGE * canvas) {
   
   List *helpTiles = room->getHelpTiles();
   HelpTile *helpTile;
@@ -676,55 +676,55 @@ void World::drawUserInterface(BITMAP * buffer) {
   // Put the hero's health on the screen.
   for (i = 0; i < hero->getMaxHealth(); i++) {
     if (i < hero->getHealth()) {
-      draw_anim(&heart_anim, buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_anim, canvas, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     } else {
-      draw_anim(&heart_empty_anim, buffer, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_empty_anim, canvas, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     }
   }
   
   sprintf(moneyLine, "$%d", hero->getMoney());
-  draw_text(buffer, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
+  draw_text(canvas, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   helpTiles->iterate();
   
   while ((helpTile = (HelpTile *)helpTiles->getNext()) != NULL) {
     if (helpTile->getX() == hero->getX() && helpTile->getY() == hero->getY()) {
-      helpTile->draw(buffer);
+      helpTile->draw(canvas);
     }
   }
 }
 
 
-void World::draw(BITMAP * buffer) {
+void World::draw(IMAGE * canvas) {
 
   char text[9];
   
   switch (state) {
   
   case WORLD_UPDATE_STATE:
-    this->drawTerrain(buffer);
-    this->drawCharacters(buffer);
-    this->drawUserInterface(buffer);
+    this->drawTerrain(canvas);
+    this->drawCharacters(canvas);
+    this->drawUserInterface(canvas);
     break;
   
   case WORLD_ROOM_TRANSITION_STATE:
-    prevRoomSnapshot->draw(buffer);
-    nextRoomSnapshot->draw(buffer);
-    this->drawUserInterface(buffer);
+    prevRoomSnapshot->draw(canvas);
+    nextRoomSnapshot->draw(canvas);
+    this->drawUserInterface(canvas);
     break;
   
   case WORLD_SHAKING_STATE:
     this->drawTerrain(prevRoomSnapshot->getCanvas());
     this->drawCharacters(prevRoomSnapshot->getCanvas());
-    prevRoomSnapshot->draw(buffer);
-    this->drawUserInterface(buffer);
+    prevRoomSnapshot->draw(canvas);
+    this->drawUserInterface(canvas);
     break;
     
   }
   
   // Put the current room number on the screen.
   sprintf(text, "Room %d", room->getNumber());
-  draw_text(buffer, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), 1, WHITE, text);
+  draw_text(canvas, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), 1, WHITE, text);
 }
 

@@ -214,9 +214,9 @@ void Ninja::update() {
 }
 
 
-void Ninja::draw(BITMAP * buffer) {
-  Enemy::draw(buffer);
-  sword->draw(buffer);
+void Ninja::draw(IMAGE * canvas) {
+  Enemy::draw(canvas);
+  sword->draw(canvas);
 
 }
 

@@ -2,7 +2,6 @@
 #define GAME_HEADER
 
 
-#include <allegro.h>
 #include "anim.h"
 #include "key_input.h"
 
@@ -40,14 +39,14 @@ public:
   ~Game();
 
   virtual void update();
-  virtual void draw(BITMAP *buffer);
+  virtual void draw(IMAGE *canvas);
 
   void readPlayerInitials();
   bool continuePlaying();
   void activateMenuSelection();
-  void drawMenu(BITMAP *buffer);
-  void drawHighScores(BITMAP *buffer);
-  void drawEnterInitials(BITMAP *buffer);
+  void drawMenu(IMAGE *canvas);
+  void drawHighScores(IMAGE *canvas);
+  void drawEnterInitials(IMAGE *canvas);
 
   void setState(int aState);
 
