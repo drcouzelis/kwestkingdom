@@ -8,7 +8,7 @@
 
 static int  updatemethod = UPDATE_NONE;
 static int  waitforvsync = 0;
-static BITMAP *pages[3] = {NULL, NULL, NULL}, *active_page = NULL, *canvas = NULL;
+static BITMAP *pages[3] = {NULL, NULL, NULL}, *active_page = NULL, *buffer = NULL;
 
 // helper function that both deletes a bitmap and (optionally) sets it to NULL in one move.
 // it's safe to pass this function a NULL pointer.
@@ -27,27 +27,27 @@ int  initialize_screen_updating(int  i)
 	// make sure the chosen update method is valid
 	if(i >= UPDATE_MAX || i <= UPDATE_NONE) i = UPDATE_TRIPLE_BUFFER;
 	
-	// deal with the video memory w/ memory canvas methods first.
+	// deal with the video memory w/ memory buffer methods first.
 	// if they fail, drop to System Buffering and try again below
 	switch(i)
 	{
 		case UPDATE_TRIPLE_WMB:
 			if (!(gfx_capabilities & GFX_CAN_TRIPLE_BUFFER))
-				enable_triple_canvas();
+				enable_triple_buffer();
 
 			if((gfx_capabilities & GFX_CAN_TRIPLE_BUFFER))
 			{
 				pages[0] = create_video_bitmap(SCREEN_W, SCREEN_H);
 				pages[1] = create_video_bitmap(SCREEN_W, SCREEN_H);
 				pages[2] = create_video_bitmap(SCREEN_W, SCREEN_H);
-				canvas = create_bitmap(SCREEN_W, SCREEN_H);
+				buffer = create_bitmap(SCREEN_W, SCREEN_H);
 				
-				if(pages[0] && pages[1] && pages[2] && canvas)
+				if(pages[0] && pages[1] && pages[2] && buffer)
 				{
 					clear_bitmap(pages[0]);
 					clear_bitmap(pages[1]);
 					clear_bitmap(pages[2]);
-					clear_bitmap(canvas);
+					clear_bitmap(buffer);
 					active_page = pages[0];
 					show_video_bitmap(pages[2]);
 					return (updatemethod = UPDATE_TRIPLE_WMB);
@@ -57,21 +57,21 @@ int  initialize_screen_updating(int  i)
 					pages[0] = erase_bitmap(pages[0]);
 					pages[1] = erase_bitmap(pages[1]);
 					pages[2] = erase_bitmap(pages[2]);
-					canvas   = erase_bitmap(canvas);
+					buffer   = erase_bitmap(buffer);
 				}
 			}
-		// fall through if triple canvasing isn't supported
+		// fall through if triple buffering isn't supported
 			
 		case UPDATE_PAGEFLIP_WMB:
 			pages[0] = create_video_bitmap(SCREEN_W, SCREEN_H);
 			pages[1] = create_video_bitmap(SCREEN_W, SCREEN_H);
-			canvas = create_bitmap(SCREEN_W, SCREEN_H);
+			buffer = create_bitmap(SCREEN_W, SCREEN_H);
 			
-			if(pages[0] && pages[1] && canvas)
+			if(pages[0] && pages[1] && buffer)
 			{
 				clear_bitmap(pages[0]);
 				clear_bitmap(pages[1]);
-				clear_bitmap(canvas);
+				clear_bitmap(buffer);
 				active_page = pages[0];
 				show_video_bitmap(pages[1]);
 				return (updatemethod = UPDATE_PAGEFLIP_WMB);
@@ -80,7 +80,7 @@ int  initialize_screen_updating(int  i)
 			{
 				pages[0] = erase_bitmap(pages[0]);
 				pages[1] = erase_bitmap(pages[1]);
-				canvas   = erase_bitmap(canvas);
+				buffer   = erase_bitmap(buffer);
 				i = UPDATE_SYSTEM_BUFFER;
 			}
 		// fall through if page flipping isn't supported
@@ -93,7 +93,7 @@ int  initialize_screen_updating(int  i)
 	{
 		case UPDATE_TRIPLE_BUFFER:
 			if (!(gfx_capabilities & GFX_CAN_TRIPLE_BUFFER))
-				enable_triple_canvas();
+				enable_triple_buffer();
 
 			if((gfx_capabilities & GFX_CAN_TRIPLE_BUFFER))
 			{
@@ -106,7 +106,7 @@ int  initialize_screen_updating(int  i)
 					clear_bitmap(pages[0]);
 					clear_bitmap(pages[1]);
 					clear_bitmap(pages[2]);
-					active_page = canvas = pages[0];
+					active_page = buffer = pages[0];
 					show_video_bitmap(pages[2]);
 					return (updatemethod= UPDATE_TRIPLE_BUFFER);
 				}
@@ -117,7 +117,7 @@ int  initialize_screen_updating(int  i)
 					pages[2] = erase_bitmap(pages[2]);
 				}
 			}
-		// fall through if triple canvasing isn't supported
+		// fall through if triple buffering isn't supported
 			
 		case UPDATE_PAGE_FLIP:
 			pages[0] = create_video_bitmap(SCREEN_W, SCREEN_H);
@@ -127,7 +127,7 @@ int  initialize_screen_updating(int  i)
 			{
 				clear_bitmap(pages[0]);
 				clear_bitmap(pages[1]);
-				active_page = canvas = pages[0];
+				active_page = buffer = pages[0];
 				show_video_bitmap(pages[1]);
 				return (updatemethod = UPDATE_PAGE_FLIP);
 			}
@@ -139,40 +139,40 @@ int  initialize_screen_updating(int  i)
 		// fall through if page flipping isn't supported
 			
 		case UPDATE_SYSTEM_BUFFER:
-			canvas   = create_system_bitmap(SCREEN_W, SCREEN_H);
+			buffer   = create_system_bitmap(SCREEN_W, SCREEN_H);
 			pages[0] = create_video_bitmap(SCREEN_W, SCREEN_H);
 		
-			if(canvas && pages[0])
+			if(buffer && pages[0])
 			{
-				clear_bitmap(canvas);
+				clear_bitmap(buffer);
 				clear_bitmap(pages[0]);
 				show_video_bitmap(pages[0]);
 				return (updatemethod = UPDATE_SYSTEM_BUFFER);
 			}
 			else
 			{
-				canvas   = erase_bitmap(canvas);
+				buffer   = erase_bitmap(buffer);
 				pages[0] = erase_bitmap(pages[0]);
 			}
-		// fall through if system canvasing isn't supported
+		// fall through if system buffering isn't supported
 			
 		case UPDATE_DOUBLE_BUFFER:
-			canvas   = create_bitmap(SCREEN_W, SCREEN_H);
+			buffer   = create_bitmap(SCREEN_W, SCREEN_H);
 			pages[0] = create_video_bitmap(SCREEN_W, SCREEN_H);
 		
-			if(canvas && pages[0])
+			if(buffer && pages[0])
 			{
-				clear_bitmap(canvas);
+				clear_bitmap(buffer);
 				clear_bitmap(pages[0]);
 				show_video_bitmap(pages[0]);
 				return updatemethod = UPDATE_DOUBLE_BUFFER;
 			}
 			else
 			{
-				canvas   = erase_bitmap(canvas);
+				buffer   = erase_bitmap(buffer);
 				pages[0] = erase_bitmap(pages[0]);
 			}
-		// fall through if double canvasing isn't supported
+		// fall through if double buffering isn't supported
 			
 		default:
 			// if there's been a total failure to set an update method (personally, I think that's impossible),
@@ -187,7 +187,7 @@ void update_screen()
 	switch(updatemethod)
 	{
 		case UPDATE_TRIPLE_WMB:
-			blit(canvas, active_page, 0, 0, 0, 0, canvas->w, canvas->h);
+			blit(buffer, active_page, 0, 0, 0, 0, buffer->w, buffer->h);
 			while (poll_scroll());
 			request_video_bitmap(active_page);
 			
@@ -200,7 +200,7 @@ void update_screen()
 		return;
 		
 		case UPDATE_PAGEFLIP_WMB:
-			blit(canvas, active_page, 0, 0, 0, 0, canvas->w, canvas->h);
+			blit(buffer, active_page, 0, 0, 0, 0, buffer->w, buffer->h);
 			show_video_bitmap(active_page);
 			active_page = ((active_page == pages[0]) ? pages[1] : pages[0]);
 		return;
@@ -216,34 +216,34 @@ void update_screen()
 			else
 				active_page = pages[0];
 			
-			canvas = active_page;
+			buffer = active_page;
 		return;
 		
 		case UPDATE_PAGE_FLIP:
 			show_video_bitmap(active_page);
-			canvas = active_page = ((active_page == pages[0]) ? pages[1] : pages[0]);
+			buffer = active_page = ((active_page == pages[0]) ? pages[1] : pages[0]);
 		return;
 			
 		case UPDATE_SYSTEM_BUFFER:
 			if(waitforvsync) vsync();
-			blit(canvas, pages[0], 0, 0, 0, 0, canvas->w, canvas->h);
+			blit(buffer, pages[0], 0, 0, 0, 0, buffer->w, buffer->h);
 		return;
 			
 		case UPDATE_DOUBLE_BUFFER:
 			if(waitforvsync) vsync();
-			blit(canvas, pages[0], 0, 0, 0, 0, canvas->w, canvas->h);
+			blit(buffer, pages[0], 0, 0, 0, 0, buffer->w, buffer->h);
 		return;
 	}
 }
 
 void shutdown_screen_updating()
 {
-	// just in case. canvas is always either a memory bitmap, or equal to active_page.
+	// just in case. buffer is always either a memory bitmap, or equal to active_page.
 	// active_page always points to video memory (an element of page[]), or nothing.
-	if(is_memory_bitmap(canvas))
-		canvas = erase_bitmap(canvas);
+	if(is_memory_bitmap(buffer))
+		buffer = erase_bitmap(buffer);
 	else
-		canvas = NULL;
+		buffer = NULL;
 	
 	active_page = NULL;
 	
@@ -255,10 +255,10 @@ void shutdown_screen_updating()
 }
 
 // two more quickies
-BITMAP* get_canvas()     { return canvas;       }
+BITMAP* get_buffer()     { return buffer;       }
 int  get_update_method() { return updatemethod; }
 
-// finally, the vsync stuff. Note that waitforvsync only affects system canvasing and double canvasing
+// finally, the vsync stuff. Note that waitforvsync only affects system buffering and double buffering
 void enable_vsync()     { waitforvsync = 1;     }
 void disable_vsync()    { waitforvsync = 0;     }
 void toggle_vsync()     { waitforvsync = waitforvsync ? 0 : 1; }

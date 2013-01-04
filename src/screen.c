@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include <allegro.h>
+
 #include "al_screen.h"
 #include "KwestKingdom.h"
 #include "screen.h"
@@ -190,7 +192,7 @@ FLAG show_screen()
   /* Scale the window onto the screen */
   stretch_blit(
     get_win(),
-    get_canvas(),
+    get_buffer(),
     0,
     0,
     get_win_w(),

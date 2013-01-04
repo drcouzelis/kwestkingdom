@@ -615,7 +615,7 @@ void World::drawTerrain(IMAGE * canvas) {
   // Draw help tiles.
   for (i = 0; i < room->num_helps; i++) {
     helpTile = room->helps[i];
-    draw_anim(&help_tile_anim, buffer, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
+    draw_anim(&help_tile_anim, canvas, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
 }
 
@@ -628,12 +628,12 @@ void World::drawCharacters(IMAGE *canvas) {
   
   for (counter = 0; counter < room->num_items; counter++) {
     item = room->items[counter];
-    item->draw(buffer);
+    item->draw(canvas);
   }
   
   for (counter = 0; counter < room->num_enemies; counter++) {
     enemy = room->enemies[counter];
-    enemy->draw(buffer);
+    enemy->draw(canvas);
   }
   
   hero->draw(canvas);

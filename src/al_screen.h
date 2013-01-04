@@ -24,7 +24,7 @@ enum {
 int     initialize_screen_updating(int i);
 void    update_screen();
 void    shutdown_screen_updating();
-BITMAP* get_canvas();
+BITMAP* get_buffer();
 int     get_update_method();
 void    enable_vsync();
 void    disable_vsync();
