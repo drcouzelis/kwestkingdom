@@ -182,7 +182,7 @@ void Game::update() {
 }
 
 
-void Game::drawMenu(BITMAP * buffer) {
+void Game::drawMenu(IMAGE * canvas) {
   
   int x;
   int y;
@@ -200,50 +200,50 @@ void Game::drawMenu(BITMAP * buffer) {
   hTextOffset = getTileSize();
   vTextOffset = lineSpacing;
   
-  menuBackground->draw(buffer);
-  draw_box(buffer, x, y, w, h);
+  menuBackground->draw(canvas);
+  draw_box(canvas, x, y, w, h);
 
   // Draw the title of the game
-  draw_anim(&title_anim, buffer, (get_win_w() / 2) - (get_anim_w(&title_anim) / 2), (get_win_w() - get_anim_w(&title_anim)) / 2);
+  draw_anim(&title_anim, canvas, (get_win_w() / 2) - (get_anim_w(&title_anim) / 2), (get_win_w() - get_anim_w(&title_anim)) / 2);
   
   // New Game
-  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
+  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
 
   // Survival Mode
-  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, (char *)"Survival Mode");
+  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, (char *)"Survival Mode");
   
   // Resume Game
   if (world == NULL) {
-    draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, (char *)"Resume Game");
+    draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, (char *)"Resume Game");
   } else {
-    draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, (char *)"Resume Game");
+    draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, (char *)"Resume Game");
   }
   
   // High Scores
-  draw_text(buffer, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, (char *)"High Scores");
+  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, (char *)"High Scores");
   
   // Quit
-  draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, (char *)"Press ESC To Quit");
+  draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, (char *)"Press ESC To Quit");
   
   // Fullscreen
   if (is_windowed_mode()) {
-    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Fullscreen");
+    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Fullscreen");
   } else {
-    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Windowed");
+    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Windowed");
   }
   
   // Sound
   if (is_sound_enabled()) {
-    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
+    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
   } else {
-    draw_text(buffer, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
+    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
   }
   
-  draw_anim(&menu_pointer, buffer, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
+  draw_anim(&menu_pointer, canvas, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
 }
 
 
-void Game::drawHighScores(BITMAP * buffer) {
+void Game::drawHighScores(IMAGE * canvas) {
   
   HIGH_SCORE high_score;
   int x;
@@ -263,14 +263,14 @@ void Game::drawHighScores(BITMAP * buffer) {
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
-  highScoresBackground->draw(buffer);
-  draw_box(buffer, x, y, w, h);
+  highScoresBackground->draw(canvas);
+  draw_box(canvas, x, y, w, h);
   
   // Title
-  draw_text(buffer, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, (char *)"High Scores");
+  draw_text(canvas, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, (char *)"High Scores");
   
   // Header
-  draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"        Room  Coins");
+  draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
@@ -279,15 +279,15 @@ void Game::drawHighScores(BITMAP * buffer) {
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
   }
   
   // Return
-  draw_text(buffer, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
+  draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
 }
 
 
-void Game::drawEnterInitials(BITMAP * buffer) {
+void Game::drawEnterInitials(IMAGE * canvas) {
   
   int x;
   int y;
@@ -304,43 +304,43 @@ void Game::drawEnterInitials(BITMAP * buffer) {
   lineSpacing = getTileSize() / 2;
   vTextOffset = lineSpacing;
   
-  world->draw(buffer);
+  world->draw(canvas);
   
-  draw_box(buffer, x, y, w, h);
+  draw_box(canvas, x, y, w, h);
   
   // Title
-  draw_text(buffer, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, (char *)"Congratulations!");
-  draw_text(buffer, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, (char *)"You got a high score!");
-  draw_text(buffer, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"Please enter your initials: ");
+  draw_text(canvas, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, (char *)"Congratulations!");
+  draw_text(canvas, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, (char *)"You got a high score!");
+  draw_text(canvas, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"Please enter your initials: ");
   
   // Initials
-  draw_text(buffer, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
+  draw_text(canvas, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
 }
 
 
-void Game::draw(BITMAP * buffer) {
+void Game::draw(IMAGE * canvas) {
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    this->drawMenu(buffer);
+    this->drawMenu(canvas);
     break;
   
   case GAME_PLAY_STATE:
-    world->draw(buffer);
+    world->draw(canvas);
     break;
   
   case GAME_OVER_STATE:
-    world->draw(buffer);
-    draw_anim(&game_over_anim, buffer, (get_win_w() / 2) - (get_anim_w(&game_over_anim) / 2), (get_win_h() / 2) - (get_anim_h(&game_over_anim) / 2));
+    world->draw(canvas);
+    draw_anim(&game_over_anim, canvas, (get_win_w() / 2) - (get_anim_w(&game_over_anim) / 2), (get_win_h() / 2) - (get_anim_h(&game_over_anim) / 2));
     break;
     
   case GAME_ENTER_INITIALS_STATE:
-    this->drawEnterInitials(buffer);
+    this->drawEnterInitials(canvas);
     break;
     
   case GAME_HIGH_SCORES_STATE:
-    this->drawHighScores(buffer);
+    this->drawHighScores(canvas);
     break;
   
   case GAME_QUIT_STATE:

@@ -52,11 +52,11 @@ void Bow::update() {
 }
 
 
-void Bow::draw(BITMAP * buffer) {
-  Sprite::draw(buffer);
+void Bow::draw(IMAGE * canvas) {
+  Sprite::draw(canvas);
 
   if (arrow) {
-    arrow->draw(buffer);
+    arrow->draw(canvas);
   }
 }
 

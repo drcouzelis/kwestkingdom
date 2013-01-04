@@ -48,7 +48,7 @@ public:
   ~Hero();
 
   void update();
-  void draw(BITMAP *buffer);
+  void draw(IMAGE *canvas);
 
   virtual void hurt();
   virtual bool isDead();

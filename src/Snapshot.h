@@ -9,7 +9,7 @@ class Snapshot : public Sprite {
  
 protected:
 
-  BITMAP *canvas;
+  IMAGE *canvas;
   
 public:
 
@@ -17,13 +17,13 @@ public:
   ~Snapshot();
 
   void update();
-  void draw(BITMAP *buffer);
+  void draw(IMAGE *canvas);
 
   virtual bool moving();
   virtual void setX(int newX);
   virtual void setY(int newY);
 
-  BITMAP *getCanvas();
+  IMAGE *getCanvas();
 };
 
 

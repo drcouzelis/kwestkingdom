@@ -61,8 +61,6 @@ kwestkingdom_SOURCES = \
   screen.c \
   Shield.h \
   Shield.cpp \
-  simclist.h \
-  simclist.c \
   Snapshot.h \
   Snapshot.cpp \
   Sprite.h \

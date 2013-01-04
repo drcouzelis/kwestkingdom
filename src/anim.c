@@ -109,9 +109,9 @@ IMAGE *get_canvas(int width, int height)
 #include <stdio.h>
 
 
-void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
+void draw_anim(ANIM *anim, IMAGE *canvas, int x, int y)
 {
-  IMAGE *canvas;
+  IMAGE *tmp_canvas;
 
   if (get_frame(anim) == NULL) {
     return;
@@ -121,34 +121,34 @@ void draw_anim(ANIM *anim, IMAGE *buffer, int x, int y)
   // to work correctly.
   // Only necessary when rotating and flipping sprites.
   if (anim->rotate || anim->h_flip || anim->v_flip) {
-    canvas = get_canvas(get_frame(anim)->w, get_frame(anim)->h);
-    if (canvas) {
-      blit(get_frame(anim), canvas, 0, 0, 0, 0, canvas->w, canvas->h);
+    tmp_canvas = get_canvas(get_frame(anim)->w, get_frame(anim)->h);
+    if (tmp_canvas) {
+      blit(get_frame(anim), tmp_canvas, 0, 0, 0, 0, tmp_canvas->w, tmp_canvas->h);
     }
   } else {
-    canvas = get_frame(anim);
+    tmp_canvas = get_frame(anim);
   }
   
-  if (canvas == NULL) {
+  if (tmp_canvas == NULL) {
     return;
   }
   
   if (anim->rotate && anim->h_flip && anim->v_flip) {
-    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->h_flip) {
-    rotate_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
+    rotate_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->v_flip) {
-    rotate_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
+    rotate_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->rotate) {
-    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->h_flip && anim->v_flip) {
-    rotate_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y, itofix(128));
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(128));
   } else if (anim->h_flip) {
-    draw_sprite_h_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
+    draw_sprite_h_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   } else if (anim->v_flip) {
-    draw_sprite_v_flip(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
+    draw_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   } else {
-    draw_sprite(buffer, canvas, x + anim->offset_x, y + anim->offset_y);
+    draw_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   }
 }
 

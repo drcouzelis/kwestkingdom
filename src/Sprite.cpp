@@ -62,20 +62,20 @@ void Sprite::update() {
 }
 
 
-void Sprite::draw(BITMAP * buffer) {
+void Sprite::draw(IMAGE * canvas) {
   
   // Add a shadow.
   /*
-  hline(buffer, visualX + 6, visualY + 30, visualX + 33, BLACK);
-  hline(buffer, visualX + 6, visualY + 31, visualX + 33, BLACK);
-  hline(buffer, visualX + 4, visualY + 32, visualX + 35, BLACK);
-  hline(buffer, visualX + 4, visualY + 33, visualX + 35, BLACK);
-  hline(buffer, visualX + 6, visualY + 34, visualX + 33, BLACK);
-  hline(buffer, visualX + 6, visualY + 35, visualX + 33, BLACK);
+  hline(canvas, visualX + 6, visualY + 30, visualX + 33, BLACK);
+  hline(canvas, visualX + 6, visualY + 31, visualX + 33, BLACK);
+  hline(canvas, visualX + 4, visualY + 32, visualX + 35, BLACK);
+  hline(canvas, visualX + 4, visualY + 33, visualX + 35, BLACK);
+  hline(canvas, visualX + 6, visualY + 34, visualX + 33, BLACK);
+  hline(canvas, visualX + 6, visualY + 35, visualX + 33, BLACK);
   */
   
   if (anim != NULL) {
-    draw_anim(anim, buffer, visualX, visualY);
+    draw_anim(anim, canvas, visualX, visualY);
   }
 }
 

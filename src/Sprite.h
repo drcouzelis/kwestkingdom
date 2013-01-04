@@ -2,7 +2,6 @@
 #define SPRITE_HEADER
 
 
-#include <allegro.h>
 #include "anim.h"
 
 class World;
@@ -36,7 +35,7 @@ public:
   Sprite();
 
   virtual void update();
-  virtual void draw(BITMAP *buffer);
+  virtual void draw(IMAGE *canvas);
 
   virtual bool moving();
   virtual int getWidth();

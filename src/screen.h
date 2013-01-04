@@ -6,7 +6,7 @@
 #endif 
 
 
-#include <allegro.h>
+#include "resources.h"
 #include "utilities.h"
 
 
@@ -18,7 +18,7 @@ void free_screen();
 int get_win_w();
 int get_win_h();
 
-BITMAP *get_win();
+IMAGE *get_win();
 FLAG show_screen();
 
 

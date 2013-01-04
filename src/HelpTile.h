@@ -2,7 +2,7 @@
 #define HELPTILE_HEADER
 
 
-#include <allegro.h>
+#include "resources.h"
 
 
 typedef enum {
@@ -34,7 +34,7 @@ public:
   HelpTile();
   ~HelpTile();
 
-  virtual void draw(BITMAP *buffer);
+  virtual void draw(IMAGE *canvas);
 
   void setX(int newX);
   void setY(int newY);

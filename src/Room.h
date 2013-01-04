@@ -74,7 +74,7 @@ public:
   virtual ~Room();
 
   virtual void update();
-  virtual void draw(BITMAP *buffer);
+  virtual void draw(IMAGE *canvas);
 
   virtual FLAG isSwimmable(int x, int y);
   virtual FLAG isWalkable(int x, int y);

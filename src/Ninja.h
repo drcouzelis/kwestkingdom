@@ -23,7 +23,7 @@ public:
   ~Ninja();
 
   void update();
-  void draw(BITMAP *buffer);
+  void draw(IMAGE *canvas);
 
   virtual void setX(int newX);
   virtual void setY(int newY);

@@ -86,7 +86,7 @@ void Room::update() {
 }
 
 
-void Room::draw(BITMAP * buffer) {
+void Room::draw(IMAGE * canvas) {
   
   int x;
   int y;
@@ -95,28 +95,28 @@ void Room::draw(BITMAP * buffer) {
     for (x = 0; x < COLS; x++) {
       
       //if (path_map[x][y]) { // Draw the path
-        //draw_anim(&path_anim, buffer, x * getTileSize(), y * getTileSize());
+        //draw_anim(&path_anim, canvas, x * getTileSize(), y * getTileSize());
       //} else
       if (terrain_map[x][y] == GRASS_TERRAIN) {
-        draw_anim(&grass_anim, buffer, x * getTileSize(), y * getTileSize());
+        draw_anim(&grass_anim, canvas, x * getTileSize(), y * getTileSize());
       } else if (terrain_map[x][y] == TREE_TERRAIN) {
-        draw_anim(&mountain_anim, buffer, x * getTileSize(), y * getTileSize());
+        draw_anim(&mountain_anim, canvas, x * getTileSize(), y * getTileSize());
       } else if (terrain_map[x][y] == WATER_TERRAIN) {
         
-        draw_anim(&water_anim, buffer, x * getTileSize(), y * getTileSize());
+        draw_anim(&water_anim, canvas, x * getTileSize(), y * getTileSize());
         
         // Add the shore borders
         if (terrain_map[x][y - 1] != WATER_TERRAIN) { // North
-          draw_anim(&shore_north_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_north_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (terrain_map[x][y + 1] != WATER_TERRAIN) { // South
-          draw_anim(&shore_south_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_south_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (terrain_map[x + 1][y] != WATER_TERRAIN) { // East
-          draw_anim(&shore_east_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_east_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (terrain_map[x - 1][y] != WATER_TERRAIN) { // West
-          draw_anim(&shore_west_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_west_anim, canvas, x * getTileSize(), y * getTileSize());
         }
           
       }
@@ -135,25 +135,25 @@ void Room::draw(BITMAP * buffer) {
           terrain_map[x][y - 1] != WATER_TERRAIN &&
           terrain_map[x + 1][y] != WATER_TERRAIN
         ) { // North East
-          draw_anim(&shore_inside_ne_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_inside_ne_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y + 1] != WATER_TERRAIN &&
           terrain_map[x + 1][y] != WATER_TERRAIN
         ) { // South East
-          draw_anim(&shore_inside_se_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_inside_se_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y - 1] != WATER_TERRAIN &&
           terrain_map[x - 1][y] != WATER_TERRAIN
         ) { // North West
-          draw_anim(&shore_inside_nw_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_inside_nw_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y + 1] != WATER_TERRAIN &&
           terrain_map[x - 1][y] != WATER_TERRAIN
         ) { // South West
-          draw_anim(&shore_inside_sw_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_inside_sw_anim, canvas, x * getTileSize(), y * getTileSize());
         }
           
         // Add the shore outside corners.
@@ -162,28 +162,28 @@ void Room::draw(BITMAP * buffer) {
           terrain_map[x + 1][y] == WATER_TERRAIN &&
           terrain_map[x + 1][y - 1] != WATER_TERRAIN
         ) { // North East
-          draw_anim(&shore_outside_ne_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_outside_ne_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y + 1] == WATER_TERRAIN &&
           terrain_map[x + 1][y] == WATER_TERRAIN &&
           terrain_map[x + 1][y + 1] != WATER_TERRAIN
         ) { // South East
-          draw_anim(&shore_outside_se_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_outside_se_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y - 1] == WATER_TERRAIN &&
           terrain_map[x - 1][y] == WATER_TERRAIN &&
           terrain_map[x - 1][y - 1] != WATER_TERRAIN
         ) { // North West
-          draw_anim(&shore_outside_nw_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_outside_nw_anim, canvas, x * getTileSize(), y * getTileSize());
         }
         if (
           terrain_map[x][y + 1] == WATER_TERRAIN &&
           terrain_map[x - 1][y] == WATER_TERRAIN &&
           terrain_map[x - 1][y + 1] != WATER_TERRAIN
         ) { // South West
-          draw_anim(&shore_outside_sw_anim, buffer, x * getTileSize(), y * getTileSize());
+          draw_anim(&shore_outside_sw_anim, canvas, x * getTileSize(), y * getTileSize());
         }
       }
       
