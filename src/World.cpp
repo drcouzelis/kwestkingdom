@@ -5,7 +5,6 @@
 #include "Hero.h"
 #include "Item.h"
 #include "KwestKingdom.h"
-#include "List.h"
 #include "resources.h"
 #include "RoomFactory.h"
 #include "screen.h"
@@ -28,8 +27,41 @@ typedef enum
 } CHARACTER_TURN;
 
 
+void add_room(World *world, Room *room)
+{
+  if (world->num_rooms < MAX_ROOMS) {
+    world->rooms[world->num_rooms] = room;
+    world->num_rooms++;
+  }
+}
+
+
+void crop_rooms(World *world, int amount)
+{
+  if (amount < 0) {
+    return;
+  }
+
+  while (world->num_rooms > amount) {
+    // Remove oldest room
+    delete world->rooms[0];
+
+    for (i = 1; i < world->num_rooms; i++) {
+      world->rooms[i - 1] = world->rooms[i];
+    }
+
+    world->num_rooms--;
+
+    // Remove entrance to the new first room
+    world->rooms[0]->removeExitToPrevRoom();
+  }
+}
+
+
 World::World() {
   
+  int i;
+
   difficulty = 0;
   
   hero = new Hero();
@@ -54,8 +86,10 @@ World::World() {
   room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
   room->setExitToPrevRoomY(-1);
   
-  rooms = new List();
-  rooms->append(room);
+  for (i = 0; i < MAX_ROOMS; i++) {
+    rooms[i] = NULL;
+  }
+  add_room(this, room);
   
   init_anim(&heart_anim, OFF, 0);
   add_frame(&heart_anim, IMG("heart.bmp"));
@@ -577,13 +611,7 @@ void World::changeRooms() {
       room = nextRoom;
       
       // Delete the oldest room.
-      if (rooms->getSize() > 2) {
-        firstRoom = (Room *)rooms->getHead();
-        rooms->remove(rooms->getHead());
-        delete firstRoom;
-        firstRoom = (Room *)rooms->getHead();
-        firstRoom->removeExitToPrevRoom();
-      }
+      crop_rooms(this, MAX_ROOMS);
     }
     
     hero->setX(room->getEntranceFromPrevRoomX());

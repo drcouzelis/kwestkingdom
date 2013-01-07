@@ -3,16 +3,18 @@
 
 
 #include "anim.h"
+#include "room.h"
 #include "utilities.h"
 
 class Character;
 class HelpTile;
 class Hero;
 class Item;
-class List;
-class Room;
 class RoomFactory;
 class Snapshot;
+
+
+#define MAX_ROOMS 3
 
 
 class World {
@@ -20,7 +22,9 @@ class World {
 public:
 
   Hero *hero;
-  List *rooms;
+
+  Room *rooms[MAX_ROOMS];
+  int num_rooms;
   
   RoomFactory *roomFactory;
   Room *room;
