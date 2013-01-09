@@ -29,9 +29,10 @@ typedef enum
 
 Room *curr_room(World *world)
 {
-  if (world->room_idx => world->num_rooms) {
+  if (world->room_idx < 0 || world->room_idx => world->num_rooms) {
     return NULL;
   }
+
   return world->rooms[world->room_idx];
 }
 
@@ -532,8 +533,7 @@ Room * World::createNextRoom() {
 
 void World::changeRooms() {
   
-  Room *nextRoom;
-  Room *firstRoom;
+  Room *room;
   int entranceX;
   int entranceY;
   
@@ -587,18 +587,17 @@ void World::changeRooms() {
   // If the hero is at the exit that leads to the next room...
   if (hero->getX() == curr_room(this)->getExitToNextRoomX() && hero->getY() == curr_room(this)->getExitToNextRoomY()) {
     
-    // YOU LEFT OFF HERE!!
-    nextRoom = (Room *)rooms->getIndex(rooms->findIndex(room) + 1);
-    
-    // Create the next room here, if necessary.
-    if (nextRoom != NULL) {
+    // Move the room index to point to the next room
+    room_idx++;
+
+    if (room_idx >= num_rooms) {
+
+      // Delete the oldest room.
+      crop_rooms(this, MAX_ROOMS);
       
-      room = nextRoom;
-      
-    } else {
-      
-      entranceX = ((Room *)rooms->getTail())->getExitToNextRoomX();
-      entranceY = ((Room *)rooms->getTail())->getExitToNextRoomY();
+      // Create the next room
+      entranceX = rooms[room_idx - 1]->getExitToNextRoomX();
+      entranceY = rooms[room_idx - 1]->getExitToNextRoomY();
       
       // Bound the entrance.
       if (entranceX < 0) {
@@ -626,24 +625,19 @@ void World::changeRooms() {
       
       roomFactory->setPathBeginX(entranceX);
       roomFactory->setPathBeginY(entranceY);
-      nextRoom = this->createNextRoom();
-      rooms->append(nextRoom);
-      
-      room = nextRoom;
-      
-      // Delete the oldest room.
-      crop_rooms(this, MAX_ROOMS);
+      room = this->createNextRoom();
+      rooms->append(room);
     }
     
-    hero->setX(room->getEntranceFromPrevRoomX());
-    hero->setY(room->getEntranceFromPrevRoomY());
+    hero->setX(curr_room(this)->getEntranceFromPrevRoomX());
+    hero->setY(curr_room(this)->getEntranceFromPrevRoomY());
     
-  } else if (hero->getX() == room->getExitToPrevRoomX() && hero->getY() == room->getExitToPrevRoomY()) {
+  } else if (hero->getX() == curr_room(this)->getExitToPrevRoomX() && hero->getY() == curr_room(this)->getExitToPrevRoomY()) {
     
     // Go to the previous room.
-    room = (Room *)rooms->getIndex(rooms->findIndex(room) - 1);
-    hero->setX(room->getEntranceFromNextRoomX());
-    hero->setY(room->getEntranceFromNextRoomY());
+    room_idx--;
+    hero->setX(curr_room(this)->getEntranceFromNextRoomX());
+    hero->setY(curr_room(this)->getEntranceFromNextRoomY());
     
   }
   
