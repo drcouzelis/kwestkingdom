@@ -3,7 +3,7 @@
 
 
 #include "anim.h"
-#include "room.h"
+#include "Room.h"
 #include "utilities.h"
 
 class Character;
@@ -25,9 +25,9 @@ public:
 
   Room *rooms[MAX_ROOMS];
   int num_rooms;
+  int room_idx;
   
   RoomFactory *roomFactory;
-  Room *room;
   
   ANIM heart_anim;
   ANIM heart_empty_anim;
