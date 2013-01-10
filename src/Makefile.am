@@ -43,8 +43,6 @@ kwestkingdom_SOURCES = \
   key_input.c \
   KwestKingdom.h \
   KwestKingdom.cpp \
-  List.h \
-  List.cpp \
   memory.h \
   memory.c \
   MoneyBag.h \
