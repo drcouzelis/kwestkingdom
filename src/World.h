@@ -72,7 +72,7 @@ public:
   void updateHero();
   void updateEnemies();
 
-  Room *createNextRoom();
+  Room *createNextRoom(int number);
   virtual void changeRooms();
 
   void drawTerrain(IMAGE *canvas);
@@ -84,6 +84,9 @@ public:
 
   void addHelpTile(HelpTile *aHelpTile);
 };
+
+
+Room *curr_room(World *world);
 
 
 #endif

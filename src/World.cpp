@@ -29,7 +29,7 @@ typedef enum
 
 Room *curr_room(World *world)
 {
-  if (world->room_idx < 0 || world->room_idx => world->num_rooms) {
+  if (world->room_idx < 0 || world->room_idx >= world->num_rooms) {
     return NULL;
   }
 
@@ -48,6 +48,8 @@ void add_room(World *world, Room *room)
 
 void crop_rooms(World *world, int amount)
 {
+  int i;
+
   if (amount < 0) {
     return;
   }
@@ -68,6 +70,7 @@ void crop_rooms(World *world, int amount)
 
     if (world->room_idx > 0) {
       world->room_idx--;
+      printf("Room idx dec to %d\n", world->room_idx);
     }
 
     // Remove entrance to the new first room
@@ -100,16 +103,16 @@ World::World() {
   roomFactory->setPathBeginX(hero->getX());
   roomFactory->setPathBeginY(hero->getY());
   
-  room = this->createNextRoom();
-  room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
-  room->setExitToPrevRoomY(-1);
-  
   for (i = 0; i < MAX_ROOMS; i++) {
     rooms[i] = NULL;
   }
   num_rooms = 0;
   room_idx = 0;
 
+  room = this->createNextRoom(1);
+  room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
+  room->setExitToPrevRoomY(-1);
+  
   add_room(this, room);
   
   init_anim(&heart_anim, OFF, 0);
@@ -129,7 +132,12 @@ World::World() {
 
 
 World::~World() {
-  delete rooms;
+  int i;
+
+  for (i = 0; i < num_rooms; i++) {
+    delete rooms[i];
+  }
+
   delete roomFactory;
   delete hero;
   delete prevRoomSnapshot;
@@ -501,15 +509,7 @@ void World::shake() {
 }
 
 
-Room * World::createNextRoom() {
-  
-  int number;
-  
-  if (curr_room(this) != NULL) {
-    number = curr_room(this)->getNumber() + 1;
-  } else {
-    number = 1;
-  }
+Room * World::createNextRoom(int number) {
   
   if (number % 20 == 0) {
     roomFactory->setType(ROOM_UNDERGROUND);
@@ -589,11 +589,12 @@ void World::changeRooms() {
     
     // Move the room index to point to the next room
     room_idx++;
+    printf("Room idx inc to %d\n", room_idx);
 
     if (room_idx >= num_rooms) {
 
       // Delete the oldest room.
-      crop_rooms(this, MAX_ROOMS);
+      crop_rooms(this, MAX_ROOMS - 1);
       
       // Create the next room
       entranceX = rooms[room_idx - 1]->getExitToNextRoomX();
@@ -625,8 +626,8 @@ void World::changeRooms() {
       
       roomFactory->setPathBeginX(entranceX);
       roomFactory->setPathBeginY(entranceY);
-      room = this->createNextRoom();
-      rooms->append(room);
+      room = this->createNextRoom(rooms[room_idx - 1]->getNumber() + 1);
+      add_room(this, room);
     }
     
     hero->setX(curr_room(this)->getEntranceFromPrevRoomX());
