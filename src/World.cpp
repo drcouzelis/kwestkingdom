@@ -27,17 +27,13 @@ typedef enum
 } CHARACTER_TURN;
 
 
-Room *curr_room(World *world)
+Room *the_room(World *world)
 {
-  if (world->room_idx < 0 || world->room_idx >= world->num_rooms) {
-    return NULL;
-  }
-
   return world->rooms[world->room_idx];
 }
 
 
-void add_room(World *world, Room *room)
+void append_room(World *world, Room *room)
 {
   if (world->num_rooms < MAX_ROOMS) {
     world->rooms[world->num_rooms] = room;
@@ -46,7 +42,7 @@ void add_room(World *world, Room *room)
 }
 
 
-void crop_rooms(World *world, int amount)
+void crop_old_rooms(World *world, int amount)
 {
   int i;
 
@@ -58,6 +54,7 @@ void crop_rooms(World *world, int amount)
     // Remove oldest room
     delete world->rooms[0];
 
+    // Shift the room pointers down the list
     for (i = 1; i < world->num_rooms; i++) {
       world->rooms[i - 1] = world->rooms[i];
     }
@@ -67,11 +64,7 @@ void crop_rooms(World *world, int amount)
     }
 
     world->num_rooms--;
-
-    if (world->room_idx > 0) {
-      world->room_idx--;
-      printf("Room idx dec to %d\n", world->room_idx);
-    }
+    world->room_idx--;
 
     // Remove entrance to the new first room
     world->rooms[0]->removeExitToPrevRoom();
@@ -107,13 +100,13 @@ World::World() {
     rooms[i] = NULL;
   }
   num_rooms = 0;
-  room_idx = 0;
+  room_idx = -1;
 
   room = this->createNextRoom(1);
   room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.
   room->setExitToPrevRoomY(-1);
   
-  add_room(this, room);
+  append_room(this, room);
   
   init_anim(&heart_anim, OFF, 0);
   add_frame(&heart_anim, IMG("heart.bmp"));
@@ -146,7 +139,7 @@ World::~World() {
 
 
 void World::updateRoom() {
-  rooms[room_idx]->update();
+  the_room(this)->update();
 }
 
 
@@ -157,9 +150,9 @@ void World::updateItems() {
   int x;
   int y;
   
-  for (item_counter = 0; item_counter < curr_room(this)->num_items; item_counter++) {
+  for (item_counter = 0; item_counter < the_room(this)->num_items; item_counter++) {
 
-    item = curr_room(this)->items[item_counter];
+    item = the_room(this)->items[item_counter];
     
     item->update();
     
@@ -171,7 +164,7 @@ void World::updateItems() {
         // Hero is standing on the item
         if (item->getX() == hero->getX() + x && item->getY() == hero->getY() + y) {
           item->collectedBy(hero);
-          remove_item(curr_room(this), item_counter);
+          remove_item(the_room(this), item_counter);
           item_counter--;
         }
         
@@ -186,7 +179,7 @@ Character *get_active_character(World *world)
   if (world->whose_turn == HERO_TURN) {
     return world->hero;
   } else {
-    return curr_room(world)->enemies[world->whose_turn - ENEMY_TURN];
+    return the_room(world)->enemies[world->whose_turn - ENEMY_TURN];
   }
 }
 
@@ -194,13 +187,13 @@ Character *get_active_character(World *world)
 void cycle_active_character(World *world)
 {
   if (world->whose_turn == HERO_TURN) {
-    if (curr_room(world)->num_enemies > 0) {
+    if (the_room(world)->num_enemies > 0) {
       world->whose_turn = ENEMY_TURN;
     }
   } else {
     // Cycle through the list of enemies
     world->whose_turn++;
-    if (world->whose_turn - ENEMY_TURN == curr_room(world)->num_enemies) {
+    if (world->whose_turn - ENEMY_TURN == the_room(world)->num_enemies) {
       world->whose_turn = HERO_TURN;
     }
   }
@@ -223,8 +216,8 @@ void World::updateHero() {
   
   // If the hero is at an exit...
   if (
-    (hero->getX() == curr_room(this)->getExitToNextRoomX() && hero->getY() == curr_room(this)->getExitToNextRoomY()) ||
-    (hero->getX() == curr_room(this)->getExitToPrevRoomX() && hero->getY() == curr_room(this)->getExitToPrevRoomY())
+    (hero->getX() == the_room(this)->getExitToNextRoomX() && hero->getY() == the_room(this)->getExitToNextRoomY()) ||
+    (hero->getX() == the_room(this)->getExitToPrevRoomX() && hero->getY() == the_room(this)->getExitToPrevRoomY())
   ) {
     
     // This prevents enemies from moving around during a change of rooms.
@@ -251,14 +244,14 @@ void World::updateEnemies() {
   int enemy_counter;
   
   // Update the enemies and remove any that are dead.
-  for (enemy_counter = 0; enemy_counter < curr_room(this)->num_enemies; enemy_counter++) {
+  for (enemy_counter = 0; enemy_counter < the_room(this)->num_enemies; enemy_counter++) {
     
-    enemy = curr_room(this)->enemies[enemy_counter];
+    enemy = the_room(this)->enemies[enemy_counter];
     enemy->update();
     
     if (enemy->isDead()) {
       enemy->dropItem();
-      remove_enemy(curr_room(this), enemy_counter);
+      remove_enemy(the_room(this), enemy_counter);
       enemy_counter--;
     }
     
@@ -316,14 +309,14 @@ void World::update() {
 
 void World::addItem(Item *anItem) {
   if (anItem != NULL) {
-    add_item(curr_room(this), anItem);
+    add_item(the_room(this), anItem);
   }
 }
 
 
 void World::addHelpTile(HelpTile *aHelpTile) {
   if (aHelpTile != NULL) {
-    add_help(curr_room(this), aHelpTile);
+    add_help(the_room(this), aHelpTile);
   }
 }
 
@@ -358,8 +351,8 @@ FLAG World::isAttackable(int team, int x, int y) {
         }
       }
       
-      for (enemy_counter = 0; enemy_counter < curr_room(this)->num_enemies; enemy_counter++) {
-        enemy = curr_room(this)->enemies[enemy_counter];
+      for (enemy_counter = 0; enemy_counter < the_room(this)->num_enemies; enemy_counter++) {
+        enemy = the_room(this)->enemies[enemy_counter];
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (team != enemy->getTeam() && x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
@@ -390,8 +383,8 @@ void World::attackFromTeam(int team, int x, int y) {
     }
   }
   
-  for (enemy_counter = 0; enemy_counter < curr_room(this)->num_enemies; enemy_counter++) {
-    enemy = curr_room(this)->enemies[enemy_counter];
+  for (enemy_counter = 0; enemy_counter < the_room(this)->num_enemies; enemy_counter++) {
+    enemy = the_room(this)->enemies[enemy_counter];
     for (m = 0; m < enemy->getWidth(); m++) {
       for (n = 0; n < enemy->getHeight(); n++) {
         if (team != enemy->getTeam() && x == enemy->getX() + m && y == enemy->getY() + n) {
@@ -405,7 +398,7 @@ void World::attackFromTeam(int team, int x, int y) {
 
 FLAG World::isSwimmable(int x, int y) {
   if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
-    return curr_room(this)->isSwimmable(x, y);
+    return the_room(this)->isSwimmable(x, y);
   }
   return OFF;
 }
@@ -413,7 +406,7 @@ FLAG World::isSwimmable(int x, int y) {
 
 FLAG World::isWalkable(int x, int y) {
   if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
-    return curr_room(this)->isWalkable(x, y);
+    return the_room(this)->isWalkable(x, y);
   }
   // Areas outside of the room are walkable
   // This allows the hero to walk to the door
@@ -423,7 +416,7 @@ FLAG World::isWalkable(int x, int y) {
 
 FLAG World::isJumpable(int x, int y) {
   if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
-    return curr_room(this)->isJumpable(x, y);
+    return the_room(this)->isJumpable(x, y);
   }
   return ON;
 }
@@ -431,7 +424,7 @@ FLAG World::isJumpable(int x, int y) {
 
 FLAG World::isFlyable(int x, int y) {
   if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
-    return curr_room(this)->isFlyable(x, y);
+    return the_room(this)->isFlyable(x, y);
   }
   return ON;
 }
@@ -439,7 +432,7 @@ FLAG World::isFlyable(int x, int y) {
 
 FLAG World::isSoarable(int x, int y) {
   if (x >= 0 && x <= COLS - 1 && y >= 0 && y <= ROWS - 1) {
-    return curr_room(this)->isSoarable(x, y);
+    return the_room(this)->isSoarable(x, y);
   }
   return ON;
 }
@@ -470,8 +463,8 @@ FLAG World::isInhabited(int x, int y) {
         }
       }
       
-      for (enemy_counter = 0; enemy_counter < curr_room(this)->num_enemies; enemy_counter++) {
-        enemy = curr_room(this)->enemies[enemy_counter];
+      for (enemy_counter = 0; enemy_counter < the_room(this)->num_enemies; enemy_counter++) {
+        enemy = the_room(this)->enemies[enemy_counter];
         for (m = 0; m < enemy->getWidth(); m++) {
           for (n = 0; n < enemy->getHeight(); n++) {
             if (x + i == enemy->getX() + m && y + j == enemy->getY() + n) {
@@ -489,7 +482,7 @@ FLAG World::isInhabited(int x, int y) {
 
 
 int World::getRoomNumber() {
-  return curr_room(this)->getNumber();
+  return the_room(this)->getNumber();
 }
 
 
@@ -585,20 +578,16 @@ void World::changeRooms() {
   this->drawCharacters(prevRoomSnapshot->getCanvas());
   
   // If the hero is at the exit that leads to the next room...
-  if (hero->getX() == curr_room(this)->getExitToNextRoomX() && hero->getY() == curr_room(this)->getExitToNextRoomY()) {
+  if (hero->getX() == the_room(this)->getExitToNextRoomX() && hero->getY() == the_room(this)->getExitToNextRoomY()) {
     
-    // Move the room index to point to the next room
-    room_idx++;
-    printf("Room idx inc to %d\n", room_idx);
-
-    if (room_idx >= num_rooms) {
+    if (room_idx + 1 == num_rooms) {
 
       // Delete the oldest room.
-      crop_rooms(this, MAX_ROOMS - 1);
+      crop_old_rooms(this, MAX_ROOMS - 1);
       
       // Create the next room
-      entranceX = rooms[room_idx - 1]->getExitToNextRoomX();
-      entranceY = rooms[room_idx - 1]->getExitToNextRoomY();
+      entranceX = the_room(this)->getExitToNextRoomX();
+      entranceY = the_room(this)->getExitToNextRoomY();
       
       // Bound the entrance.
       if (entranceX < 0) {
@@ -626,19 +615,22 @@ void World::changeRooms() {
       
       roomFactory->setPathBeginX(entranceX);
       roomFactory->setPathBeginY(entranceY);
-      room = this->createNextRoom(rooms[room_idx - 1]->getNumber() + 1);
-      add_room(this, room);
+      room = this->createNextRoom(the_room(this)->getNumber() + 1);
+      append_room(this, room);
     }
     
-    hero->setX(curr_room(this)->getEntranceFromPrevRoomX());
-    hero->setY(curr_room(this)->getEntranceFromPrevRoomY());
+    // Move the room index to point to the next room
+    room_idx++;
+
+    hero->setX(the_room(this)->getEntranceFromPrevRoomX());
+    hero->setY(the_room(this)->getEntranceFromPrevRoomY());
     
-  } else if (hero->getX() == curr_room(this)->getExitToPrevRoomX() && hero->getY() == curr_room(this)->getExitToPrevRoomY()) {
+  } else if (hero->getX() == the_room(this)->getExitToPrevRoomX() && hero->getY() == the_room(this)->getExitToPrevRoomY()) {
     
     // Go to the previous room.
     room_idx--;
-    hero->setX(curr_room(this)->getEntranceFromNextRoomX());
-    hero->setY(curr_room(this)->getEntranceFromNextRoomY());
+    hero->setX(the_room(this)->getEntranceFromNextRoomX());
+    hero->setY(the_room(this)->getEntranceFromNextRoomY());
     
   }
   
@@ -654,11 +646,11 @@ void World::drawTerrain(IMAGE * canvas) {
   HelpTile *helpTile;
   int i;
   
-  curr_room(this)->draw(canvas);
+  the_room(this)->draw(canvas);
   
   // Draw help tiles.
-  for (i = 0; i < curr_room(this)->num_helps; i++) {
-    helpTile = curr_room(this)->helps[i];
+  for (i = 0; i < the_room(this)->num_helps; i++) {
+    helpTile = the_room(this)->helps[i];
     draw_anim(&help_tile_anim, canvas, helpTile->getX() * getTileSize(), helpTile->getY() * getTileSize());
   }
 }
@@ -670,13 +662,13 @@ void World::drawCharacters(IMAGE *canvas) {
   Item *item;
   int counter;
   
-  for (counter = 0; counter < curr_room(this)->num_items; counter++) {
-    item = curr_room(this)->items[counter];
+  for (counter = 0; counter < the_room(this)->num_items; counter++) {
+    item = the_room(this)->items[counter];
     item->draw(canvas);
   }
   
-  for (counter = 0; counter < curr_room(this)->num_enemies; counter++) {
-    enemy = curr_room(this)->enemies[counter];
+  for (counter = 0; counter < the_room(this)->num_enemies; counter++) {
+    enemy = the_room(this)->enemies[counter];
     enemy->draw(canvas);
   }
   
@@ -704,8 +696,8 @@ void World::drawUserInterface(IMAGE * canvas) {
   draw_text(canvas, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
-  for (counter = 0; counter < curr_room(this)->num_helps; counter++) {
-    helpTile = curr_room(this)->helps[counter];
+  for (counter = 0; counter < the_room(this)->num_helps; counter++) {
+    helpTile = the_room(this)->helps[counter];
     if (helpTile->getX() == hero->getX() && helpTile->getY() == hero->getY()) {
       helpTile->draw(canvas);
     }
@@ -741,7 +733,7 @@ void World::draw(IMAGE * canvas) {
   }
   
   // Put the current room number on the screen.
-  sprintf(text, "Room %d", curr_room(this)->getNumber());
+  sprintf(text, "Room %d", the_room(this)->getNumber());
   draw_text(canvas, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), 1, WHITE, text);
 }
 
