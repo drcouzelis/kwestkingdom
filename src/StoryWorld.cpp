@@ -83,8 +83,8 @@ StoryWorld::StoryWorld() {
   
   // Welcome help
   helpTile = new HelpTile();
-  helpTile->setX(curr_room(this)->getXOfStepNumber(2));
-  helpTile->setY(curr_room(this)->getYOfStepNumber(2));
+  helpTile->setX(the_room(this)->getXOfStepNumber(2));
+  helpTile->setY(the_room(this)->getYOfStepNumber(2));
   helpTile->setLines((char *)WELCOME_TEXT_LINE_1,
                      (char *)WELCOME_TEXT_LINE_2,
                      (char *)WELCOME_TEXT_LINE_3,
@@ -95,8 +95,8 @@ StoryWorld::StoryWorld() {
   
   // About help
   helpTile = new HelpTile();
-  helpTile->setX(curr_room(this)->getXOfStepNumber(4));
-  helpTile->setY(curr_room(this)->getYOfStepNumber(4));
+  helpTile->setX(the_room(this)->getXOfStepNumber(4));
+  helpTile->setY(the_room(this)->getYOfStepNumber(4));
   helpTile->setLines((char *)ABOUT_TEXT_LINE_1,
                      (char *)ABOUT_TEXT_LINE_2,
                      (char *)ABOUT_TEXT_LINE_3,
@@ -115,20 +115,20 @@ void StoryWorld::update() {
   World::update();
   
   // This will add the enemy to the room AFTER the room number that is shown here.
-  if (curr_room(this)->getNumber() == 2) {
+  if (the_room(this)->getNumber() == 2) {
     roomFactory->setChanceOfChomper(DEFAULT_CHANCE_OF_CHOMPER);
     difficulty = 5;
-  } else if (curr_room(this)->getNumber() == 5) {
+  } else if (the_room(this)->getNumber() == 5) {
     roomFactory->setChanceOfArcher(DEFAULT_CHANCE_OF_ARCHER);
-  } else if (curr_room(this)->getNumber() == 8) {
+  } else if (the_room(this)->getNumber() == 8) {
     roomFactory->setChanceOfNinja(DEFAULT_CHANCE_OF_NINJA);
-  } else if (curr_room(this)->getNumber() == 11) {
+  } else if (the_room(this)->getNumber() == 11) {
     roomFactory->setChanceOfGiant(DEFAULT_CHANCE_OF_GIANT);
-  } else if (curr_room(this)->getNumber() == 16) {
+  } else if (the_room(this)->getNumber() == 16) {
     difficulty = 100;
   }
   
-  if (curr_room(this)->getNumber() == MAX_NUM_OF_ROOMS) {
+  if (the_room(this)->getNumber() == MAX_NUM_OF_ROOMS) {
     // There are no more rooms to explore!
     // It's the end of the game.
     //play_sound(SND("sound.wav"));
@@ -143,12 +143,12 @@ void StoryWorld::changeRooms() {
   
   World::changeRooms();
   
-  if (curr_room(this)->getNumber() == 2) {
+  if (the_room(this)->getNumber() == 2) {
     
     // Sword help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(2));
-    helpTile->setY(curr_room(this)->getYOfStepNumber(2));
+    helpTile->setX(the_room(this)->getXOfStepNumber(2));
+    helpTile->setY(the_room(this)->getYOfStepNumber(2));
     helpTile->setLines((char *)SWORD_TEXT_LINE_1,
                        (char *)SWORD_TEXT_LINE_2,
                        (char *)SWORD_TEXT_LINE_3,
@@ -159,8 +159,8 @@ void StoryWorld::changeRooms() {
     
     // Chomper help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
-    helpTile->setY(curr_room(this)->getYOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
+    helpTile->setX(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
+    helpTile->setY(the_room(this)->getYOfStepNumber(the_room(this)->getSizeOfPath() - 4));
     helpTile->setLines((char *)CHOMPER_TEXT_LINE_1,
                        (char *)CHOMPER_TEXT_LINE_2,
                        (char *)CHOMPER_TEXT_LINE_3,
@@ -169,12 +169,12 @@ void StoryWorld::changeRooms() {
                        (char *)NULL);
     this->addHelpTile(helpTile);
     
-  } else if (curr_room(this)->getNumber() == 3) {
+  } else if (the_room(this)->getNumber() == 3) {
     
     // Wait help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(2));
-    helpTile->setY(curr_room(this)->getYOfStepNumber(2));
+    helpTile->setX(the_room(this)->getXOfStepNumber(2));
+    helpTile->setY(the_room(this)->getYOfStepNumber(2));
     helpTile->setLines((char *)WAIT_TEXT_LINE_1,
                        (char *)WAIT_TEXT_LINE_2,
                        (char *)WAIT_TEXT_LINE_3,
@@ -183,12 +183,12 @@ void StoryWorld::changeRooms() {
                        (char *)NULL);
     this->addHelpTile(helpTile);
     
-  } else if (curr_room(this)->getNumber() == 4) {
+  } else if (the_room(this)->getNumber() == 4) {
     
     // Shield help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(2));
-    helpTile->setY(curr_room(this)->getYOfStepNumber(2));
+    helpTile->setX(the_room(this)->getXOfStepNumber(2));
+    helpTile->setY(the_room(this)->getYOfStepNumber(2));
     helpTile->setLines((char *)SHIELD_TEXT_LINE_1,
                        (char *)SHIELD_TEXT_LINE_2,
                        (char *)SHIELD_TEXT_LINE_3,
@@ -197,12 +197,12 @@ void StoryWorld::changeRooms() {
                        (char *)NULL);
     this->addHelpTile(helpTile);
     
-  } else if (curr_room(this)->getNumber() == 5) {
+  } else if (the_room(this)->getNumber() == 5) {
     
     // Bow help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(2));
-    helpTile->setY(curr_room(this)->getYOfStepNumber(2));
+    helpTile->setX(the_room(this)->getXOfStepNumber(2));
+    helpTile->setY(the_room(this)->getYOfStepNumber(2));
     helpTile->setLines((char *)BOW_TEXT_LINE_1,
                        (char *)BOW_TEXT_LINE_2,
                        (char *)BOW_TEXT_LINE_3,
@@ -213,8 +213,8 @@ void StoryWorld::changeRooms() {
     
     // Archer help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
-    helpTile->setY(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
+    helpTile->setX(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
+    helpTile->setY(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
     helpTile->setLines((char *)ARCHER_TEXT_LINE_1,
                        (char *)ARCHER_TEXT_LINE_2,
                        (char *)ARCHER_TEXT_LINE_3,
@@ -223,12 +223,12 @@ void StoryWorld::changeRooms() {
                        (char *)NULL);
     this->addHelpTile(helpTile);
     
-  } else if (curr_room(this)->getNumber() == 8) {
+  } else if (the_room(this)->getNumber() == 8) {
     
     // Ninja help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
-    helpTile->setY(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
+    helpTile->setX(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
+    helpTile->setY(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
     helpTile->setLines((char *)NINJA_TEXT_LINE_1,
                        (char *)NINJA_TEXT_LINE_2,
                        (char *)NULL,
@@ -237,12 +237,12 @@ void StoryWorld::changeRooms() {
                        (char *)NULL);
     this->addHelpTile(helpTile);
     
-  } else if (curr_room(this)->getNumber() == 11) {
+  } else if (the_room(this)->getNumber() == 11) {
     
     // Giant help
     helpTile = new HelpTile();
-    helpTile->setX(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
-    helpTile->setY(curr_room(this)->getXOfStepNumber(curr_room(this)->getSizeOfPath() - 4));
+    helpTile->setX(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
+    helpTile->setY(the_room(this)->getXOfStepNumber(the_room(this)->getSizeOfPath() - 4));
     helpTile->setLines((char *)GIANT_TEXT_LINE_1,
                        (char *)GIANT_TEXT_LINE_2,
                        (char *)GIANT_TEXT_LINE_3,

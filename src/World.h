@@ -86,7 +86,7 @@ public:
 };
 
 
-Room *curr_room(World *world);
+Room *the_room(World *world);
 
 
 #endif
