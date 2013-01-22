@@ -46,7 +46,7 @@ void init_resources()
     resources[i] = NULL;
   }
 
-  set_volume(GAME_VOLUME, GAME_VOLUME);
+  //set_volume(GAME_VOLUME, GAME_VOLUME); // NEW_ALLEGRO
 }
 
 
@@ -57,9 +57,9 @@ void stop_resources()
   for (i = 0; i < num_resources; i++) {
     if (resources[i]) {
       if (resources[i]->type == RESOURCE_TYPE_IMAGE) {
-        destroy_bitmap((IMAGE *)resources[i]->data);
+        al_destroy_bitmap((IMAGE *)resources[i]->data);
       } else if (resources[i]->type == RESOURCE_TYPE_SOUND) {
-        destroy_sample((SOUND *)resources[i]->data);
+        al_destroy_sample((SOUND *)resources[i]->data);
       }
       free_memory("RESOURCE", resources[i]);
       resources[i] = NULL;
@@ -93,15 +93,12 @@ void add_resource_path(const char *path)
 IMAGE *load_bitmap_with_magic_pink(const char *filename)
 {
   IMAGE *bitmap;
-  static PALETTE palette;
 
-  bitmap = load_bitmap(filename, palette);
+  bitmap = al_load_bitmap(filename);
 
-  /*
   if (bitmap) {
     al_convert_mask_to_alpha(bitmap, al_map_rgb(255, 0, 255));
   }
-  */
 
   return bitmap;
 }
@@ -161,7 +158,7 @@ void *get_resource(const char *name, RESOURCE_TYPE type)
     if (type == RESOURCE_TYPE_IMAGE) {
       data = load_bitmap_with_magic_pink(fullpath);
     } else if (type == RESOURCE_TYPE_SOUND) {
-      data = load_sample(fullpath);
+      data = al_load_sample(fullpath);
     }
 
     if (data) {
@@ -191,7 +188,7 @@ SOUND *get_sound(const char *name)
 void play_sound(SOUND *sound)
 {
   if (sound_enabled && sound) {
-    play_sample(sound, 255, 128, 1000, 0);
+    al_play_sample(sound, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
   }
 }
 

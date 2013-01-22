@@ -1,4 +1,4 @@
-#include <allegro.h>
+#include <allegro5/allegro.h>
 #include <stdio.h>
 
 #include "key_input.h"

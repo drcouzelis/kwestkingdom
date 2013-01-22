@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include <allegro.h>
+#include <allegro5/allegro.h>
 
 #include "al_screen.h"
 #include "KwestKingdom.h"
