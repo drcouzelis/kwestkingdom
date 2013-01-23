@@ -73,17 +73,17 @@ Hero::Hero() {
   add_frame(&dead_anim, IMG("hero_die_4.bmp"));
   add_frame(&dead_anim, IMG("hero_die_5.bmp"));
   
-  init_key_input(&upKey, KEY_UP, 0);
-  init_key_input(&downKey, KEY_DOWN, 0);
-  init_key_input(&leftKey, KEY_LEFT, 0);
-  init_key_input(&rightKey, KEY_RIGHT, 0);
-  init_key_input(&waitKey, KEY_SPACE, GAME_TICKER);
-  init_key_input(&attackKey1, KEY_LCONTROL, 0);
-  init_key_input(&attackKey2, KEY_RCONTROL, 0);
-  init_key_input(&handKey, KEY_0, GAME_TICKER);
-  init_key_input(&shieldKey, KEY_1, GAME_TICKER);
-  init_key_input(&swordKey, KEY_2, GAME_TICKER);
-  init_key_input(&bowKey, KEY_3, GAME_TICKER);
+  upKey = ALLEGRO_KEY_UP;
+  downKey = ALLEGRO_KEY_DOWN;
+  leftKey = ALLEGRO_KEY_LEFT;
+  rightKey = ALLEGRO_KEY_RIGHT;
+  waitKey = ALLEGRO_KEY_SPACE;
+  attackKey1 = ALLEGRO_KEY_LCTRL;
+  attackKey2 = ALLEGRO_KEY_RCTRL;
+  handKey = ALLEGRO_KEY_0;
+  shieldKey = ALLEGRO_KEY_1;
+  swordKey = ALLEGRO_KEY_2;
+  bowKey = ALLEGRO_KEY_3;
   
   this->toStandState();
   sword->toHoldState();
@@ -106,36 +106,36 @@ void Hero::updateStandState() {
   
   // Handle item key input.
   // Update the items.
-  if (is_key_pressed(&shieldKey)) {
+  if (is_key_pressed(shieldKey)) {
     shield->toHoldState();
     sword->toAwayState();
     bow->toAwayState();
-  } else if (is_key_pressed(&swordKey)) {
+  } else if (is_key_pressed(swordKey)) {
     shield->toAwayState();
     sword->toHoldState();
     bow->toAwayState();
-  } else if (is_key_pressed(&bowKey)) {
+  } else if (is_key_pressed(bowKey)) {
     shield->toAwayState();
     sword->toAwayState();
     bow->toHoldState();
-  } else if (is_key_pressed(&handKey)) {
+  } else if (is_key_pressed(handKey)) {
     shield->toAwayState();
     sword->toAwayState();
     bow->toAwayState();
   }
   
-  if (is_key_pressed(&attackKey1) || is_key_pressed(&attackKey2)) {
+  if (is_key_held(attackKey1) || is_key_held(attackKey2)) {
     
-    if (is_key_pressed(&upKey)) {
+    if (is_key_held(upKey)) {
       direction = UP;
       this->toAttackState();
-    } else if (is_key_pressed(&downKey)) {
+    } else if (is_key_held(downKey)) {
       direction = DOWN;
       this->toAttackState();
-    } else if (is_key_pressed(&leftKey)) {
+    } else if (is_key_held(leftKey)) {
       direction = LEFT;
       this->toAttackState();
-    } else if (is_key_pressed(&rightKey)) {
+    } else if (is_key_held(rightKey)) {
       direction = RIGHT;
       this->toAttackState();
     }
@@ -148,25 +148,25 @@ void Hero::updateStandState() {
     toX = x;
     toY = y;
     
-    if (is_key_pressed(&upKey)) {
+    if (is_key_held(upKey)) {
       toY--;
       if (sword->held() && world->isAttackable(team, x, y - 1)) {
         direction = UP;
         this->toAttackState();
       }
-    } else if (is_key_pressed(&downKey)) {
+    } else if (is_key_held(downKey)) {
       toY++;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = DOWN;
         this->toAttackState();
       }
-    } else if (is_key_pressed(&leftKey)) {
+    } else if (is_key_held(leftKey)) {
       toX--;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = LEFT;
         this->toAttackState();
       }
-    } else if (is_key_pressed(&rightKey)) {
+    } else if (is_key_held(rightKey)) {
       toX++;
       if (sword->held() && world->isAttackable(team, toX, toY)) {
         direction = RIGHT;
@@ -203,7 +203,7 @@ void Hero::update() {
     return;
   }
   
-  if (is_key_pressed(&waitKey)) {
+  if (is_key_pressed(waitKey)) {
     this->wait();
   }
   

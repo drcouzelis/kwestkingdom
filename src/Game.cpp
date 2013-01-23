@@ -6,7 +6,6 @@
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "RoomFactory.h"
-#include "screen.h"
 #include "Snapshot.h"
 #include "StoryWorld.h"
 #include "text.h"
@@ -46,13 +45,13 @@ Game::Game() {
   init_anim(&game_over_anim, OFF, 1);
   add_frame(&game_over_anim, IMG("gameover.bmp"));
   
-  init_key_input(&escapeKey, KEY_ESC, GAME_TICKER);
-  init_key_input(&fullscreenKey, KEY_F, GAME_TICKER);
-  init_key_input(&soundKey, KEY_S, GAME_TICKER);
+  escapeKey = ALLEGRO_KEY_ESCAPE;
+  fullscreenKey = ALLEGRO_KEY_F;
+  soundKey = ALLEGRO_KEY_S;
 
-  init_key_input(&upKey, KEY_UP, GAME_TICKER);
-  init_key_input(&downKey, KEY_DOWN, GAME_TICKER);
-  init_key_input(&selectKey, KEY_ENTER, GAME_TICKER);
+  upKey = ALLEGRO_KEY_UP;
+  downKey = ALLEGRO_KEY_DOWN;
+  selectKey = ALLEGRO_KEY_ENTER;
   
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();
@@ -75,48 +74,49 @@ Game::~Game() {
 }
 
 
-void Game::readPlayerInitials() {
-  
-  int key;
-  int length;
-  
-  if (keypressed()) {
-    key = readkey();
-    length = strlen(playerInitials);
-    // If the player pressed "backspace" or "delete" then delet a character.
-    if ((key >> 8) == KEY_BACKSPACE || (key >> 8) == KEY_DEL) {
-      if (length > 0) {
-        playerInitials[length - 1] = '\0';
-      }
-    } else if (((key >> 8) >= KEY_A && (key >> 8) <= KEY_Z) || ((key >> 8) >= KEY_0 && (key >> 8) <= KEY_9)) {
-      // The player pressed a letter or number key! Add it to the initials.
-      if (length < 3) {
-        playerInitials[length] = key & 0xFF;
-        playerInitials[length + 1] = '\0';
-      }
-    }
-  }
+void Game::readPlayerInitials() { // NEW_ALLEGRO
+//  
+//  int key;
+//  int length;
+//  
+//  if (keypressed()) {
+//    key = readkey();
+//    length = strlen(playerInitials);
+//    // If the player pressed "backspace" or "delete" then delet a character.
+//    if ((key >> 8) == KEY_BACKSPACE || (key >> 8) == KEY_DEL) {
+//      if (length > 0) {
+//        playerInitials[length - 1] = '\0';
+//      }
+//    } else if (((key >> 8) >= KEY_A && (key >> 8) <= KEY_Z) || ((key >> 8) >= KEY_0 && (key >> 8) <= KEY_9)) {
+//      // The player pressed a letter or number key! Add it to the initials.
+//      if (length < 3) {
+//        playerInitials[length] = key & 0xFF;
+//        playerInitials[length + 1] = '\0';
+//      }
+//    }
+//  }
 }
 
 
 void Game::update() {
   
-  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&fullscreenKey)) {
-    if (init_screen(-1, -1, is_windowed_mode()) == false) {
-      this->setState(GAME_QUIT_STATE);
-    }
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(fullscreenKey)) {
+    //if (init_screen(WINDOW_WIDTH, WINDOW_HEIGHT, is_windowed_mode()) == false) {
+    //  this->setState(GAME_QUIT_STATE);
+    //}
+    printf("Pretending to switch to fullscreen...\n");
   }
   
-  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&soundKey)) {
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(soundKey)) {
     toggle_sound();
   }
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_QUIT_STATE);
-    } else if (is_key_pressed(&upKey)) {
+    } else if (is_key_pressed(upKey)) {
       menuSelection--;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection--;
@@ -124,7 +124,7 @@ void Game::update() {
       if (menuSelection < 0) {
         menuSelection++;
       }
-    } else if (is_key_pressed(&downKey)) {
+    } else if (is_key_pressed(downKey)) {
       menuSelection++;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection++;
@@ -132,38 +132,38 @@ void Game::update() {
       if (menuSelection == MAX_MENU_SELECTIONS) {
         menuSelection--;
       }
-    } else if (is_key_pressed(&selectKey)) {
+    } else if (is_key_pressed(selectKey)) {
       this->activateMenuSelection();
     }
     animate(&menu_pointer);
     break;
   
   case GAME_PLAY_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     world->update();
     break;
   
   case GAME_HIGH_SCORES_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     break;
   
   case GAME_ENTER_INITIALS_STATE:
     this->readPlayerInitials();
-    if (strlen(playerInitials) > 0 && is_key_pressed(&selectKey)) {
-      this->setState(GAME_MENU_STATE);
-      add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
+    //if (strlen(playerInitials) > 0 && is_key_pressed(selectKey)) { // NEW_ALLEGRO
+      //add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
+      strcpy(playerInitials, "\0");
       delete world;
       world = NULL;
-      strcpy(playerInitials, "\0");
-    }
+      this->setState(GAME_MENU_STATE);
+    //}
     break;
   
   case GAME_OVER_STATE:
-    if (is_key_pressed(&selectKey)) {
+    if (is_key_pressed(selectKey)) {
       menuSelection = NEW_GAME_SELECTION;
       if (high_score_pos(world->getRoomNumber(), world->getMoney()) == MAX_NUM_OF_HIGH_SCORES) {
         this->setState(GAME_MENU_STATE);
@@ -192,8 +192,8 @@ void Game::drawMenu(IMAGE * canvas) {
   int hTextOffset;
   int vTextOffset;
   
-  x = (get_win_w() / 2) - (getTileSize() * 4);
-  y = (get_win_h() / 2) - (getTileSize() / 2);
+  x = (WINDOW_WIDTH / 2) - (getTileSize() * 4);
+  y = (WINDOW_HEIGHT / 2) - (getTileSize() / 2);
   w = getTileSize() * 4 * 2;
   h = getTileSize() * 5;
   lineSpacing = getTileSize() / 2;
@@ -201,42 +201,42 @@ void Game::drawMenu(IMAGE * canvas) {
   vTextOffset = lineSpacing;
   
   menuBackground->draw(canvas);
-  draw_box(canvas, x, y, w, h);
+  draw_box(x, y, w, h);
 
   // Draw the title of the game
-  draw_anim(&title_anim, canvas, (get_win_w() / 2) - (get_anim_w(&title_anim) / 2), (get_win_w() - get_anim_w(&title_anim)) / 2);
+  draw_anim(&title_anim, canvas, (WINDOW_WIDTH / 2) - (get_anim_w(&title_anim) / 2), (WINDOW_WIDTH - get_anim_w(&title_anim)) / 2);
   
   // New Game
-  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), 2, WHITE, (char *)"New Game");
+  draw_text(x + hTextOffset, y + vTextOffset + (lineSpacing * NEW_GAME_SELECTION), (char *)"New Game");
 
   // Survival Mode
-  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), 2, WHITE, (char *)"Survival Mode");
+  draw_text(x + hTextOffset, y + vTextOffset + (lineSpacing * SURVIVAL_MODE_SELECTION), (char *)"Survival Mode");
   
   // Resume Game
   if (world == NULL) {
-    draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, GRAY, (char *)"Resume Game");
+    draw_text(x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), (char *)"Resume Game");
   } else {
-    draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), 2, WHITE, (char *)"Resume Game");
+    draw_text(x + hTextOffset, y + vTextOffset + (lineSpacing * RESUME_GAME_SELECTION), (char *)"Resume Game");
   }
   
   // High Scores
-  draw_text(canvas, x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), 2, WHITE, (char *)"High Scores");
+  draw_text(x + hTextOffset, y + vTextOffset + (lineSpacing * HIGH_SCORES_SELECTION), (char *)"High Scores");
   
   // Quit
-  draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), 2, WHITE, (char *)"Press ESC To Quit");
+  draw_text(x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 1)), (char *)"Press ESC To Quit");
   
   // Fullscreen
-  if (is_windowed_mode()) {
-    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Fullscreen");
-  } else {
-    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), 2, WHITE, (char *)"F for Windowed");
-  }
+  //if (is_windowed_mode()) { // NEW_ALLEGRO
+    draw_text(x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), (char *)"F for Fullscreen");
+  //} else {
+  //  draw_text(x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 2)), (char *)"F for Windowed");
+  //}
   
   // Sound
   if (is_sound_enabled()) {
-    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (On)");
+    draw_text(x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), (char *)"S for Sound (On)");
   } else {
-    draw_text(canvas, x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), 2, WHITE, (char *)"S for Sound (Off)");
+    draw_text(x + hTextOffset - lineSpacing, y + vTextOffset + (lineSpacing * (MAX_MENU_SELECTIONS + 3)), (char *)"S for Sound (Off)");
   }
   
   draw_anim(&menu_pointer, canvas, x - 4, y + vTextOffset + (lineSpacing * menuSelection) - 1);
@@ -264,13 +264,13 @@ void Game::drawHighScores(IMAGE * canvas) {
   vTextOffset = lineSpacing;
   
   highScoresBackground->draw(canvas);
-  draw_box(canvas, x, y, w, h);
+  draw_box(x, y, w, h);
   
   // Title
-  draw_text(canvas, x + getTileSize() * 3, y + vTextOffset, 2, WHITE, (char *)"High Scores");
+  draw_text(x + getTileSize() * 3, y + vTextOffset, (char *)"High Scores");
   
   // Header
-  draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"        Room  Coins");
+  draw_text(x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 2), (char *)"        Room  Coins");
   
   // High scores
   for (i = 0; i < MAX_NUM_OF_HIGH_SCORES; i++) {
@@ -279,42 +279,42 @@ void Game::drawHighScores(IMAGE * canvas) {
     } else {
       sprintf(line, "#%d", i + 1);
     }
-    draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), 2, WHITE, line);
+    draw_text(x + getTileSize() + (getTileSize() / 4), y + vTextOffset + (lineSpacing * 3) + (lineSpacing * i), line);
   }
   
   // Return
-  draw_text(canvas, x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), 2, WHITE, (char *)"Press ESC to RETURN");
+  draw_text(x + getTileSize() + (getTileSize() / 4), y + h - (lineSpacing * 2), (char *)"Press ESC to RETURN");
 }
 
 
-void Game::drawEnterInitials(IMAGE * canvas) {
-  
-  int x;
-  int y;
-  int w;
-  int h;
-  
-  int lineSpacing;
-  int vTextOffset;
-  
-  x = getTileSize();
-  y = getTileSize() * 5;
-  w = getTileSize() * 14;
-  h = (getTileSize() * 2) + (getTileSize() / 2);
-  lineSpacing = getTileSize() / 2;
-  vTextOffset = lineSpacing;
-  
-  world->draw(canvas);
-  
-  draw_box(canvas, x, y, w, h);
-  
-  // Title
-  draw_text(canvas, x + (getTileSize() * 4), y + vTextOffset, 2, WHITE, (char *)"Congratulations!");
-  draw_text(canvas, x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), 2, WHITE, (char *)"You got a high score!");
-  draw_text(canvas, x + getTileSize(), y + vTextOffset + (lineSpacing * 2), 2, WHITE, (char *)"Please enter your initials: ");
-  
-  // Initials
-  draw_text(canvas, x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), 2, WHITE, playerInitials);
+void Game::drawEnterInitials(IMAGE * canvas) { // NEW_ALLEGRO
+//
+//  int x;
+//  int y;
+//  int w;
+//  int h;
+//  
+//  int lineSpacing;
+//  int vTextOffset;
+//  
+//  x = getTileSize();
+//  y = getTileSize() * 5;
+//  w = getTileSize() * 14;
+//  h = (getTileSize() * 2) + (getTileSize() / 2);
+//  lineSpacing = getTileSize() / 2;
+//  vTextOffset = lineSpacing;
+//  
+//  world->draw(canvas);
+//  
+//  draw_box(x, y, w, h);
+//  
+//  // Title
+//  draw_text(x + (getTileSize() * 4), y + vTextOffset, (char *)"Congratulations!");
+//  draw_text(x + (getTileSize() * 3), y + vTextOffset + (lineSpacing * 1), (char *)"You got a high score!");
+//  draw_text(x + getTileSize(), y + vTextOffset + (lineSpacing * 2), (char *)"Please enter your initials: ");
+//  
+//  // Initials
+//  draw_text(x + (getTileSize() * 12), y + vTextOffset + (lineSpacing * 2), playerInitials);
 }
 
 
@@ -332,7 +332,7 @@ void Game::draw(IMAGE * canvas) {
   
   case GAME_OVER_STATE:
     world->draw(canvas);
-    draw_anim(&game_over_anim, canvas, (get_win_w() / 2) - (get_anim_w(&game_over_anim) / 2), (get_win_h() / 2) - (get_anim_h(&game_over_anim) / 2));
+    draw_anim(&game_over_anim, canvas, (WINDOW_WIDTH / 2) - (get_anim_w(&game_over_anim) / 2), (WINDOW_HEIGHT / 2) - (get_anim_h(&game_over_anim) / 2));
     break;
     
   case GAME_ENTER_INITIALS_STATE:
@@ -406,7 +406,7 @@ void Game::setState(int aState) {
     break;
     
   case GAME_ENTER_INITIALS_STATE:
-    clear_keybuf();
+    //clear_keybuf(); // NEW_ALLEGRO
     break;
   }
 }

@@ -52,8 +52,6 @@ kwestkingdom_SOURCES = \
   RoomFactory.cpp \
   Room.h \
   Room.cpp \
-  screen.h \
-  screen.c \
   Shield.h \
   Shield.cpp \
   Snapshot.h \
