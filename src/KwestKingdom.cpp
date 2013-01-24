@@ -139,7 +139,7 @@ int main(int argc, char **argv)
   }
 
   /* TEMP */
-  scale = 1;
+  scale = 2;
 
   screen_w = scale * WINDOW_WIDTH;
   screen_h = scale * WINDOW_HEIGHT;

@@ -20,6 +20,6 @@ void draw_text(float x, float y, char *text)
 
 void draw_box(float x, float y, int w, int h)
 {
-  al_draw_filled_rectangle(x, y, x + w, y + w, RED);
+  al_draw_filled_rectangle(x, y, x + w, y + h, RED);
 }
 
