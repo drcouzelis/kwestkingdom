@@ -99,7 +99,7 @@ World::World() {
     rooms[i] = NULL;
   }
   num_rooms = 0;
-  room_idx = -1;
+  room_idx = 0;
 
   room = this->createNextRoom(1);
   room->setExitToPrevRoomX(-1); // Remove the entrance to the first room.

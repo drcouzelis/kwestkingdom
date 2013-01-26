@@ -19,12 +19,12 @@
  * Returns true if the key has been pressed since
  * the last time this function was called.
  */
-int is_key_pressed(char code);
+int is_key_pressed(int key);
 
 /**
  * Returns true if the key is being held down.
  */
-int is_key_held(char code);
+int is_key_held(int key);
 
 
 #ifdef __cplusplus
