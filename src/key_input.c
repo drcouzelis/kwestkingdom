@@ -1,46 +1,57 @@
 #include <allegro.h>
-#include <stdio.h>
 
 #include "key_input.h"
+#include "utilities.h"
 
 
-void init_key_input(KEY_INPUT *key_input, int key_code, int delay)
+static FLAG key_held[KEY_MAX];
+static FLAG key_init = OFF;
+
+
+void init_keys()
 {
-  key_input->key_code = key_code;
-  key_input->delay = delay;
-  key_input->released = ON;
-  key_input->timer = 0;
+  int i;
+
+  if (key_init) {
+    return;
+  }
+
+  for (i = 0; i < KEY_MAX; i++) {
+    key_held[i] = OFF;
+  }
+
+  key_init = ON;
 }
 
 
-FLAG is_key_pressed(KEY_INPUT *key_input)
+FLAG is_key_pressed(char key_code)
 {
-  FLAG ret = OFF;
-  
-  if (key_input->delay == 0 && key[key_input->key_code]) {
-    return ON;
-  }
-  
-  if (key[key_input->key_code]) {
-    if (key_input->released) {
-      
-      ret = ON;
-      key_input->timer = 0;
-      
-    } else {
-      key_input->timer++;
+    init_keys();
+    
+    if (!key_held[key_code] && key[key_code]) {
+        key_held[key_code] = ON;
+        return ON;
     }
-    
-    key_input->released = OFF;
-    
-    if (key_input->timer >= key_input->delay) {
-      key_input->released = ON;
+
+    if (key_held[key_code] && !key[key_code]) {
+        key_held[key_code] = OFF;
+        return OFF;
     }
-    
-  } else {
-    key_input->released = ON;
-  }
-  
-  return ret;
+
+    return OFF;
 }
 
+
+FLAG is_key_held(char key_code)
+{
+    init_keys();
+    
+    if (key[key_code]) {
+        key_held[key_code] = ON;
+        return ON;
+    }
+
+    key_held[key_code] = OFF;
+
+    return OFF;
+}

@@ -46,13 +46,13 @@ Game::Game() {
   init_anim(&game_over_anim, OFF, 1);
   add_frame(&game_over_anim, IMG("gameover.bmp"));
   
-  init_key_input(&escapeKey, KEY_ESC, GAME_TICKER);
-  init_key_input(&fullscreenKey, KEY_F, GAME_TICKER);
-  init_key_input(&soundKey, KEY_S, GAME_TICKER);
+  escapeKey = KEY_ESC;
+  fullscreenKey = KEY_F;
+  soundKey = KEY_S;
 
-  init_key_input(&upKey, KEY_UP, GAME_TICKER);
-  init_key_input(&downKey, KEY_DOWN, GAME_TICKER);
-  init_key_input(&selectKey, KEY_ENTER, GAME_TICKER);
+  upKey = KEY_UP;
+  downKey = KEY_DOWN;
+  selectKey = KEY_ENTER;
   
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();
@@ -101,22 +101,22 @@ void Game::readPlayerInitials() {
 
 void Game::update() {
   
-  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&fullscreenKey)) {
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(fullscreenKey)) {
     if (init_screen(-1, -1, is_windowed_mode()) == false) {
       this->setState(GAME_QUIT_STATE);
     }
   }
   
-  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(&soundKey)) {
+  if (state != GAME_ENTER_INITIALS_STATE && is_key_pressed(soundKey)) {
     toggle_sound();
   }
   
   switch (state) {
   
   case GAME_MENU_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_QUIT_STATE);
-    } else if (is_key_pressed(&upKey)) {
+    } else if (is_key_pressed(upKey)) {
       menuSelection--;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection--;
@@ -124,7 +124,7 @@ void Game::update() {
       if (menuSelection < 0) {
         menuSelection++;
       }
-    } else if (is_key_pressed(&downKey)) {
+    } else if (is_key_pressed(downKey)) {
       menuSelection++;
       if (menuSelection == RESUME_GAME_SELECTION && world == NULL) {
         menuSelection++;
@@ -132,28 +132,28 @@ void Game::update() {
       if (menuSelection == MAX_MENU_SELECTIONS) {
         menuSelection--;
       }
-    } else if (is_key_pressed(&selectKey)) {
+    } else if (is_key_pressed(selectKey)) {
       this->activateMenuSelection();
     }
     animate(&menu_pointer);
     break;
   
   case GAME_PLAY_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     world->update();
     break;
   
   case GAME_HIGH_SCORES_STATE:
-    if (is_key_pressed(&escapeKey)) {
+    if (is_key_pressed(escapeKey)) {
       this->setState(GAME_MENU_STATE);
     }
     break;
   
   case GAME_ENTER_INITIALS_STATE:
     this->readPlayerInitials();
-    if (strlen(playerInitials) > 0 && is_key_pressed(&selectKey)) {
+    if (strlen(playerInitials) > 0 && is_key_pressed(selectKey)) {
       this->setState(GAME_MENU_STATE);
       add_high_score(playerInitials, world->getRoomNumber(), world->getMoney());
       delete world;
@@ -163,7 +163,7 @@ void Game::update() {
     break;
   
   case GAME_OVER_STATE:
-    if (is_key_pressed(&selectKey)) {
+    if (is_key_pressed(selectKey)) {
       menuSelection = NEW_GAME_SELECTION;
       if (high_score_pos(world->getRoomNumber(), world->getMoney()) == MAX_NUM_OF_HIGH_SCORES) {
         this->setState(GAME_MENU_STATE);

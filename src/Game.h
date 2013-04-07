@@ -18,13 +18,13 @@ class Game {
   ANIM title_anim;
   ANIM game_over_anim;
   
-  KEY_INPUT fullscreenKey;
-  KEY_INPUT soundKey;
-  KEY_INPUT escapeKey;
+  char fullscreenKey;
+  char soundKey;
+  char escapeKey;
 
-  KEY_INPUT upKey;
-  KEY_INPUT downKey;
-  KEY_INPUT selectKey;
+  char upKey;
+  char downKey;
+  char selectKey;
   
   int menuSelection;
   Snapshot *menuBackground;

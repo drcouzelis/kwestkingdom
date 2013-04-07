@@ -28,17 +28,17 @@ protected:
   ANIM hurt_anim;
   ANIM dead_anim;
   
-  KEY_INPUT upKey;
-  KEY_INPUT downKey;
-  KEY_INPUT rightKey;
-  KEY_INPUT leftKey;
-  KEY_INPUT waitKey;
-  KEY_INPUT attackKey1;
-  KEY_INPUT attackKey2;
-  KEY_INPUT handKey;
-  KEY_INPUT shieldKey;
-  KEY_INPUT swordKey;
-  KEY_INPUT bowKey;
+  char upKey;
+  char downKey;
+  char rightKey;
+  char leftKey;
+  char waitKey;
+  char attackKey1;
+  char attackKey2;
+  char handKey;
+  char shieldKey;
+  char swordKey;
+  char bowKey;
   
   int direction;
   
