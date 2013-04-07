@@ -47,7 +47,7 @@ void add_frame(ANIM *anim, IMAGE *frame);
 
 void reset_anim(ANIM *anim);
 
-void draw_anim(ANIM *anim, IMAGE *canvas, float x, float y);
+void draw_anim(ANIM *anim, IMAGE *canvas, int x, int y);
 
 int get_anim_w(ANIM *anim);
 int get_anim_h(ANIM *anim);

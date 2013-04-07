@@ -1,64 +1,46 @@
-#include <allegro5/allegro.h>
+#include <allegro.h>
+#include <stdio.h>
 
 #include "key_input.h"
-#include "utilities.h"
 
 
-/* Hold the state of the keyboard */
-static ALLEGRO_KEYBOARD_STATE kbdstate;
-
-static int key_held[ALLEGRO_KEY_MAX];
-static FLAG key_init = OFF;
-
-
-void init_keys()
+void init_key_input(KEY_INPUT *key_input, int key_code, int delay)
 {
-  int i;
+  key_input->key_code = key_code;
+  key_input->delay = delay;
+  key_input->released = ON;
+  key_input->timer = 0;
+}
 
-  if (key_init) {
-    return;
+
+FLAG is_key_pressed(KEY_INPUT *key_input)
+{
+  FLAG ret = OFF;
+  
+  if (key_input->delay == 0 && key[key_input->key_code]) {
+    return ON;
   }
-
-  for (i = 0; i < ALLEGRO_KEY_MAX; i++) {
-    key_held[i] = 0;
+  
+  if (key[key_input->key_code]) {
+    if (key_input->released) {
+      
+      ret = ON;
+      key_input->timer = 0;
+      
+    } else {
+      key_input->timer++;
+    }
+    
+    key_input->released = OFF;
+    
+    if (key_input->timer >= key_input->delay) {
+      key_input->released = ON;
+    }
+    
+  } else {
+    key_input->released = ON;
   }
-
-  key_init = ON;
+  
+  return ret;
 }
 
-
-int is_key_pressed(int key)
-{
-    init_keys();
-    
-    al_get_keyboard_state(&kbdstate);
-
-    if (!key_held[key] && al_key_down(&kbdstate, key)) {
-        key_held[key] = 1;
-        return 1;
-    }
-
-    if (key_held[key] && !al_key_down(&kbdstate, key)) {
-        key_held[key] = 0;
-        return 0;
-    }
-
-    return 0;
-}
-
-
-int is_key_held(int key)
-{
-    init_keys();
-    
-    al_get_keyboard_state(&kbdstate);
-
-    if (al_key_down(&kbdstate, key)) {
-        key_held[key] = 1;
-        return 1;
-    }
-
-    key_held[key] = 0;
-
-    return 0;
-}

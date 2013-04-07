@@ -2,6 +2,7 @@
 #define TEXT_HEADER
 
 
+#include <allegro.h>
 #include "resources.h"
 
 
@@ -10,8 +11,8 @@
 #endif 
 
 
-void draw_text(float x, float y, char *text);
-void draw_box(float x, float y, int w, int h);
+void draw_text(IMAGE *canvas, int x, int y, double multiplier, int color, char *text);
+void draw_box(IMAGE *canvas, int x, int y, int w, int h);
 
 
 #ifdef __cplusplus

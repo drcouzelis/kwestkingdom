@@ -2,10 +2,7 @@
 #define RESOURCES_HEADER
 
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_acodec.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_image.h>
+#include <allegro.h>
 #include "utilities.h"
 
 
@@ -18,8 +15,8 @@
 #define SND(name) (get_sound(name))
 
 
-typedef ALLEGRO_BITMAP IMAGE;
-typedef ALLEGRO_SAMPLE SOUND;
+typedef BITMAP IMAGE;
+typedef SAMPLE SOUND;
 
 
 /**

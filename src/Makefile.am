@@ -6,6 +6,9 @@ bin_PROGRAMS = kwestkingdom
 # A list of all of the source code files.
 # The "SOURCES" suffix marks it as source code.
 kwestkingdom_SOURCES = \
+  al_screen.h \
+  al_screen.c \
+  allegro_icon.c \
   anim.h \
   anim.c \
   Archer.h \
@@ -52,6 +55,8 @@ kwestkingdom_SOURCES = \
   RoomFactory.cpp \
   Room.h \
   Room.cpp \
+  screen.h \
+  screen.c \
   Shield.h \
   Shield.cpp \
   Snapshot.h \

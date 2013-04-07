@@ -33,14 +33,14 @@ void Sprite::update() {
       fudge += speed;
       
       while (fudge >= GAME_TICKER) {
-        if ((int)visualX != x * getTileSize()) {
+        if (visualX != x * getTileSize()) {
           if (visualX < x * getTileSize()) {
             visualX++;
           } else {
             visualX--;
           }
         }
-        if ((int)visualY != y * getTileSize()) {
+        if (visualY != y * getTileSize()) {
           if (visualY < y * getTileSize()) {
             visualY++;
           } else {

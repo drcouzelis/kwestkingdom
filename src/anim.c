@@ -74,34 +74,81 @@ void add_frame(ANIM *anim, IMAGE *frame)
 }
 
 
-void draw_anim(ANIM *anim, IMAGE *canvas, float x, float y)
+static IMAGE *canvas_standard_size = NULL;
+static IMAGE *canvas_triple_size = NULL;
+
+
+/**
+ * This silly little function provides a fix for transparency
+ * when using the rotate sprite and flip sprite functions.
+ */
+IMAGE *get_canvas(int width, int height)
 {
-  int xhalf = 0;
-  int yhalf = 0;
+  int tile_size = 20;
+  
+  if (width == tile_size && height == tile_size) {
+    if (canvas_standard_size == NULL) {
+      canvas_standard_size = create_bitmap(tile_size, tile_size);
+    }
+    return canvas_standard_size;
+  }
+  
+  if (width == tile_size * 3 && height == tile_size * 3) {
+    if (canvas_triple_size == NULL) {
+      canvas_triple_size = create_bitmap(tile_size * 3, tile_size * 3);
+    }
+    return canvas_triple_size;
+  }
+
+  fprintf(stderr, "Failed to find a canvas size %dx%d. \n", width, height);
+  
+  return NULL;
+}
+
+
+#include <stdio.h>
+
+
+void draw_anim(ANIM *anim, IMAGE *canvas, int x, int y)
+{
+  IMAGE *tmp_canvas;
 
   if (get_frame(anim) == NULL) {
     return;
   }
-
-  xhalf = al_get_bitmap_width(get_frame(anim)) / 2;
-  yhalf = al_get_bitmap_height(get_frame(anim)) / 2;
+  
+  // Write to a temporary canvas to get transparency
+  // to work correctly.
+  // Only necessary when rotating and flipping sprites.
+  if (anim->rotate || anim->h_flip || anim->v_flip) {
+    tmp_canvas = get_canvas(get_frame(anim)->w, get_frame(anim)->h);
+    if (tmp_canvas) {
+      blit(get_frame(anim), tmp_canvas, 0, 0, 0, 0, tmp_canvas->w, tmp_canvas->h);
+    }
+  } else {
+    tmp_canvas = get_frame(anim);
+  }
+  
+  if (tmp_canvas == NULL) {
+    return;
+  }
   
   if (anim->rotate && anim->h_flip && anim->v_flip) {
-    al_draw_rotated_bitmap(get_frame(anim), xhalf, yhalf, x, y, (ALLEGRO_PI / 2) * 3, 0); // 270 degrees
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->h_flip) {
-    al_draw_rotated_bitmap(get_frame(anim), xhalf, yhalf, x, y, (ALLEGRO_PI / 2) * 3, ALLEGRO_FLIP_VERTICAL); // 270 degrees
+    rotate_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(192));
   } else if (anim->rotate && anim->v_flip) {
-    al_draw_rotated_bitmap(get_frame(anim), xhalf, yhalf, x, y, ALLEGRO_PI / 2, ALLEGRO_FLIP_VERTICAL); // 90 degrees
+    rotate_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->rotate) {
-    al_draw_rotated_bitmap(get_frame(anim), xhalf, yhalf, x, y, ALLEGRO_PI / 2, 0); // 90 degrees
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(64));
   } else if (anim->h_flip && anim->v_flip) {
-    al_draw_bitmap(get_frame(anim), x + anim->offset_x, y + anim->offset_y, ALLEGRO_FLIP_HORIZONTAL | ALLEGRO_FLIP_VERTICAL);
+    rotate_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y, itofix(128));
   } else if (anim->h_flip) {
-    al_draw_bitmap(get_frame(anim), x + anim->offset_x, y + anim->offset_y, ALLEGRO_FLIP_HORIZONTAL);
+    draw_sprite_h_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   } else if (anim->v_flip) {
-    al_draw_bitmap(get_frame(anim), x + anim->offset_x, y + anim->offset_y, ALLEGRO_FLIP_VERTICAL);
+    draw_sprite_v_flip(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   } else {
-    al_draw_bitmap(get_frame(anim), x + anim->offset_x, y + anim->offset_y, 0);
+    draw_sprite(canvas, tmp_canvas, x + anim->offset_x, y + anim->offset_y);
   }
 }
 
@@ -141,7 +188,7 @@ void animate(ANIM *anim) {
 int get_anim_w(ANIM *anim)
 {
   if (get_frame(anim)) {
-    return al_get_bitmap_width(get_frame(anim));
+    return get_frame(anim)->w;
   }
   return 0;
 }
@@ -150,7 +197,7 @@ int get_anim_w(ANIM *anim)
 int get_anim_h(ANIM *anim)
 {
   if (get_frame(anim)) {
-    return al_get_bitmap_height(get_frame(anim));
+    return get_frame(anim)->h;
   }
   return 0;
 }

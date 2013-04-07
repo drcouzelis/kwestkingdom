@@ -1,16 +1,38 @@
-#include <allegro5/allegro_primitives.h>
-#include <stdio.h>
-
 #include "config.h"
 
 #include "Game.h"
 #include "KwestKingdom.h"
 #include "resources.h"
+#include "screen.h"
+
+#ifdef ALLEGRO_UNIX
+  #include <xalleg.h>
+#endif
 
 
-ALLEGRO_DISPLAY *display = NULL;
+volatile int timer = 0;
+volatile int fps_timer = 0;
 
 Game *game;
+
+
+/**
+ * To keep the game running at the correct frames per second
+ */
+void do_timer(void)
+{
+  timer++;
+} END_OF_FUNCTION (do_timer);
+
+
+/**
+ * To display the current frames per second
+ */
+void game_time_ticker()
+{
+  fps_timer++;
+}
+END_OF_FUNCTION(game_time_ticker)
 
 
 int getTileSize()
@@ -31,155 +53,103 @@ void game_over()
 }
 
 
-int update_game(void *data)
+void init_game()
 {
-  game->update();
+  allegro_init();
+  install_timer();
+  install_keyboard();
+  
+  LOCK_VARIABLE(timer);
+  LOCK_FUNCTION(do_timer);
+  install_int_ex(do_timer, BPS_TO_TIMER(GAME_TICKER));
+  
+  LOCK_VARIABLE(fps_timer);
+  LOCK_FUNCTION(game_time_ticker);
+  install_int_ex(game_time_ticker, BPS_TO_TIMER(10));
+  
+  timer = 0;
+  fps_timer = 0;
+  
+  init_resources();
+  add_resource_path( PKGDATADIR "/images/");
+  add_resource_path( PKGDATADIR "/sounds/");
 
-  return game->continuePlaying();
-}
-
-
-void draw_game(void *data)
-{
-  al_set_target_bitmap(al_get_backbuffer(display));
-  game->draw(NULL);
-}
-
-
-void run(int (*update)(void *data), void (*draw)(void *data), void *data)
-{
-  ALLEGRO_TIMER *timer = NULL;
-  int keep_running = 1;
-  int redraw = 1;
-
-  ALLEGRO_EVENT_QUEUE *events = al_create_event_queue();
-  ALLEGRO_EVENT event;
-
-  timer = al_create_timer(1.0 / GAME_TICKER);
-  al_register_event_source(events, al_get_timer_event_source(timer));
-
-  al_start_timer(timer);
-
-  while (keep_running) {
-
-    al_wait_for_event(events, &event);
-
-    if (event.type == ALLEGRO_EVENT_TIMER) {
-
-      /* Update */
-      keep_running = update(data);
-
-      redraw = 1;
-    }
-
-    if (redraw && al_is_event_queue_empty(events)) {
-
-      redraw = 0;
-
-      /* Draw */
-      draw(data);
-
-      /* Update the screen */
-      al_flip_display();
-    }
+  if (init_screen(WINDOW_WIDTH * DEFAULT_SCREEN_RATIO, WINDOW_HEIGHT * DEFAULT_SCREEN_RATIO, false) == false) {
+    exit(0);
   }
 
-  al_destroy_event_queue(events);
-  al_destroy_timer(timer);
-}
+  set_window_title("Kwest Kingdom");
 
+#ifdef ALLEGRO_UNIX
+  xwin_set_window_name("kwestkingdom", "KwestKingdom");
+#endif
 
-void get_desktop_resolution(int adapter, int *w, int *h)
-{
-  /*
-  ALLEGRO_MONITOR_INFO info;
-
-  al_get_monitor_info(adapter, &info);
-
-  *w = info.x2 - info.x1;
-  *h = info.y2 - info.y1;
-  */
-  printf("Pretending to get the desktop resolution...\n");
-  *w = 1680;
-  *h = 1050;
+  set_win_size(WINDOW_WIDTH, WINDOW_HEIGHT);
+  
+  install_sound(DIGI_AUTODETECT, MIDI_NONE, NULL);
+  toggle_sound(); // Turn off sound
 }
 
 
 int main(int argc, char **argv)
 {
-  /* For screen scaling */
-  ALLEGRO_TRANSFORM trans;
-  float scale_x = 1;
-  float scale_y = 1;
-  int scale = 1;
-  int screen_w = 0;
-  int screen_h = 0;
+  int timemark;
+  int fps;
+  int frames_done;
+  int prevTime;
+  
+  fps = 0;
+  frames_done = 0;
+  prevTime = 0;
 
-  int monitor_w = WINDOW_WIDTH;
-  int monitor_h = WINDOW_HEIGHT;
-
-  if (!al_init() || !al_init_image_addon() || !al_init_primitives_addon() || !al_install_keyboard() || !al_install_mouse()) {
-    fprintf(stderr, "Failed to initialize allegro.\n");
-    exit(1);
-  }
-
-  //al_init_font_addon();
-  //al_init_ttf_addon();
-
-  get_desktop_resolution(ALLEGRO_DEFAULT_DISPLAY_ADAPTER, &monitor_w, &monitor_h);
-
-  /* Find the largest size the screen can be */
-  scale_x = monitor_w / (float) WINDOW_WIDTH;
-  scale_y = monitor_h / (float) WINDOW_HEIGHT;
-
-  if (scale_x < scale_y) {
-    scale = (int) scale_x;
-  } else {
-    scale = (int) scale_y;
-  }
-
-  /* TEMP */
-  scale = 2;
-
-  screen_w = scale * WINDOW_WIDTH;
-  screen_h = scale * WINDOW_HEIGHT;
-
-  /* Initialize the one and only global display for the game */
-  display = al_create_display(screen_w, screen_h);
-
-  if (!display) {
-    fprintf(stderr, "Failed to create display.\n");
-    exit(1);
-  }
-
-  /* Scale the screen to the largest size the monitor can handle */
-  al_identity_transform(&trans);
-  al_scale_transform(&trans, scale, scale);
-  al_use_transform(&trans);
-
-  /* Hide the mouse cursor */
-  al_hide_mouse_cursor(display);
-
-  toggle_sound(); // Turn off sound
-
-  init_resources();
-  add_resource_path( PKGDATADIR "/images/");
-  add_resource_path( PKGDATADIR "/sounds/");
-
-  /* Set the window title and icon */
-  al_set_window_title(display, "Kwest Kingdom");
-  //al_set_display_icon(display, IMG("icon.bmp")); // NEW_ALLEGRO
-
+  init_game();
+  
   game = new Game();
-
-  /* START THE GAME */
-  run(update_game, draw_game, NULL);
-
-  // DONE, clean up
+  
+  // Reset the timers just before the game begins.
+  timer = 0;
+  fps_timer = 0;
+  
+  while (game->continuePlaying()) {
+    
+    while (timer == 0) {
+      rest(1);
+    }
+    
+    while (timer > 0) {
+      
+      timemark = timer;
+      
+      game->update();
+      
+      timer--;
+      
+      if (timemark <= timer) {
+        break;
+      }
+    }
+    
+    // If a second has passed since we last measured the frame rate...
+    if (fps_timer - prevTime >= 10) {
+      // fps now holds the the number of frames done in the last second.
+      fps = frames_done;
+      // Reset for the next second
+      frames_done = 0;
+      prevTime = fps_timer;
+    }
+    
+    game->draw(get_win());
+    //textprintf_ex(get_win(), font, 10, 10, WHITE, -1, "FPS %d", fps);
+    
+    show_screen();
+    frames_done++;
+  }
+  
   delete game;
+  free_screen();
   stop_resources();
-  al_destroy_display(display);
   
   return 0;
 }
+END_OF_MAIN()
 

@@ -1,14 +1,16 @@
 #include "KwestKingdom.h"
+#include "screen.h"
 #include "Snapshot.h"
 
 
 Snapshot::Snapshot() {
-  canvas = al_create_bitmap(WINDOW_WIDTH, WINDOW_HEIGHT);
+  canvas = create_bitmap(get_win_w(), get_win_h());
 }
 
 
 Snapshot::~Snapshot() {
-  al_destroy_bitmap(canvas);
+  destroy_bitmap(canvas);
+
 }
 
 
@@ -48,11 +50,15 @@ void Snapshot::update() {
     }
     
   }
+  
+
+  
 }
 
 
 void Snapshot::draw(IMAGE * canvas) {
-  //draw_sprite(canvas, this->getCanvas(), visualX, visualY); // NEW_ALLEGRO
+  draw_sprite(canvas, this->getCanvas(), visualX, visualY);
+
 }
 
 
@@ -72,11 +78,15 @@ bool Snapshot::moving() {
 void Snapshot::setX(int newX) {
   x = newX;
   visualX = x;
+
 }
 
 
 void Snapshot::setY(int newY) {
   y = newY;
   visualY = y;
+
 }
+
+
 

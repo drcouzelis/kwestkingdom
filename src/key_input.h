@@ -8,23 +8,18 @@
 #endif
 
 
-/**
- * See the Allegro documentation for a list of key codes.
- *
- * http://www.allegro.cc/manual/5/keyboard.html
- */
+typedef struct
+{
+  int key_code;
+  int delay; // Number of ticks to wait until the action for this key is performed again
+  int timer; // Update every tick while the key is pressed
+  FLAG released;
+} KEY_INPUT;
 
 
-/**
- * Returns true if the key has been pressed since
- * the last time this function was called.
- */
-int is_key_pressed(int key);
+void init_key_input(KEY_INPUT *key_input, int key_code, int delay);
 
-/**
- * Returns true if the key is being held down.
- */
-int is_key_held(int key);
+FLAG is_key_pressed(KEY_INPUT *input);
 
 
 #ifdef __cplusplus

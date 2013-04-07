@@ -7,6 +7,7 @@
 #include "KwestKingdom.h"
 #include "resources.h"
 #include "RoomFactory.h"
+#include "screen.h"
 #include "Snapshot.h"
 #include "text.h"
 #include "World.h"
@@ -495,7 +496,7 @@ void World::shake() {
   prevRoomSnapshot->setX(0);
   prevRoomSnapshot->setY(0);
   prevRoomSnapshot->moveY(10);
-  prevRoomSnapshot->setSpeed(WINDOW_HEIGHT);
+  prevRoomSnapshot->setSpeed(get_win_h());
   this->drawTerrain(prevRoomSnapshot->getCanvas());
   this->drawCharacters(prevRoomSnapshot->getCanvas());
 }
@@ -533,39 +534,39 @@ void World::changeRooms() {
   if (hero->getX() < 0) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveX(WINDOW_WIDTH);
-    prevRoomSnapshot->setSpeed(WINDOW_WIDTH);
-    nextRoomSnapshot->setX(-WINDOW_WIDTH);
+    prevRoomSnapshot->moveX(get_win_w());
+    prevRoomSnapshot->setSpeed(get_win_w());
+    nextRoomSnapshot->setX(-get_win_w());
     nextRoomSnapshot->setY(0);
     nextRoomSnapshot->moveX(0);
-    nextRoomSnapshot->setSpeed(WINDOW_WIDTH);
+    nextRoomSnapshot->setSpeed(get_win_w());
   } else if (hero->getX() > COLS - 1) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveX(-WINDOW_WIDTH);
-    prevRoomSnapshot->setSpeed(WINDOW_WIDTH);
-    nextRoomSnapshot->setX(WINDOW_WIDTH);
+    prevRoomSnapshot->moveX(-get_win_w());
+    prevRoomSnapshot->setSpeed(get_win_w());
+    nextRoomSnapshot->setX(get_win_w());
     nextRoomSnapshot->setY(0);
     nextRoomSnapshot->moveX(0);
-    nextRoomSnapshot->setSpeed(WINDOW_WIDTH);
+    nextRoomSnapshot->setSpeed(get_win_w());
   } else if (hero->getY() < 0) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveY(WINDOW_HEIGHT);
-    prevRoomSnapshot->setSpeed(WINDOW_HEIGHT);
+    prevRoomSnapshot->moveY(get_win_h());
+    prevRoomSnapshot->setSpeed(get_win_h());
     nextRoomSnapshot->setX(0);
-    nextRoomSnapshot->setY(-WINDOW_HEIGHT);
+    nextRoomSnapshot->setY(-get_win_h());
     nextRoomSnapshot->moveY(0);
-    nextRoomSnapshot->setSpeed(WINDOW_HEIGHT);
+    nextRoomSnapshot->setSpeed(get_win_h());
   } else if (hero->getY() > ROWS - 1) {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
-    prevRoomSnapshot->moveY(-WINDOW_HEIGHT);
-    prevRoomSnapshot->setSpeed(WINDOW_HEIGHT);
+    prevRoomSnapshot->moveY(-get_win_h());
+    prevRoomSnapshot->setSpeed(get_win_h());
     nextRoomSnapshot->setX(0);
-    nextRoomSnapshot->setY(WINDOW_HEIGHT);
+    nextRoomSnapshot->setY(get_win_h());
     nextRoomSnapshot->moveY(0);
-    nextRoomSnapshot->setSpeed(WINDOW_HEIGHT);
+    nextRoomSnapshot->setSpeed(get_win_h());
   } else {
     prevRoomSnapshot->setX(0);
     prevRoomSnapshot->setY(0);
@@ -685,14 +686,14 @@ void World::drawUserInterface(IMAGE * canvas) {
   // Put the hero's health on the screen.
   for (i = 0; i < hero->getMaxHealth(); i++) {
     if (i < hero->getHealth()) {
-      draw_anim(&heart_anim, canvas, WINDOW_WIDTH - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_anim, canvas, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     } else {
-      draw_anim(&heart_empty_anim, canvas, WINDOW_WIDTH - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
+      draw_anim(&heart_empty_anim, canvas, get_win_w() - (MAX_HERO_HEALTH + 1) * (getTileSize() / 2) + (i * (getTileSize() / 2)), 0);
     }
   }
   
   sprintf(moneyLine, "$%d", hero->getMoney());
-  draw_text(WINDOW_WIDTH - (getTileSize() * 2), getTileSize(), moneyLine);
+  draw_text(canvas, get_win_w() - (getTileSize() * 2), getTileSize(), 2, WHITE, moneyLine);
   
   // Draw help information.
   for (counter = 0; counter < the_room(this)->num_helps; counter++) {
@@ -733,6 +734,6 @@ void World::draw(IMAGE * canvas) {
   
   // Put the current room number on the screen.
   sprintf(text, "Room %d", the_room(this)->getNumber());
-  draw_text(WINDOW_WIDTH - (getTileSize() * 3), WINDOW_HEIGHT - (getTileSize() / 2), text);
+  draw_text(canvas, get_win_w() - (getTileSize() * 3), get_win_h() - (getTileSize() / 2), 1, WHITE, text);
 }
 

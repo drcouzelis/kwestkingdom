@@ -18,8 +18,8 @@ protected:
   int h; // Height of the sprite
   
   // Where the image is on the screen
-  float visualX; // Screen width
-  float visualY; // Screen height
+  int visualX; // Screen width
+  int visualY; // Screen height
   int fudge;
   
   int speed; // In FPS
