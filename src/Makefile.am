@@ -6,73 +6,74 @@ bin_PROGRAMS = kwestkingdom
 # A list of all of the source code files.
 # The "SOURCES" suffix marks it as source code.
 kwestkingdom_SOURCES = \
-  al_screen.h \
-  al_screen.c \
   allegro_icon.c \
-  anim.h \
+  al_screen.c \
+  al_screen.h \
   anim.c \
-  Archer.h \
+  anim.h \
   Archer.cpp \
-  Arrow.h \
+  Archer.h \
   Arrow.cpp \
-  Bow.h \
+  Arrow.h \
   Bow.cpp \
-  Character.h \
+  Bow.h \
   Character.cpp \
-  Chomper.h \
+  Character.h \
   Chomper.cpp \
-  EndlessWorld.h \
+  Chomper.h \
   EndlessWorld.cpp \
-  Enemy.h \
+  EndlessWorld.h \
   Enemy.cpp \
-  Game.h \
+  Enemy.h \
   Game.cpp \
-  Giant.h \
+  Game.h \
   Giant.cpp \
-  Hammer.h \
+  Giant.h \
   Hammer.cpp \
-  Heart.h \
+  Hammer.h \
   Heart.cpp \
-  HelpTile.h \
+  Heart.h \
   HelpTile.cpp \
-  Hero.h \
+  HelpTile.h \
   Hero.cpp \
-  highscore.h \
+  Hero.h \
   highscore.c \
-  key_input.h \
+  highscore.h \
+  Item.h \
   key_input.c \
-  KwestKingdom.h \
+  key_input.h \
   KwestKingdom.cpp \
-  memory.h \
+  KwestKingdom.h \
   memory.c \
-  MoneyBag.h \
+  memory.h \
   MoneyBag.cpp \
-  Ninja.h \
+  MoneyBag.h \
   Ninja.cpp \
-  resources.h \
+  Ninja.h \
   resources.c \
-  RoomFactory.h \
-  RoomFactory.cpp \
-  Room.h \
+  resources.h \
   Room.cpp \
-  screen.h \
+  RoomFactory.cpp \
+  RoomFactory.h \
+  Room.h \
   screen.c \
-  Shield.h \
+  screen.h \
   Shield.cpp \
-  Snapshot.h \
+  Shield.h \
   Snapshot.cpp \
-  Sprite.h \
+  Snapshot.h \
   Sprite.cpp \
-  StoryWorld.h \
+  Sprite.h \
   StoryWorld.cpp \
-  Sword.h \
+  StoryWorld.h \
   Sword.cpp \
-  text.h \
+  Sword.h \
   text.c \
-  utilities.h \
+  text.h \
   utilities.c \
-  World.h \
-  World.cpp
+  utilities.h \
+  World.cpp \
+  World.h
 
 # This provides the compiler with a variable that points to the
 # location of the data files.
