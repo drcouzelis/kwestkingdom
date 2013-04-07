@@ -2,7 +2,7 @@
 
 # Initialize autoconf with the name of the program,
 # the version number, and the contact information.
-AC_INIT([kwestkingdom], [0.1], [drcouzelis@gmail.com])
+AC_INIT([kwestkingdom], [0.2], [drcouzelis@gmail.com])
 
 # Initialize automake with all warnings.
 AM_INIT_AUTOMAKE([-Wall -Werror])
