@@ -13,18 +13,13 @@ Different enemies will try to stop your progress. The brown enemies, Chompers, w
 
 Building
 --------
-Kwest Kingdom is written in Objective-C using the Allegro game programming library.
-
-Compile time dependencies:
-
-  gcc-objc:     Objective-C front-end for GCC
+Kwest Kingdom is written in C++ using the Allegro 4 game programming library.
 
 Compile time and runtime dependencies:
 
   allegro4:     Portable library mainly aimed at video game and multimedia programming (legacy version)
-  gnustep-base: The GNUstep base package
 
-The application icon for X is build using the "fix icon" script that comes with Allegro:
+The application icon for X is built using the "fix icon" script that comes with Allegro:
 
   tools/x11/xfixicon.sh
 
