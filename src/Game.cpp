@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 
 #include "EndlessWorld.h"
@@ -53,6 +54,7 @@ Game::Game() {
   upKey = KEY_UP;
   downKey = KEY_DOWN;
   selectKey = KEY_ENTER;
+  altSelectKey = KEY_SPACE;
   
   menuBackground = new Snapshot();
   highScoresBackground = new Snapshot();
@@ -83,7 +85,7 @@ void Game::readPlayerInitials() {
   if (keypressed()) {
     key = readkey();
     length = strlen(playerInitials);
-    // If the player pressed "backspace" or "delete" then delet a character.
+    // If the player pressed "backspace" or "delete" then delete a character.
     if ((key >> 8) == KEY_BACKSPACE || (key >> 8) == KEY_DEL) {
       if (length > 0) {
         playerInitials[length - 1] = '\0';
@@ -92,6 +94,8 @@ void Game::readPlayerInitials() {
       // The player pressed a letter or number key! Add it to the initials.
       if (length < 3) {
         playerInitials[length] = key & 0xFF;
+        // Force initials to be uppercase, old school style.
+        playerInitials[length] = toupper(playerInitials[length]);
         playerInitials[length + 1] = '\0';
       }
     }
@@ -132,7 +136,7 @@ void Game::update() {
       if (menuSelection == MAX_MENU_SELECTIONS) {
         menuSelection--;
       }
-    } else if (is_key_pressed(selectKey)) {
+    } else if (is_key_pressed(selectKey) || is_key_pressed(altSelectKey)) {
       this->activateMenuSelection();
     }
     animate(&menu_pointer);
@@ -163,7 +167,7 @@ void Game::update() {
     break;
   
   case GAME_OVER_STATE:
-    if (is_key_pressed(selectKey)) {
+    if (is_key_pressed(selectKey) || is_key_pressed(altSelectKey)) {
       menuSelection = NEW_GAME_SELECTION;
       if (high_score_pos(world->getRoomNumber(), world->getMoney()) == MAX_NUM_OF_HIGH_SCORES) {
         this->setState(GAME_MENU_STATE);

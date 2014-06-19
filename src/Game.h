@@ -25,6 +25,7 @@ class Game {
   char upKey;
   char downKey;
   char selectKey;
+  char altSelectKey;
   
   int menuSelection;
   Snapshot *menuBackground;
