@@ -12,6 +12,13 @@ You goal is to make it through the forest. In the regular game mode, the game en
 
 Different enemies will try to stop your progress. The brown enemies, Chompers, will walk towards you when you get close. The red enemies, Ninjas, will dash at you andpoke you with their sword as soon as they see you. Look out! The green enemies with the beards, Archers, will shoot arrows at you. The enemies can be overbearing, but you have three health points to help you. When your health points reaches zero, it's the end of the game.
 
+## Features
+
+* An original game combining strategy with cute graphics
+* Story mode and endless survival mode
+* Nice animations and classic sound effects
+* It's pretty fun!
+
 ## Reviews
 
 draconishinobi, 5 stars:
