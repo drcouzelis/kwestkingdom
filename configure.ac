@@ -5,7 +5,7 @@
 AC_INIT([kwestkingdom], [0.2], [drcouzelis@gmail.com])
 
 # Initialize automake with all warnings.
-AM_INIT_AUTOMAKE([-Wall -Werror])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 # Mark the source code directory.
 AC_CONFIG_SRCDIR([src/KwestKingdom.h])
