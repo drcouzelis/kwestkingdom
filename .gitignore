@@ -13,6 +13,7 @@ config.log
 config.status
 configure
 depcomp
+dev
 install-sh
 missing
 stamp-h1
